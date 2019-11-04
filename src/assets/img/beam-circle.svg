@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
+    <title>345FC426-3A00-4C86-931C-60B5C71076DE</title>
+    <desc>Created with sketchtool.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="wallet-main" transform="translate(-126.000000, -507.000000)">
+            <g id="transactions" transform="translate(100.000000, 392.000000)">
+                <g id="1" transform="translate(26.000000, 107.000000)">
+                    <g id="Group-4" transform="translate(2.000000, 10.000000)">
+                        <circle id="Oval-3" stroke="#25C1FF" stroke-width="2" fill="#292236" cx="12" cy="12" r="13"></circle>
+                        <g id="Group-2" transform="translate(4.000000, 5.000000)" fill="#FFFFFF">
+                            <g id="Group">
+                                <path d="M7.50023812,10.8297641 L11.3272292,10.8297641 L7.50142637,4.08653113 L7.50142637,0 L15,13 L7.5,13 L7.50023812,10.8297641 Z" id="Combined-Shape"></path>
+                                <path d="M0.000238119239,10.8297641 L3.82722924,10.8297641 L0.00142636573,4.08653113 L0.00142636573,0 L7.5,13 L0,13 L0.000238119239,10.8297641 Z" id="Combined-Shape" transform="translate(3.750000, 6.500000) scale(-1, 1) translate(-3.750000, -6.500000) "></path>
+                                <polygon id="Triangle-5" points="7.5 5.76047904 7.5 10.0372052 5.12755102 10.0419162"></polygon>
+                                <polygon id="Triangle-5" transform="translate(8.686224, 7.901198) scale(-1, 1) translate(-8.686224, -7.901198) " points="9.87244898 5.76047904 9.87244898 10.0372052 7.5 10.0419162"></polygon>
+                            </g>
+                            <polygon id="Path-38" transform="translate(4.000000, 6.000000) scale(-1, 1) translate(-4.000000, -6.000000) " points="0 7.47958932 8 4 8 8 0 7.83770021"></polygon>
+                            <polygon id="Path-38" points="8 7.47958932 16 4 16 8 8 7.83770021"></polygon>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

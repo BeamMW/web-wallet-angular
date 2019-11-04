@@ -1,0 +1,25 @@
+<div mat-dialog-content>
+  <p>New wallet</p>
+  <form [formGroup]="ownerForm" autocomplete="off" novalidate (ngSubmit)="createOwner(ownerForm.value)">
+    <section>
+      <mat-form-field>
+        <input matInput type="text" required
+               placeholder="Wallet name"
+               autocomplete="off"
+               formControlName="name">
+        <mat-error *ngIf="hasError('name', 'required')">Name is required</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" required
+               placeholder="Wallet port"
+               autocomplete="off"
+               formControlName="port">
+        <mat-error *ngIf="hasError('name', 'required')">Port is required</mat-error>
+      </mat-form-field>
+    </section>
+  </form>
+</div>
+<div mat-dialog-actions align="center">
+  <button mat-button [mat-dialog-close]="ownerForm" [disabled]="!ownerForm.valid">Add</button>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+</div>

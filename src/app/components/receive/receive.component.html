@@ -1,0 +1,46 @@
+<section class="wallet-receive-container">
+  <div class="wallet-title-container">
+    <app-status-title class="wallet-title-element" [title]="'Wallet'"></app-status-title>
+  </div>
+  <div class="receive-title">Receive Beam</div>
+  <div class="receive-main-container">
+    <div class="receive-items">
+      <div>My address</div>
+      <input autocomplete="off" class="receive-address" disabled
+             type="search" #addressInput id="addressInput"/>
+      <div class="expires-container">
+        Expires:
+        <span class="expires-selector">
+          <span class="time-selected" (click)="showTypesOptions($event)">
+            <span>{{selectedExpireTime.name}}</span>
+            <img src="../../../assets/img/arrow-down-small.png"
+                 class="arrow-down-small">
+          </span>
+          <div class="time-options" *ngIf="isExpiresVisible">
+            <ul>
+              <li class="time-item" *ngFor="let p of blocksChartTypes"
+                  [class.selected]="p.isSelected"
+                  (click)="expireTimeChanged(p)">
+                <span> {{p.name}} </span>
+              </li>
+            </ul>
+          </div>
+        </span>
+      </div>
+      <div>Comment</div>
+      <input autocomplete="off" class="receive-comment"
+             type="search" #commentInput id="commentInput"/>
+    </div>
+  </div>
+  <div class="send-title">Send this address to the sender over an external secure channel</div>
+  <div class="controls-container">
+    <button mat-raised-button (click)="closeClicked()" class="close-button">
+      <img src="../../../assets/img/icon-cancel.svg" class="icon-cancel">
+      close
+    </button>
+    <button mat-raised-button (click)="copyClicked()" class="copy-button">
+      <img src="../../../assets/img/icon-copy-blue.svg" class="icon-copy-blue">
+      copy
+    </button>
+  </div>
+</section>

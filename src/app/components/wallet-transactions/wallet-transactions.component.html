@@ -1,0 +1,188 @@
+<div class="wallet-transactions-container">
+  <div class="wallet-title-container">
+    <app-status-title class="wallet-title-element" [title]="'Wallet'"></app-status-title>
+    <button mat-raised-button (click)="receiveClicked()" class="receive-button">
+      <img src="../../../assets/img/icon-receive-blue.png" class="icon-receive-blue">
+      receive
+    </button>
+    <button mat-raised-button (click)="sendClicked()" class="send-button">
+      <img src="../../../assets/img/icon-send-blue.png" class="icon-send-blue">
+      send
+    </button>
+    <button mat-raised-button (click)="swapClicked()" class="swap-button">
+      <img src="../../../assets/img/icon-swap.svg" class="icon-swap">
+      swap
+    </button>
+  </div>
+
+  <div class="status-cards-container" *ngIf="!status_loading">
+    <mat-card class="block-card available-card">
+      <mat-card-header class="block-card-header">
+        <mat-card-subtitle class="block-card-header-title">Available</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="block-card-content">
+        <span class="block-card-content-available">{{wallet_status.available}}</span>
+        <span class="block-card-content-beam">BEAM</span>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="block-card height-card">
+      <mat-card-header class="block-card-header">
+        <mat-card-subtitle class="block-card-header-title">In progress</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="block-card-content">
+        <div class="card-container">
+          <span class="receiving-container">
+            <h2 class="title">RECEIVING</h2>
+            <div class="value">{{wallet_status.receiving}}</div>
+            <img src="../../../assets/img/icon-receiving.svg" class="icon">
+          </span>
+          <span class="sending-container">
+            <h2 class="title">SENDING</h2>
+            <div class="value">{{wallet_status.sending}}</div>
+            <img src="../../../assets/img/icon-sending.svg" class="icon">
+          </span>
+          <span class="maturing-container">
+            <h2 class="title">MATURING</h2>
+            <div class="value">{{wallet_status.maturing}}</div>
+            <img src="../../../assets/img/icon-maturing.svg" class="icon">
+          </span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="table-container">
+    <h2 *ngIf="!transactions_loading" class="transaction-title">Transactions</h2>
+
+    <div class="transactions-table">
+      <mat-table matSort *ngIf="!transactions_loading" (matSortChange)="sortData($event)"
+          [dataSource]="sortedData" class="mat-elevation-z8">
+        <ng-container matColumnDef="icon">
+          <mat-header-cell class="icon-header" *matHeaderCellDef> </mat-header-cell>
+          <mat-cell class="cell icon-cell" *matCellDef="let element">
+            <img src="../../../assets/img/beam-circle.svg">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <mat-header-cell class="height-cell-date" mat-sort-header *matHeaderCellDef> Date | time </mat-header-cell>
+          <mat-cell class="cell height-cell" *matCellDef="let element">
+            <span class="table-label">
+               {{element.create_time*1000 | date:"dd.MM.yyyy HH:mm"}}
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="from">
+          <mat-header-cell class="receiver-cell-header" mat-sort-header *matHeaderCellDef> From </mat-header-cell>
+          <mat-cell class="cell receiver-cell" *matCellDef="let element">
+            <span class="table-label">
+              {{element.sender}}
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="to">
+          <mat-header-cell class="receiver-cell-header" mat-sort-header *matHeaderCellDef> To </mat-header-cell>
+          <mat-cell class="cell receiver-cell" *matCellDef="let element">
+            <span class="table-label">
+              {{element.receiver}}
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="sent">
+          <mat-header-cell class="age-cell-header" mat-sort-header *matHeaderCellDef> Sent </mat-header-cell>
+          <mat-cell class="cell age-cell" *matCellDef="let element">
+            <span class="income amount" *ngIf="element.income">+ </span>
+            <span class="outcome amount" *ngIf="!element.income">- </span>
+            <span class="table-label amount"
+                [class.income]="element.income"
+                [class.outcome]="!element.income">
+              {{element.value}}
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="received">
+          <mat-header-cell class="age-cell-header" mat-sort-header *matHeaderCellDef> Received </mat-header-cell>
+          <mat-cell class="cell age-cell" *matCellDef="let element">
+            <span class="income amount" *ngIf="element.income">+ </span>
+            <span class="outcome amount" *ngIf="!element.income">- </span>
+            <span class="table-label amount"
+                [class.income]="element.income"
+                [class.outcome]="!element.income">
+              {{element.value}}
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <mat-header-cell class="header-row" mat-sort-header *matHeaderCellDef> Status </mat-header-cell>
+          <mat-cell class="cell status-cell" *matCellDef="let element">
+            <img [attr.src]="'../../../assets/img/icon-' + (element.income ? 'receiving' : 'sending') + '.svg'"
+              class="status-icon" alt="">
+            <span class="table-label"
+                [class.income]="element.income"
+                [class.outcome]="!element.income">
+              {{element.status_string}}
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell class="actions-header" *matHeaderCellDef> </mat-header-cell>
+          <mat-cell class="cell actions-cell" *matCellDef="let element">
+            <div class="options-selector">
+              <img class="option-selected" (click)="showOptions($event)" src="../../../assets/img/icon-actions.svg">
+              <div class="options-items"  style="visibility:hidden">
+                <ul>
+                  <li class="item" *ngFor="let p of transactionOptions"
+                      (click)="itemOptionChange($event, p, element)">
+                    <span> {{p.name}} </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+         <ng-container matColumnDef="expandedDetail">
+           <mat-cell *matCellDef="let element">
+             <mat-table class="details-table" #table [dataSource]="element.item.tableData">
+                <ng-container matColumnDef="name">
+                  <mat-header-cell *matHeaderCellDef> General transaction info </mat-header-cell>
+                  <mat-cell class="name-cell" *matCellDef="let element">
+                    <span> {{element.name}} </span>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="value">
+                  <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+                  <mat-cell class="value-cell" *matCellDef="let element">
+                    {{element.value}}
+                  </mat-cell>
+                </ng-container>
+
+                <mat-header-row class="info-header-row" *matHeaderRowDef="columns"></mat-header-row>
+                <mat-row class="details-row" *matRowDef="let row; columns: columns;"></mat-row>
+              </mat-table>
+           </mat-cell>
+         </ng-container>
+
+        <mat-header-row class="transactions-table-header" *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+        <mat-row class="transactions-table-row"
+                 *matRowDef="let item; let row; columns: displayedColumns;"
+                 matRipple
+                 [class.expanded]="expandedItem == row"
+                 (click)="toggleElement(item)"></mat-row>
+        <mat-row class="expand-table-row"
+                 *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
+                 [@detailExpand]="row.item.show ? 'expanded' : 'collapsed'"
+                 style="overflow: hidden">
+      </mat-row>
+      </mat-table>
+    </div>
+  </div>
+</div>

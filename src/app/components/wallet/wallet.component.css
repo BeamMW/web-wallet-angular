@@ -1,0 +1,66 @@
+.sidenav-list {
+  padding: 0;
+}
+
+.example-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #eee;
+}
+
+.sidenav-container {
+  background-color: rgb(24,18,35);
+}
+
+.sidenav-list-item {
+  height: 50px;
+  width: 150px;
+  margin-top: 5px;
+  color: #ffffff;
+}
+
+.logo-image {
+  padding: 50px 15px 68px 15px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  object-fit: contain;
+}
+
+.sidenav-image {
+  height: 28px;
+  width: 28px;
+  object-fit: contain;
+  border: none;
+}
+
+.icon-wallet {
+  content:url(../../../assets/img/icon-wallet.svg);
+}
+
+.icon-wallet.active {
+  content:url(../../../assets/img/icon-wallet-active.svg);
+}
+
+.icon-addressbook {
+  content:url(../../../assets/img/icon-addressbook.svg);
+}
+
+.icon-addressbook.active {
+  content:url(../../../assets/img/icon-addressbook-active.svg);
+}
+
+.icon-utxo {
+  content:url(../../../assets/img/icon-utxo.svg);
+}
+
+.icon-utxo.active {
+  content:url(../../../assets/img/icon-utxo-active.svg);
+}
+
+.sidenav-list-item {
+  margin-bottom: 20px;
+}

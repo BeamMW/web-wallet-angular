@@ -1,0 +1,70 @@
+<div class="wallet-utxo-container">
+  <div class="utxo-title-container">
+    <app-status-title class="utxo-title-element" [title]="'UTXO'"></app-status-title>
+
+    <mat-card class="block-card height-card" *ngIf="!status_loading">
+        <mat-card-header class="block-card-header">
+          <mat-card-subtitle class="block-card-header-title">Blockchain Height:</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="block-card-content">
+          <span class="block-card-content-title">{{wallet_status.current_height}} </span>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card class="block-card hash-card" *ngIf="!status_loading">
+        <mat-card-header class="block-card-header">
+          <mat-card-subtitle class="block-card-header-title">Last block hash:</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="block-card-content">
+          <span class="block-card-content-title">{{wallet_status.current_state_hash | slice:0:20}} </span>
+        </mat-card-content>
+      </mat-card>
+  </div>
+
+  <div class="table-container">
+    <div class="utxo-table">
+      <mat-table matSort *ngIf="!utxo_loading" [dataSource]="utxo_list" class="mat-elevation-z8">
+        <ng-container matColumnDef="amount">
+          <mat-header-cell class="height-cell-date" *matHeaderCellDef> Amount </mat-header-cell>
+          <mat-cell class="height-cell" *matCellDef="let element">
+            <span class="table-label">
+              {{element.amount}}
+              BEAM
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="maturity">
+          <mat-header-cell class="hash-cell-address" *matHeaderCellDef> Maturity </mat-header-cell>
+          <mat-cell class="hash-cell" *matCellDef="let element">
+            <span class="table-label">
+              {{element.maturity}}
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <mat-header-cell class="age-cell-header" *matHeaderCellDef> Status </mat-header-cell>
+          <mat-cell class="age-cell" *matCellDef="let element">
+            <span class="table-label">
+              {{ element.status_string }}
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <mat-header-cell *matHeaderCellDef> Type: </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <span class="table-label">
+              {{element.type}}
+            </span>
+          </mat-cell>
+        </ng-container>
+
+
+        <mat-header-row class="utxo-table-header" *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row class="utxo-table-row" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
+  </div>
+</div>

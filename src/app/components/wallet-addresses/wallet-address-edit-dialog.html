@@ -1,0 +1,21 @@
+<div mat-dialog-content>
+  <p>Edit address</p>
+  <form [formGroup]="ownerForm" autocomplete="off" novalidate (ngSubmit)="createOwner(ownerForm.value)">
+    <section>
+      <mat-form-field>
+        <input matInput type="text"
+               disabled
+               formControlName="address">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text"
+               disabled
+               formControlName="comment">
+      </mat-form-field>
+    </section>
+  </form>
+</div>
+<div mat-dialog-actions align="center">
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="ownerForm" [disabled]="!ownerForm.valid">Save</button>
+</div>
