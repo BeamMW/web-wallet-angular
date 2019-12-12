@@ -1,0 +1,21 @@
+<div class="side-menu">
+    <div class="side-menu__close" (click)="closeMenu()">back</div>
+    <div class="side-menu__items">
+        <div class="side-menu__items__wallet menu-item" [routerLink]="walletRoute"> 
+            <img class="side-menu__items__wallet__logo menu-item-icon" [src]="iconWallet">
+            <span>Wallet</span>
+        </div>
+        <div class="side-menu__items__addresses menu-item">
+            <img class="side-menu__items__addresses__logo menu-item-icon" [src]="iconAddresses">
+            <span>Addresses</span>
+        </div>
+        <div class="side-menu__items__utxo menu-item">
+            <img class="side-menu__items__utxo__logo menu-item-icon" [src]="iconUtxo">
+            <span>UTXO</span>
+        </div>
+        <div class="side-menu__items__settings menu-item">
+            <img class="side-menu__items__settings__logo menu-item-icon" [src]="iconSettings">
+            <span>Settings</span>
+        </div>
+    </div>
+</div>

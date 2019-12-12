@@ -1,45 +1,25 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import {WalletUtxoComponent} from './components/wallet-utxo/wallet-utxo.component';
-import {WalletAddressesComponent} from './components/wallet-addresses/wallet-addresses.component';
-import {WalletTransactionsComponent} from './components/wallet-transactions/wallet-transactions.component';
-import {WalletManagerComponent} from './components/wallet-manager/wallet-manager.component';
-import {WalletComponent} from './components/wallet/wallet.component';
-import {ReceiveComponent} from './components/receive/receive.component';
-import {SendComponent} from './components/send/send.component';
-import {SendSwapComponent} from './components/send-swap/send-swap.component';
-
-
 const routes: Routes = [
-  { path: '', component: WalletManagerComponent, pathMatch: 'full' },
+  { path: '', redirectTo: 'wallet/login', pathMatch: 'full'},
+  { path: 'initialize', loadChildren: './modules/first-time-flow/first-time-flow.module#FirstTimeFlowModule' },
   {
-    path: 'wallet/:port',
-    component: WalletComponent,
-    children: [{
-      path: 'transactions',
-      component: WalletTransactionsComponent,
-    }, {
-      path: 'addresses',
-      component: WalletAddressesComponent
-    }, {
-      path: 'utxo',
-      component: WalletUtxoComponent
-    }, {
-      path: 'send',
-      component: SendComponent
-    }, {
-      path: 'swap',
-      component: SendSwapComponent
-    }, {
-      path: 'receive',
-      component: ReceiveComponent
-    }
-] },
+    path: 'wallet',
+    loadChildren: () => import('./modules/wallet/wallet.module').then(m => m.WalletModule)
+  }, {
+    path: 'send',
+    loadChildren: () => import('./modules/send/send.module').then(m => m.SendModule)
+  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+      onSameUrlNavigation: 'reload',
+      initialNavigation: 'enabled',
+      paramsInheritanceStrategy: 'always',
+      useHash: true
+    })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

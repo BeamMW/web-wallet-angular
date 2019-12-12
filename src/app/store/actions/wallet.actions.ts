@@ -1,12 +1,8 @@
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
+import { Address } from './../../models/address';
+import { Utxo } from './../../models/utxo.model';
+import { Transaction } from '@app/models/transactions.model';
 
-export enum WalletActionTypes {
-  LoadWallets = '[Wallet] Load Wallets'
-}
-
-export class LoadWallets implements Action {
-  readonly type = WalletActionTypes.LoadWallets;
-}
-
-
-export type WalletActions = LoadWallets;
+export const loadAddresses = createAction('[Addresses] Load Addresses', props<{ addresses: Address[] }>());
+export const loadUtxo = createAction('[Utxos] Load Utxos', props<{ utxos: Utxo[] }>());
+export const loadTr = createAction('[Transcations] Load Transcations', props<{ transactions: Transaction[] }>());

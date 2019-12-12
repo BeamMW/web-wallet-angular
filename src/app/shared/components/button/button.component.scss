@@ -1,0 +1,22 @@
+.ui-button {
+  border: 0;
+  width: 164px;
+  height: 44px;
+  border-radius: 50px;
+  box-shadow: none;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #032e49;
+  outline: none;
+
+  &__icon {
+    display: none;
+  }
+}

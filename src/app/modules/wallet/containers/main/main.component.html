@@ -1,0 +1,43 @@
+<div class="main">
+    <div class="main__header">
+        <div class="main__header__side-menu">
+            <div class="main__header__side-menu__control" (click)="menuClicked()">
+                <div class="main__header__side-menu__control__line"></div>
+                <div class="main__header__side-menu__control__line"></div>
+                <div class="main__header__side-menu__control__line"></div>
+            </div>
+        </div>
+        <div class="main__header__title">WALLET</div>
+    </div>
+    <div class="main__controls">
+        <app-button class="main__controls__send-button" [routerLink]="sendRoute">send</app-button>
+        <app-button class="main__controls__receive-button">receive</app-button>
+    </div>
+    <div class="main__available">
+        <div class="main__available__title">AVAILABLE</div>
+        <div class="main__available__container">
+            <img class="main__available__container__logo" [src]="iconBeam">
+            <span class="main__available__container__value">{{walletStatus.available}}</span>
+        </div>
+    </div>
+    <div class="main__in-progress">
+        <div class="main__in-progress__title">IN PROGRESS</div>
+        <div class="main__in-progress__container-sent">
+            <img class="main__in-progress__container-sent__logo" [src]="iconSent">
+            <span class="main__in-progress__container-sent__value">- {{walletStatus.sending}}</span>
+        </div>
+        <div class="main__in-progress__container-receive">
+            <img class="main__in-progress__container-receive__logo" [src]="iconReceived">
+            <span class="main__in-progress__container-receive__value">+ {{walletStatus.receiving}}</span>
+        </div>
+    </div>
+
+    <ng-container *ngIf="addresses$ | async as addresses">
+        <ng-container *ngFor="let addr of addresses">
+            <div class="address">{{addr.address}}</div>
+        </ng-container>
+    </ng-container>
+    
+
+    <div class="main__top-gradient"></div>
+</div>

@@ -1,0 +1,42 @@
+.side-menu {
+    position: absolute;
+    left: 0;
+    top: 50px;
+    z-index: 20;
+    width: 319px;
+    height: 550px;
+    background-image: linear-gradient(to bottom, #0a4c7e, #042548);
+
+    &__close {
+        margin: 40px 0 0 20px;
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+    &__items {
+        margin-top: 90px;
+    }
+}
+
+.menu-item {
+    cursor: pointer;
+    height: 60px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #92abba;
+    align-items: center;
+    display: flex;
+}
+
+.menu-item:hover {
+    background-image: linear-gradient(to right, rgba(5, 226, 194, 0.1), rgba(5, 226, 194, 0));
+}
+
+.menu-item-icon {
+    margin: 0 20px;
+}

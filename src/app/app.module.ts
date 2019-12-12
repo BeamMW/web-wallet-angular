@@ -4,10 +4,9 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './store/reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-
+import { RouterModule } from '@angular/router';
 
 import {
   MatExpansionModule,
@@ -31,53 +30,38 @@ import {
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from './shared/shared.module';
-import { WalletComponent } from './components/wallet/wallet.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FirstTimeFlowModule } from './modules/first-time-flow/first-time-flow.module';
+import { WalletModule } from './modules/wallet/wallet.module';
+import { SendModule } from './modules/send/send.module';
+import { WebsocketModule } from './modules/websocket';
+import { StorageModule } from '@ngx-pwa/local-storage';
 
-import { WalletAddressesComponent, WalletAddressEditComponent } from './components/wallet-addresses/wallet-addresses.component';
-import { WalletUtxoComponent } from './components/wallet-utxo/wallet-utxo.component';
-import { WalletTransactionsComponent } from './components/wallet-transactions/wallet-transactions.component';
-import { WalletManagerComponent, WalletManagerDialogComponent } from './components/wallet-manager/wallet-manager.component';
-import { ReceiveComponent } from './components/receive/receive.component';
-import { SendComponent } from './components/send/send.component';
-import { SendSwapComponent } from './components/send-swap/send-swap.component';
-
+import { EffectsModule } from '@ngrx/effects';
+import { WalletEffects } from './store/effects/wallet.effects';
+import * as walletReducer from './store/index';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 @NgModule({
-  entryComponents: [
-    WalletManagerComponent,
-    WalletManagerDialogComponent,
-    WalletAddressEditComponent
-  ],
+  entryComponents: [],
   declarations: [
     AppComponent,
-    WalletComponent,
-    WalletAddressesComponent,
-    WalletUtxoComponent,
-    WalletTransactionsComponent,
-    WalletManagerComponent,
-    WalletManagerDialogComponent,
-    WalletAddressEditComponent,
-    ReceiveComponent,
-    SendComponent,
-    SendSwapComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot(reducers, {
-      metaReducers,
-      runtimeChecks: {
-        strictStateImmutability: true,
-        strictActionImmutability: true,
-      }
-    }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     HttpClientModule,
     BrowserAnimationsModule,
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
+    FirstTimeFlowModule,
+    WalletModule,
+    SendModule,
+    WebsocketModule.config({
+      url: environment.ws
+    }),
     // Material
     MatExpansionModule,
     MatButtonModule,
@@ -95,6 +79,17 @@ import { SendSwapComponent } from './components/send-swap/send-swap.component';
     MatPaginatorModule,
     MatSidenavModule,
     MatDialogModule,
+    StoreModule.forRoot(walletReducer.reducers, {
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true
+      }
+    }),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    EffectsModule.forRoot([WalletEffects]),
+    StorageModule.forRoot({ IDBNoWrap: true }),
+    StoreRouterConnectingModule.forRoot(),
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

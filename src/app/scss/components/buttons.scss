@@ -1,0 +1,107 @@
+@import './styles';
+
+/// Creates a button with predefined or custom theme
+///
+/// @group UI-Buttons
+///
+/// @param {String} $theme [$btn-dark-blue] - theme name
+/// @param {String} $size [$btn-md] - size
+/// @param {Bool} $with-icon [false] - is button contain icon flag
+///
+/// @example scss
+///   .login-button {
+///     @include ui-button;
+///   }
+///
+/// @example scss
+///   .login-button {
+///     @include ui-button($btn-dark-blue);
+///   }
+///
+/// @example scss
+///   .login-button {
+///     @include ui-button($btn-dark-blue, $btn-xs);
+///   }
+///
+/// @example scss
+///   .login-button {
+///     @include ui-button($btn-dark-blue, $btn-md) {
+///       margin-top: 2px;
+///     }
+///   }
+@mixin ui-button($theme: $btn-receive, $size: $btn-md, $rounded: true) {
+
+  ::ng-deep {
+    appearance: none;
+
+    button {
+      @if ($theme == $btn-send) {
+        background-color: #da68f5;
+        color: #032e49;
+
+        &:not([disabled]) {
+          &:hover,
+          &:active {
+            background-color: #da68f9;
+          }
+        }
+      }
+
+      @if ($theme == $btn-receive) {
+        background-color: #0bccf7;
+        color: #032e49;
+
+        &:not([disabled]) {
+          &:hover,
+          &:active {
+            background-color: #0bccf7;
+          }
+        }
+      }
+
+      @if($size == $btn-md) {
+        height: 44px;
+        width: 164px;
+      }
+    }
+
+    ::ng-deep {
+
+      button {
+        @if($rounded == $btn-rounded) {
+          border-radius: 50px;
+        }
+
+        transition: background-color .1s ease-out;
+        @content;
+      }
+    }
+
+  }
+}
+
+@mixin ui-button-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      display: flex;
+      height: 100%;
+      justify-content: space-between;
+
+      .ui-button__icon {
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 40px;
+        @content;
+      }
+
+      .ui-button__text {
+        align-items: center;
+        border-left: 1px solid rgba(255, 255, 255, .3);
+        display: flex;
+        flex-basis: 100%;
+        justify-content: center;
+        margin-left: 6px;
+      }
+    }
+  }
+}

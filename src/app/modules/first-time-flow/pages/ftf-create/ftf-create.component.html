@@ -1,0 +1,21 @@
+<div class="example-container">
+    <div class="container">
+        <form [formGroup]="createForm" novalidate (ngSubmit)="submit()">
+            <div class="form-group">
+                <label class="pass-title">Enter seed phrase:</label>
+                <input class="form-control" name="seed" formControlName="seedPhrase" 
+                    placeholder="Enter seed phrase"/>
+            </div>
+            <div class="form-group">
+                <label class="pass-title">Enter wallet password:</label>
+                <input class="form-control" type="password" placeholder="Enter wallet password" 
+                    name="password" formControlName="walletPassword" />
+            </div>
+            <div class="form-group">
+                <button class="receive-button btn btn-default">
+                    Create wallet
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

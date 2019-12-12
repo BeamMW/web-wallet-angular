@@ -1,8 +1,15 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "outDir": "./dist/out-tsc",
+    "paths": {
+      "@app/*": ["app/*"],
+      "@shared/*": ["app/shared/*"],
+      "@consts": ["app/consts"],
+      "@environments/*": ["environments/*"],
+      "@environment": ["environments/environment"]
+    },
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
@@ -14,6 +21,7 @@
     "typeRoots": [
       "node_modules/@types"
     ],
+    "types": [ "Chrome" ],
     "lib": [
       "es2018",
       "dom"

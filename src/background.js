@@ -1,12 +1,12 @@
-const extension = require('extensionizer')
-
 // On first install, open a new tab with MetaMask
-extension.runtime.onInstalled.addListener(({reason}) => {
-  if ((reason === 'install') && (!METAMASK_DEBUG)) {
-    platform.openExtensionInBrowser()
+function openExtensionInBrowser() {
+  const extensionURL = chrome.runtime.getURL('index.html#initialize/create');
+
+  chrome.tabs.create({ url: extensionURL })
+}
+
+chrome.runtime.onInstalled.addListener(({reason}) => {
+  if ((reason === 'install')) {
+    openExtensionInBrowser();
   }
-})  
-  
-chrome.browserAction.onClicked.addListener(function () {
-  chrome.tabs.create({ url: chrome.runtime.getURL("index.html") });
 });

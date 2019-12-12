@@ -1,0 +1,18 @@
+:host {
+    font-size: 0;
+}
+
+.logo {
+    &__link {
+        display: inline-block;
+        font-size: 0;
+        height: 30px;
+        width: 42px;
+    }
+
+    &__image {
+        display: inline-block;
+        height: 30px;
+        width: 42px;
+    }
+}

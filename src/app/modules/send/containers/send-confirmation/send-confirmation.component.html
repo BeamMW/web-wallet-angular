@@ -1,0 +1,26 @@
+<div class="send">
+    <div class="send__header">
+        <div class="send__header__side-menu">
+            <div class="side-menu__close" [routerLink]="walletRoute">back</div>
+        </div>
+        <div class="send__header__title">SEND</div>
+    </div>
+    <div class="send__container">
+        <form [formGroup]="sendForm" novalidate (ngSubmit)="submit()">
+            <div class="form-group">
+                <label class="pass-title">Address:</label>
+                <input class="form-control" name="address" formControlName="address" 
+                    placeholder="Enter address"/>
+            </div>
+            <div class="form-group">
+                <label class="pass-title">Amount:</label>
+                <input class="form-control" placeholder="Enter amount" 
+                    name="amount" formControlName="amount" />
+            </div>
+            <div class="form-group">
+                <app-button class="send-button">send</app-button>
+            </div>
+        </form>
+    </div>
+    <div class="send__top-gradient"></div>
+</div>

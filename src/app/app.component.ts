@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { WasmService } from './wasm.service';
 
 @Component({
   selector: 'app-root',
@@ -7,13 +6,8 @@ import { WasmService } from './wasm.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  constructor(private wasm: WasmService) {}
+  constructor() {}
 
   ngOnInit() {
-  }
-
-  testKeykeeper() {
-    this.wasm.keyKeeper().subscribe(value => {
-    });
   }
 }
