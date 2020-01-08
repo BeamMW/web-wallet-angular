@@ -1,26 +1,33 @@
 <div class="send">
     <div class="send__header">
-        <div class="send__header__side-menu">
-            <div class="side-menu__close" [routerLink]="walletRoute">back</div>
+        <div class="back-control-wrapper">
+            <img class="send__header__back" (click)="backAmountClicked()" [src]="iconBack"/>
         </div>
-        <div class="send__header__title">SEND</div>
+        <div class="title-wrapper">
+            <div class="send__header__title">SEND</div>
+        </div>
+        <div class="right-wrapper"></div>
+    </div>
+    <div class="send__progress">
+        <span class="send__progress__full"></span>
+        <span class="send__progress__full"></span>
+        <span class="send__progress__full"></span>
     </div>
     <div class="send__container">
-        <form [formGroup]="sendForm" novalidate (ngSubmit)="submit()">
-            <div class="form-group">
-                <label class="pass-title">Address:</label>
-                <input class="form-control" name="address" formControlName="address" 
-                    placeholder="Enter address"/>
+        <div class="send__container__content">
+            <div class="send__container__content__send-to">SEND TO</div>
+            <div class="send__container__content__address">{{send.address}}</div>
+            <div class="send__container__content__amount">AMOUNT TO SEND</div>
+            <div class="send__container__content__amount-value">{{send.amount}} BEAM</div>
+            <div class="send__container__content__fee">TRANSACTION FEE</div>
+            <div class="send__container__content__fee-value">{{send.fee}} GROTH</div>
+            <div class="send__container__content__info">For the transaction to complete, the recipient must get 
+                online within the next 12 hours and you should get 
+                online within 2 hours afterwards.</div>
+            <div class="send__container__content__button">
+                <app-button class="send-button" (click)="submit()">send</app-button>
             </div>
-            <div class="form-group">
-                <label class="pass-title">Amount:</label>
-                <input class="form-control" placeholder="Enter amount" 
-                    name="amount" formControlName="amount" />
-            </div>
-            <div class="form-group">
-                <app-button class="send-button">send</app-button>
-            </div>
-        </form>
+        </div>
     </div>
     <div class="send__top-gradient"></div>
 </div>

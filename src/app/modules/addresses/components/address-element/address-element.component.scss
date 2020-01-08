@@ -1,0 +1,48 @@
+.address {
+    height: 78px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+
+    &__name {
+        margin-top: 20px;
+        margin-left: 20px;
+        font-family: 'ProximaNovaBold', sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #ffffff;
+    }
+
+    &__data {
+        display: flex;
+        justify-content: space-between;
+        font-family: 'ProximaNova', sans-serif;
+        margin-top: 4px;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #ffffff;
+
+        &__value {
+            margin-left: 20px;
+            opacity: .5;
+        }
+
+        &__type-icon {
+            margin-left: auto;
+            margin-right: 15px;
+        }
+
+        &__type {
+            margin-right: 20px;
+            opacity: .5;
+        }
+    }
+}

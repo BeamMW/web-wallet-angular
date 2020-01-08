@@ -1,8 +1,15 @@
 <header class="header">
-    <div class="header__status">
-        <div class="header__status__icon"></div>
-        online
+    <div class="header-status-wrapper">
+        <div class="header__status">
+            <div class="header__status__icon"></div>
+            online
+        </div>
     </div>
-    <app-header-logo class="header__logo"></app-header-logo>
-    <app-header-popup class="header__popup"></app-header-popup>
+    <div class="header-logo-wrapper">
+        <app-header-logo class="header__logo"></app-header-logo>
+    </div>
+    <div class="header-full-wrapper">
+        <img class="header__full-sc-control" (click)="openFull()" [src]="iconFull" />
+        <!-- <app-header-popup class="header__popup"></app-header-popup> -->
+    </div>
 </header>

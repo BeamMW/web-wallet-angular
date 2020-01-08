@@ -1,0 +1,32 @@
+<div class="send">
+    <div class="send__header">
+        <div class="back-control-wrapper">
+            <img class="send__header__back" (click)="backConfirmationClicked()" [src]="iconBack"/>
+        </div>
+        <div class="title-wrapper">
+            <div class="send__header__title">SEND</div>
+        </div>
+        <div class="right-wrapper"></div>
+    </div>
+    <div class="send__progress">
+        <span class="send__progress__full"></span>
+        <span class="send__progress__empty"></span>
+        <span class="send__progress__empty"></span>
+    </div>
+    <div class="send__container">
+        <div class="send__container__title">SEND TO</div>
+        <div class="send__container__content">
+            <form class="send-form-cl" [formGroup]="sendForm" autocomplete="off" novalidate (ngSubmit)="submit()">
+                <div class="form-group">
+                    <textarea class="send__container__content__input" autosize maxlength="70"
+                         name="address" formControlName="address" 
+                        placeholder="Search by address, name or comment"></textarea>
+                </div>
+                <div class="send__container__content__button">
+                    <app-button class="send-button">next</app-button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="send__top-gradient"></div>
+</div>

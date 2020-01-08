@@ -4,7 +4,9 @@ import { StatusTitleComponent } from './components';
 import { MainLayoutComponent } from './layouts';
 import { HeaderComponent } from './containers';
 import { RouterModule } from '@angular/router';
-import { HeaderLogoComponent, HeaderPopupComponent, ButtonComponent } from './components';
+import { HeaderLogoComponent, HeaderPopupComponent, ButtonComponent, MenuComponent } from './components';
+import { MenuControlComponent } from './components/menu-control/menu-control.component';
+import { ClickOutsideDirective } from './directives/click-outside/click-outside.directive';
 
 @NgModule({
   declarations: [
@@ -13,7 +15,10 @@ import { HeaderLogoComponent, HeaderPopupComponent, ButtonComponent } from './co
     HeaderComponent,
     HeaderLogoComponent,
     HeaderPopupComponent,
-    ButtonComponent
+    ButtonComponent,
+    MenuComponent,
+    MenuControlComponent,
+    ClickOutsideDirective
   ],
   imports: [
     CommonModule,
@@ -23,7 +28,10 @@ import { HeaderLogoComponent, HeaderPopupComponent, ButtonComponent } from './co
     StatusTitleComponent,
     MainLayoutComponent,
     HeaderComponent,
-    ButtonComponent
+    ButtonComponent,
+    MenuComponent,
+    MenuControlComponent,
+    ClickOutsideDirective
   ]
 })
 export class SharedModule { }

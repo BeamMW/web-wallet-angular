@@ -43,6 +43,10 @@ export class WasmService {
       map(() => {
         const wordList = new this.module.WordList();
         seed.split(' ').forEach((word) => wordList.push_back(word));
+        // const phrase = this.module.KeyKeeper.GeneratePhrase();
+
+        // console.log(phrase);
+        // return new this.module.KeyKeeper(phrase);
         return new this.module.KeyKeeper(wordList);
       })
     );

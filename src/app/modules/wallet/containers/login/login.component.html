@@ -1,1 +1,19 @@
-<app-login-form (submitted)="submit($event)"></app-login-form>
+<!-- <app-login-form (submitted)="submit($event)"></app-login-form> -->
+<img [src]="bgUrl" class="background">
+<div class="login">
+    <img [src]="logoUrl" class="login__logo">
+    <div class="login__header-text">Enter your password to access the wallet</div>
+    <div class="login__container">
+        <form class="send-form-cl" [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="submit()">
+            <div class="form-group">
+                <input autofocus class="login__container__input" #passInput
+                    name="password" type="password" formControlName="password" 
+                    placeholder="Password"/>
+                    {{ passInput.focus() }}
+            </div>
+            <div class="login__container__button">
+                <app-button class="open-button">open your wallet</app-button>
+            </div>
+        </form>
+    </div>
+</div>

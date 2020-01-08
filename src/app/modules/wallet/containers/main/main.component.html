@@ -1,13 +1,16 @@
-<div class="main">
+<div class="main" [class.blur-filter]="modalOpened">
     <div class="main__header">
-        <div class="main__header__side-menu">
-            <div class="main__header__side-menu__control" (click)="menuClicked()">
-                <div class="main__header__side-menu__control__line"></div>
-                <div class="main__header__side-menu__control__line"></div>
-                <div class="main__header__side-menu__control__line"></div>
-            </div>
+        <div class="menu-control-wrapper">
+            <img class="main__header__menu" (click)="sideMenuClicked($event)" [src]="iconMenu"/>
+            <!-- <app-menu-control></app-menu-control> -->
         </div>
-        <div class="main__header__title">WALLET</div>
+        <div class="title-wrapper">
+            <div class="main__header__title">WALLET</div>
+        </div>
+        <div class="privacy-control-wrapper">
+            <img class="main__header__privacy-control" (click)="privacyControl()" 
+                [src]="privacyMode ? iconEnabledPrivacy : iconDisabledPrivacy"/>
+        </div>
     </div>
     <div class="main__controls">
         <app-button class="main__controls__send-button" [routerLink]="sendRoute">send</app-button>
@@ -17,27 +20,77 @@
         <div class="main__available__title">AVAILABLE</div>
         <div class="main__available__container">
             <img class="main__available__container__logo" [src]="iconBeam">
-            <span class="main__available__container__value">{{walletStatus.available}}</span>
+            <span class="main__available__container__value">{{walletStatus.available | beam:'1.0-9'}}</span>
         </div>
     </div>
-    <div class="main__in-progress">
+    <div class="main__in-progress" *ngIf="walletStatusLoaded && (walletStatus.receiving > 0 || walletStatus.sending > 0)">
         <div class="main__in-progress__title">IN PROGRESS</div>
         <div class="main__in-progress__container-sent">
             <img class="main__in-progress__container-sent__logo" [src]="iconSent">
-            <span class="main__in-progress__container-sent__value">- {{walletStatus.sending}}</span>
+            <span class="main__in-progress__container-sent__value">- {{walletStatus.sending | beam:'1.0-9'}}</span>
         </div>
         <div class="main__in-progress__container-receive">
             <img class="main__in-progress__container-receive__logo" [src]="iconReceived">
-            <span class="main__in-progress__container-receive__value">+ {{walletStatus.receiving}}</span>
+            <span class="main__in-progress__container-receive__value">+ {{walletStatus.receiving | beam:'1.0-9'}}</span>
         </div>
     </div>
 
-    <ng-container *ngIf="addresses$ | async as addresses">
-        <ng-container *ngFor="let addr of addresses">
-            <div class="address">{{addr.address}}</div>
+    <div class="main__transactions">
+        <ng-container *ngIf="transactions$ | async as transactions">
+            <div class="main__transactions__header">
+                <div class="main__transactions__header__title">
+                    <span class="main__transactions__header__title__text">TRANSACTIONS</span>
+                </div>
+                <div class="main__transactions__header__show-all" *ngIf="transactionsLoaded && transactions.length > 0">
+                    <span class="main__transactions__header__show-all__text" (click)="showAllTransactions()">Show all</span>
+                </div>
+            </div>
+            <div class="main__transactions__content">
+                <ng-container *ngIf="transactionsLoaded && transactions.length > 0">
+                    <div class="transcaction-container" *ngFor="let transaction of transactions; let i = index">
+                        <ng-container *ngIf="i < 5">
+                            <div class="main__transactions__content__receive" *ngIf="transaction.status_string == 'received'">
+                                <div class="main__transactions__content__receive__value">
+                                    <img class="tr-receive-icon" [src]="iconReceived"/>
+                                    <span class="tr-receive-text">Receive</span>
+                                    <span class="tr-receive-value">+ {{ transaction.value | beam:'1.0-9'}}</span>        
+                                </div>
+                                <div class="main__transactions__content__receive__status">received</div>
+                            </div>
+                            <div class="main__transactions__content__receive" *ngIf="transaction.status_string == 'receiving'">
+                                <div class="main__transactions__content__receive__value">
+                                    <img class="tr-receive-icon" [src]="iconReceived"/>
+                                    <span class="tr-receive-text">Receive</span>
+                                    <span class="tr-receive-value">+ {{ transaction.value | beam:'1.0-9'}}</span>        
+                                </div>
+                                <div class="main__transactions__content__receive__status">receiving</div>
+                            </div>
+                            <div class="main__transactions__content__send" *ngIf="transaction.status_string == 'sent'">
+                                <div class="main__transactions__content__send__value">
+                                    <img class="tr-send-icon" [src]="iconSent">
+                                    <span class="tr-send-text">Send</span>
+                                    <span class="tr-send-value">- {{ transaction.value | beam:'1.0-9'}}</span>        
+                                </div>
+                                <div class="main__transactions__content__send__status">sent</div>
+                            </div>
+                            <div class="main__transactions__content__send" *ngIf="transaction.status_string == 'sending'">
+                                <div class="main__transactions__content__send__value">
+                                    <img class="tr-send-icon" [src]="iconSent">
+                                    <span class="tr-send-text">Send</span>
+                                    <span class="tr-send-value">- {{ transaction.value | beam:'1.0-9'}}</span>        
+                                </div>
+                                <div class="main__transactions__content__send__status">sending</div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="transactionsLoaded && transactions.length === 0">
+                    <img class="main__transactions__content__empty-tr-icon" [src]="iconEmpty">
+                    <div class="main__transactions__content__empty-tr-text">Your transaction list is empty</div>
+                </ng-container>
+            </div>
         </ng-container>
-    </ng-container>
-    
+    </div>
 
     <div class="main__top-gradient"></div>
 </div>

@@ -21,7 +21,7 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "types": [ "Chrome" ],
+    "types": [ ],
     "lib": [
       "es2018",
       "dom"

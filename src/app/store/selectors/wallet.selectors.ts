@@ -19,15 +19,36 @@ export const selectAddressIds = createSelector(
   selectAddressState,
   fromWallet.selectAddressIds // shorthand for usersState => fromUser.selectUserIds(usersState)
 );
+
 export const selectUserEntities = createSelector(
   selectAddressState,
   fromWallet.selectAddressEntities
 );
-export const selectAllUsers = createSelector(
+
+export const selectAllAddresses = createSelector(
   selectAddressState,
   fromWallet.selectAllAddresses
 );
+
 export const selectAddressTotal = createSelector(
   selectAddressState,
   fromWallet.selectAddressesTotal
+);
+
+export const selectActiveAddresses = createSelector(
+  selectAllAddresses,
+  addresses => addresses.filter(address => !address.expired)
+);
+
+export const selectExpiredAddresses = createSelector(
+  selectAllAddresses,
+  addresses => addresses.filter(address => address.expired)
+);
+
+export const selectAddress = (address: String) => createSelector(
+  selectAllAddresses,
+  allAddresses => {
+    return allAddresses
+            .filter(addressValue => addressValue.address === address);
+  }
 );

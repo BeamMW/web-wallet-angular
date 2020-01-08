@@ -35,6 +35,7 @@
     "extensionizer": "^1.0.1",
     "fs": "0.0.1-security",
     "hammerjs": "^2.0.8",
+    "ngx-textarea-autosize": "^2.0.3",
     "obs-store": "^4.0.3",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
@@ -42,7 +43,7 @@
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "^8.2.0",
-    "@angular-devkit/build-angular": "^0.803.19",
+    "@angular-devkit/build-angular": "^0.803.21",
     "@angular/cli": "~8.3.13",
     "@angular/compiler-cli": "~8.2.11",
     "@angular/language-service": "~8.2.11",

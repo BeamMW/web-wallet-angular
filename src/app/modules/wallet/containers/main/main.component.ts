@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { WasmService } from './../../../../wasm.service';
 import { WebsocketService } from './../../../websocket';
 import { Subscription } from 'rxjs';
@@ -8,10 +8,10 @@ import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { loadAddresses, loadUtxo, loadTr } from './../../../../store/actions/wallet.actions';
-import { selectAllUsers } from '../../../../store/selectors/wallet.selectors';
+import { selectAllAddresses } from '../../../../store/selectors/wallet.selectors';
 import { selectAllUtxo } from '../../../../store/selectors/utxo.selectors';
 import { selectAllTr } from '../../../../store/selectors/transaction.selectors';
-import {DataService} from './../../../../services/data.service';
+import { DataService } from './../../../../services/data.service';
 
 import { environment } from '@environment';
 
@@ -21,17 +21,24 @@ import { environment } from '@environment';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit, OnDestroy {
+  public sendIcon: string = 'ic-send-blue';
+  public receiveIcon: string = 'ic-receive-blue';
   public iconBeam: string = `${environment.assetsPath}/images/modules/wallet/containers/main/ic-beam.svg`;
   public iconReceived: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-received.svg`;
   public iconSent: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-sent.svg`;
+  public iconMenu: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-menu.svg`;
+  public iconEmpty: string = `${environment.assetsPath}/images/modules/wallet/containers/main/atomic-empty-state.svg`;
+  public iconDisabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye.svg`; 
+  public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
 
-  public sendRoute = '/send/confirmation';
+  public sendRoute = '/send/addresses';
 
   private wallet: any;
-  private walledData: any;
   private sub: Subscription;
   private active = false;
   private mainActive = false;
+  transactionsLoaded = false;
+  modalOpened = false;
   addresses$: Observable<any>;
   utxos$: Observable<any>;
   transactions$: Observable<any>;
@@ -40,6 +47,7 @@ export class MainComponent implements OnInit, OnDestroy {
   transcationsColumns: string[] = ['sender', 'value', 'txId'];
   fullView = window.innerWidth < 800;
 
+  walletStatusLoaded = false;
   walletStatus = {
     available: 0,
     currentHeight: 0,
@@ -51,6 +59,7 @@ export class MainComponent implements OnInit, OnDestroy {
     sending: ''
   };
 
+  privacyMode = false;
   activeSidenavItem = '';
 
   constructor(private store: Store<any>,
@@ -58,9 +67,13 @@ export class MainComponent implements OnInit, OnDestroy {
               public router: Router,
               private wsService: WebsocketService,
               private dataService: DataService) {
-     this.addresses$ = this.store.pipe(select(selectAllUsers));
-     this.utxos$ = this.store.pipe(select(selectAllUtxo));
-     this.transactions$ = this.store.pipe(select(selectAllTr));
+    this.addresses$ = this.store.pipe(select(selectAllAddresses));
+    this.utxos$ = this.store.pipe(select(selectAllUtxo));
+    this.transactions$ = this.store.pipe(select(selectAllTr));
+
+    dataService.changeEmitted$.subscribe(emittedState => {
+      this.modalOpened = emittedState;
+    });
   }
 
   private transactionsUpdate() {
@@ -73,6 +86,7 @@ export class MainComponent implements OnInit, OnDestroy {
         } else {
           this.store.dispatch(loadTr({transactions: [msg.result]}));
         }
+        this.transactionsLoaded = true;
 
         this.sub.unsubscribe();
         setTimeout(() => {
@@ -114,7 +128,7 @@ export class MainComponent implements OnInit, OnDestroy {
   private addressUpdate() {
     this.sub = this.wsService.on().subscribe((msg: any) => {
       if (msg.result) {
-        console.log('[main-page] addresses')
+        console.log('[main-page] addresses', msg.result)
         if (msg.result.length !== undefined) {
           this.store.dispatch(loadAddresses({addresses: msg.result}));
         } else {
@@ -152,6 +166,7 @@ export class MainComponent implements OnInit, OnDestroy {
         this.walletStatus.sending = msg.result.sending;
 
         this.sub.unsubscribe();
+        this.walletStatusLoaded = true;
         this.addressUpdate();
       }
     });
@@ -200,18 +215,17 @@ export class MainComponent implements OnInit, OnDestroy {
     // this.router.navigate([item.route], {relativeTo: this.route});
   }
 
-  private toSend() {
-    this.router.navigate(
-      ['/wallet/send']
-    );
+  sideMenuClicked(event) {
+    event.stopPropagation();
+    this.router.navigate([this.router.url, { outlets: { sidemenu: 'menu' }}]);
   }
 
-  log (data) {
-    console.log(data);
+  showAllTransactions() {
+    this.router.navigate(['/transactions/view']);
   }
 
-  menuClicked() {
-    this.router.navigate(['/wallet/main', { outlets: { sidemenu: 'menu' }}]);
+  privacyControl() {
+    this.privacyMode = !this.privacyMode; 
   }
 }
 

@@ -8,25 +8,6 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { RouterModule } from '@angular/router';
 
-import {
-  MatExpansionModule,
-  MatButtonModule,
-  MatCheckboxModule,
-  MatIconModule,
-  MatTabsModule,
-  MatSortModule,
-  MatListModule,
-  MatCardModule,
-  MatProgressBarModule,
-  MatTableModule,
-  MatToolbarModule,
-  MatInputModule,
-  MatFormFieldModule,
-  MatPaginatorModule,
-  MatSidenavModule,
-  MatDialogModule,
-} from '@angular/material';
-
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from './shared/shared.module';
@@ -36,6 +17,7 @@ import { WalletModule } from './modules/wallet/wallet.module';
 import { SendModule } from './modules/send/send.module';
 import { WebsocketModule } from './modules/websocket';
 import { StorageModule } from '@ngx-pwa/local-storage';
+import { TransactionsModule } from './modules/transactions/transactions.module';
 
 import { EffectsModule } from '@ngrx/effects';
 import { WalletEffects } from './store/effects/wallet.effects';
@@ -59,26 +41,10 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
     FirstTimeFlowModule,
     WalletModule,
     SendModule,
+    TransactionsModule,
     WebsocketModule.config({
       url: environment.ws
     }),
-    // Material
-    MatExpansionModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatTabsModule,
-    MatSortModule,
-    MatListModule,
-    MatCardModule,
-    MatProgressBarModule,
-    MatTableModule,
-    MatToolbarModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatPaginatorModule,
-    MatSidenavModule,
-    MatDialogModule,
     StoreModule.forRoot(walletReducer.reducers, {
       runtimeChecks: {
         strictStateImmutability: true,

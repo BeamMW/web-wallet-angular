@@ -7,28 +7,7 @@
 /// @param {String} $theme [$btn-dark-blue] - theme name
 /// @param {String} $size [$btn-md] - size
 /// @param {Bool} $with-icon [false] - is button contain icon flag
-///
-/// @example scss
-///   .login-button {
-///     @include ui-button;
-///   }
-///
-/// @example scss
-///   .login-button {
-///     @include ui-button($btn-dark-blue);
-///   }
-///
-/// @example scss
-///   .login-button {
-///     @include ui-button($btn-dark-blue, $btn-xs);
-///   }
-///
-/// @example scss
-///   .login-button {
-///     @include ui-button($btn-dark-blue, $btn-md) {
-///       margin-top: 2px;
-///     }
-///   }
+
 @mixin ui-button($theme: $btn-receive, $size: $btn-md, $rounded: true) {
 
   ::ng-deep {
@@ -59,9 +38,26 @@
         }
       }
 
+      @if ($theme == $btn-open-wallet) {
+        background-color: #00f6d2;
+        color: #032e49;
+
+        &:not([disabled]) {
+          &:hover,
+          &:active {
+            background-color: #00f6d2;
+          }
+        }
+      }
+
       @if($size == $btn-md) {
         height: 44px;
         width: 164px;
+      }
+
+      @if($size == $btn-lg) {
+        height: 44px;
+        width: 253px;
       }
     }
 
@@ -80,27 +76,101 @@
   }
 }
 
-@mixin ui-button-icon {
+@mixin ui-button-receive-icon {
   ::ng-deep {
     .ui-button__inner-wrapper {
+      align-items: center;
       display: flex;
-      height: 100%;
-      justify-content: space-between;
+      justify-content: center;
 
       .ui-button__icon {
+        background: url('/assets/images/shared/components/button/ic-receive-blue.svg');
         background-repeat: no-repeat;
         display: inline-block;
-        width: 40px;
+        width: 16px;
+        height: 16px;
+
         @content;
       }
 
       .ui-button__text {
-        align-items: center;
-        border-left: 1px solid rgba(255, 255, 255, .3);
-        display: flex;
-        flex-basis: 100%;
-        justify-content: center;
-        margin-left: 6px;
+        margin-left: 10px;
+        font-family: 'ProximaNovaBold', sans-serif;
+      }
+    }
+  }
+}
+
+@mixin ui-button-send-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      .ui-button__icon {
+        background: url('/assets/images/shared/components/button/ic-send-blue.svg');
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+
+        @content;
+      }
+
+      .ui-button__text {
+        margin-left: 10px;
+        font-family: 'ProximaNovaBold', sans-serif;
+      }
+    }
+  }
+}
+
+@mixin ui-button-next-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      .ui-button__icon {
+        background: url('/assets/images/shared/components/button/ic-send-blue-copy.svg');
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+
+        @content;
+      }
+
+      .ui-button__text {
+        margin-left: 10px;
+        font-family: 'ProximaNovaBold', sans-serif;
+      }
+    }
+  }
+}
+
+@mixin ui-button-open-wallet-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      .ui-button__icon {
+        background: url('/assets/images/modules/wallet/containers/login/icon-wallet-small.svg');
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+
+        @content;
+      }
+
+      .ui-button__text {
+        margin-left: 10px;
+        font-family: 'ProximaNovaBold', sans-serif;
       }
     }
   }

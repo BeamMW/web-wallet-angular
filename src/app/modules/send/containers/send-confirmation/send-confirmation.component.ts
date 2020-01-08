@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { WebsocketService } from './../../../websocket';
+import { environment } from '@environment';
 
 @Component({
   selector: 'app-send-confirmation',
@@ -11,24 +12,26 @@ import { WebsocketService } from './../../../websocket';
   styleUrls: ['./send-confirmation.component.scss']
 })
 export class SendConfirmationComponent implements OnInit {
+  public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
   active = false;
   sendForm: FormGroup;
   sub: Subscription;
+  public send = {
+    address: '',
+    fee: 0,
+    comment: '',
+    amount: 0
+  };
   public walletRoute = '/wallet/main';
   constructor(private dataService: DataService, public router: Router, private wsService: WebsocketService) { 
-    this.sendForm = new FormGroup({
-      address: new FormControl(),
-      amount: new FormControl()
-    });
   }
 
   submit() {
     this.sub = this.wsService.on().subscribe((msg: any) => {
       if (msg.result) {
         if (msg.result !== undefined) {
-          alert('sended');
           this.router.navigate(['/wallet/main']);
-        } 
+        }
 
         this.sub.unsubscribe();
       }
@@ -38,20 +41,24 @@ export class SendConfirmationComponent implements OnInit {
       method:"tx_send", 
       params:
       {
-        value : parseInt(this.sendForm.value.amount, 10),
-        fee : 100,
-        address : this.sendForm.value.address,
-        comment : ''
+        value : this.send.amount * 100000000,
+        fee : this.send.fee,
+        address : this.send.address,
+        comment : this.send.comment
       }
     });
   }
 
   ngOnInit() {
     this.active = this.dataService.store.getState().active;
+    this.send = this.dataService.sendStore.getState().send;
 
     if (!this.active){
       this.router.navigate(['/wallet/login']);
     }
   }
 
+  backAmountClicked() {
+    this.router.navigate(['/send/amount']);
+  }
 }

@@ -1,0 +1,110 @@
+@import 'ui-mixins';
+@import './styles';
+
+:host {
+    flex: 1 0 auto;
+    background-color: #042548;
+}
+
+.addresses {
+    min-height: 550px;
+    display: flex;
+    flex-direction: column;
+
+    &__top-gradient {
+        position: absolute;
+        width: 100%;
+        height: 100px;
+        background: linear-gradient(to top, rgba(3, 91, 143, 0), #035b8f);
+        z-index: 1;
+    }
+
+    &__header {
+        margin-top: 20px;
+        display: flex;
+        z-index: 10;
+        width: 100%;
+
+        &__menu {
+            cursor: pointer;
+            margin-left: 20px;
+        }
+
+        &__title {
+            font-family: 'ProximaNovaSemiBold', sans-serif;
+            margin: 0 auto;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: 3px;
+            text-align: center;
+        }
+
+        &__privacy-control {
+            margin-right: 20px;
+            cursor: pointer;
+        }
+    }
+
+    &__list {
+        z-index: 10;
+        margin-top: 35px;
+        display: flex;
+        flex-direction: column;
+
+        &__header {
+            margin: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            &__title {
+                opacity: 0.5;
+                font-family: 'ProximaNovaBold', sans-serif;
+                font-size: 14px;
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 1px;
+                color: #ffffff;
+            }
+        }
+
+        &__items {
+            margin-top: 10px;
+        }
+    }
+}
+
+.addresses.blur-filter {
+    -webkit-filter: blur(4px);
+    -moz-filter: blur(4px);
+    -o-filter: blur(4px);
+    -ms-filter: blur(4px);
+    filter: blur(4px);
+}
+
+.menu-control-wrapper {
+    width: 50%;
+    flex-shrink: 1;
+    display: flex;
+}
+
+.title-wrapper {
+    flex-shrink: 0;
+}
+
+.save-addr-control-wrapper {
+    width: 50%;
+    flex-shrink: 1;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.address-item:nth-child(odd)  {
+    background-color: rgba(255, 255, 255, 0.03);
+}

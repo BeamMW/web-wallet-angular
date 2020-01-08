@@ -1,0 +1,179 @@
+@import 'ui-mixins';
+@import './styles';
+
+:host {
+    flex: 1 0 auto;
+    background-color: #042548;
+}
+
+.send {
+    min-height: 550px;
+    display: flex;
+    flex-direction: column;
+
+    &__top-gradient {
+        position: absolute;
+        width: 100%;
+        height: 100px;
+        background: linear-gradient(to top, rgba(204, 100, 234, 0), #da68f5);
+    //  background: linear-gradient(to top, rgba(3, 91, 143, 0), #035b8f);
+        z-index: 1;
+    }
+
+    &__header {
+        margin-top: 20px;
+        display: flex;
+        z-index: 10;
+        width: 100%;
+
+        &__back {
+            cursor: pointer;
+            margin-left: 20px;
+        }
+
+        &__title {
+            font-family: 'ProximaNovaSemiBold', sans-serif;
+            margin: 0 auto;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: 3px;
+            text-align: center;
+        }
+    }
+
+    &__progress {
+        display: flex;
+        margin: 5px auto 0 auto;
+        z-index: 10;
+
+        &__full {
+            border-radius: 50px;
+            margin-right: 5px;
+            width: 4px;
+            height: 4px;
+            background-color: #ffffff;
+        }
+
+        &__empty {
+            margin-right: 5px;
+            border-radius: 50px;
+            width: 4px;
+            height: 4px;
+            opacity: .4;
+            background-color: #ffffff;
+        }
+    }
+
+    &__container {
+        z-index: 10;
+        margin-top: 30px;
+        display: flex;
+        color: #ffffff;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 20px;
+        flex-grow: 1; 
+
+        &__title {
+            font-family: 'ProximaNovaBold', sans-serif;
+            opacity: 0.5;
+            font-size: 14px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: 1px;
+            color: #ffffff;
+        }
+
+        &__content {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            width:calc(100% - 20px);
+
+            &__input {
+                background: rgba(255, 255, 255, 0);
+                font-family: 'ProximaNova', sans-serif;
+                border: none;
+                width: 291px;
+                border-bottom: 1px solid rgba(255, 255, 255, .3);
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+                resize:none;
+                max-height: 40px;
+            }
+
+            &__input:focus {
+                font-family: 'ProximaNova', sans-serif;
+                outline-width: 0;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+            }
+
+            &__input::placeholder {
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: rgba(255, 255, 255, .3);
+            }
+
+            &__button {
+                margin: auto auto 20px auto;
+                
+                @include ui-button($btn-send, $btn-md) {
+                }
+    
+                @include ui-button-next-icon()
+            }
+        }
+    }
+}
+
+.send-form-cl {
+    display: flex;
+	flex-direction: column;
+    flex: 1;
+}
+
+.send-button {
+    @include ui-button($btn-send, $btn-md) {
+        margin-right: 7px;
+    }
+}
+
+.back-control-wrapper {
+    width: 50%;
+    flex-shrink: 1;
+    display: flex;
+}
+
+.title-wrapper {
+    flex-shrink: 0;
+}
+
+.right-wrapper {
+    width: 50%;
+    flex-shrink: 1;
+    display: flex;
+    flex-direction: row-reverse;
+}

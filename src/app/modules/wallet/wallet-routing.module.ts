@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { MainComponent, LoginComponent } from './containers';
-import { MenuComponent } from './components';
-import { MainLayoutComponent } from '../../shared/layouts';
-import { HeaderComponent } from '../../shared/containers';
+import { MenuComponent } from '@shared/components';
+import { MainLayoutComponent } from '@shared/layouts';
+import { HeaderComponent } from '@shared/containers';
 
 const routes: Routes = [{
   path: '',

@@ -1,0 +1,100 @@
+@import 'ui-mixins';
+@import './styles';
+
+:host {
+    flex: 1 0 auto;
+    background-color: #042548;
+}
+
+.background {
+    display: flex;
+    position: absolute;
+    z-index: 1;
+
+    @media (min-width: 376px) {
+        display: none;
+    }
+}
+
+.login {
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    
+    &__logo {
+        margin-top: 70px;
+        z-index: 10;
+    }
+
+    &__header-text {
+        margin-top: 70px;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
+        color: #ffffff;
+        z-index: 10;
+    }
+
+    &__container {
+        margin-top: 30px;
+        display: flex;
+        align-self: center;
+        z-index: 10;
+
+        &__input {
+            background: rgba(255, 255, 255, 0);
+            font-family: 'ProximaNova', sans-serif;
+            border: none;
+            width: 291px;
+            border-bottom: 2px solid #00f6d2;
+            font-size: 14px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: #ffffff;
+            resize:none;
+            padding: 5px;
+            max-height: 40px;
+        }
+
+        &__input:focus {
+            font-family: 'ProximaNova', sans-serif;
+            outline-width: 0;
+            font-size: 14px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: #ffffff;
+        }
+
+        &__input::placeholder {
+            font-family: 'ProximaNova', sans-serif;
+            font-size: 14px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: rgba(255, 255, 255, .3);
+        }
+
+        &__button {
+            text-align: center;
+            margin-top: 20px;
+            
+            @include ui-button($btn-open-wallet, $btn-lg) {
+            }
+
+            @include ui-button-open-wallet-icon()
+        }
+    }
+}

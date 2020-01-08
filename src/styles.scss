@@ -8,8 +8,28 @@
 //     padding: 0;
 // }
 
+@font-face {
+  font-family: "ProximaNova";
+  src: url("./assets/fonts/ProximaNova-Regular.ttf");
+}
+
+@font-face {
+  font-family: "ProximaNovaIT";
+  src: url("./assets/fonts/ProximaNova-RegularIt.ttf");
+}
+
+@font-face {
+  font-family: "ProximaNovaSemibold";
+  src: url("./assets/fonts/ProximaNova-Semibold.ttf");
+}
+
+@font-face {
+  font-family: "ProximaNovaBold";
+  src: url("./assets/fonts/ProximaNova-Bold.ttf");
+}
+
 * {
-    font-family: 'ProximaNova', sans-serif;
+  outline: none;
 }
 
 *,
@@ -46,4 +66,3 @@ html {
         text-align: left;
     }
 }
-

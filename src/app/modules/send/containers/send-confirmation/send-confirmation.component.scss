@@ -24,14 +24,15 @@
         margin-top: 20px;
         display: flex;
         z-index: 10;
-        height: 60px;
         width: 100%;
 
-        &__side-menu {
-            color: #ffffff;
+        &__back {
+            cursor: pointer;
+            margin-left: 20px;
         }
 
         &__title {
+            font-family: 'ProximaNovaSemiBold', sans-serif;
             margin: 0 auto;
             color: #ffffff;
             font-size: 20px;
@@ -44,11 +45,109 @@
         }
     }
 
+    &__progress {
+        display: flex;
+        margin: 5px auto 0 auto;
+        z-index: 10;
+
+        &__full {
+            border-radius: 50px;
+            margin-right: 5px;
+            width: 4px;
+            height: 4px;
+            background-color: #ffffff;
+        }
+
+        &__empty {
+            margin-right: 5px;
+            border-radius: 50px;
+            width: 4px;
+            height: 4px;
+            opacity: .4;
+            background-color: #ffffff;
+        }
+    }
+
     &__container {
-        margin-top: 50px;
+        z-index: 10;
         display: flex;
         color: #ffffff;
-        justify-content: center;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 20px;
+        flex-grow: 1; 
+
+        &__content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            width:calc(100% - 20px);
+
+            &__send-to,
+            &__amount,
+            &__fee {
+                margin-top: 30px;
+                font-family: 'ProximaNovaBold', sans-serif;
+                opacity: 0.5;
+                font-size: 14px;
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 1px;
+                color: #ffffff;
+            }
+
+            &__fee-value,
+            &__amount-value {
+                margin-top: 7px;
+                font-family: 'ProximaNovaSemiBold', sans-serif;
+                font-size: 18px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 0.34px;
+                color: #c061e0;
+            }
+
+            &__address {
+                margin-top: 7px;
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+            }
+
+            &__info {
+                width: 335px;
+                margin-top: 30px;
+                font-family: 'ProximaNovaIT', sans-serif;
+                font-size: 14px;
+                opacity: .4;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: center;
+                color: #ffffff;
+            }
+
+            &__button {
+                margin: auto auto 20px auto;
+
+                @include ui-button($btn-send, $btn-md) {
+                    margin-right: 7px;
+                }
+    
+                @include ui-button-send-icon()
+            }
+        }
     }
 }
 
@@ -56,4 +155,21 @@
     @include ui-button($btn-send, $btn-md) {
         margin-right: 7px;
     }
+}
+
+.back-control-wrapper {
+    width: 50%;
+    flex-shrink: 1;
+    display: flex;
+}
+
+.title-wrapper {
+    flex-shrink: 0;
+}
+
+.right-wrapper {
+    width: 50%;
+    flex-shrink: 1;
+    display: flex;
+    flex-direction: row-reverse;
 }

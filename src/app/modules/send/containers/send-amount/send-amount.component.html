@@ -1,0 +1,51 @@
+<div class="send">
+    <div class="send__header">
+        <div class="back-control-wrapper">
+            <img class="send__header__back" (click)="backAddressesClicked()" [src]="iconBack"/>
+        </div>
+        <div class="title-wrapper">
+            <div class="send__header__title">SEND</div>
+        </div>
+        <div class="right-wrapper"></div>
+    </div>
+    <div class="send__progress">
+        <span class="send__progress__full"></span>
+        <span class="send__progress__full"></span>
+        <span class="send__progress__empty"></span>
+    </div>
+    <div class="send__container">
+        <div class="send__container__content">
+            <form class="send-form-cl" [formGroup]="sendForm" autocomplete="off" novalidate (ngSubmit)="submit()">
+                <div class="send__container__content__title-amount">AMOUNT</div>
+                <div class="form-group">
+                    <input class="send__container__content__input"
+                         name="amount" formControlName="amount" 
+                        placeholder="Enter amount"/>
+                    <span class="send__container__content__currency">BEAM</span>
+                </div>
+                <div class="send__container__content__title-fee">TRANSACTION FEE</div>
+                <div class="form-group">
+                    <input class="send__container__content__input-groth"
+                         name="fee" formControlName="fee" 
+                        placeholder="Enter fee"/>
+                    <span class="send__container__content__currency">GROTH</span>
+                </div>
+                <div class="send__container__content__title-fee">TRANSACTION COMMENT</div>
+                <div class="form-group">
+                    <input class="send__container__content__input-comment"
+                         name="comment" formControlName="comment" 
+                        placeholder="Enter comment"/>
+                </div>
+                <div class="send__container__content__info">
+                    For the transaction to complete, the recipient must get 
+                    online within the next 12 hours and you should get 
+                    online within 2 hours afterwards.
+                </div>
+                <div class="send__container__content__button">
+                    <app-button class="send-button">next</app-button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="send__top-gradient"></div>
+</div>

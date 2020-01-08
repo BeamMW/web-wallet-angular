@@ -1,0 +1,10 @@
+<div class="address" [routerLink]="['/addresses/details', item.address]">
+    <div class="address__name">No name</div>
+    <div class="address__data">
+        <div class="address__data__value">{{(item.address | slice:0:6)+'...'+(item.address | slice:-6)}}</div>
+        <img class="address__data__type-icon" [src]="addressIcon">
+        <div class="address__data__type">{{item.duration === 0 ? 'never expires' : 
+            (item.expired ? ('expired ' + ((item.create_time + item.duration) * 1000 | date:'d MMM y')) :
+            ('will expire ' + ((item.create_time + item.duration) * 1000 | date:'d MMM y')))}}</div>
+    </div>
+</div>

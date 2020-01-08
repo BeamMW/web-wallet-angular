@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { loadAddresses, loadUtxo, loadTr } from './../../../../store/actions/wallet.actions';
-import { selectAllUsers } from '../../../../store/selectors/wallet.selectors';
+import { selectAllAddresses } from '../../../../store/selectors/wallet.selectors';
 import { selectAllUtxo } from '../../../../store/selectors/utxo.selectors';
 import { selectAllTr } from '../../../../store/selectors/transaction.selectors';
 import {DataService} from './../../../../services/data.service';
@@ -50,7 +50,7 @@ export class MainComponent implements OnInit, OnDestroy {
               public router: Router,
               private wsService: WebsocketService,
               private dataService: DataService) {
-     this.addresses$ = this.store.pipe(select(selectAllUsers));
+     this.addresses$ = this.store.pipe(select(selectAllAddresses));
      this.utxos$ = this.store.pipe(select(selectAllUtxo));
      this.transactions$ = this.store.pipe(select(selectAllTr));
   }
