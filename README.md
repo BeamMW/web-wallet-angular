@@ -15,4 +15,4 @@ Start wallet service `wallet-service-masternet -n eu-node01.masternet.beam.mw:81
 
 Enable developer mode in Chrome `chrome://extensions/`
 
-Export unpacked extension from `./dist/web-wallet`
+Import unpacked extension from `./dist/web-wallet`
