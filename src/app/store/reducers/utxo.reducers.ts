@@ -1,4 +1,4 @@
-import { Address } from '../../models/address';
+import { Address } from '../../models/address.model';
 import { Action, createReducer, on, State } from '@ngrx/store';
 import * as walletActions from '../actions/wallet.actions';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';

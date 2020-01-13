@@ -13,7 +13,6 @@ import { environment } from '@environment';
 })
 export class SendConfirmationComponent implements OnInit {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
-  active = false;
   sendForm: FormGroup;
   sub: Subscription;
   public send = {
@@ -50,12 +49,7 @@ export class SendConfirmationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.active = this.dataService.store.getState().active;
     this.send = this.dataService.sendStore.getState().send;
-
-    if (!this.active){
-      this.router.navigate(['/wallet/login']);
-    }
   }
 
   backAmountClicked() {

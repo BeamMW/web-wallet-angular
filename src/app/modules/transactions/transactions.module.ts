@@ -4,11 +4,15 @@ import { TransactionsViewComponent } from './containers/transactions-view/transa
 import { TransactionDetailsComponent } from './containers/transaction-details/transaction-details.component';
 import { SharedModule } from '../../shared/shared.module';
 import { TransactionsRoutingModule } from './transactions-routing.module';
+import { TransactionsMenuComponent } from './components/transactions-menu/transactions-menu.component';
+import { TransactionElementComponent } from './components/transaction-element/transaction-element.component';
 
 @NgModule({
   declarations: [
     TransactionsViewComponent,
-    TransactionDetailsComponent
+    TransactionDetailsComponent,
+    TransactionsMenuComponent,
+    TransactionElementComponent
   ],
   imports: [
     CommonModule,

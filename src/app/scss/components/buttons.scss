@@ -101,6 +101,32 @@
   }
 }
 
+@mixin ui-button-create-password-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      .ui-button__icon {
+        background: url('/assets/images/shared/components/button/ic-receive-blue.svg');
+        transform: rotate(270deg);
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+
+        @content;
+      }
+
+      .ui-button__text {
+        margin-left: 10px;
+        font-family: 'ProximaNovaBold', sans-serif;
+      }
+    }
+  }
+}
+
 @mixin ui-button-send-icon {
   ::ng-deep {
     .ui-button__inner-wrapper {
@@ -160,6 +186,56 @@
 
       .ui-button__icon {
         background: url('/assets/images/modules/wallet/containers/login/icon-wallet-small.svg');
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+
+        @content;
+      }
+
+      .ui-button__text {
+        margin-left: 10px;
+        font-family: 'ProximaNovaBold', sans-serif;
+      }
+    }
+  }
+}
+
+@mixin ui-button-create-wallet-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      .ui-button__icon {
+        background: url('/assets/images/modules/first-time-flow/containers/ftf-create/icon-add-blue.svg');
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+
+        @content;
+      }
+
+      .ui-button__text {
+        margin-left: 10px;
+        font-family: 'ProximaNovaBold', sans-serif;
+      }
+    }
+  }
+}
+
+@mixin ui-button-generate-seed-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      .ui-button__icon {
+        background: url('/assets/images/modules/first-time-flow/containers/ftf-generate-seed/icon-recovery.svg');
         background-repeat: no-repeat;
         display: inline-block;
         width: 16px;

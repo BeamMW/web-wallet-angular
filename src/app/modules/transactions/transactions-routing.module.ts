@@ -4,10 +4,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { TransactionDetailsComponent, TransactionsViewComponent } from './containers';
 import { MainLayoutComponent } from '@shared/layouts';
 import { HeaderComponent } from '@shared/containers';
+import { LoginGuard } from './../wallet/guards/login.guard';
 
 const routes: Routes = [{
   path: '',
   component: MainLayoutComponent,
+  canActivate: [LoginGuard],
   children: [
   {
     path: 'view',

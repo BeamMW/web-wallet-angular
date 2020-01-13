@@ -1,0 +1,53 @@
+@import 'ui-mixins';
+@import './styles';
+
+:host {
+    flex: 1 0 auto;
+    background-color: #042548;
+}
+
+.background {
+    display: flex;
+    position: absolute;
+    z-index: 1;
+
+    @media (min-width: 376px) {
+        display: none;
+    }
+}
+
+.create {
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    
+    &__logo {
+        margin-top: 70px;
+        z-index: 10;
+    }
+
+    &__header-text {
+        margin-top: 33px;
+        font-family: 'ProximaNovaBold', sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
+        color: #25c1ff;
+        z-index: 10;
+    }
+
+    &__create-button {
+        text-align: center;
+        margin-top: 100px;
+        z-index: 10;
+        
+        @include ui-button($btn-open-wallet, $btn-lg) {
+        }
+
+        @include ui-button-create-wallet-icon()
+    }
+}

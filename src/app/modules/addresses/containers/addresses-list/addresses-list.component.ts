@@ -5,7 +5,7 @@ import { DataService } from './../../../../services/data.service';
 import { WebsocketService } from './../../../websocket';
 import { Store, select } from '@ngrx/store';
 import { loadAddresses } from './../../../../store/actions/wallet.actions';
-import { selectAllAddresses, selectExpiredAddresses, selectActiveAddresses } from '../../../../store/selectors/wallet.selectors';
+import { selectAllAddresses, selectExpiredAddresses, selectActiveAddresses } from '../../../../store/selectors/address.selectors';
 import { Subscription, Observable } from 'rxjs';
 
 @Component({
@@ -16,8 +16,6 @@ import { Subscription, Observable } from 'rxjs';
 export class AddressesListComponent implements OnInit, OnDestroy {
   public iconMenu: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-menu.svg`;
   private sub: Subscription;
-  private wallet: any;
-  private active = false;
   private pageActive = false;
   public modalOpened = false;
   addresses$: Observable<any>;
@@ -70,18 +68,7 @@ export class AddressesListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.wallet = localStorage.getItem('wallet');
-    if (this.wallet === undefined) {
-      this.router.navigate(['/initialize/create']);
-    }
-    this.active = this.dataService.store.getState().active;
     this.pageActive = true;
-
-    if (this.active) {
-      this.addressesUpdate();
-    } else {
-      this.router.navigate(['/wallet/login']);
-    }
   }
 
   ngOnDestroy() {
@@ -105,19 +92,4 @@ export class AddressesListComponent implements OnInit, OnDestroy {
       this.addresses$ = this.store.pipe(select(selectAllAddresses));
     }
   }
-
-
-  // test() {
-  //   this.wsService.send({
-  //         jsonrpc:'2.0',
-  //         id: 123,
-  //         method: 'create_address',
-  //         params:
-  //         {
-  //             expiration : 'never',
-  //             comment : 'John Smith'
-  //         }
-  //     })
-  // }
-
 }

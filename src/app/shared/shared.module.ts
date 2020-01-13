@@ -7,6 +7,8 @@ import { RouterModule } from '@angular/router';
 import { HeaderLogoComponent, HeaderPopupComponent, ButtonComponent, MenuComponent } from './components';
 import { MenuControlComponent } from './components/menu-control/menu-control.component';
 import { ClickOutsideDirective } from './directives/click-outside/click-outside.directive';
+import { BeamPipe } from 'app/pipes/beam.pipe';
+import { DecimalPipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import { ClickOutsideDirective } from './directives/click-outside/click-outside.
     ButtonComponent,
     MenuComponent,
     MenuControlComponent,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    BeamPipe
   ],
   imports: [
     CommonModule,
@@ -31,7 +34,11 @@ import { ClickOutsideDirective } from './directives/click-outside/click-outside.
     ButtonComponent,
     MenuComponent,
     MenuControlComponent,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    BeamPipe
+  ],
+  providers: [
+    DecimalPipe
   ]
 })
 export class SharedModule { }

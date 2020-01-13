@@ -1,0 +1,12 @@
+<span class="header" (click)="changeDropdownState($event)">
+    <span>{{selectedItem.title}}</span>
+    <img src="" class="header__icon" [src]="iconDrop">
+</span>
+<div class="dropdown" *ngIf="isDropdownVisible" appClickOutside (clickOutside)="onClickedOutside()">
+    <div class="dropdown__content">
+        <ul class="dropdown__column">
+            <li class="dropdown__item" *ngFor="let item of menuItems"
+                [class.active]="item.id === selectedItem.id" (click)="selectItem(item)"> {{item.title}} </li>
+        </ul>
+    </div>
+</div>

@@ -28,9 +28,33 @@ export const selectTrEntities = createSelector(
 export const selectAllTr = createSelector(
     selectTrState,
     fromTr.selectAllTr
-  );
+);
+
+export const selectInProgressTr = createSelector(
+    selectAllTr,
+    transactions => transactions.filter(transaction => transaction.status_string === 'receiving' ||
+        transaction.status_string === 'sending')
+);
+
+export const selectSentTr = createSelector(
+    selectAllTr,
+    transactions => transactions.filter(transaction => transaction.status_string === 'sent')
+);
+
+export const selectReceivedTr = createSelector(
+    selectAllTr,
+    transactions => transactions.filter(transaction => transaction.status_string === 'received')
+);
 
 export const selectTrTotal = createSelector(
     selectTrState,
     fromTr.selectTrTotal
+);
+
+export const selectTrByAddress = (address: string) => createSelector(
+    selectAllTr,
+    allTr => {
+        return allTr
+            .filter(transactions => transactions.sender === address || transactions.receiver === address);
+    }
 );

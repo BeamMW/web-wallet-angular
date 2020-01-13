@@ -26,7 +26,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       srcOut: `${environment.assetsPath}/images/shared/components/menu/ic-addressbook.svg`,
       srcOn: `${environment.assetsPath}/images/shared/components/menu/ic-addressbook-active.svg`
     }, {
-      path: '',
+      path: '/utxo/info',
       title: 'UTXO',
       src: '',
       srcOut: `${environment.assetsPath}/images/shared/components/menu/ic-utxo.svg`,

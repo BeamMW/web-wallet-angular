@@ -3,14 +3,13 @@ import { Router } from '@angular/router';
 import { WasmService } from './../../../../wasm.service';
 import { WebsocketService } from './../../../websocket';
 import { Subscription } from 'rxjs';
-/// <reference types="chrome"/>
-
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { loadAddresses, loadUtxo, loadTr } from './../../../../store/actions/wallet.actions';
-import { selectAllAddresses } from '../../../../store/selectors/wallet.selectors';
+import { loadAddresses, loadUtxo, loadTr, saveWalletStatus } from './../../../../store/actions/wallet.actions';
+import { selectAllAddresses } from '../../../../store/selectors/address.selectors';
 import { selectAllUtxo } from '../../../../store/selectors/utxo.selectors';
 import { selectAllTr } from '../../../../store/selectors/transaction.selectors';
+import { selectAppState } from '../../../../store/selectors/wallet-state.selectors';
 import { DataService } from './../../../../services/data.service';
 
 import { environment } from '@environment';
@@ -21,8 +20,6 @@ import { environment } from '@environment';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit, OnDestroy {
-  public sendIcon: string = 'ic-send-blue';
-  public receiveIcon: string = 'ic-receive-blue';
   public iconBeam: string = `${environment.assetsPath}/images/modules/wallet/containers/main/ic-beam.svg`;
   public iconReceived: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-received.svg`;
   public iconSent: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-sent.svg`;
@@ -32,10 +29,9 @@ export class MainComponent implements OnInit, OnDestroy {
   public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
 
   public sendRoute = '/send/addresses';
+  public receiveRoute = '/receive/main';
 
-  private wallet: any;
   private sub: Subscription;
-  private active = false;
   private mainActive = false;
   transactionsLoaded = false;
   modalOpened = false;
@@ -156,6 +152,8 @@ export class MainComponent implements OnInit, OnDestroy {
         console.log('[main-page] update: ');
         console.dir(msg);
 
+        this.store.dispatch(saveWalletStatus({status: msg.result}));
+
         this.walletStatus.available = msg.result.available;
         this.walletStatus.currentHeight = msg.result.current_height;
         this.walletStatus.current_state_hash = msg.result.current_state_hash;
@@ -178,24 +176,9 @@ export class MainComponent implements OnInit, OnDestroy {
     });
   }
 
-  walletActivated() {
-    this.update();
-    this.active = this.dataService.store.getState().active;
-  }
-
   ngOnInit() {
-    this.wallet = localStorage.getItem('wallet');
-    if (this.wallet === undefined) {
-      this.router.navigate(['/initialize/create']);
-    }
     this.mainActive = true;
-    this.active = this.dataService.store.getState().active;
-
-    if (this.active) {
-      this.update();
-    } else {
-      this.router.navigate(['/wallet/login']);
-    }
+    this.update();
   }
 
   ngOnDestroy() {
@@ -225,7 +208,8 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   privacyControl() {
-    this.privacyMode = !this.privacyMode; 
+    this.privacyMode = !this.privacyMode;
+    // this.dataService.saveAppState();
   }
 }
 

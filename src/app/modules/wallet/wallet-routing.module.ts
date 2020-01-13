@@ -5,9 +5,11 @@ import { MainComponent, LoginComponent } from './containers';
 import { MenuComponent } from '@shared/components';
 import { MainLayoutComponent } from '@shared/layouts';
 import { HeaderComponent } from '@shared/containers';
+import { LoginGuard } from './guards/login.guard';
 
 const routes: Routes = [{
   path: '',
+  canActivate: [LoginGuard],
   component: MainLayoutComponent,
   children: [
   {

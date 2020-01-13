@@ -5,6 +5,7 @@ import { AddressesListComponent, AddressDetailsComponent } from './containers';
 import { MenuComponent } from '@shared/components';
 import { MainLayoutComponent } from '@shared/layouts';
 import { HeaderComponent } from '@shared/containers';
+import { LoginGuard } from './../wallet/guards/login.guard';
 
 const routes: Routes = [{
   path: '',
@@ -12,6 +13,7 @@ const routes: Routes = [{
   children: [
   {
     path: 'list',
+    canActivate: [LoginGuard],
     children: [{
         path: '', component: HeaderComponent, outlet: 'header'
       }, {
@@ -22,6 +24,7 @@ const routes: Routes = [{
     ]
   }, {
     path: 'details/:address',
+    canActivate: [LoginGuard],
     children: [{
         path: '', component: HeaderComponent, outlet: 'header'
       }, {

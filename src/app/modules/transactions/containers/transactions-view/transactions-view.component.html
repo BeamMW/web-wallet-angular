@@ -1,17 +1,30 @@
-<div class="main">
-    <div class="main__header">
+<div class="transactions" [class.blur-filter]="modalOpened">
+    <div class="transactions__header">
         <div class="menu-control-wrapper">
-            <!-- <img class="main__header__menu" (click)="sideMenuClicked()" [src]="iconMenu"/> -->
-            <!-- <app-menu-control></app-menu-control> -->
+            <img class="transactions__header__menu" (click)="backClicked($event)" [src]="iconBack"/>
         </div>
         <div class="title-wrapper">
-            <div class="main__header__title">TRANSACTIONS</div>
+            <div class="transactions__header__title">TRANSACTIONS</div>
         </div>
-        <div class="privacy-control-wrapper">
-            <!-- <img class="main__header__privacy-control" (click)="privacyControl()" 
+        <div class="save-addr-control-wrapper">
+            <!-- <img class="addresses__header__privacy-control" (click)="privacyControl()" 
                 [src]="privacyMode ? iconEnabledPrivacy : iconDisabledPrivacy"/> -->
         </div>
     </div>
+
+    <div class="transactions__list">
+        <div class="transactions__list__header">
+            <div class="transactions__list__header__title">TRANSACTIONS</div>
+            <div class="transactions__list__header__addr-type-selector">
+                <app-transactions-menu (menuChanged)="dropdownSelected($event)" [(menuItems)]="menuItems"></app-transactions-menu>
+            </div>
+        </div>
+        <div class="transactions__list__items transactions-container" *ngIf="transactions$ | async as transactions">
+            <div class="transaction-item" *ngFor="let item of transactions">
+                <app-transaction-element [(transaction)]="item"></app-transaction-element>
+            </div>
+        </div>
+    </div>
     
-    <div class="main__top-gradient"></div>
+    <div class="transactions__top-gradient"></div>
 </div>

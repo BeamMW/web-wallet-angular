@@ -13,7 +13,6 @@ import { environment } from '@environment';
 })
 export class SendAmountComponent implements OnInit {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
-  active = false;
   send = {
     address: '',
     fee: 0,
@@ -49,11 +48,6 @@ export class SendAmountComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.active = this.dataService.store.getState().active;
-
-    if (!this.active) {
-      this.router.navigate(['/wallet/login']);
-    }
   }
 
   backAddressesClicked() {

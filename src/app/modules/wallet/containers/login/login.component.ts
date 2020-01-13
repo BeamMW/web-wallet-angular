@@ -7,6 +7,8 @@ import { Subscription } from 'rxjs';
 import {Router} from '@angular/router';
 import {DataService} from './../../../../services/data.service';
 import { environment } from '@environment';
+import { Store, select } from '@ngrx/store';
+import { ChangeWalletState } from './../../../../store/actions/wallet.actions';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +22,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   public loginForm: FormGroup;
 
 
-  constructor(private wasm: WasmService,
+  constructor(private store: Store<any>,
+              private wasm: WasmService,
               private wsService: WebsocketService,
               public router: Router,
               private dataService: DataService) {
@@ -74,7 +77,9 @@ export class LoginComponent implements OnInit, OnDestroy {
           if (msg.result && msg.result.length) {
             console.log(`[login] wallet session: ${msg.result}`);
             this.sub.unsubscribe();
-            this.dataService.store.putState({active: true}); // app activated
+            //this.dataService.store.putState({active: true}); // app activated
+
+            this.store.dispatch(ChangeWalletState({walletState: true}));
             this.router.navigate(['/wallet/main']);
           }
         });

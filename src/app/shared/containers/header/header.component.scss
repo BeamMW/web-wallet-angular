@@ -37,6 +37,12 @@
         margin-right: 20px;
         cursor: pointer;
     }
+
+    @media (min-width: 601px) {
+        &__full-sc-control {
+            display: none;
+        }
+    }
 }
 
 .header-status-wrapper {

@@ -1,1 +1,78 @@
-<p>address-details works!</p>
+<div class="details">
+    <div class="details__header">
+        <div class="back-control-wrapper">
+            <img class="details__header__back" (click)="backClicked()" [src]="iconBack"/>
+        </div>
+        <div class="title-wrapper">
+            <div class="details__header__title">DETAILS</div>
+        </div>
+        <div class="right-wrapper"></div>
+    </div>
+    <ng-container *ngIf="address$ | async as data">
+        <div class="details__container">
+            <div class="details__container__name">No name</div>
+            <div class="details-title">ADDRESS</div>
+            <div class="details__container__address">{{data.address}}</div>
+            <div class="details-title"> {{data.expired ? 'EXPIRED' : 'EXPIRATION DATE'}}</div>
+            <div class="details__container__expiring">
+                {{data.duration === 0 ? 'never' : (data.create_time + data.duration) * 1000 | date:'d MMM y | HH:MM' }}
+            </div>
+        </div>
+        <div class="details__transactions" *ngIf="transactions$ | async as transactions">
+            <ng-container *ngIf="transactions.length > 0">
+                <div class="details__transactions__title">
+                    <span class="transactions-title">TRANSACTIONS LIST</span>
+                </div>
+                <div *ngFor="let item of transactions" class="transaction-item">
+                    <div class="details__transactions__receive" *ngIf="item.status_string == 'received'">
+                        <div class="details__transactions__receive__value">
+                            <img class="tr-receive-icon" [src]="iconReceived"/>
+                            <span class="tr-receive-text">Receive</span>
+                            <span class="tr-receive-value">+ {{ item.value | beam:'1.0-9'}} BEAM</span>        
+                        </div>
+                        <div class="details__transactions__receive__status">received</div>
+                    </div>
+                    <div class="details__transactions__receive" *ngIf="item.status_string == 'receiving'">
+                        <div class="details__transactions__receive__value">
+                            <img class="tr-receive-icon" [src]="iconReceived"/>
+                            <span class="tr-receive-text">Receive</span>
+                            <span class="tr-receive-value">+ {{ item.value | beam:'1.0-9'}} BEAM</span>        
+                        </div>
+                        <div class="details__transactions__receive__status">receiving</div>
+                    </div>
+                    <div class="details__transactions__send" *ngIf="item.status_string == 'sent'">
+                        <div class="details__transactions__send__value">
+                            <img class="tr-send-icon" [src]="iconSent">
+                            <span class="tr-send-text">Send</span>
+                            <span class="tr-send-value">- {{ item.value | beam:'1.0-9'}} BEAM</span>        
+                        </div>
+                        <div class="details__transactions__send__status">sent</div>
+                    </div>
+                    <div class="details__transactions__send" *ngIf="item.status_string == 'sending'">
+                        <div class="details__transactions__send__value">
+                            <img class="tr-send-icon" [src]="iconSent">
+                            <span class="tr-send-text">Send</span>
+                            <span class="tr-send-value">- {{ item.value | beam:'1.0-9'}} BEAM</span>        
+                        </div>
+                        <div class="details__transactions__send__status">sending</div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+    <div class="details__top-gradient"></div>
+</div>
+
+<!-- comment: "default"
+confirmations: 8
+create_time: 1578855200
+fee: 100
+height: 49662
+income: true
+kernel: "2813fc15630d72d4d682f06a0dcd802fb5b6f899843e1c2d4ac959633becca85"
+receiver: "113e528359c3f74a5138e5fc76852850f4c29e6b3406266dffbbf6475d8e34fe6c1"
+sender: "2917c7d6f4db2733a91bb51442a0140d674690754d5fcd5885fc647af6a3449f019"
+status: 3
+status_string: "received"
+txId: "e32f582d541c4e8c8920b94684e15465"
+value: 113000000 -->

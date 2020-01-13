@@ -8,22 +8,24 @@ import {
   MetaReducer
 } from '@ngrx/store';
 
-import * as walletReducers from './reducers/wallet.reducers';
+import * as addressReducers from './reducers/address.reducers';
 import * as utxoReducers from './reducers/utxo.reducers';
 import * as trReducers from './reducers/transaction.reducers';
-import { trReducer } from './reducers/transaction.reducers';
+import * as walletStateReducers from './reducers/wallet-state.reducers';
 
 
 export interface State {
-    addresses: walletReducers.WalletState;
+    addresses: addressReducers.AddressesState;
     utxos: utxoReducers.UtxoState;
     transactions: trReducers.TrState;
+    walletAppState: walletStateReducers.WalletAppState;
 }
 
 export const reducers: ActionReducerMap<State> = {
-  addresses: walletReducers.walletReducer,
+  addresses: addressReducers.walletReducer,
   utxos: utxoReducers.utxoReducer,
-  transactions: trReducers.trReducer
+  transactions: trReducers.trReducer,
+  walletAppState: walletStateReducers.reducer
 };
 
 export const metaReducers: MetaReducer<State>[] = [];

@@ -6,6 +6,9 @@ import { WebsocketService } from './modules/websocket';
 import * as Module from './../../wasm/wasm-key-keeper.js';
 import '!!file-loader?name=wasm/wasm-key-keeper.wasm!../../wasm/wasm-key-keeper.wasm';
 
+import { Store, select } from '@ngrx/store';
+import { ChangeWasmState } from './store/actions/wallet.actions';
+
 @Injectable({providedIn: 'root'})
 export class WasmService {
   module: any;
@@ -13,8 +16,13 @@ export class WasmService {
 
   wasmReady = new BehaviorSubject<boolean>(false);
 
-  constructor(private wsService: WebsocketService) {
-    this.instantiateWasm('wasm/wasm-key-keeper.wasm');
+  constructor(private store: Store<any>, private wsService: WebsocketService) {
+  }
+
+  init() {
+    this.instantiateWasm('wasm/wasm-key-keeper.wasm').then(() => {
+      this.store.dispatch(ChangeWasmState({wasmState: true}));
+    });
   }
 
   private async instantiateWasm(url: string) {
@@ -41,13 +49,13 @@ export class WasmService {
   public keykeeperInit(seed) {
     return this.wasmReady.pipe(filter(value => value === true)).pipe(
       map(() => {
-        const wordList = new this.module.WordList();
-        seed.split(' ').forEach((word) => wordList.push_back(word));
+        // const wordList = new this.module.WordList();
+        // seed.split(' ').forEach((word) => wordList.push_back(word));
         // const phrase = this.module.KeyKeeper.GeneratePhrase();
 
         // console.log(phrase);
         // return new this.module.KeyKeeper(phrase);
-        return new this.module.KeyKeeper(wordList);
+        return new this.module.KeyKeeper(seed);
       })
     );
   }
@@ -68,6 +76,10 @@ export class WasmService {
       id,
       error
     });
+  }
+
+  public generatePhrase() {
+    return this.module.KeyKeeper.GeneratePhrase();
   }
 
   public onkeykeeper(data) {

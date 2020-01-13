@@ -16,7 +16,6 @@ export class SendAddressesComponent implements OnInit {
   send = {
     address: ''
   };
-  active = false;
   sendForm: FormGroup;
   constructor(private dataService: DataService, public router: Router, private wsService: WebsocketService) {
     this.send = this.dataService.sendStore.getState().send;
@@ -38,11 +37,6 @@ export class SendAddressesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.active = this.dataService.store.getState().active;
-
-    if (!this.active) {
-      this.router.navigate(['/wallet/login']);
-    }
   }
 
   backConfirmationClicked() {

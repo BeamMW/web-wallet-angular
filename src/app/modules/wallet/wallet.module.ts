@@ -6,22 +6,16 @@ import { SharedModule } from '../../shared/shared.module';
 import { MainComponent, LoginComponent } from './containers';
 
 import { WalletRoutingModule } from './wallet-routing.module';
-import { LoginFormComponent } from './components/login-form/login-form.component';
-import { BeamPipe } from 'app/pipes/beam.pipe';
-import { DecimalPipe } from '@angular/common';
 
-import { SendComponent } from './pages/send/send.component';
+import { LoginGuard } from './guards/login.guard';
 
 @NgModule({
   declarations: [
     MainComponent,
-    LoginComponent,
-    LoginFormComponent,
-    SendComponent,
-    BeamPipe
+    LoginComponent
   ],
   providers: [
-    DecimalPipe
+    LoginGuard
   ],
   imports: [
     SharedModule,

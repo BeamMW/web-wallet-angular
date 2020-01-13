@@ -1,0 +1,30 @@
+<div class="generate">
+    <div class="generate__header">
+        <div class="menu-control-wrapper">
+            <img class="generate__header__menu" (click)="backClicked($event)" [src]="iconBack"/>
+        </div>
+        <div class="title-wrapper">
+            <div class="generate__header__title">SEED PHRASE</div>
+        </div>
+        <div class="save-addr-control-wrapper">
+            <!-- <img class="addresses__header__privacy-control" (click)="privacyControl()" 
+                [src]="privacyMode ? iconEnabledPrivacy : iconDisabledPrivacy"/> -->
+        </div>
+
+    </div>
+
+    <div class="generate__content">
+        <div class="generate__content__first-row">
+            Your seed phrase is the access key to all the funds in 
+            your wallet. Print or write down the phrase to keep it in 
+            a safe or in a locked vault. Without the phrase you will 
+            not be able to recover your money.
+        </div>
+        <div class="generate__content__seed">{{seed}}</div>
+        <div class="generate__content__generate-button">
+            <app-button class="generate-button" [routerLink]="passwordCreateRoute">next</app-button>
+        </div>
+    </div>
+
+    <div class="generate__top-gradient"></div>
+</div>

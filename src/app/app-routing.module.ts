@@ -3,8 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   { path: '', redirectTo: 'wallet/login', pathMatch: 'full'},
-  { path: 'initialize', loadChildren: './modules/first-time-flow/first-time-flow.module#FirstTimeFlowModule' },
   {
+    path: 'initialize',
+    loadChildren: () => import('./modules/first-time-flow/first-time-flow.module').then(m => m.FirstTimeFlowModule)
+  },{
     path: 'wallet',
     loadChildren: () => import('./modules/wallet/wallet.module').then(m => m.WalletModule)
   }, {
@@ -16,6 +18,12 @@ const routes: Routes = [
   }, {
     path: 'transactions',
     loadChildren: () => import('./modules/transactions/transactions.module').then(m => m.TransactionsModule)
+  }, {
+    path: 'receive',
+    loadChildren: () => import('./modules/receive/receive.module').then(m => m.ReceiveModule)
+  }, {
+    path: 'utxo',
+    loadChildren: () => import('./modules/utxo/utxo.module').then(m => m.UtxoModule)
   }
 ];
 
