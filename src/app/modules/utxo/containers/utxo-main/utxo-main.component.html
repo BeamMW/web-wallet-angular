@@ -24,23 +24,27 @@
         </div>
     </div>
 
-    <div class="utxo__transactions">
-        <ng-container *ngIf="transactions$ | async as transactions">
-            <div class="utxo__transactions__header">
-                <div class="utxo__transactions__header__title">
-                    <span class="utxo__transactions__header__title__text">UTXO</span>
+    <div class="utxo__container">
+        <ng-container *ngIf="utxos$ | async as utxos">
+            <div class="utxo__container__header">
+                <div class="utxo__container__header__title">
+                    <span class="utxo__container__header__title__text">UTXO</span>
                 </div>
-                <div class="utxo__transactions__header__show-all">
+                <div class="utxo__container__header__show-all">
                 </div>
             </div>
-            <div class="utxo__transactions__content">
-                <ng-container *ngIf="transactionsLoaded && transactions.length > 0">
-                    <div class="transcaction-container" *ngFor="let transaction of transactions; let i = index">
+            <div class="utxo__container__content">
+                <ng-container *ngIf="utxos.length > 0">
+                    <div class="utxos-container" *ngFor="let utxo of utxos; let i = index">
+                        <div class="utxos-container__item">
+                            <span class="utxos-container__item__amount">{{utxo.amount | beam:'1.0-9'}} BEAM</span>
+                            <span class="utxos-container__item__status">{{utxo.status_string}}</span>
+                        </div>
                     </div>
                 </ng-container>
-                <ng-container *ngIf="transactionsLoaded && transactions.length === 0">
-                    <img class="utxo__transactions__content__empty-tr-icon" [src]="iconEmpty">
-                    <div class="utxo__transactions__content__empty-tr-text">Your transaction list is empty</div>
+                <ng-container *ngIf="utxos.length === 0">
+                    <img class="utxo__container__content__empty-tr-icon" [src]="iconEmpty">
+                    <div class="utxo__container__content__empty-tr-text">Your UTXO list is empty</div>
                 </ng-container>
             </div>
         </ng-container>

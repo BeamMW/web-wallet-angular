@@ -89,7 +89,7 @@ export class AddressesListComponent implements OnInit, OnDestroy {
     } else if (item === this.menuItems[1]) {
       this.addresses$ = this.store.pipe(select(selectExpiredAddresses));
     } else if (item === this.menuItems[2]) {
-      this.addresses$ = this.store.pipe(select(selectAllAddresses));
+      // this.addresses$ = this.store.pipe(select(selectAllAddresses));
     }
   }
 }

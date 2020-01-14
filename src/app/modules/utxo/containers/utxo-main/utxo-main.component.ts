@@ -19,25 +19,23 @@ import { environment } from '@environment';
 })
 export class UtxoMainComponent implements OnInit {
   public iconMenu: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-menu.svg`;
-  public iconEmpty: string = `${environment.assetsPath}/images/modules/wallet/containers/main/atomic-empty-state.svg`;
+  public iconEmpty: string = `${environment.assetsPath}/images/modules/uxto/containers/utxo-main/icon-utxo-empty-state.svg`;
   public iconDisabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye.svg`; 
   public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
 
   walletStatus$: Observable<any>;
+  utxos$: Observable<any>;
 
   constructor(private store: Store<any>,
               private wasm: WasmService,
               public router: Router,
               private wsService: WebsocketService,
               private dataService: DataService) { 
-      this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
+    this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
+    this.utxos$ = this.store.pipe(select(selectAllUtxo));
   }
 
   ngOnInit() {
-  }
-
-  log(a) {
-    console.log(a);
   }
 
   sideMenuClicked(event) {

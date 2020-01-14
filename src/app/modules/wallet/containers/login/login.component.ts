@@ -3,12 +3,13 @@ import { FormControl, FormGroup } from '@angular/forms';
 import * as passworder from 'browser-passworder';
 import { WasmService } from './../../../../wasm.service';
 import { WebsocketService } from './../../../websocket';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import {Router} from '@angular/router';
 import {DataService} from './../../../../services/data.service';
 import { environment } from '@environment';
 import { Store, select } from '@ngrx/store';
-import { ChangeWalletState } from './../../../../store/actions/wallet.actions';
+import { ChangeWalletState, saveWallet } from './../../../../store/actions/wallet.actions';
+import { selectWalletData } from './../../../../store/selectors/wallet-state.selectors';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public bgUrl: string = `${environment.assetsPath}/images/modules/wallet/containers/login/bg.svg`;
   public logoUrl: string = `${environment.assetsPath}/images/modules/wallet/containers/login/logo.svg`;
   public loginForm: FormGroup;
-
+  wallet$: Observable<any>;
 
   constructor(private store: Store<any>,
               private wasm: WasmService,
@@ -33,10 +34,21 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const wallet = localStorage.getItem('wallet');
-    if (wallet === undefined) {
-      this.router.navigate(['/initialize/create']);
-    }
+  //   const wallet = localStorage.getItem('wallet');
+  //   if (wallet === undefined) {
+  //     this.router.navigate(['/initialize/create']);
+  //   }
+
+    this.dataService.loadWalletData().then(walletData => {
+      if(walletData.length > 0) {
+          console.log('Wallet: ', walletData);
+          this.store.dispatch(saveWallet({wallet: walletData}));
+          this.store.dispatch(ChangeWalletState({walletState: true}));
+      } else {
+          this.router.navigate(['/initialize/create']);
+          return false;
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -55,10 +67,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   // }
 
   public submit(): void {
-    const wallet = localStorage.getItem('wallet');
     const pass = this.loginForm.value.password;
 
-    if (wallet) {
+    this.wallet$ = this.store.pipe(select(selectWalletData));
+    this.wallet$.subscribe(wallet => {
       passworder.decrypt(pass, wallet).then((result) => {
         this.wasm.keykeeperInit(result.seed).subscribe(value => {
           if (this.wasm.keyKeeper === undefined) {
@@ -94,6 +106,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           }
         });
       });
-    }
+    })
   }
 }

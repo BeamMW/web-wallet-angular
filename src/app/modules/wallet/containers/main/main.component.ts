@@ -63,7 +63,7 @@ export class MainComponent implements OnInit, OnDestroy {
               public router: Router,
               private wsService: WebsocketService,
               private dataService: DataService) {
-    this.addresses$ = this.store.pipe(select(selectAllAddresses));
+    this.addresses$ = this.store.pipe(select(selectAllAddresses)); 
     this.utxos$ = this.store.pipe(select(selectAllUtxo));
     this.transactions$ = this.store.pipe(select(selectAllTr));
 

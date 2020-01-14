@@ -107,7 +107,7 @@
         }
     }
 
-    &__transactions {
+    &__container {
         &__header {
             margin: 20px;
             display: flex;
@@ -121,6 +121,7 @@
                 font-style: normal;
                 line-height: normal;
                 letter-spacing: 1px;
+                opacity: .5;
                 color: #ffffff;
             }
 
@@ -211,6 +212,41 @@
     }
 }
 
+.utxos-container {
+    height: 68px;
+
+    &__item {
+        display: flex;
+        justify-content: space-between;
+        
+        &__amount {
+            margin-top: 14px;
+            margin-left: 20px;
+            font-family: 'ProximaNova', sans-serif;
+            font-size: 18px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: #ffffff;
+        }
+
+        &__status {
+            margin-top: 18px;
+            margin-right: 20px;
+            font-family: 'ProximaNovaIT', sans-serif;
+            font-size: 14px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: #ffffff;
+        }
+    }
+}
+
 .height-container {
     display: flex;
     margin-top: 27px;
@@ -286,6 +322,6 @@
     flex-direction: row-reverse;
 }
 
-.transcaction-container:nth-child(odd)  {
+.utxos-container:nth-child(odd)  {
     background-color: rgba(255, 255, 255, 0.03);
 }

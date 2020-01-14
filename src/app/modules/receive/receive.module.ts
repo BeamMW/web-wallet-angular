@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { ReceiveRoutingModule } from './receive-routing.module';
 import { ReceiveComponent } from './containers/receive/receive.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ReceiveComponent } from './containers/receive/receive.component';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    ReceiveRoutingModule
+    ReceiveRoutingModule,
+    QRCodeModule
   ]
 })
 export class ReceiveModule { }
