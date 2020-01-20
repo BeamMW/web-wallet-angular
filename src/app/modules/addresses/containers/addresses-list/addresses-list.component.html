@@ -17,7 +17,7 @@
         <div class="addresses__list__header">
             <div class="addresses__list__header__title">ADDRESSES</div>
             <div class="addresses__list__header__addr-type-selector">
-                <app-address-type-menu (menuChanged)="dropdownSelected($event)" [(menuItems)]="menuItems"></app-address-type-menu>
+                <app-dropdown (menuChanged)="dropdownSelected($event)" [(menuItems)]="menuItems"></app-dropdown>
             </div>
         </div>
         <div class="addresses__list__items addresses-container" *ngIf="addresses$ | async as addresses">

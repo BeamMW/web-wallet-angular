@@ -2,11 +2,11 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { environment } from '@environment';
 
 @Component({
-  selector: 'app-address-type-menu',
-  templateUrl: './address-type-menu.component.html',
-  styleUrls: ['./address-type-menu.component.scss']
+  selector: 'app-dropdown',
+  templateUrl: './dropdown.component.html',
+  styleUrls: ['./dropdown.component.scss']
 })
-export class AddressTypeMenuComponent implements OnInit {
+export class DropdownComponent implements OnInit {
   @Output() menuChanged = new EventEmitter<string>();
   @Input() menuItems: any;
 

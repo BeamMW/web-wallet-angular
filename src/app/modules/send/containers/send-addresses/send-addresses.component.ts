@@ -25,7 +25,9 @@ export class SendAddressesComponent implements OnInit {
     }
 
     this.sendForm = new FormGroup({
-      address: new FormControl(address)
+      address: new FormControl(address,  [
+        Validators.required
+      ])
     });
   }
 

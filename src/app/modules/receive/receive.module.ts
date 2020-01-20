@@ -6,10 +6,17 @@ import { SharedModule } from '../../shared/shared.module';
 import { ReceiveRoutingModule } from './receive-routing.module';
 import { ReceiveComponent } from './containers/receive/receive.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import { EditAddressComponent } from './containers/edit-address/edit-address.component';
+import { ChangeAddressComponent } from './containers/change-address/change-address.component';
+import { QrPopupComponent } from './components/qr-popup/qr-popup.component';
+import { ClipboardModule } from 'ngx-clipboard';
 
 @NgModule({
   declarations: [
-    ReceiveComponent
+    ReceiveComponent,
+    EditAddressComponent,
+    ChangeAddressComponent,
+    QrPopupComponent
   ],
   imports: [
     CommonModule,
@@ -17,7 +24,8 @@ import { QRCodeModule } from 'angularx-qrcode';
     FormsModule,
     ReactiveFormsModule,
     ReceiveRoutingModule,
-    QRCodeModule
+    QRCodeModule,
+    ClipboardModule
   ]
 })
 export class ReceiveModule { }

@@ -222,6 +222,49 @@
     }
 }
 
+.total {
+    display: flex;
+    flex-direction: row;
+    max-width: 335px;
+    margin-top: 30px;
+
+    &__container {
+        &__header {
+            font-family: 'ProximaNovaBold', sans-serif;
+            opacity: 0.5;
+            font-size: 14px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: 1px;
+            color: #ffffff;
+        }
+
+        &__value {
+            margin-top: 10px;
+            font-family: 'ProximaNovaBold', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: #ffffff;
+        }
+    }
+
+    &__add-all {
+        margin-left: auto;
+        //margin: auto auto 20px auto;
+        
+        @include ui-button($btn-add-all, $btn-sm) {
+        }
+
+        @include ui-button-add-all-icon()
+    }
+}
+
 .send-form-cl {
     display: flex;
 	flex-direction: column;

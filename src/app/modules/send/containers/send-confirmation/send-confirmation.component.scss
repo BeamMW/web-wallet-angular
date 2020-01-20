@@ -151,6 +151,14 @@
     }
 }
 
+.send.blur-filter {
+    -webkit-filter: blur(4px);
+    -moz-filter: blur(4px);
+    -o-filter: blur(4px);
+    -ms-filter: blur(4px);
+    filter: blur(4px);
+}
+
 .send-button {
     @include ui-button($btn-send, $btn-md) {
         margin-right: 7px;

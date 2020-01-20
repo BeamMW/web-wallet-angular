@@ -21,31 +21,39 @@ export class SendConfirmationComponent implements OnInit {
     comment: '',
     amount: 0
   };
+  popupOpened = false;
   public walletRoute = '/wallet/main';
-  constructor(private dataService: DataService, public router: Router, private wsService: WebsocketService) { 
+  constructor(private dataService: DataService,
+              public router: Router,
+              private wsService: WebsocketService) {
+    dataService.changeEmitted$.subscribe(emittedState => {
+      this.popupOpened = emittedState;
+    });
   }
 
-  submit() {
-    this.sub = this.wsService.on().subscribe((msg: any) => {
-      if (msg.result) {
-        if (msg.result !== undefined) {
-          this.router.navigate(['/wallet/main']);
-        }
+  submit($event) {
+    $event.stopPropagation();
+    this.confirmation();
+    // this.sub = this.wsService.on().subscribe((msg: any) => {
+    //   if (msg.result) {
+    //     if (msg.result !== undefined) {
+    //       this.router.navigate(['/wallet/main']);
+    //     }
 
-        this.sub.unsubscribe();
-      }
-    });
-    this.wsService.send({jsonrpc:"2.0", 
-      id: 123,
-      method:"tx_send", 
-      params:
-      {
-        value : this.send.amount * 100000000,
-        fee : this.send.fee,
-        address : this.send.address,
-        comment : this.send.comment
-      }
-    });
+    //     this.sub.unsubscribe();
+    //   }
+    // });
+    // this.wsService.send({jsonrpc:"2.0", 
+    //   id: 123,
+    //   method:"tx_send", 
+    //   params:
+    //   {
+    //     value : this.send.amount * 100000000,
+    //     fee : this.send.fee,
+    //     address : this.send.address,
+    //     comment : this.send.comment
+    //   }
+    // });
   }
 
   ngOnInit() {
@@ -54,5 +62,9 @@ export class SendConfirmationComponent implements OnInit {
 
   backAmountClicked() {
     this.router.navigate(['/send/amount']);
+  }
+
+  confirmation() {
+    this.router.navigate([this.router.url, { outlets: { popup: 'confirm-popup' }}]);
   }
 }

@@ -50,9 +50,73 @@
         }
       }
 
+      @if ($theme == $btn-show-qr) {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: #032e49;
+
+        &:not([disabled]) {
+          &:hover,
+          &:active {
+            background-color: rgba(255, 255, 255, 0.05);
+          }
+        }
+      }
+
+      @if ($theme == $btn-cancel) {
+        background-color: rgba(255, 255, 255, 0.07);
+        color: #ffffff;
+
+        &:not([disabled]) {
+          &:hover,
+          &:active {
+            background-color: rgba(255, 255, 255, 0.07);
+          }
+        }
+      }
+
+      @if ($theme == $btn-ok) {
+        background-color: #00f6d2;
+        color: #032e49;
+
+        &:not([disabled]) {
+          &:hover,
+          &:active {
+            background-color: #00f6d2;
+          }
+        }
+      }
+
+      @if ($theme == $btn-add-all) {
+        background-color: rgba(255, 255, 255, 0.0);
+        color: #da68f5;
+        border: solid 1px #da68f5;
+
+        &:not([disabled]) {
+          &:hover,
+          &:active {
+            background-color: rgba(255, 255, 255, 0.0);
+          }
+        }
+      }
+
+      @if($size == $btn-sm) {
+        height: 36px;
+        width: 117px;
+      }
+
+      @if($size == $btn-nssm) {
+        height: 44px;
+        width: 141px;
+      }
+
       @if($size == $btn-md) {
         height: 44px;
         width: 164px;
+      }
+
+      @if($size == $btn-nsmd) {
+        height: 44px;
+        width: 189px;
       }
 
       @if($size == $btn-lg) {
@@ -246,6 +310,131 @@
 
       .ui-button__text {
         margin-left: 10px;
+        font-family: 'ProximaNovaBold', sans-serif;
+      }
+    }
+  }
+}
+
+@mixin ui-button-copy-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      .ui-button__icon {
+        background: url('/assets/images/modules/receive/containers/receive/icon-copy-blue.svg');
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+
+        @content;
+      }
+
+      .ui-button__text {
+        margin-left: 10px;
+        font-family: 'ProximaNovaBold', sans-serif;
+      }
+    }
+  }
+}
+
+@mixin ui-button-qr-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      .ui-button__icon {
+        background: url('/assets/images/modules/receive/containers/receive/icon-qr.svg');
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+
+        @content;
+      }
+
+      .ui-button__text {
+        margin-left: 10px;
+        font-family: 'ProximaNovaBold', sans-serif;
+      }
+    }
+  }
+}
+
+@mixin ui-button-add-all-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      .ui-button__icon {
+        background: url('/assets/images/modules/send/containers/send-amount/icn-send-pink.svg');
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+
+        @content;
+      }
+
+      .ui-button__text {
+        margin-left: 16px;
+        font-family: 'ProximaNovaBold', sans-serif;
+      }
+    }
+  }
+}
+
+@mixin ui-button-cancel-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      .ui-button__icon {
+        background: url('/assets/images/modules/send/components/confirmation-popup/icon-cancel-copy.svg');
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+
+        @content;
+      }
+
+      .ui-button__text {
+        margin-left: 16px;
+        font-family: 'ProximaNovaBold', sans-serif;
+      }
+    }
+  }
+}
+
+@mixin ui-button-ok-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      .ui-button__icon {
+        background: url('/assets/images/modules/send/components/confirmation-popup/icon-done.svg');
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+
+        @content;
+      }
+
+      .ui-button__text {
+        margin-left: 16px;
         font-family: 'ProximaNovaBold', sans-serif;
       }
     }

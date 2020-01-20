@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddressTypeMenuComponent } from './address-type-menu.component';
+import { SettingsMainComponent } from './settings-main.component';
 
-describe('AddressTypeMenuComponent', () => {
-  let component: AddressTypeMenuComponent;
-  let fixture: ComponentFixture<AddressTypeMenuComponent>;
+describe('SettingsMainComponent', () => {
+  let component: SettingsMainComponent;
+  let fixture: ComponentFixture<SettingsMainComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddressTypeMenuComponent ]
+      declarations: [ SettingsMainComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddressTypeMenuComponent);
+    fixture = TestBed.createComponent(SettingsMainComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

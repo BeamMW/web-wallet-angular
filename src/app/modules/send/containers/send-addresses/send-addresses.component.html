@@ -16,14 +16,14 @@
     <div class="send__container">
         <div class="send__container__title">SEND TO</div>
         <div class="send__container__content">
-            <form class="send-form-cl" [formGroup]="sendForm" autocomplete="off" novalidate (ngSubmit)="submit()">
+            <form class="send-form-cl" novalidate [formGroup]="sendForm" autocomplete="off" (ngSubmit)="submit()">
                 <div class="form-group">
                     <textarea class="send__container__content__input" autosize maxlength="70"
-                         name="address" formControlName="address" 
+                         name="address" formControlName="address"
                         placeholder="Search by address, name or comment"></textarea>
                 </div>
                 <div class="send__container__content__button">
-                    <app-button class="send-button">next</app-button>
+                    <app-button [disabled]="sendForm.invalid" class="send-button">next</app-button>
                 </div>
             </form>
         </div>

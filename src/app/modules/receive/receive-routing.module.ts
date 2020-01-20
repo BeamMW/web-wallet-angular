@@ -4,6 +4,7 @@ import { MainLayoutComponent } from '@shared/layouts';
 import { HeaderComponent } from '@shared/containers';
 import { LoginGuard } from './../wallet/guards/login.guard';
 import { ReceiveComponent } from './containers/receive/receive.component';
+import { QrPopupComponent } from './components/qr-popup/qr-popup.component';
 
 const routes: Routes = [{
   path: '',
@@ -14,6 +15,8 @@ const routes: Routes = [{
     path: 'main',
     children: [{
         path: '', component: HeaderComponent, outlet: 'header'
+      }, {
+        path: 'qr-popup', component: QrPopupComponent, outlet: 'popup',
       }, {
         path: '', component: ReceiveComponent
       }

@@ -1,0 +1,30 @@
+<div class="general" [class.blur-filter]="popupOpened">
+    <div class="general__header">
+        <div class="menu-control-wrapper">
+            <img class="general__header__menu" (click)="backClicked($event)" [src]="iconBack"/>
+        </div>
+        <div class="title-wrapper">
+            <div class="general__header__title">GENERAL</div>
+        </div>
+        <div class="save-addr-control-wrapper">
+        </div>
+    </div>
+
+    <div class="general__container">
+        <div class="general__container__logs">
+            <span class="general-item-title">Save wallet logs</span>
+            <app-dropdown class="general__container__logs__menu" 
+                (menuChanged)="logsDropdownSelected($event)" [(menuItems)]="logsMenuItems"></app-dropdown>
+        </div>
+        <div class="general__container__currency">
+            <span class="general-item-title">Secondary currency</span>
+            <app-dropdown class="general__container__currency__menu"
+                (menuChanged)="currencyDropdownSelected($event)" [(menuItems)]="currencyMenuItems"></app-dropdown>
+        </div>
+        <div class="general__container__clear general-item-title">
+            Clear local wallet data
+        </div>
+    </div>
+    
+    <div class="general__top-gradient"></div>
+</div>

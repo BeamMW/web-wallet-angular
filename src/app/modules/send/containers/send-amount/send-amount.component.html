@@ -19,17 +19,28 @@
                 <div class="send__container__content__title-amount">AMOUNT</div>
                 <div class="form-group">
                     <input class="send__container__content__input"
-                         name="amount" formControlName="amount" 
+                        name="amount" formControlName="amount" 
                         placeholder="Enter amount"/>
                     <span class="send__container__content__currency">BEAM</span>
                 </div>
                 <div class="send__container__content__title-fee">TRANSACTION FEE</div>
                 <div class="form-group">
                     <input class="send__container__content__input-groth"
-                         name="fee" formControlName="fee" 
+                        name="fee" formControlName="fee" 
                         placeholder="Enter fee"/>
                     <span class="send__container__content__currency">GROTH</span>
                 </div>
+                <ng-container *ngIf="walletStatus$ | async as walletStatus">
+                    <div class="total" *ngIf="walletStatus.available > 0">
+                        <div class="total__container">
+                            <div class="total__container__header">TOTAL AVAILABLE</div>
+                            <div class="total__container__value">{{walletStatus.available | beam:'1.0-9'}} BEAM</div>
+                        </div>
+                        <div class="total__add-all">
+                            <app-button class="add-all-button" (click)="addAll($event)">add all</app-button>
+                        </div>
+                    </div>
+                </ng-container>
                 <div class="send__container__content__title-fee">TRANSACTION COMMENT</div>
                 <div class="form-group">
                     <input class="send__container__content__input-comment"
@@ -42,7 +53,7 @@
                     online within 2 hours afterwards.
                 </div>
                 <div class="send__container__content__button">
-                    <app-button class="send-button">next</app-button>
+                    <app-button class="send-button" [disabled]="sendForm.invalid" (click)="submit()">next</app-button>
                 </div>
             </form>
         </div>

@@ -2,10 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { WasmService } from './../../../../wasm.service';
 import { WebsocketService } from './../../../websocket';
-import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { loadAddresses, loadUtxo, loadTr, loadWalletState } from './../../../../store/actions/wallet.actions';
 import { selectAllUtxo } from '../../../../store/selectors/utxo.selectors';
 import { selectWalletStatus } from '../../../../store/selectors/wallet-state.selectors';
 import { DataService } from './../../../../services/data.service';
@@ -19,7 +17,7 @@ import { environment } from '@environment';
 })
 export class UtxoMainComponent implements OnInit {
   public iconMenu: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-menu.svg`;
-  public iconEmpty: string = `${environment.assetsPath}/images/modules/uxto/containers/utxo-main/icon-utxo-empty-state.svg`;
+  public iconEmpty: string = `${environment.assetsPath}/images/modules/utxo/containers/utxo-main/icon-utxo-empty-state.svg`;
   public iconDisabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye.svg`; 
   public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
 

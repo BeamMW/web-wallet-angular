@@ -14,3 +14,5 @@ export const ChangeWasmState = createAction('[Wallet state] Change wasm state', 
 export const addSeedPhrase = createAction('[Wallet state] Add seed phrase', props<{ seedPhraseValue: string }>());
 export const saveWallet = createAction('[Wallet state] Save wallet', props<{ wallet: any }>());
 export const saveWalletStatus = createAction('[Wallet state] Save wallet status', props<{ status: any }>());
+
+export const saveReceiveData = createAction('[Wallet state] Save receive data', props<{ receive: any }>());

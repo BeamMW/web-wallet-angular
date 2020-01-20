@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {DataService} from './../../../../services/data.service';
 import {Router} from '@angular/router';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { WebsocketService } from './../../../websocket';
 import { environment } from '@environment';
+import { Store, select } from '@ngrx/store';
+import { selectWalletStatus } from '../../../../store/selectors/wallet-state.selectors';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-send-amount',
   templateUrl: './send-amount.component.html',
   styleUrls: ['./send-amount.component.scss']
 })
-export class SendAmountComponent implements OnInit {
+export class SendAmountComponent implements OnInit, OnDestroy {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
   send = {
     address: '',
@@ -19,8 +22,15 @@ export class SendAmountComponent implements OnInit {
     comment: '',
     amount: 0
   };
+  walletStatus$: Observable<any>;
   sendForm: FormGroup;
-  constructor(private dataService: DataService, public router: Router, private wsService: WebsocketService) { 
+  walletStatusSub: Subscription;
+
+  constructor(private dataService: DataService,
+              public router: Router,
+              private store: Store<any>,
+              private wsService: WebsocketService) {
+    this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
     this.send = this.dataService.sendStore.getState().send;
     let amount = 0;
     let fee = 0;
@@ -33,9 +43,13 @@ export class SendAmountComponent implements OnInit {
     }
 
     this.sendForm = new FormGroup({
-      fee: new FormControl(fee),
+      fee: new FormControl(fee, [
+        Validators.required
+      ]),
       comment: new FormControl(comment),
-      amount: new FormControl(amount)
+      amount: new FormControl(amount, [
+        Validators.required
+      ])
     });
   }
 
@@ -50,7 +64,26 @@ export class SendAmountComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnDestroy() {
+    if (this.walletStatusSub) {
+      this.walletStatusSub.unsubscribe();
+    }
+  }
+
+  stripText(control: FormControl) {
+    control.setValue(control.value.replace(/[^0-9]/g, ''));
+  }
+
   backAddressesClicked() {
     this.router.navigate(['/send/addresses']);
+  }
+
+  addAll($event) {
+    $event.preventDefault();
+    this.walletStatusSub = this.walletStatus$.subscribe((status) => {
+      if (status.available > 0) {
+        this.sendForm.get('amount').setValue(status.available);
+      }
+    });
   }
 }

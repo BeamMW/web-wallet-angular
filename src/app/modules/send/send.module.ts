@@ -9,12 +9,14 @@ import {
   SendAddressesComponent,
   SendAmountComponent } from './containers';
 import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
+import { ConfirmationPopupComponent } from './components/confirmation-popup/confirmation-popup.component';
 
 @NgModule({
   declarations: [
     SendConfirmationComponent,
     SendAddressesComponent,
-    SendAmountComponent
+    SendAmountComponent,
+    ConfirmationPopupComponent
   ],
   imports: [
     TextareaAutosizeModule,

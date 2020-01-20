@@ -4,4 +4,5 @@ export interface WalletState {
     seedPhrase: string;
     walletData: any;
     walletStatus: any;
+    receiveData: any;
 }

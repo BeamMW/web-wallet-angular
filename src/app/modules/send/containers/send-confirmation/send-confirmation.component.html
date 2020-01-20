@@ -1,4 +1,4 @@
-<div class="send">
+<div class="send" [class.blur-filter]="popupOpened">
     <div class="send__header">
         <div class="back-control-wrapper">
             <img class="send__header__back" (click)="backAmountClicked()" [src]="iconBack"/>
@@ -25,7 +25,7 @@
                 online within the next 12 hours and you should get 
                 online within 2 hours afterwards.</div>
             <div class="send__container__content__button">
-                <app-button class="send-button" (click)="submit()">send</app-button>
+                <app-button class="send-button" (click)="submit($event)">send</app-button>
             </div>
         </div>
     </div>

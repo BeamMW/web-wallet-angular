@@ -11,8 +11,7 @@ const routes: Routes = [{
   path: '',
   canActivate: [LoginGuard],
   component: MainLayoutComponent,
-  children: [
-  {
+  children: [{
     path: 'main',
     children: [{
         path: '', component: HeaderComponent, outlet: 'header'

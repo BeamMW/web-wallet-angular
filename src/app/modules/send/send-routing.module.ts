@@ -8,6 +8,7 @@ import {
 import { MainLayoutComponent } from '@shared/layouts';
 import { HeaderComponent } from '@shared/containers';
 import { LoginGuard } from './../wallet/guards/login.guard';
+import { ConfirmationPopupComponent } from './components/confirmation-popup/confirmation-popup.component';
 
 const routes: Routes = [{
   path: '',
@@ -18,6 +19,8 @@ const routes: Routes = [{
     path: 'confirmation',
     children: [{
         path: '', component: HeaderComponent, outlet: 'header'
+      }, {
+        path: 'confirm-popup', component: ConfirmationPopupComponent, outlet: 'popup',
       }, {
         path: '', component: SendConfirmationComponent
       }

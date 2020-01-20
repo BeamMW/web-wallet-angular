@@ -3,6 +3,11 @@ import { environment } from '@environment';
 import { Router } from '@angular/router';
 import { WebsocketService } from './../../../websocket';
 import { Subscription } from 'rxjs';
+import { FormGroup, FormControl, Validators} from '@angular/forms';
+import { DataService } from './../../../../services/data.service';
+import { Store, select } from '@ngrx/store';
+import { saveReceiveData } from './../../../../store/actions/wallet.actions';
+
 
 @Component({
   selector: 'app-receive',
@@ -10,14 +15,26 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./receive.component.scss']
 })
 export class ReceiveComponent implements OnInit {
-  public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
-  public generatedAddress: string = '';
+  public iconBack = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
+  public generatedAddress = '';
 
   private sub: Subscription;
+  receiveForm: FormGroup;
+  popupOpened = false;
 
-  constructor(
-    public router: Router,
-    private wsService: WebsocketService) { }
+  constructor(private store: Store<any>,
+              public router: Router,
+              private dataService: DataService,
+              private wsService: WebsocketService) {
+    this.receiveForm = new FormGroup({
+      amount: new FormControl(),
+      comment: new FormControl()
+    });
+
+    dataService.changeEmitted$.subscribe(emittedState => {
+      this.popupOpened = emittedState;
+    });
+  }
 
   ngOnInit() {
     this.createAddress();
@@ -45,5 +62,43 @@ export class ReceiveComponent implements OnInit {
             comment : ''
         }
     });
+  }
+
+  stripText(control: FormControl) {
+    control.setValue(control.value.replace(/[^0-9]/g, ''));
+  }
+
+  editAddress() {
+    this.sub = this.wsService.on().subscribe((msg: any) => {
+      if (msg.result) {
+        console.log(msg.result);
+        this.sub.unsubscribe();
+      }
+    });
+    this.wsService.send({
+        jsonrpc: '2.0',
+        id: 123,
+        method: 'edit_address',
+        params:
+        {
+            address : '19ecec1a5793060fd9e49ee67560da4a4cf7ad8a42577019a9fa0f95fe6e550e81e',
+            comment : '',
+            expiration: 'never'
+        }
+    });
+  }
+
+  qrShowClicked(event) {
+    event.stopPropagation();
+    this.router.navigate([this.router.url, { outlets: { popup: 'qr-popup' }}]);
+    this.submit();
+  }
+
+  submit() {
+    this.store.dispatch(saveReceiveData({receive: {
+      address: this.generatedAddress,
+      amount: this.receiveForm.value.amount,
+      comment: this.receiveForm.value.comment
+    }}));
   }
 }

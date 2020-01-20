@@ -1,0 +1,23 @@
+<div class="privacy" [class.blur-filter]="popupOpened">
+    <div class="privacy__header">
+        <div class="menu-control-wrapper">
+            <img class="privacy__header__menu" (click)="backClicked($event)" [src]="iconBack"/>
+        </div>
+        <div class="title-wrapper">
+            <div class="privacy__header__title">PRIVACY</div>
+        </div>
+        <div class="save-addr-control-wrapper">
+        </div>
+    </div>
+
+    <div class="privacy__container">
+        <div class="privacy__container__complete-vf">
+            <span class="privacy-item-title">Complete wallet verification</span>
+        </div>
+        <div class="privacy__container__change-pass">
+            <span class="privacy-item-title">Change password</span>
+        </div>
+    </div>
+    
+    <div class="privacy__top-gradient"></div>
+</div>

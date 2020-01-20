@@ -34,13 +34,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-  //   const wallet = localStorage.getItem('wallet');
-  //   if (wallet === undefined) {
-  //     this.router.navigate(['/initialize/create']);
-  //   }
-
     this.dataService.loadWalletData().then(walletData => {
-      if(walletData.length > 0) {
+      if (walletData !== undefined && walletData.length > 0) {
           console.log('Wallet: ', walletData);
           this.store.dispatch(saveWallet({wallet: walletData}));
           this.store.dispatch(ChangeWalletState({walletState: true}));
@@ -89,8 +84,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           if (msg.result && msg.result.length) {
             console.log(`[login] wallet session: ${msg.result}`);
             this.sub.unsubscribe();
-            //this.dataService.store.putState({active: true}); // app activated
-
             this.store.dispatch(ChangeWalletState({walletState: true}));
             this.router.navigate(['/wallet/main']);
           }

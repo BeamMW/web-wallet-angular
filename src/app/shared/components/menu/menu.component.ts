@@ -32,7 +32,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       srcOut: `${environment.assetsPath}/images/shared/components/menu/ic-utxo.svg`,
       srcOn: `${environment.assetsPath}/images/shared/components/menu/ic-utxo-active.svg`
     }, {
-      path: '',
+      path: '/settings/all',
       title: 'Settings',
       src: '',
       srcOut: `${environment.assetsPath}/images/shared/components/menu/icon-settings.svg`,
@@ -50,7 +50,6 @@ export class MenuComponent implements OnInit, OnDestroy {
     public router: Router,
     private activatedRoute: ActivatedRoute,
     private dataService: DataService) {
-
   }
 
   ngOnInit() {

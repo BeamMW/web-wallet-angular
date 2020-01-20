@@ -1,0 +1,25 @@
+<div class="server" [class.blur-filter]="popupOpened">
+    <div class="server__header">
+        <div class="menu-control-wrapper">
+            <img class="server__header__menu" (click)="backClicked($event)" [src]="iconBack"/>
+        </div>
+        <div class="title-wrapper">
+            <div class="server__header__title">SERVER</div>
+        </div>
+        <div class="save-addr-control-wrapper">
+        </div>
+    </div>
+
+    <div class="server__container">
+        <div class="server__container__dns">
+            <span class="server-item-title">dns/ip</span>
+            <span class="server-item-value">www.server.com</span>
+        </div>
+        <div class="server__container__ip">
+            <span class="server-item-title">ip:port</span>
+            <span class="server-item-value">12.123.123.1234</span>
+        </div>
+    </div>
+    
+    <div class="server__top-gradient"></div>
+</div>

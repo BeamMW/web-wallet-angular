@@ -1,0 +1,97 @@
+@import 'ui-mixins';
+@import './styles';
+
+:host {
+    height: 0;
+}
+
+.confirm {
+    border-radius: 10px;
+    background-color: #003f6f;
+    position: absolute;
+    width: 335px;
+    height: 206px;
+    z-index: 100;
+    margin-top: 147px;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+        margin: 30px auto 0 auto;
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.06;
+        letter-spacing: normal;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    &__input {
+        margin-top: 30px;
+        margin-left: 20px;
+        height: 35px;
+        background: rgba(255, 255, 255, 0);
+        font-family: 'ProximaNova', sans-serif;
+        border: none;
+        width: 295px;
+        border-bottom: 2px solid #00f6d2;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #ffffff;
+        resize:none;
+        max-height: 40px;
+    }
+
+    &__input:focus {
+        font-family: 'ProximaNova', sans-serif;
+        outline-width: 0;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #ffffff;
+    }
+
+    &__input::placeholder {
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: rgba(255, 255, 255, .3);
+    }
+
+    &__controls {
+        display: flex;
+        margin-top: 30px;
+        margin-left: 20px;
+
+        &__ok {
+            margin-left: 13px;
+            
+            @include ui-button($btn-ok, $btn-nssm) {
+            }
+
+            @include ui-button-ok-icon()
+        }
+
+        &__cancel {
+            
+            @include ui-button($btn-cancel, $btn-nssm) {
+            }
+
+            @include ui-button-cancel-icon()
+        }
+    }
+}

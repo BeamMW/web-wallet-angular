@@ -1,0 +1,85 @@
+@import 'ui-mixins';
+@import './styles';
+
+:host {
+    height: 0;
+}
+
+.qr-popup {
+    border-radius: 10px;
+    background-color: #003f6f;
+    position: absolute;
+    width: 335px;
+    height: 442px;
+    z-index: 100;
+    margin-top: 30px;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+
+    &__close-icon {
+        margin-top: 10px;
+        margin-right: 10px;
+        width: 14px;
+        height: 14px;
+        align-self: flex-end;
+        cursor: pointer;
+    }    
+
+    &__code {
+        margin-top: 6px;
+        margin-left: 98px;
+    }
+
+    &__address {
+        margin-left: 20px;
+        margin-top: 10px;
+        font-family: 'ProximaNova', sans-serif;
+        max-width: 295px;
+        word-wrap: break-word;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #ffffff;
+    }
+
+    &__address-header,
+    &__amount-header {
+        margin-left: 20px;
+        margin-top: 30px;
+        opacity: 0.5;
+        font-family: 'ProximaNovaBold', sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 1px;
+        color: #ffffff;
+    }
+
+    &__amount {
+        margin-left: 20px;
+        margin-top: 7px;
+        font-family: 'ProximaNovaSemiBold', sans-serif;
+        font-size: 18px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.34px;
+        color: #0bccf7;
+    }
+
+    &__copy {
+        margin: auto auto 30px auto;
+
+        @include ui-button($btn-receive, $btn-nsmd) {
+        }
+
+        @include ui-button-copy-icon()
+    }
+}

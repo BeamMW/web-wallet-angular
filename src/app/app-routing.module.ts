@@ -24,6 +24,9 @@ const routes: Routes = [
   }, {
     path: 'utxo',
     loadChildren: () => import('./modules/utxo/utxo.module').then(m => m.UtxoModule)
+  }, {
+    path: 'settings',
+    loadChildren: () => import('./modules/settings/settings.module').then(m => m.SettingsModule)
   }
 ];
 

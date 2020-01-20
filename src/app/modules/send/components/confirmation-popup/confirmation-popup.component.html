@@ -1,0 +1,18 @@
+<div class="confirm" appClickOutside (clickOutside)="closePopup()">
+    <form class="send-form-cl" [formGroup]="confirmForm" autocomplete="off" novalidate (ngSubmit)="submit()">
+        <div class="confirm__title">Transaction confirmation</div>
+        <div class="form-group">
+            <input class="confirm__input" type="password"
+                name="password" formControlName="password" 
+                placeholder="Enter password"/>
+        </div>
+    </form>
+    <div class="confirm__controls">
+        <div class="confirm__controls__cancel">
+            <app-button class="copy-button" (click)="cancelClicked($event)" >cancel</app-button>
+        </div>
+        <div class="confirm__controls__ok">
+            <app-button class="copy-button" (click)="submit($event)" >ok</app-button>
+        </div>
+    </div>
+</div>

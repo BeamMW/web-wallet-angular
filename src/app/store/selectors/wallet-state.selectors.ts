@@ -35,3 +35,8 @@ export const selectWalletStatus = createSelector(
   selectAppState,
   state => state.walletStatus
 );
+
+export const selectReceiveData = createSelector(
+  selectAppState,
+  state => state.receiveData
+);

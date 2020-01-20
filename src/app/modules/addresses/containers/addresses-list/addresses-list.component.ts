@@ -14,7 +14,7 @@ import { Subscription, Observable } from 'rxjs';
   styleUrls: ['./addresses-list.component.scss']
 })
 export class AddressesListComponent implements OnInit, OnDestroy {
-  public iconMenu: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-menu.svg`;
+  public iconMenu = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-menu.svg`;
   private sub: Subscription;
   private pageActive = false;
   public modalOpened = false;

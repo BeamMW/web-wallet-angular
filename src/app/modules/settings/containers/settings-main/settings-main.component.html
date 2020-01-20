@@ -1,0 +1,24 @@
+<div class="settings" [class.blur-filter]="modalOpened">
+    <div class="settings__header">
+        <div class="menu-control-wrapper">
+            <img class="settings__header__menu" (click)="sideMenuClicked($event)" [src]="iconMenu"/>
+            <!-- <app-menu-control></app-menu-control> -->
+        </div>
+        <div class="title-wrapper">
+            <div class="settings__header__title">SETTINGS</div>
+        </div>
+        <div class="privacy-control-wrapper">
+        </div>
+    </div>
+
+    <div class="settings__list">
+        <div *ngFor="let item of menuItems" class="settings__list__item" 
+                [routerLink]="item.path" (mouseover)="item.src = item.srcOn"
+                (mouseout)="item.src = item.srcOut"> 
+            <img class="settings__list__item__icon" [src]="item.src || item.srcOut"/>
+            <span class="settings__list__item__text" [class.remove]="item.class === 'remove'">{{item.title}}</span>
+        </div>
+    </div>
+
+    <div class="settings__top-gradient"></div>
+</div>
