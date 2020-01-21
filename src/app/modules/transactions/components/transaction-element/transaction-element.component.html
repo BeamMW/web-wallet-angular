@@ -1,6 +1,6 @@
-<div class="transaction">
-    <div class="transaction__receive" [class.commented]="isCommentDefault(transaction.comment)" 
-            *ngIf="transaction.status_string == 'received'">
+<div class="transaction" [routerLink]="['/transactions/details', transaction.txId]">
+    <div class="transaction__receive" [class.commented]="isCommentDefault(transaction.comment) && transaction.comment.length > 0" 
+            *ngIf="transaction.status_string === 'received' || transaction.status_string === 'completed'">
         <div class="transaction__receive__value">
             <img class="tr-receive-icon" [src]="iconReceived"/>
             <span class="tr-receive-text">Receive</span>
@@ -8,13 +8,13 @@
         </div>
         <div class="transaction__receive__status">received</div>
         <div class="tr-created">{{transaction.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
-        <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment)">
+        <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment) && transaction.comment.length > 0">
             <img class="tr-comment__icon" [src]="iconComment"/>
             <span class="tr-comment__text">"{{transaction.comment}}"</span>
         </div>
     </div>
-    <div class="transaction__receive" [class.commented]="isCommentDefault(transaction.comment)" 
-            *ngIf="transaction.status_string == 'receiving'">
+    <div class="transaction__receive" [class.commented]="isCommentDefault(transaction.comment)  && transaction.comment.length > 0" 
+            *ngIf="transaction.status_string === 'receiving'">
         <div class="transaction__receive__value">
             <img class="tr-receive-icon" [src]="iconReceived"/>
             <span class="tr-receive-text">Receive</span>
@@ -22,12 +22,12 @@
         </div>
         <div class="transaction__receive__status">receiving</div>
         <div class="tr-created">{{transaction.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
-        <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment)">
+        <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment) && transaction.comment.length > 0">
             <img class="tr-comment__icon" [src]="iconComment"/>
             <span class="tr-comment__text">"{{transaction.comment}}"</span>
         </div>
     </div>
-    <div class="transaction__send" [class.commented]="isCommentDefault(transaction.comment)" 
+    <div class="transaction__send" [class.commented]="isCommentDefault(transaction.comment) && transaction.comment.length > 0" 
             *ngIf="transaction.status_string == 'sent'">
         <div class="transaction__send__value">
             <img class="tr-send-icon" [src]="iconSent">
@@ -36,12 +36,12 @@
         </div>
         <div class="transaction__send__status">sent</div>
         <div class="tr-created">{{transaction.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
-        <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment)">
+        <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment) && transaction.comment.length > 0">
             <img class="tr-comment__icon" [src]="iconComment"/>
             <span class="tr-comment__text">"{{transaction.comment}}"</span>
         </div>
     </div>
-    <div class="transaction__send" [class.commented]="isCommentDefault(transaction.comment)" 
+    <div class="transaction__send" [class.commented]="isCommentDefault(transaction.comment) && transaction.comment.length > 0" 
             *ngIf="transaction.status_string == 'sending'">
         <div class="transaction__send__value">
             <img class="tr-send-icon" [src]="iconSent">
@@ -50,7 +50,7 @@
         </div>
         <div class="transaction__send__status">sending</div>
         <div class="tr-created">{{transaction.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
-        <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment)">
+        <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment) && transaction.comment.length > 0">
             <img class="tr-comment__icon" [src]="iconComment"/>
             <span class="tr-comment__text">"{{transaction.comment}}"</span>
         </div>

@@ -20,6 +20,10 @@ export class TransactionElementComponent implements OnInit {
     return comment === 'default';
   }
 
+  itemSelected(transactionData) {
+    
+  }
+
   ngOnInit() {
   }
 }

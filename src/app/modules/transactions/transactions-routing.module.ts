@@ -23,9 +23,10 @@ const routes: Routes = [{
 }, {
   path: '',
   component: MainLayoutComponent,
+  canActivate: [LoginGuard],
   children: [
   {
-    path: 'details',
+    path: 'details/:id',
     children: [{
         path: '', component: HeaderComponent, outlet: 'header'
       }, {

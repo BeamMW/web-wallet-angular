@@ -1,4 +1,6 @@
 .transaction {
+    cursor: pointer;
+    
     &__receive {
         display: flex;
         flex-direction: column;

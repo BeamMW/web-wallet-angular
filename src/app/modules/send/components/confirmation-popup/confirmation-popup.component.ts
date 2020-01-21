@@ -69,7 +69,7 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
             value : this.send.amount * 100000000,
             fee : this.send.fee,
             address : this.send.address,
-            comment : this.send.comment
+            comment : this.send.comment && this.send.comment.length > 0 ? this.send.comment : ''
           }
         });
       });

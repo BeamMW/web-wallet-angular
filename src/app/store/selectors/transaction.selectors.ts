@@ -58,3 +58,11 @@ export const selectTrByAddress = (address: string) => createSelector(
             .filter(transactions => transactions.sender === address || transactions.receiver === address);
     }
 );
+
+export const selectTrById = (txId: string) => createSelector(
+    selectAllTr,
+    allTr => {
+        return allTr
+            .find(transactions => transactions.txId === txId);
+    }
+);
