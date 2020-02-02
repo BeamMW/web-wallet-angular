@@ -10,6 +10,7 @@ import { ClickOutsideDirective } from './directives/click-outside/click-outside.
 import { BeamPipe } from 'app/pipes/beam.pipe';
 import { DecimalPipe } from '@angular/common';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
+import { MenuFullComponent } from './components/menu-full/menu-full.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { DropdownComponent } from './components/dropdown/dropdown.component';
     MenuControlComponent,
     ClickOutsideDirective,
     BeamPipe,
-    DropdownComponent
+    DropdownComponent,
+    MenuFullComponent
   ],
   imports: [
     CommonModule,
@@ -38,7 +40,8 @@ import { DropdownComponent } from './components/dropdown/dropdown.component';
     MenuControlComponent,
     ClickOutsideDirective,
     BeamPipe,
-    DropdownComponent
+    DropdownComponent,
+    MenuFullComponent
   ],
   providers: [
     DecimalPipe

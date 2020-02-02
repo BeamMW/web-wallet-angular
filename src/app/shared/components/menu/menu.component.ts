@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router} from '@angular/router';
 import { environment } from '@environment';
 import { ActivatedRoute} from '@angular/router';
-import { DataService } from './../../../services/data.service';
+import { DataService, WindowService } from './../../../services';
 
 @Component({
   selector: 'app-menu',

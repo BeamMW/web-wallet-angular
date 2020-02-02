@@ -99,6 +99,16 @@
         }
       }
 
+      @if($size == $btn-full-sm) {
+        height: 38px;
+        width: 123px;
+      }
+
+      @if($size == $btn-full-md) {
+        height: 38px;
+        width: 138px;
+      }
+
       @if($size == $btn-sm) {
         height: 36px;
         width: 117px;

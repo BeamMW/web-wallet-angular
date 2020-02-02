@@ -112,6 +112,8 @@
             }
 
             &__address {
+                word-wrap: break-word;
+                max-width: 335px;
                 margin-top: 7px;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 14px;

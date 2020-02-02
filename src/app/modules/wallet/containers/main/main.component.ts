@@ -10,7 +10,7 @@ import { selectAllAddresses } from '../../../../store/selectors/address.selector
 import { selectAllUtxo } from '../../../../store/selectors/utxo.selectors';
 import { selectAllTr } from '../../../../store/selectors/transaction.selectors';
 import { selectAppState } from '../../../../store/selectors/wallet-state.selectors';
-import { DataService } from './../../../../services/data.service';
+import { DataService, WindowService } from './../../../../services';
 
 import { environment } from '@environment';
 
@@ -56,14 +56,17 @@ export class MainComponent implements OnInit, OnDestroy {
   };
 
   privacyMode = false;
+  isFullScreen = false;
   activeSidenavItem = '';
 
   constructor(private store: Store<any>,
               private wasm: WasmService,
               public router: Router,
+              public windowService: WindowService,
               private wsService: WebsocketService,
               private dataService: DataService) {
-    this.addresses$ = this.store.pipe(select(selectAllAddresses)); 
+    this.isFullScreen = windowService.isFullSize();
+    this.addresses$ = this.store.pipe(select(selectAllAddresses));
     this.utxos$ = this.store.pipe(select(selectAllUtxo));
     this.transactions$ = this.store.pipe(select(selectAllTr));
 

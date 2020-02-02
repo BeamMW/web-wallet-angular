@@ -33,12 +33,12 @@ export class SendAmountComponent implements OnInit, OnDestroy {
     this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
     this.send = this.dataService.sendStore.getState().send;
     let amount = 0;
-    let fee = 0;
+    let fee = 100;
     let comment = '';
 
     if (this.send !== undefined) {
       amount = this.send.amount;
-      fee = this.send.fee;
+      fee = this.send.fee === undefined || this.send.fee === 0 ? 100 : this.send.fee;
       comment = this.send.comment;
     }
 
@@ -82,7 +82,7 @@ export class SendAmountComponent implements OnInit, OnDestroy {
     $event.preventDefault();
     this.walletStatusSub = this.walletStatus$.subscribe((status) => {
       if (status.available > 0) {
-        this.sendForm.get('amount').setValue(status.available);
+        this.sendForm.get('amount').setValue((status.available - this.sendForm.value.fee) / 100000000);
       }
     });
   }
