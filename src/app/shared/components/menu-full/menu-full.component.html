@@ -1,9 +1,9 @@
-<div class="side-menu">
+<div class="side-menu" *ngIf="isFullScreen">
     <div class="side-menu__items" routerLinkActive="active">
         <div class="side-menu__items__item menu-item" *ngFor="let item of menuItems" 
-            [routerLink]="item.path" (mouseover)="itemMouseover(item)"
+            [routerLink]="item.path" (mouseover)="itemMouseover(item)" (click)="itemClicked(item)"
                 (mouseout)="itemMouseout(item)">
-            <div class="menu-item-side" [class.hovered]="item.hovered"></div>
+            <div class="menu-item-side" [class.hovered]="item.hovered || item.path === router.url"></div>
             <img class="menu-item-icon" [src]="item.src || item.srcOut"/>
         </div>
     </div>

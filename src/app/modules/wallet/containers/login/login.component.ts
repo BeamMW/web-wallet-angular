@@ -5,7 +5,7 @@ import { WasmService } from './../../../../wasm.service';
 import { WebsocketService } from './../../../websocket';
 import { Subscription, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { DataService, WindowService } from './../../../../services';
+import { DataService } from './../../../../services';
 import { environment } from '@environment';
 import { Store, select } from '@ngrx/store';
 import { ChangeWalletState, saveWallet } from './../../../../store/actions/wallet.actions';
@@ -26,7 +26,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(private store: Store<any>,
               private wasm: WasmService,
               private wsService: WebsocketService,
-              public windowService: WindowService,
               public router: Router,
               private dataService: DataService) {
     this.loginForm = new FormGroup({
@@ -86,9 +85,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             console.log(`[login] wallet session: ${msg.result}`);
             this.sub.unsubscribe();
             this.store.dispatch(ChangeWalletState({walletState: true}));
-            this.windowService.isFullSize() ?
-              this.router.navigate(['/wallet/main', { outlets: { sidemenu: 'full-menu' }}]) :
-              this.router.navigate(['/wallet/main']);
+            this.router.navigate(['/wallet/main']);
           }
         });
 

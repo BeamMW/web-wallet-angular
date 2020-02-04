@@ -1,0 +1,75 @@
+.example-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+}
+
+.mat-table {
+    overflow: auto;
+    max-height: 500px;
+    border-radius: 10px;
+    background-color: rgba(255,255,255, 0);
+}
+
+.element-row {
+    min-height: 56px;
+    border: none;
+    position: relative;
+}
+
+.element-row:not(.expanded) {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.element-row:not(.expanded):nth-child(4n) {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.element-row:not(.expanded):hover {
+    background: rgba(35, 193, 255, .1);
+}
+
+.element-row.expanded {
+    cursor: pointer;
+    background: rgba(35, 193, 255, .1);
+    border-bottom-color: transparent;
+}
+
+.row-details {
+    border: none;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.03);
+}
+  
+.row-details:nth-child(4n-1) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.table-header {
+    height: 46px;
+    background-color: #003f6f;
+}
+
+
+.mat-header-cell {
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #8da1ad;
+    font-family: 'SFProDisplayRegular', sans-serif;
+}
+
+.mat-cell {
+    font-family: 'ProximaNova', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    color: #ffffff;
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
 import { WebsocketService } from './../../../websocket';
@@ -14,7 +14,7 @@ import { saveReceiveData } from './../../../../store/actions/wallet.actions';
   templateUrl: './receive.component.html',
   styleUrls: ['./receive.component.scss']
 })
-export class ReceiveComponent implements OnInit {
+export class ReceiveComponent implements OnInit, OnDestroy {
   public iconBack = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
   public generatedAddress = '';
 
@@ -38,6 +38,12 @@ export class ReceiveComponent implements OnInit {
 
   ngOnInit() {
     this.createAddress();
+  }
+
+  ngOnDestroy() {
+    if (this.sub !== undefined) {
+      this.sub.unsubscribe();
+    }
   }
 
   backClicked(event) {

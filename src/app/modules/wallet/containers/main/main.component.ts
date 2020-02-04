@@ -2,9 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { WasmService } from './../../../../wasm.service';
 import { WebsocketService } from './../../../websocket';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { loadAddresses, loadUtxo, loadTr, saveWalletStatus } from './../../../../store/actions/wallet.actions';
 import { selectAllAddresses } from '../../../../store/selectors/address.selectors';
 import { selectAllUtxo } from '../../../../store/selectors/utxo.selectors';
@@ -21,6 +20,7 @@ import { environment } from '@environment';
 })
 export class MainComponent implements OnInit, OnDestroy {
   public iconBeam: string = `${environment.assetsPath}/images/modules/wallet/containers/main/ic-beam.svg`;
+  public iconBeamFull: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-beam-full.svg`;
   public iconReceived: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-received.svg`;
   public iconSent: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-sent.svg`;
   public iconMenu: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-menu.svg`;
@@ -29,7 +29,7 @@ export class MainComponent implements OnInit, OnDestroy {
   public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
 
   public sendRoute = '/send/addresses';
-  public receiveRoute = '/receive/main';
+  public receiveRoute = '/receive/page';
 
   private sub: Subscription;
   private mainActive = false;
@@ -41,7 +41,6 @@ export class MainComponent implements OnInit, OnDestroy {
   addressesColumns: string[] = ['address', 'created', 'comment'];
   utxoColumns: string[] = ['utxo', 'amount', 'status'];
   transcationsColumns: string[] = ['sender', 'value', 'txId'];
-  fullView = window.innerWidth < 800;
 
   walletStatusLoaded = false;
   walletStatus = {

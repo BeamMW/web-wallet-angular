@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '@environment';
+import { WindowService } from './../../../services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu-full',
@@ -7,6 +9,7 @@ import { environment } from '@environment';
   styleUrls: ['./menu-full.component.scss']
 })
 export class MenuFullComponent implements OnInit {
+  private assetsPath = `${environment.assetsPath}/images/shared/components/menu/`;
   public iconBuyBeam: string = `${environment.assetsPath}/images/shared/components/full-menu/icon-where-to-buy-beam.svg`;
   menuItems = [{
       path: '/wallet/main',
@@ -38,7 +41,15 @@ export class MenuFullComponent implements OnInit {
       srcOn: `${environment.assetsPath}/images/shared/components/menu/icon-settings-active.svg`
     }
   ];
-  constructor() { }
+  isFullScreen = false;
+  constructor(private windowService: WindowService,
+              public router: Router) {
+    this.isFullScreen = windowService.isFullSize();
+  }
+
+  itemClicked(item) {
+    
+  }
 
   ngOnInit() {
   }

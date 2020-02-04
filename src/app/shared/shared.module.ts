@@ -11,6 +11,12 @@ import { BeamPipe } from 'app/pipes/beam.pipe';
 import { DecimalPipe } from '@angular/common';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { MenuFullComponent } from './components/menu-full/menu-full.component';
+import { TableComponent } from './components/table/table.component';
+
+import {
+  MatToolbarModule,
+  MatTableModule,
+} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -25,11 +31,15 @@ import { MenuFullComponent } from './components/menu-full/menu-full.component';
     ClickOutsideDirective,
     BeamPipe,
     DropdownComponent,
-    MenuFullComponent
+    MenuFullComponent,
+    TableComponent
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+
+    MatToolbarModule,
+    MatTableModule,
   ],
   exports: [
     StatusTitleComponent,
@@ -41,7 +51,8 @@ import { MenuFullComponent } from './components/menu-full/menu-full.component';
     ClickOutsideDirective,
     BeamPipe,
     DropdownComponent,
-    MenuFullComponent
+    MenuFullComponent,
+    TableComponent
   ],
   providers: [
     DecimalPipe

@@ -2,11 +2,36 @@
     <div class="main">
         <div class="main__content">
             <div class="main__content__header">
-                <div class="main__content__header__title">WALLET</div>
+                <div class="main__content__header__title">Wallet</div>
                 <app-button class="main__content__header__send-button" [routerLink]="sendRoute">send</app-button>
                 <app-button class="main__content__header__receive-button" [routerLink]="receiveRoute">receive</app-button>
             </div>
-            <div class="main__content__available"></div>
+            <div class="main__content__state">
+                <div class="available">
+                    <img class="available__logo" [src]="iconBeamFull">
+                    <div class="available__container">
+                        <div class="available__container__title">Available</div>
+                        <span class="available__container__value">{{walletStatus.available | beam:'1.0-9'}} BEAM</span>
+                    </div>
+                </div>
+                <ng-container *ngIf="walletStatusLoaded && (walletStatus.receiving > 0 || walletStatus.sending > 0)">
+                    <div class="main__content__state__separator"></div>
+                    <div class="in-progress">
+                        <div class="in-progress__sent">
+                            <div class="in-progress__sent__title">In progress</div>
+                            <div class="in-progress__sent__value">
+                                <img class="in-progress__sent__value__logo" [src]="iconSent">
+                                <span class="in-progress__sent__value__data">-{{walletStatus.sending | beam:'1.0-9'}} BEAM</span>
+                            </div>
+                        </div>
+                        <div class="in-progress__receive">
+                            <img class="in-progress__receive__logo" [src]="iconReceived">
+                            <span class="in-progress__receive__value">+{{walletStatus.receiving | beam:'1.0-9'}} BEAM</span>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            <app-table></app-table>
         </div>
         <div class="main__top-gradient"></div>
     </div>    

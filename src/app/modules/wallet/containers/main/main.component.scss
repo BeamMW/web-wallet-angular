@@ -285,7 +285,7 @@
     }
 }
 
-@media (min-width: 376px) {
+@media (min-width: 400px) {
     .main {
         &__content {
             z-index: 10;
@@ -294,7 +294,7 @@
             &__header {
                 display: flex;
                 &__title {
-                    font-family: 'ProximaNova', sans-serif;
+                    font-family: 'SFUIDisplay-Medium', sans-serif;
                     font-size: 36px;
                     font-weight: 500;
                     font-stretch: normal;
@@ -322,16 +322,123 @@
                 }
             }
 
-            &__available {
+            &__state {
                 margin-top: 30px;
                 width: 100%;
                 height: 67px;
                 border-radius: 10px;
                 background-color: rgba(255, 255, 255, 0.06);
+                display: flex;
+
+                &__separator {
+                    width: 1px;
+                    height: 35px;
+                    margin: auto 0;
+                    flex-shrink: 0;
+                    background-color: rgba(255, 255, 255, 0.1);
+                }
+            }
+        }
+    }
+    
+    .available {
+        width: 50%;
+        flex-shrink: 1;
+        display: flex;
+        align-items: center;
+
+        &__logo {
+            margin-left: 20px;
+        }
+
+        &__container {
+            margin-left: 20px;
+
+            &__title {
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 12px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #92abba;
+            }
+
+            &__value {
+                font-family: 'SFProDisplayRegular', sans-serif;
+                margin-top: 5px;
+                font-size: 16px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+            }
+        }
+    }
+
+    .in-progress {
+        width: 50%;
+        flex-shrink: 1;
+        display: flex;
+        align-items: center;
+
+        &__sent {
+            margin-left: 20px;
+
+            &__title {
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 12px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #92abba;
+            }
+
+            &__value {
+                display: flex;
+                align-items: center;
+                margin-top: 5px;
+
+                &__data {
+                    margin-left: 10px;
+                    font-family: 'SFProDisplayRegular', sans-serif;
+                    font-size: 16px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: normal;
+                    letter-spacing: normal;
+                    color: #da68f5;
+                }
+            }
+        }
+
+        &__receive {
+            margin-top: 19px;
+            display: flex;
+            align-items: center;
+            margin-left: 75px;
+
+            &__value {
+                margin-left: 10px;
+                font-family: 'SFProDisplayRegular', sans-serif;
+                font-size: 16px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #0bccf7;
             }
         }
     }
 }
+
 
 .main.blur-filter {
     -webkit-filter: blur(4px);
