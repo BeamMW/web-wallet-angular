@@ -31,7 +31,19 @@
                     </div>
                 </ng-container>
             </div>
-            <app-table></app-table>
+            <div class="main__content__subtitle">TRANSACTIONS</div>
+            <div class="main__content__selector">
+                <div class="selector" *ngFor="let item of selectorValues" (click)="selectorItemClicked(item)">
+                    <div class="selector__title" [class.active]="item.active">{{item.title}}</div>
+                    <div class="selector__bottom-line" *ngIf="item.active"></div>
+                </div>
+            </div>
+            <ng-container *ngIf="transactions$ | async as transactions">
+                <app-table *ngIf="transactions.length > 0" 
+                    [tableType]="tableType"
+                    [tableColumns]="tableColumns" 
+                    [tableData]="transactions"></app-table>
+            </ng-container>
         </div>
         <div class="main__top-gradient"></div>
     </div>    
@@ -121,6 +133,12 @@
                                         <span class="tr-send-value">- {{ transaction.value | beam:'1.0-9'}} BEAM</span>        
                                     </div>
                                     <div class="main__transactions__content__send__status">sending</div>
+                                </div>
+                                <div class="main__transactions__content__send" *ngIf="transaction.status_string === 'cancelled'">
+                                    <div class="main__transactions__content__send__value">
+                                        <span class="tr-send-text">Cancelled</span>
+                                        <span class="tr-send-value">- {{ transaction.value | beam:'1.0-9'}} BEAM</span>        
+                                    </div>
                                 </div>
                             </ng-container>
                         </div>

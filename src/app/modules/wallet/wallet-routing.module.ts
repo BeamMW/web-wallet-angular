@@ -19,7 +19,7 @@ const routes: Routes = [{
         path: 'menu', component: MenuComponent, outlet: 'sidemenu',
       },  {
         path: '', component: MenuFullComponent, outlet: 'sidemenu',
-      },{
+      }, {
         path: '', component: MainComponent
       }
     ]

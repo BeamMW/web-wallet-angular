@@ -10,6 +10,6 @@ export class WindowService {
   }
 
   isFullSize() {
-      return window.innerWidth > 375;
+      return window.innerWidth > 400;
   }
 }

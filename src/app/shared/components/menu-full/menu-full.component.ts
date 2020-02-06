@@ -51,16 +51,35 @@ export class MenuFullComponent implements OnInit {
     
   }
 
+  getItemSrc(item) {
+    if (item.path === '/wallet/main' &&
+        (this.router.url === '/send/addresses' ||
+        this.router.url === '/send/confirmation' ||
+        this.router.url === '/send/amount' ||
+        this.router.url === '/receive/page')) {
+      return item.srcOn;
+    }
+    return item.path === this.router.url ? item.srcOn : (item.src || item.srcOut);
+  }
+
+  isSideActive(item) {
+    return item.hovered || item.path === this.router.url || (item.path === '/wallet/main' &&
+      (this.router.url === '/send/addresses' ||
+      this.router.url === '/send/confirmation' ||
+      this.router.url === '/send/amount' ||
+      this.router.url === '/receive/page'));
+  }
+
   ngOnInit() {
   }
 
   itemMouseover(item) {
     item.src = item.srcOn;
-    item.hovered = !item.hovered;
+    //item.hovered = !item.hovered;
   }
 
   itemMouseout(item) {
     item.src = item.srcOut;
-    item.hovered = !item.hovered;
+    //item.hovered = !item.hovered;
   }
 }

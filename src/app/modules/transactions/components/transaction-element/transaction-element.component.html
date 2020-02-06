@@ -55,4 +55,16 @@
             <span class="tr-comment__text">"{{transaction.comment}}"</span>
         </div>
     </div>
+    <div class="transaction__send" [class.commented]="isCommentDefault(transaction.comment) && transaction.comment.length > 0" 
+            *ngIf="transaction.status_string == 'cancelled'">
+        <div class="transaction__send__value">
+            <span class="tr-send-text">Cancelled</span>
+            <span class="tr-send-value">- {{ transaction.value | beam:'1.0-9'}} BEAM</span>
+        </div>
+        <div class="tr-created">{{transaction.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
+        <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment) && transaction.comment.length > 0">
+            <img class="tr-comment__icon" [src]="iconComment"/>
+            <span class="tr-comment__text">"{{transaction.comment}}"</span>
+        </div>
+    </div>
 </div>

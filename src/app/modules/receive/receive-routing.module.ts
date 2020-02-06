@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MainLayoutComponent } from '@shared/layouts';
 import { HeaderComponent } from '@shared/containers';
+import { MenuFullComponent } from '@shared/components';
 import { LoginGuard } from './../wallet/guards/login.guard';
 import { ReceiveComponent } from './containers/receive/receive.component';
 import { QrPopupComponent } from './components/qr-popup/qr-popup.component';
@@ -17,6 +18,8 @@ const routes: Routes = [{
         path: '', component: HeaderComponent, outlet: 'header'
       }, {
         path: 'qr-popup', component: QrPopupComponent, outlet: 'popup',
+      }, {
+        path: '', component: MenuFullComponent, outlet: 'sidemenu',
       }, {
         path: '', component: ReceiveComponent
       }

@@ -1,32 +1,91 @@
-<div class="send">
-    <div class="send__header">
-        <div class="back-control-wrapper">
-            <img class="send__header__back" (click)="backConfirmationClicked()" [src]="iconBack"/>
+<div class="send" [class.blur-filter]="popupOpened">
+    <ng-container *ngIf="!isFullScreen">
+        <div class="send__header">
+            <div class="back-control-wrapper">
+                <img class="send__header__back" (click)="backConfirmationClicked()" [src]="iconBack"/>
+            </div>
+            <div class="title-wrapper">
+                <div class="send__header__title">SEND</div>
+            </div>
+            <div class="right-wrapper"></div>
         </div>
-        <div class="title-wrapper">
-            <div class="send__header__title">SEND</div>
+        <div class="send__progress">
+            <span class="send__progress__full"></span>
+            <span class="send__progress__empty"></span>
+            <span class="send__progress__empty"></span>
         </div>
-        <div class="right-wrapper"></div>
-    </div>
-    <div class="send__progress">
-        <span class="send__progress__full"></span>
-        <span class="send__progress__empty"></span>
-        <span class="send__progress__empty"></span>
-    </div>
-    <div class="send__container">
-        <div class="send__container__title">SEND TO</div>
-        <div class="send__container__content">
-            <form class="send-form-cl" novalidate [formGroup]="sendForm" autocomplete="off" (ngSubmit)="submit()">
-                <div class="form-group">
-                    <textarea class="send__container__content__input" autosize maxlength="70"
-                         name="address" formControlName="address"
-                        placeholder="Search by address, name or comment"></textarea>
+        <div class="send__container">
+            <div class="send__container__title">SEND TO</div>
+            <div class="send__container__content">
+                <form class="send-form-cl" novalidate [formGroup]="sendForm" autocomplete="off" (ngSubmit)="submit()">
+                    <div class="form-group">
+                        <textarea class="send__container__content__input" autosize maxlength="70"
+                             name="address" formControlName="address"
+                            placeholder="Search by address, name or comment"></textarea>
+                    </div>
+                    <div class="send__container__content__button">
+                        <app-button [disabled]="sendForm.invalid" class="send-button">next</app-button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="send__top-gradient"></div>
+    </ng-container>
+    
+    <ng-container *ngIf="isFullScreen">
+        <div class="send__content">
+            <div class="send__content__header">
+                <div class="send__content__header__title">Send</div>
+            </div>
+            <form class="form" novalidate [formGroup]="fullSendForm" autocomplete="off" (ngSubmit)="fullSubmit()">
+                <div class="container">
+                    <div class="container__address">
+                        <div class="container__address__title">SEND TO</div>
+                        <textarea class="container__address__input" autosize maxlength="70"
+                             name="address" formControlName="address"
+                            placeholder="Search by address, name or comment"></textarea>
+                    </div>
+                    <div class="container__values">
+                        <div class="container__values__title-amount">AMOUNT</div>
+                        <div class="form-group">
+                            <input class="container__values__input-amount"
+                                name="amount" formControlName="amount" 
+                                placeholder="Enter amount"/>
+                            <span class="container__values__currency">BEAM</span>
+                        </div>
+                        <div class="container__values__title-fee">TRANSACTION FEE</div>
+                        <div class="form-group">
+                            <input class="container__values__input-groth"
+                                name="fee" formControlName="fee" 
+                                placeholder="Enter fee"/>
+                            <span class="container__values__currency">GROTH</span>
+                        </div>
+                        <ng-container *ngIf="walletStatus$ | async as walletStatus">
+                            <div class="total" *ngIf="walletStatus.available > 0">
+                                <div class="total__container">
+                                    <div class="total__container__header">TOTAL AVAILABLE</div>
+                                    <div class="total__container__value">{{walletStatus.available | beam:'1.0-9'}} BEAM</div>
+                                </div>
+                                <div class="total__add-all">
+                                    <app-button class="add-all-button" (click)="addAll($event)">add all</app-button>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <div class="container__values__title-comment">TRANSACTION COMMENT</div>
+                        <div class="form-group">
+                            <input class="container__values__input-comment"
+                                name="comment" formControlName="comment" 
+                                placeholder="Enter comment"/>
+                        </div>
+                    </div>
                 </div>
-                <div class="send__container__content__button">
-                    <app-button [disabled]="sendForm.invalid" class="send-button">next</app-button>
+                
+                <div class="controls">
+                    <app-button class="controls__back-button" (click)="backConfirmationClicked()">back</app-button>
+                    <app-button [disabled]="fullSendForm.invalid" class="controls__send-button">next</app-button>
                 </div>
             </form>
         </div>
-    </div>
-    <div class="send__top-gradient"></div>
+        <div class="send__top-gradient"></div>
+    </ng-container>
 </div>

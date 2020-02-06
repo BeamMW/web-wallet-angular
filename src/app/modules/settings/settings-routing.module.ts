@@ -11,7 +11,7 @@ import {
 import { MainLayoutComponent } from '@shared/layouts';
 import { HeaderComponent } from '@shared/containers';
 import { LoginGuard } from '../wallet/guards/login.guard';
-import { MenuComponent } from '@shared/components';
+import { MenuComponent, MenuFullComponent } from '@shared/components';
 
 const routes: Routes = [{
   path: '',
@@ -24,6 +24,8 @@ const routes: Routes = [{
         path: '', component: HeaderComponent, outlet: 'header'
       }, {
         path: 'menu', component: MenuComponent, outlet: 'sidemenu',
+      }, {
+        path: '', component: MenuFullComponent, outlet: 'sidemenu',
       }, {
         path: '', component: SettingsMainComponent
       }

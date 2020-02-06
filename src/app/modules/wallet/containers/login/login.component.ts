@@ -5,7 +5,7 @@ import { WasmService } from './../../../../wasm.service';
 import { WebsocketService } from './../../../websocket';
 import { Subscription, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { DataService } from './../../../../services';
+import { DataService, WindowService } from './../../../../services';
 import { environment } from '@environment';
 import { Store, select } from '@ngrx/store';
 import { ChangeWalletState, saveWallet } from './../../../../store/actions/wallet.actions';
@@ -18,16 +18,22 @@ import { selectWalletData } from './../../../../store/selectors/wallet-state.sel
 })
 export class LoginComponent implements OnInit, OnDestroy {
   sub: Subscription;
-  public bgUrl: string = `${environment.assetsPath}/images/modules/wallet/containers/login/bg.svg`;
-  public logoUrl: string = `${environment.assetsPath}/images/modules/wallet/containers/login/logo.svg`;
   public loginForm: FormGroup;
+  public isFullScreen: boolean;
+  public bgUrl: string = '';
+  public logoUrl: string = `${environment.assetsPath}/images/modules/wallet/containers/login/logo.svg`;
+
   wallet$: Observable<any>;
 
   constructor(private store: Store<any>,
               private wasm: WasmService,
               private wsService: WebsocketService,
+              private windowService: WindowService,
               public router: Router,
               private dataService: DataService) {
+    this.isFullScreen = windowService.isFullSize();
+    this.bgUrl = `${environment.assetsPath}/images/modules/wallet/containers/login/` +
+      (this.isFullScreen ? 'bg-full.svg' : 'bg.svg');
     this.loginForm = new FormGroup({
       password: new FormControl()
     });

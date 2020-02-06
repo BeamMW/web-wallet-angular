@@ -7,7 +7,7 @@ import { Store, select } from '@ngrx/store';
 import { loadAddresses, loadUtxo, loadTr, saveWalletStatus } from './../../../../store/actions/wallet.actions';
 import { selectAllAddresses } from '../../../../store/selectors/address.selectors';
 import { selectAllUtxo } from '../../../../store/selectors/utxo.selectors';
-import { selectAllTr } from '../../../../store/selectors/transaction.selectors';
+import { selectAllTr, selectInProgressTr, selectReceivedTr, selectSentTr } from '../../../../store/selectors/transaction.selectors';
 import { selectAppState } from '../../../../store/selectors/wallet-state.selectors';
 import { DataService, WindowService } from './../../../../services';
 
@@ -30,6 +30,23 @@ export class MainComponent implements OnInit, OnDestroy {
 
   public sendRoute = '/send/addresses';
   public receiveRoute = '/receive/page';
+  public tableType = 'wallet';
+  public tableColumns = ['created', 'from', 'to', 'amount', 'status'];
+
+  public selectorValues = [{
+    title: 'All',
+    active: true
+  }, {
+    title: 'In progress',
+    active: false
+  }, {
+    title: 'Sent',
+    active: false
+  }, {
+    title: 'Received',
+    active: false
+  }];
+  public activeSelectorItem = this.selectorValues[0];
 
   private sub: Subscription;
   private mainActive = false;
@@ -61,7 +78,7 @@ export class MainComponent implements OnInit, OnDestroy {
   constructor(private store: Store<any>,
               private wasm: WasmService,
               public router: Router,
-              public windowService: WindowService,
+              private windowService: WindowService,
               private wsService: WebsocketService,
               private dataService: DataService) {
     this.isFullScreen = windowService.isFullSize();
@@ -212,6 +229,22 @@ export class MainComponent implements OnInit, OnDestroy {
   privacyControl() {
     this.privacyMode = !this.privacyMode;
     // this.dataService.saveAppState();
+  }
+
+  selectorItemClicked(item) {
+    this.activeSelectorItem.active = false;
+    item.active = true;
+    this.activeSelectorItem = item;
+
+    if (item === this.selectorValues[0]) {
+      this.transactions$ = this.store.pipe(select(selectAllTr));
+    } else if (item === this.selectorValues[1]) {
+      this.transactions$ = this.store.pipe(select(selectInProgressTr));
+    } else if (item === this.selectorValues[2]) {
+      this.transactions$ = this.store.pipe(select(selectSentTr));
+    } else if (item === this.selectorValues[3]) {
+      this.transactions$ = this.store.pipe(select(selectReceivedTr));
+    }
   }
 }
 

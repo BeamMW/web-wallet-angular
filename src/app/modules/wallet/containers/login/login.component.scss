@@ -7,12 +7,15 @@
 }
 
 .background {
-    display: flex;
+    position: absolute;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
     position: absolute;
     z-index: 1;
 
-    @media (min-width: 376px) {
-        display: none;
+    &__bg {
+        width: 100%;
     }
 }
 

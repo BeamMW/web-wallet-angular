@@ -62,6 +62,18 @@
         }
       }
 
+      @if ($theme == $btn-full-back) {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+
+        &:not([disabled]) {
+          &:hover,
+          &:active {
+            background-color: rgba(255, 255, 255, 0.1);
+          }
+        }
+      }
+
       @if ($theme == $btn-cancel) {
         background-color: rgba(255, 255, 255, 0.07);
         color: #ffffff;
@@ -97,6 +109,11 @@
             background-color: rgba(255, 255, 255, 0.0);
           }
         }
+      }
+
+      @if($size == $btn-full-xsm) {
+        height: 38px;
+        width: 117px;
       }
 
       @if($size == $btn-full-sm) {

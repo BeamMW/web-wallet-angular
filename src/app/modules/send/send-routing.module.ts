@@ -6,6 +6,7 @@ import {
   SendAddressesComponent,
   SendAmountComponent } from './containers';
 import { MainLayoutComponent } from '@shared/layouts';
+import { MenuFullComponent } from '@shared/components';
 import { HeaderComponent } from '@shared/containers';
 import { LoginGuard } from './../wallet/guards/login.guard';
 import { ConfirmationPopupComponent } from './components/confirmation-popup/confirmation-popup.component';
@@ -22,6 +23,8 @@ const routes: Routes = [{
       }, {
         path: 'confirm-popup', component: ConfirmationPopupComponent, outlet: 'popup',
       }, {
+        path: '', component: MenuFullComponent, outlet: 'sidemenu',
+      },  {
         path: '', component: SendConfirmationComponent
       }
     ]
@@ -30,6 +33,10 @@ const routes: Routes = [{
     children: [{
         path: '', component: HeaderComponent, outlet: 'header'
       }, {
+        path: 'confirm-popup', component: ConfirmationPopupComponent, outlet: 'popup',
+      }, {
+        path: '', component: MenuFullComponent, outlet: 'sidemenu',
+      }, {
         path: '', component: SendAddressesComponent
       }
     ]
@@ -37,6 +44,8 @@ const routes: Routes = [{
     path: 'amount',
     children: [{
         path: '', component: HeaderComponent, outlet: 'header'
+      }, {
+        path: '', component: MenuFullComponent, outlet: 'sidemenu',
       }, {
         path: '', component: SendAmountComponent
       }

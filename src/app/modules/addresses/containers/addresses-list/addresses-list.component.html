@@ -1,31 +1,45 @@
-<div class="addresses" [class.blur-filter]="modalOpened">
-    <div class="addresses__header">
-        <div class="menu-control-wrapper">
-            <img class="addresses__header__menu" (click)="sideMenuClicked($event)" [src]="iconMenu"/>
-        </div>
-        <div class="title-wrapper">
-            <div class="addresses__header__title">ADDRESSES</div>
-        </div>
-        <div class="save-addr-control-wrapper">
-            <!-- <img class="addresses__header__privacy-control" (click)="privacyControl()" 
-                [src]="privacyMode ? iconEnabledPrivacy : iconDisabledPrivacy"/> -->
-        </div>
 
-    </div>
-
-    <div class="addresses__list">
-        <div class="addresses__list__header">
-            <div class="addresses__list__header__title">ADDRESSES</div>
-            <div class="addresses__list__header__addr-type-selector">
-                <app-dropdown (menuChanged)="dropdownSelected($event)" [(menuItems)]="menuItems"></app-dropdown>
+<ng-container *ngIf="isFullScreen">
+    <div class="addresses">
+        <div class="addresses__content">
+            <div class="addresses__content__header">
+                Addresses
             </div>
         </div>
-        <div class="addresses__list__items addresses-container" *ngIf="addresses$ | async as addresses">
-            <div class="address-item" *ngFor="let item of addresses">
-                <app-address-element [(item)]="item"></app-address-element>
+        
+        <div class="addresses__top-gradient"></div>
+    </div>
+</ng-container>
+<ng-container *ngIf="!isFullScreen">
+    <div class="addresses" [class.blur-filter]="modalOpened">
+        <div class="addresses__header">
+            <div class="menu-control-wrapper">
+                <img class="addresses__header__menu" (click)="sideMenuClicked($event)" [src]="iconMenu"/>
+            </div>
+            <div class="title-wrapper">
+                <div class="addresses__header__title">ADDRESSES</div>
+            </div>
+            <div class="save-addr-control-wrapper">
+                <!-- <img class="addresses__header__privacy-control" (click)="privacyControl()" 
+                    [src]="privacyMode ? iconEnabledPrivacy : iconDisabledPrivacy"/> -->
+            </div>
+
+        </div>
+
+        <div class="addresses__list">
+            <div class="addresses__list__header">
+                <div class="addresses__list__header__title">ADDRESSES</div>
+                <div class="addresses__list__header__addr-type-selector">
+                    <app-dropdown (menuChanged)="dropdownSelected($event)" [(menuItems)]="menuItems"></app-dropdown>
+                </div>
+            </div>
+            <div class="addresses__list__items addresses-container" *ngIf="addresses$ | async as addresses">
+                <div class="address-item" *ngFor="let item of addresses">
+                    <app-address-element [(item)]="item"></app-address-element>
+                </div>
             </div>
         </div>
+        
+        <div class="addresses__top-gradient"></div>
     </div>
-    
-    <div class="addresses__top-gradient"></div>
-</div>
+</ng-container>

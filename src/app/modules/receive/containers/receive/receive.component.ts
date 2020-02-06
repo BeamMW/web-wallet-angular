@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { WebsocketService } from './../../../websocket';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
-import { DataService } from './../../../../services/data.service';
+import { DataService, WindowService } from './../../../../services';
 import { Store, select } from '@ngrx/store';
 import { saveReceiveData } from './../../../../store/actions/wallet.actions';
 
@@ -21,11 +21,14 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   private sub: Subscription;
   receiveForm: FormGroup;
   popupOpened = false;
+  isFullScreen = false;
 
   constructor(private store: Store<any>,
               public router: Router,
               private dataService: DataService,
+              private windowService: WindowService,
               private wsService: WebsocketService) {
+    this.isFullScreen = windowService.isFullSize();
     this.receiveForm = new FormGroup({
       amount: new FormControl(),
       comment: new FormControl()

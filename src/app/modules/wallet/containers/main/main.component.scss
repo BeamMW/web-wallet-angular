@@ -338,6 +338,25 @@
                     background-color: rgba(255, 255, 255, 0.1);
                 }
             }
+
+            &__subtitle {
+                margin-top: 50px;
+                font-family: 'ProximaNovaBold', sans-serif;
+                opacity: 0.5;
+                font-size: 14px;
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 4px;
+                color: #ffffff;
+            }
+
+            &__selector {
+                margin-top: 20px;
+                display: flex;
+                flex-direction: row;
+            }
         }
     }
     
@@ -435,6 +454,33 @@
                 letter-spacing: normal;
                 color: #0bccf7;
             }
+        }
+    }
+
+    .selector {
+        cursor: pointer;
+        &__title {
+            margin: 3px 15px;
+            font-family: 'ProximaNovaSemiBold', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: #92abba;
+        }
+
+        &__title:hover,
+        &__title.active {
+            color: #00f6d2;
+        }
+
+        &__bottom-line {
+            width: 100%;
+            height: 2px;
+            box-shadow: 0 0 5px 0 rgba(0, 246, 210, 0.7);
+            background-color: #00f6d2;
         }
     }
 }

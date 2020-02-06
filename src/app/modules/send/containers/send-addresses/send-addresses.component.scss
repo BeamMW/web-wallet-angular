@@ -7,6 +7,7 @@
 }
 
 .send {
+    overflow: hidden;
     min-height: 550px;
     display: flex;
     flex-direction: column;
@@ -147,6 +148,307 @@
             }
         }
     }
+}
+
+@media (min-width: 400px) {
+    .send {
+        height: 100%;
+
+        &__content {
+            height: 100%;
+            z-index: 10;
+            padding: 30px 20px 0 90px;
+            flex-grow: 1;
+
+            &__header {
+                display: flex;
+                &__title {
+                    font-family: 'SFUIDisplay-Medium', sans-serif;
+                    font-size: 36px;
+                    font-weight: 500;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: normal;
+                    letter-spacing: normal;
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+
+        &__address {
+            display: flex;
+            flex-direction: column;
+            
+            &__title {
+                font-family: 'ProximaNovaBold', sans-serif;
+                opacity: 0.5;
+                font-size: 14px;
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 1px;
+                color: #ffffff;
+                margin-top: 40px;
+            }
+
+            &__input {
+                background: rgba(255, 255, 255, 0);
+                font-family: 'ProximaNova', sans-serif;
+                border: none;
+                width: 390px;
+                border-bottom: 1px solid rgba(255, 255, 255, .3);
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+                resize:none;
+                max-height: 40px;
+                margin-top: 15px;
+            }
+
+            &__input:focus {
+                font-family: 'ProximaNova', sans-serif;
+                outline-width: 0;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+            }
+
+            &__input::placeholder {
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: rgba(255, 255, 255, .3);
+            }
+            
+        }
+
+        &__values {
+            display: flex;
+            flex-direction: column;
+            margin-left: 75px;
+
+            &__title-amount {
+                margin-top: 40px;
+                font-family: 'ProximaNovaBold', sans-serif;
+                opacity: 0.5;
+                font-size: 14px;
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 1px;
+                color: #ffffff;
+            }
+
+            &__title-comment,
+            &__title-fee {
+                margin-top: 30px;
+                font-family: 'ProximaNovaBold', sans-serif;
+                opacity: 0.5;
+                font-size: 14px;
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 1px;
+                color: #ffffff;
+            }
+
+            &__input-groth,
+            &__input-comment,
+            &__input-amount {
+                background: rgba(255, 255, 255, 0);
+                border: none;
+                width: 299px;
+                font-family: 'ProximaNovaSemibold', sans-serif;
+                border-bottom: 1px solid rgba(255, 255, 255, .3);
+                font-size: 18px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 0.34px;
+                color: #c061e0;
+                resize:none;
+                max-height: 40px;
+                margin-top: 10px;
+            }
+
+            &__input-groth {
+                width: 289px;
+            }
+
+            &__input-comment {
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+                width: 375px;
+            }
+
+            &__input-groth:focus,
+            &__input-amount:focus {
+                font-family: 'ProximaNovaSemibold', sans-serif;
+                outline-width: 0;
+                font-size: 18px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 0.34px;
+                color: #c061e0;
+            }
+
+            &__input-comment:focus {
+                font-family: 'ProximaNova', sans-serif;
+                outline-width: 0;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+            }
+
+            &__input-groth::placeholder,
+            &__input-comment::placeholder,
+            &__input-amount::placeholder {
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: rgba(255, 255, 255, .3);
+            }
+
+            &__currency {
+                margin-left: 23px;
+                font-size: 16px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 2.4px;
+                text-align: right;
+                color: #ffffff;
+            }
+
+            &__info {
+                width: 335px;
+                margin-top: 30px;
+                font-family: 'ProximaNovaIT', sans-serif;
+                font-size: 14px;
+                opacity: .4;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: center;
+                color: #ffffff;
+            }
+        }
+    }
+
+    .controls {
+        margin: auto auto 42px auto;
+        padding-bottom: 42px;
+
+        &__back-button {
+            @include ui-button($btn-full-back, $btn-full-xsm) {
+                font-size: 14px;
+            }
+        }
+
+        &__send-button {
+            margin-left: 20px;
+            @include ui-button($btn-send, $btn-full-xsm) {
+                font-size: 14px;
+            }
+        }
+    }
+
+    .total {
+        display: flex;
+        flex-direction: row;
+        max-width: 335px;
+        margin-top: 30px;
+    
+        &__container {
+            &__header {
+                font-family: 'ProximaNovaBold', sans-serif;
+                opacity: 0.5;
+                font-size: 14px;
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 1px;
+                color: #ffffff;
+            }
+    
+            &__value {
+                margin-top: 10px;
+                font-family: 'ProximaNovaBold', sans-serif;
+                font-size: 14px;
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+            }
+        }
+    
+        &__add-all {
+            margin-left: auto;
+            //margin: auto auto 20px auto;
+            
+            @include ui-button($btn-add-all, $btn-sm) {
+            }
+    
+            @include ui-button-add-all-icon()
+        }
+    }
+}
+
+.send.blur-filter {
+    -webkit-filter: blur(4px);
+    -moz-filter: blur(4px);
+    -o-filter: blur(4px);
+    -ms-filter: blur(4px);
+    filter: blur(4px);
 }
 
 .send-form-cl {

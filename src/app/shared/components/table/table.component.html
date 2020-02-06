@@ -1,36 +1,62 @@
 <div class="example-container">
     <mat-table #table [dataSource]="dataSource">
-  
-      <!--- Note that these columns can be defined in any order.
-            The actual rendered columns are set as a property on the row definition" -->
-  
-      <!-- Position Column -->
-      <ng-container matColumnDef="position">
-        <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+      <ng-container matColumnDef="created">
+        <mat-header-cell *matHeaderCellDef> Created on </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{ element.create_time * 1000 | date:'d MMM y | HH:MM'}} </mat-cell>
       </ng-container>
   
-      <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      <ng-container matColumnDef="from">
+        <mat-header-cell *matHeaderCellDef> From </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{(element.sender | slice:0:6)+'...'+(element.sender | slice:-6)}} </mat-cell>
       </ng-container>
   
-      <!-- Weight Column -->
-      <ng-container matColumnDef="weight">
-        <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+      <ng-container matColumnDef="to">
+        <mat-header-cell *matHeaderCellDef> To </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{(element.receiver | slice:0:6)+'...'+(element.receiver | slice:-6)}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="amount-cell" 
+            [class.sent]="element.status_string === 'sending' || element.status_string === 'sent'"
+            [class.receive]="element.status_string === 'receiving' || element.status_string === 'received'">
+            <span *ngIf="element.status_string === 'receiving' || element.status_string === 'received'">+</span>
+            <span *ngIf="element.status_string === 'sending' || element.status_string === 'sent'">-</span>
+            {{ element.value | beam:'1.0-9'}} BEAM
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+        <mat-cell class="status-cell" *matCellDef="let element"> {{element.status_string}} </mat-cell>
       </ng-container>
   
-      <!-- Expanded Content Column - The detail row is made up of this one column -->
       <ng-container matColumnDef="expandedDetail">
-        <mat-cell *matCellDef="let detail"> 
-          The symbol for {{detail.element.name}} is {{detail.element.symbol}}
+        <mat-cell *matCellDef="let detail">
+            <ng-container *ngIf="tableType === 'wallet'">
+                <div class="details">
+                    <div class="details__header">DETAILS</div>
+                    <div class="details-title">DATE</div>
+                    <div class="details-value">{{detail.element.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
+                    <div class="details-title">CONFIRMATION STATUS</div>
+                    <div class="details-value">Confirmed</div>
+                    <div class="details-title">SENDER</div>
+                    <div class="details-value">{{detail.element.sender}}</div>
+                    <div class="details-title">RECEIVER</div>
+                    <div class="details-value">{{detail.element.receiver}}</div>
+                    <div class="details-title">TRANSACTION FEE</div>
+                    <div class="details-value">{{detail.element.fee}} GROTH</div>
+                    <div class="details-title">TRANSACTION ID</div>
+                    <div class="details-value">{{detail.element.txId}}</div>
+                    <div class="details-title">KERNEL ID</div>
+                    <div class="details-value">{{detail.element.kernel}} GROTH</div>
+                </div>
+            </ng-container>
         </mat-cell>
       </ng-container>
   
-      <mat-header-row class="table-header" *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"
+      <mat-header-row class="table-header" *matHeaderRowDef="tableColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: tableColumns;"
               matRipple 
               class="element-row" 
               [class.expanded]="expandedElement == row"
@@ -39,9 +65,4 @@
               [@detailExpand]="row.element == expandedElement ? 'expanded' : 'collapsed'"> 
       </mat-row>
     </mat-table>
-  </div>
-  
-  
-  <!-- Copyright 2017 Google Inc. All Rights Reserved.
-      Use of this source code is governed by an MIT-style license that
-      can be found in the LICENSE file at http://angular.io/license -->
+</div>

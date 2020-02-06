@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
-import { DataService } from './../../../../services/data.service';
+import { DataService, WindowService } from './../../../../services';
 import { WebsocketService } from './../../../websocket';
 import { Store, select } from '@ngrx/store';
 import { loadAddresses } from './../../../../store/actions/wallet.actions';
@@ -18,6 +18,7 @@ export class AddressesListComponent implements OnInit, OnDestroy {
   private sub: Subscription;
   private pageActive = false;
   public modalOpened = false;
+  public isFullScreen = false;
   addresses$: Observable<any>;
 
   public menuItems = [{
@@ -31,7 +32,9 @@ export class AddressesListComponent implements OnInit, OnDestroy {
   constructor(public router: Router,
               public store: Store<any>,
               public dataService: DataService,
+              private windowService: WindowService,
               public wsService: WebsocketService) {
+    this.isFullScreen = windowService.isFullSize();
     this.addresses$ = this.store.pipe(select(selectActiveAddresses));
     dataService.changeEmitted$.subscribe(emittedState => {
       this.modalOpened = emittedState;
