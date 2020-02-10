@@ -83,6 +83,208 @@
     }
 }
 
+@media (min-width: 400px) {
+    .settings {
+        &__top-gradient {
+            height: 180px;
+        }  
+
+        &__content {
+            z-index: 10;
+            padding: 30px 20px 0 90px;
+
+            &__header {
+                font-family: 'SFUIDisplay-Medium', sans-serif;
+                font-size: 36px;
+                font-weight: 500;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+            }
+
+            &__list {
+                z-index: 10;
+                margin-top: 25px;
+        
+                &__item {
+                    margin-top: 8px;
+                    cursor: pointer;
+                    font-family: 'ProximaNova', sans-serif;
+                    height: 60px;
+                    background-color: rgba(255, 255, 255, .03);
+                    border-radius: 10px;
+                    font-size: 16px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: normal;
+                    letter-spacing: normal;
+                    color: #92abba;
+                    display: flex;
+                    align-items: center;
+        
+                    &__icon {
+                        margin: 0 14px 0 20px;
+                    }
+                }
+
+                &__item.expanded {
+                    border-bottom-left-radius: 0;
+                    border-bottom-right-radius: 0;
+                }
+        
+                &__item:hover {
+                    background-color: rgba(255, 255, 255, .07);
+                    color: #e4f5ff;
+                }
+
+                &__details {
+                    padding: 10px 60% 30px 30px;
+                    background-color: rgba(255, 255, 255, .05);
+                    border-bottom-left-radius: 10px;
+                    border-bottom-right-radius: 10px;
+                }
+            }
+        }
+    }
+
+    .general-item-title {
+        margin-top: 20px;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #92abba;
+    }
+
+    .general {
+        display: flex;
+        flex-direction: column;
+
+        &__logs {
+            display: flex;
+
+            &__menu {
+                margin-left: auto;
+                margin-top: 20px;
+            }
+        }
+
+        &__currency {
+            display: flex;
+
+            &__menu {
+                margin-left: auto;
+                margin-top: 20px;
+            }
+        }
+
+        &__clear {
+            cursor: pointer;
+        }
+    }
+
+    .server-item-title {
+        margin-top: 20px;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #92abba;
+    }
+    
+    .server-item-value {
+        margin-left: auto;
+        margin-top: 20px;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: right;
+        color: #ffffff;
+    }
+
+    .server {
+        display: flex;
+        flex-direction: column;
+
+        &__dns {
+            display: flex;
+            cursor: pointer;
+        }
+
+        &__ip {
+            display: flex;
+            cursor: pointer;
+        }
+    }
+
+    .privacy {
+        display: flex;
+        flex-direction: column;
+
+        &__complete-vf {
+            display: flex;
+            cursor: pointer;
+        }
+
+        &__change-pass {
+            display: flex;
+            cursor: pointer;
+        }
+    }
+
+    .privacy-item-title {
+        margin-top: 20px;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #92abba;
+    }
+
+    .utilities {
+        display: flex;
+        flex-direction: column;
+
+        &__get-beams {
+            display: flex;
+            cursor: pointer;
+        }
+
+        &__payment-proof {
+            display: flex;
+            cursor: pointer;
+        }
+    }
+
+    .util-item-title {
+        margin-top: 20px;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #92abba;
+    }
+}
+
 .settings.blur-filter {
     -webkit-filter: blur(4px);
     -moz-filter: blur(4px);

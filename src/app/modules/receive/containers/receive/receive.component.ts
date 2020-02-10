@@ -22,6 +22,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   receiveForm: FormGroup;
   popupOpened = false;
   isFullScreen = false;
+  qrCode = '';
 
   constructor(private store: Store<any>,
               public router: Router,
@@ -58,6 +59,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     this.sub = this.wsService.on().subscribe((msg: any) => {
       if (msg.result) {
         this.generatedAddress = msg.result;
+        this.dataToQr();
         this.sub.unsubscribe();
       }
     });
@@ -75,6 +77,12 @@ export class ReceiveComponent implements OnInit, OnDestroy {
 
   stripText(control: FormControl) {
     control.setValue(control.value.replace(/[^0-9]/g, ''));
+    this.dataToQr(control.value);
+  }
+
+  updateComment(control: FormControl) {
+    control.setValue(control.value);
+    this.dataToQr(control.value);
   }
 
   editAddress() {
@@ -101,6 +109,11 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     this.router.navigate([this.router.url, { outlets: { popup: 'qr-popup' }}]);
     this.submit();
+  }
+
+  dataToQr(comment = '', amount = '') {
+    this.qrCode = 'beam:' + this.generatedAddress + (amount ? ('?amount=' + amount) : '') +
+      (comment && comment.length > 0 ? ('?comment=' + comment) : '');
   }
 
   submit() {

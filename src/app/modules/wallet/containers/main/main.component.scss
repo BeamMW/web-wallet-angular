@@ -287,6 +287,10 @@
 
 @media (min-width: 400px) {
     .main {
+        &__top-gradient {
+            height: 180px;
+        }
+
         &__content {
             z-index: 10;
             padding: 30px 20px 0 90px;

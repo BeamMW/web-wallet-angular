@@ -48,6 +48,7 @@
 .table-header {
     height: 46px;
     background-color: #003f6f;
+    border-bottom-width: 0px;
 }
 
 
@@ -131,6 +132,7 @@
     margin: 30px 0 30px 6px;
     display: flex;
     flex-direction: column;
+    width: 100%;
 
     &__header {
         font-family: 'ProximaNovaBold', sans-serif;
@@ -141,5 +143,31 @@
         line-height: normal;
         letter-spacing: 1px;
         color: #ffffff;
+    }
+
+    &__subheader {
+        margin-top: 20px;
+        opacity: 0.5;
+        font-family: 'ProximaNovaBold', sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 1px;
+        color: #ffffff;
+    }
+
+    &__value {
+        margin-top: 5px;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: normal;
+        color: #ffffff;
+        margin-bottom: 30px;
     }
 }

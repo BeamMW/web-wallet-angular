@@ -1,24 +1,97 @@
 <div class="settings" [class.blur-filter]="modalOpened">
-    <div class="settings__header">
-        <div class="menu-control-wrapper">
-            <img class="settings__header__menu" (click)="sideMenuClicked($event)" [src]="iconMenu"/>
-            <!-- <app-menu-control></app-menu-control> -->
+    <ng-container *ngIf="!isFullScreen">
+        <div class="settings__header">
+            <div class="menu-control-wrapper">
+                <img class="settings__header__menu" (click)="sideMenuClicked($event)" [src]="iconMenu"/>
+                <!-- <app-menu-control></app-menu-control> -->
+            </div>
+            <div class="title-wrapper">
+                <div class="settings__header__title">SETTINGS</div>
+            </div>
+            <div class="privacy-control-wrapper">
+            </div>
         </div>
-        <div class="title-wrapper">
-            <div class="settings__header__title">SETTINGS</div>
+    
+        <div class="settings__list">
+            <div *ngFor="let item of menuItems" class="settings__list__item" 
+                    [routerLink]="item.path" (mouseover)="item.src = item.srcOn"
+                    (mouseout)="item.src = item.srcOut"> 
+                <img class="settings__list__item__icon" [src]="item.src || item.srcOut"/>
+                <span class="settings__list__item__text" [class.remove]="item.class === 'remove'">{{item.title}}</span>
+            </div>
         </div>
-        <div class="privacy-control-wrapper">
-        </div>
-    </div>
+    </ng-container>
 
-    <div class="settings__list">
-        <div *ngFor="let item of menuItems" class="settings__list__item" 
-                [routerLink]="item.path" (mouseover)="item.src = item.srcOn"
-                (mouseout)="item.src = item.srcOut"> 
-            <img class="settings__list__item__icon" [src]="item.src || item.srcOut"/>
-            <span class="settings__list__item__text" [class.remove]="item.class === 'remove'">{{item.title}}</span>
+    <ng-container *ngIf="isFullScreen">
+        <div class="settings__content">
+            <div class="settings__content__header">Settings</div>
+            <div class="settings__content__list">
+                <ng-container *ngFor="let item of menuItems">
+                    <div class="settings__content__list__item" (click)="menuItemClickedFull(item)"
+                        [class.expanded]="activeItem && item.title === activeItem.title && item.expandable"
+                        (mouseover)="item.src = item.srcOn"
+                        (mouseout)="item.src = item.srcOut"> 
+                        <img class="settings__content__list__item__icon" [src]="item.src || item.srcOut"/>
+                        <span class="settings__content__list__item__text" [class.remove]="item.class === 'remove'">{{item.title}}</span>
+                    </div>
+                    <ng-container *ngIf="activeItem">
+                        <div class="settings__content__list__details" *ngIf="item.title === activeItem.title && item.expandable">
+                            <!-- General -->
+                            <ng-container *ngIf="item === menuItems[0]">
+                                <div class="general__logs">
+                                    <span class="general-item-title">Save wallet logs</span>
+                                    <app-dropdown class="general__logs__menu" 
+                                        (menuChanged)="logsDropdownSelected($event)" [(menuItems)]="logsMenuItems"></app-dropdown>
+                                </div>
+                                <div class="general__currency">
+                                    <span class="general-item-title">Secondary currency</span>
+                                    <app-dropdown class="general__currency__menu"
+                                        (menuChanged)="currencyDropdownSelected($event)" [(menuItems)]="currencyMenuItems"></app-dropdown>
+                                </div>
+                                <div class="general__clear general-item-title">
+                                    Clear local wallet data
+                                </div>
+                            </ng-container>
+                            <!-- Server -->
+                            <ng-container *ngIf="item === menuItems[1]">
+                                <div class="server">
+                                    <div class="server__dns">
+                                        <span class="server-item-title">dns/ip</span>
+                                        <span class="server-item-value">www.server.com</span>
+                                    </div>
+                                    <div class="server__ip">
+                                        <span class="server-item-title">ip:port</span>
+                                        <span class="server-item-value">12.123.123.1234</span>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <!-- Privacy -->
+                            <ng-container *ngIf="item === menuItems[2]">
+                                <div class="privacy">
+                                    <div class="privacy__complete-vf">
+                                        <span class="privacy-item-title">Complete wallet verification</span>
+                                    </div>
+                                    <div class="privacy__change-pass">
+                                        <span class="privacy-item-title">Change password</span>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <!-- Utilities -->
+                            <ng-container *ngIf="item === menuItems[3]">
+                                <div class="utilities__get-beams ">
+                                    <span class="util-item-title">Get beams from the community faucet</span>
+                                </div>
+                                <div class="utilities__payment-proof">
+                                    <span class="util-item-title">Payment proof</span>
+                                </div>
+                            </ng-container>
+                        </div>    
+                    </ng-container>                    
+                </ng-container>
+            </div>
         </div>
-    </div>
+    </ng-container>
+    
 
     <div class="settings__top-gradient"></div>
 </div>

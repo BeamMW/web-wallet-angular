@@ -7,12 +7,15 @@
 }
 
 .background {
-    display: flex;
+    position: absolute;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
     position: absolute;
     z-index: 1;
 
-    @media (min-width: 376px) {
-        display: none;
+    &__bg {
+        width: 100%;
     }
 }
 
@@ -49,5 +52,29 @@
         }
 
         @include ui-button-create-wallet-icon()
+    }
+}
+
+@media (min-width: 400px) {
+    .create {
+        &__logo {
+            margin: 140px auto 0 auto;
+            width: 240px;
+            height: 210px;
+        }
+
+        &__header-text {
+            margin-top: 37px;
+            font-family: 'ProximaNovaBold', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: center;
+            color: #25c1ff;
+            z-index: 10;
+        }
     }
 }

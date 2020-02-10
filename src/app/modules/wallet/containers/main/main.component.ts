@@ -236,13 +236,13 @@ export class MainComponent implements OnInit, OnDestroy {
     item.active = true;
     this.activeSelectorItem = item;
 
-    if (item === this.selectorValues[0]) {
+    if (item.title === this.selectorValues[0].title) {
       this.transactions$ = this.store.pipe(select(selectAllTr));
-    } else if (item === this.selectorValues[1]) {
+    } else if (item.title === this.selectorValues[1].title) {
       this.transactions$ = this.store.pipe(select(selectInProgressTr));
-    } else if (item === this.selectorValues[2]) {
+    } else if (item.title === this.selectorValues[2].title) {
       this.transactions$ = this.store.pipe(select(selectSentTr));
-    } else if (item === this.selectorValues[3]) {
+    } else if (item.title === this.selectorValues[3].title) {
       this.transactions$ = this.store.pipe(select(selectReceivedTr));
     }
   }

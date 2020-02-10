@@ -20,14 +20,17 @@ export class AddressesListComponent implements OnInit, OnDestroy {
   public modalOpened = false;
   public isFullScreen = false;
   addresses$: Observable<any>;
+  public tableType = 'addresses';
+  public tableColumns = ['name', 'address', 'expiration'];
 
   public menuItems = [{
-    title: 'My active', id: 0, selected: true
+    title: 'My active', full: 'My active addresses', id: 0, selected: true
   }, {
-    title: 'My expired', id: 1, selected: false
+    title: 'My expired', full: 'My expired addresses', id: 1, selected: false
   }, {
-    title: 'Contacts', id: 2, selected: false
+    title: 'Contacts', full: 'Contacts', id: 2, selected: false
   }];
+  public activeSelectorItem = this.menuItems[0];
 
   constructor(public router: Router,
               public store: Store<any>,
@@ -93,6 +96,18 @@ export class AddressesListComponent implements OnInit, OnDestroy {
       this.addresses$ = this.store.pipe(select(selectExpiredAddresses));
     } else if (item === this.menuItems[2]) {
       // this.addresses$ = this.store.pipe(select(selectAllAddresses));
+    }
+  }
+
+  selectorItemClicked(item) {
+    this.activeSelectorItem.selected = false;
+    item.selected = true;
+    this.activeSelectorItem = item;
+
+    if (item.id === this.menuItems[0].id) {
+      this.addresses$ = this.store.pipe(select(selectActiveAddresses));
+    } else if (item.id === this.menuItems[1].id) {
+      this.addresses$ = this.store.pipe(select(selectExpiredAddresses));
     }
   }
 }

@@ -1,54 +1,91 @@
 <div class="utxo" [class.blur-filter]="modalOpened">
-    <div class="utxo__header">
-        <div class="menu-control-wrapper">
-            <img class="utxo__header__menu" (click)="sideMenuClicked($event)" [src]="iconMenu"/>
-            <!-- <app-menu-control></app-menu-control> -->
-        </div>
-        <div class="title-wrapper">
-            <div class="utxo__header__title">UTXO</div>
-        </div>
-        <div class="privacy-control-wrapper">
-            <img class="utxo__header__privacy-control" (click)="privacyControl()" 
-                [src]="privacyMode ? iconEnabledPrivacy : iconDisabledPrivacy"/>
-        </div>
-    </div>
-
-    <div class="utxo__status" *ngIf="walletStatus$ | async as walletStatus">
-        <div class="height-container">
-            <span class="utxo__status__title-height">Blockchain Height:</span>
-            <span class="utxo__status__height">{{walletStatus.current_height}}</span>
-        </div>
-        <div class="hash-container">
-            <span class="utxo__status__title-hash">Last block hash:</span>
-            <span class="utxo__status__hash">{{walletStatus.current_state_hash}}</span>
-        </div>
-    </div>
-
-    <div class="utxo__container">
-        <ng-container *ngIf="utxos$ | async as utxos">
-            <div class="utxo__container__header">
-                <div class="utxo__container__header__title">
-                    <span class="utxo__container__header__title__text">UTXO</span>
-                </div>
-                <div class="utxo__container__header__show-all">
-                </div>
+    <ng-container *ngIf="!isFullSize">
+        <div class="utxo__header">
+            <div class="menu-control-wrapper">
+                <img class="utxo__header__menu" (click)="sideMenuClicked($event)" [src]="iconMenu"/>
+                <!-- <app-menu-control></app-menu-control> -->
             </div>
-            <div class="utxo__container__content">
-                <ng-container *ngIf="utxos.length > 0">
-                    <div class="utxos-container" *ngFor="let utxo of utxos; let i = index">
-                        <div class="utxos-container__item">
-                            <span class="utxos-container__item__amount">{{utxo.amount | beam:'1.0-9'}} BEAM</span>
-                            <span class="utxos-container__item__status">{{utxo.status_string}}</span>
+            <div class="title-wrapper">
+                <div class="utxo__header__title">UTXO</div>
+            </div>
+            <div class="privacy-control-wrapper">
+                <img class="utxo__header__privacy-control" (click)="privacyControl()" 
+                    [src]="privacyMode ? iconEnabledPrivacy : iconDisabledPrivacy"/>
+            </div>
+        </div>
+
+        <div class="utxo__status" *ngIf="walletStatus$ | async as walletStatus">
+            <div class="height-container">
+                <span class="utxo__status__title-height">Blockchain Height:</span>
+                <span class="utxo__status__height">{{walletStatus.current_height}}</span>
+            </div>
+            <div class="hash-container">
+                <span class="utxo__status__title-hash">Last block hash:</span>
+                <span class="utxo__status__hash">{{walletStatus.current_state_hash}}</span>
+            </div>
+        </div>
+
+        <div class="utxo__container">
+            <ng-container *ngIf="utxos$ | async as utxos">
+                <div class="utxo__container__header">
+                    <div class="utxo__container__header__title">
+                        <span class="utxo__container__header__title__text">UTXO</span>
+                    </div>
+                    <div class="utxo__container__header__show-all">
+                    </div>
+                </div>
+                <div class="utxo__container__content">
+                    <ng-container *ngIf="utxos.length > 0">
+                        <div class="utxos-container" *ngFor="let utxo of utxos; let i = index">
+                            <div class="utxos-container__item">
+                                <span class="utxos-container__item__amount">{{utxo.amount | beam:'1.0-9'}} BEAM</span>
+                                <span class="utxos-container__item__status">{{utxo.status_string}}</span>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="utxos.length === 0">
+                        <img class="utxo__container__content__empty-tr-icon" [src]="iconEmpty">
+                        <div class="utxo__container__content__empty-tr-text">Your UTXO list is empty</div>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="isFullSize">
+        <div class="utxo__content">
+            <div class="content-header">
+                <div class="content-header__left-wrapper">
+                    <div class="content-header__left-wrapper__title">UTXO</div>
+                    <div class="content-header__left-wrapper__selector">
+                        <div class="selector" *ngFor="let item of menuItems" (click)="selectorItemClicked(item)">
+                            <div class="selector__title" [class.active]="item.selected">{{item.title}}</div>
+                            <div class="selector__bottom-line" *ngIf="item.selected"></div>
                         </div>
                     </div>
-                </ng-container>
-                <ng-container *ngIf="utxos.length === 0">
-                    <img class="utxo__container__content__empty-tr-icon" [src]="iconEmpty">
-                    <div class="utxo__container__content__empty-tr-text">Your UTXO list is empty</div>
-                </ng-container>
+                </div>
+                <div class="content-header__right-wrapper">
+                    <div class="utxo__status" *ngIf="walletStatus$ | async as walletStatus">
+                        <div class="height-container">
+                            <span class="utxo__status__title-height">BLOCKCHAIN HEIGHT:</span>
+                            <span class="utxo__status__height">{{walletStatus.current_height}}</span>
+                        </div>
+                        <div class="hash-container">
+                            <span class="utxo__status__title-hash">LAST BLOCK HASH:</span>
+                            <span class="utxo__status__hash">{{walletStatus.current_state_hash}}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </ng-container>
-    </div>
+
+            <div class="content-table" *ngIf="utxos$ | async as utxos">
+                <app-table *ngIf="utxos.length > 0" 
+                    [tableType]="tableType"
+                    [tableColumns]="tableColumns" 
+                    [tableData]="utxos"></app-table>
+            </div>
+        </div>
+    </ng-container>
 
     <div class="utxo__top-gradient"></div>
 </div>

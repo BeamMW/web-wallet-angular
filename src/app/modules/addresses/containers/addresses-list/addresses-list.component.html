@@ -1,17 +1,5 @@
-
-<ng-container *ngIf="isFullScreen">
-    <div class="addresses">
-        <div class="addresses__content">
-            <div class="addresses__content__header">
-                Addresses
-            </div>
-        </div>
-        
-        <div class="addresses__top-gradient"></div>
-    </div>
-</ng-container>
-<ng-container *ngIf="!isFullScreen">
-    <div class="addresses" [class.blur-filter]="modalOpened">
+<div class="addresses" [class.blur-filter]="modalOpened">
+    <ng-container *ngIf="!isFullScreen">
         <div class="addresses__header">
             <div class="menu-control-wrapper">
                 <img class="addresses__header__menu" (click)="sideMenuClicked($event)" [src]="iconMenu"/>
@@ -19,11 +7,7 @@
             <div class="title-wrapper">
                 <div class="addresses__header__title">ADDRESSES</div>
             </div>
-            <div class="save-addr-control-wrapper">
-                <!-- <img class="addresses__header__privacy-control" (click)="privacyControl()" 
-                    [src]="privacyMode ? iconEnabledPrivacy : iconDisabledPrivacy"/> -->
-            </div>
-
+            <div class="save-addr-control-wrapper"></div>
         </div>
 
         <div class="addresses__list">
@@ -39,7 +23,25 @@
                 </div>
             </div>
         </div>
-        
-        <div class="addresses__top-gradient"></div>
-    </div>
-</ng-container>
+    </ng-container>
+ 
+    <ng-container *ngIf="isFullScreen">
+        <div class="addresses__content">
+            <div class="addresses__content__header"> Addresses </div>
+            <div class="addresses__content__selector">
+                <div class="selector" *ngFor="let item of menuItems" (click)="selectorItemClicked(item)">
+                    <div class="selector__title" [class.active]="item.selected">{{item.title}}</div>
+                    <div class="selector__bottom-line" *ngIf="item.selected"></div>
+                </div>
+            </div>
+            <div class="addresses__content__table" *ngIf="addresses$ | async as addresses">
+                <app-table *ngIf="addresses.length > 0" 
+                    [tableType]="tableType"
+                    [tableColumns]="tableColumns" 
+                    [tableData]="addresses"></app-table>
+            </div>
+        </div>
+    </ng-container>
+    
+    <div class="addresses__top-gradient"></div>
+</div>

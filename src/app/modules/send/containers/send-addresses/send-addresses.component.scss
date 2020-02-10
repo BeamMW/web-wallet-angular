@@ -153,6 +153,10 @@
 @media (min-width: 400px) {
     .send {
         height: 100%;
+        
+        &__top-gradient {
+            height: 180px;
+        }
 
         &__content {
             height: 100%;
@@ -389,6 +393,8 @@
             @include ui-button($btn-full-back, $btn-full-xsm) {
                 font-size: 14px;
             }
+
+            @include ui-button-back-icon()
         }
 
         &__send-button {
@@ -396,6 +402,8 @@
             @include ui-button($btn-send, $btn-full-xsm) {
                 font-size: 14px;
             }
+
+            @include ui-button-next-icon()
         }
     }
 

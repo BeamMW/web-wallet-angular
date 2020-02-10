@@ -17,6 +17,7 @@ import {
   MatToolbarModule,
   MatTableModule,
 } from '@angular/material';
+import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import {
     BeamPipe,
     DropdownComponent,
     MenuFullComponent,
-    TableComponent
+    TableComponent,
+    TransactionListComponent
   ],
   imports: [
     CommonModule,

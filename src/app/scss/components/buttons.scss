@@ -126,6 +126,11 @@
         width: 138px;
       }
 
+      @if($size == $btn-full-lg) {
+        height: 38px;
+        width: 171px;
+      }
+
       @if($size == $btn-sm) {
         height: 36px;
         width: 117px;
@@ -462,6 +467,31 @@
 
       .ui-button__text {
         margin-left: 16px;
+        font-family: 'ProximaNovaBold', sans-serif;
+      }
+    }
+  }
+}
+
+@mixin ui-button-back-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      .ui-button__icon {
+        background: url('/assets/images/modules/receive/containers/receive/icon-back.svg');
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+
+        @content;
+      }
+
+      .ui-button__text {
+        margin-left: 14px;
         font-family: 'ProximaNovaBold', sans-serif;
       }
     }

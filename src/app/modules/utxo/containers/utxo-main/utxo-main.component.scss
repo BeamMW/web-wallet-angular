@@ -212,6 +212,107 @@
     }
 }
 
+@media (min-width: 400px) {
+    .utxo {
+        &__top-gradient {
+            height: 180px;
+        }
+
+        &__content {
+            z-index: 10;
+            padding: 30px 20px 0 90px;
+        }
+
+        &__status {
+            margin: 0;
+            height: 93px;
+            
+            &__hash {
+                max-width: none;
+            }
+
+            &__title-height,
+            &__title-hash {
+                width: 25%;
+            }
+        }
+    }
+
+    .height-container {
+        display: flex;
+        margin-top: 27px;
+        margin-left: 20px;
+    }
+    
+    .hash-container {
+        display: flex;
+        margin-left: 20px;
+        margin-top: 12px;
+    }
+
+    .content-header {
+        display: flex;
+        flex-direction: row;
+
+        &__left-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            flex-shrink: 1;
+            height: 93px;
+
+            &__title {
+                font-family: 'SFUIDisplay-Medium', sans-serif;
+                font-size: 36px;
+                font-weight: 500;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+            }
+
+            &__selector {
+                margin-top: auto;
+                display: flex;
+                flex-direction: row;
+            }
+        }
+
+        &__right-wrapper {
+            width: 50%;
+            flex-shrink: 1;
+        }
+    }
+
+    .selector {
+        cursor: pointer;
+        &__title {
+            margin: 3px 15px;
+            font-family: 'ProximaNovaSemiBold', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: #92abba;
+        }
+
+        &__title:hover,
+        &__title.active {
+            color: #00f6d2;
+        }
+
+        &__bottom-line {
+            width: 100%;
+            height: 2px;
+            box-shadow: 0 0 5px 0 rgba(0, 246, 210, 0.7);
+            background-color: #00f6d2;
+        }
+    }
+}
+
 .utxos-container {
     height: 68px;
 

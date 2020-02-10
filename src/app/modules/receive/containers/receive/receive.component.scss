@@ -57,20 +57,6 @@
         margin-left: 20px;
         flex-grow: 1;
 
-        &__address {
-            margin-top: 17px;
-            max-width: 335px;
-            word-wrap: break-word;
-            font-family: 'ProximaNova', sans-serif;
-            font-size: 14px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
-            color: #ffffff;
-        }
-
         &__comment-header,
         &__amount-header {
             margin-top: 30px;
@@ -188,11 +174,34 @@
     }
 }
 
+.address-value {
+    margin-top: 17px;
+    max-width: 335px;
+    word-wrap: break-word;
+    font-family: 'ProximaNova', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff;
+}
+
 @media (min-width: 400px) {
     .receive {
+        height: 100%;
+
+        &__top-gradient {
+            height: 180px;
+        }
+        
         &__container {
+            height: 100%;
             z-index: 10;
             padding: 30px 20px 0 90px;
+            display: flex;
+            flex-direction: column;
 
             &__header {
                 display: flex;
@@ -207,7 +216,149 @@
                     color: #ffffff;
                 }
             }
+
+            &__content {
+                display: flex;
+                flex-direction: row;
+                margin-top: 40px;
+
+                &__address {
+                    width: 435px;         
+                }
+
+                &__qr {
+                    display: flex;
+                    flex-grow: 1;
+
+                    &__value {
+                        margin: 0 auto;
+                    }
+                }
+            }
+
+            &__bottom {
+                margin-top: auto;
+                align-self: center;
+
+                &__info {
+                    max-width: 335px;
+                    margin-bottom: 30px;
+                    opacity: 0.5;
+                    font-family: 'ProximaNovaIT', sans-serif;
+                    font-size: 14px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: normal;
+                    letter-spacing: normal;
+                    text-align: center;
+                    color: #ffffff;
+                }
+
+                &__controls {
+                    display: flex;
+                    flex-direction: row;
+                    
+                    &__button-back {
+                        margin: auto 0 45px 0;
+            
+                        @include ui-button($btn-show-qr, $btn-full-xsm) {
+                            margin-right: 20px;
+                            color: #ffffff;
+                        }
+            
+                        @include ui-button-back-icon()
+                    }
+            
+                    &__button-copy {
+                        margin: auto auto 45px 0;
+            
+                        @include ui-button($btn-receive, $btn-full-lg) {
+                        }
+            
+                        @include ui-button-copy-icon()
+                    }
+                }
+            }
         }
+    }
+
+    .address-value {
+        max-width: 289px;
+    }
+
+    .form-header {
+        margin-top: 30px;
+    }
+
+    .comment-input,
+    .amount-input {
+        margin-top: 10px;
+        background: rgba(255, 255, 255, 0);
+        font-family: 'ProximaNova', sans-serif;
+        border: none;
+        width: 361px;
+        border-bottom: 1px solid rgba(255, 255, 255, .3);
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #ffffff;
+        resize:none;
+        max-height: 40px;
+    }
+
+    .comment-input {
+        width: 434px;
+    }
+
+    .comment-input:focus,
+    .amount-input:focus {
+        font-family: 'ProximaNova', sans-serif;
+        outline-width: 0;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #ffffff;
+    }
+
+    .amount-input,
+    .amount-input:focus {
+        font-family: 'ProximaNovaSemiBold', sans-serif;
+        font-size: 18px;
+        font-weight: 600;;
+        letter-spacing: 0.34px;
+        color: #0bccf7;
+    }
+
+    .comment-input::placeholder,
+    .amount-input::placeholder {
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: rgba(255, 255, 255, .3);
+    }
+
+    .beam-currency {
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 2.4px;
+        text-align: right;
+        color: #ffffff;
+        margin-left: 20px;
     }
 }
 

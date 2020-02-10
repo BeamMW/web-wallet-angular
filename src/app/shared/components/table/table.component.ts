@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable, of } from 'rxjs';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -15,7 +15,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
     ]),
   ],
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, OnChanges {
   @Input() tableData: any;
   @Input() tableColumns: any;
   @Input() tableType: any;
@@ -27,6 +27,12 @@ export class TableComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource = new ExampleDataSource(this.tableData);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.tableData) {
+      this.dataSource = new ExampleDataSource(changes.tableData.currentValue);
+    }
   }
 
   expandElement(row) {

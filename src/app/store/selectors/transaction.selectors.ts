@@ -66,3 +66,11 @@ export const selectTrById = (txId: string) => createSelector(
             .find(transactions => transactions.txId === txId);
     }
 );
+
+export const selectTrsById = (txId: string) => createSelector(
+    selectAllTr,
+    allTr => {
+        return allTr
+            .filter(transactions => transactions.txId === txId);
+    }
+);
