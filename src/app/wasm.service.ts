@@ -64,8 +64,8 @@ export class WasmService {
     console.log(`>>> keykeeper result: ${result}`);
     this.wsService.send({
       jsonrpc: '2.0',
-      id,
-      result
+      id: id,
+      result: JSON.parse(result)
     });
   }
 
@@ -84,17 +84,12 @@ export class WasmService {
 
   public onkeykeeper(data) {
     const handlers = {
-      generate_key:
-        () => this.sendKeykeeperResult(data.id, this.keyKeeper.generatePublicKey(data.params.id, data.params.create_coin_key)),
-      allocate_nonce_slot:
-        () => this.sendKeykeeperResult(data.id, this.keyKeeper.allocateNonceSlot()),
-      generate_output:
-        () => this.sendKeykeeperResult(data.id, this.keyKeeper.generateOutput(data.params.scheme, data.params.id)),
-      generate_nonce:
-        () => this.sendKeykeeperResult(data.id, this.keyKeeper.generateNonce(data.params.slot)),
-      sign:
-        () => this.sendKeykeeperResult(data.id, this.keyKeeper.sign(data.params.inputs, data.params.outputs,
-          data.params.offset, data.params.slot, data.params.kernel_parameters, data.params.public_nonce)),
+      get_kdf: () => this.sendKeykeeperResult(data.id, this.keyKeeper.get_Kdf(data.params.root, data.params.child_key_num)), 
+      get_slots: () => this.sendKeykeeperResult(data.id, this.keyKeeper.get_NumSlots()),
+      create_output: () => this.sendKeykeeperResult(data.id, this.keyKeeper.CreateOutput(data.params.scheme, data.params.id)),
+      sign_receiver: () => this.sendKeykeeperResult(data.id, this.keyKeeper.SignReceiver(data.params.inputs, data.params.outputs, data.params.kernel, data.params.non_conv, data.params.peer_id, data.params.my_id_key)),
+      sign_sender: () => this.sendKeykeeperResult(data.id, this.keyKeeper.SignSender(data.params.inputs, data.params.outputs, data.params.kernel, data.params.non_conv, data.params.peer_id, data.params.my_id_key, data.params.slot, data.params.agreement, data.params.my_id)),
+      sign_split: () => this.sendKeykeeperResult(data.id, this.keyKeeper.SignSplit(data.params.inputs, data.params.outputs, data.params.kernel, data.params.non_conv)),
     };
     handlers[data.method]
       ? handlers[data.method]()

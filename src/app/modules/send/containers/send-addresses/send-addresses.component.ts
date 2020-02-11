@@ -93,7 +93,9 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     $event.preventDefault();
     this.walletStatusSub = this.walletStatus$.subscribe((status) => {
       if (status.available > 0) {
-        this.sendForm.get('amount').setValue((status.available - this.sendForm.value.fee) / 100000000);
+        this.isFullScreen ?
+          this.fullSendForm.get('amount').setValue((status.available - this.fullSendForm.value.fee) / 100000000) :
+          this.sendForm.get('amount').setValue((status.available - this.sendForm.value.fee) / 100000000);
       }
     });
   }

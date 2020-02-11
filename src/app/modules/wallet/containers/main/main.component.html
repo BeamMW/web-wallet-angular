@@ -31,18 +31,20 @@
                     </div>
                 </ng-container>
             </div>
-            <div class="main__content__subtitle">TRANSACTIONS</div>
-            <div class="main__content__selector">
-                <div class="selector" *ngFor="let item of selectorValues" (click)="selectorItemClicked(item)">
-                    <div class="selector__title" [class.active]="item.active">{{item.title}}</div>
-                    <div class="selector__bottom-line" *ngIf="item.active"></div>
-                </div>
-            </div>
             <ng-container *ngIf="transactions$ | async as transactions">
-                <app-table *ngIf="transactions.length > 0" 
-                    [tableType]="tableType"
-                    [tableColumns]="tableColumns" 
-                    [tableData]="transactions"></app-table>
+                <ng-container *ngIf="transactions.length > 0">
+                    <div class="main__content__subtitle">TRANSACTIONS</div>
+                    <div class="main__content__selector">
+                        <div class="selector" *ngFor="let item of selectorValues" (click)="selectorItemClicked(item)">
+                            <div class="selector__title" [class.active]="item.active">{{item.title}}</div>
+                            <div class="selector__bottom-line" *ngIf="item.active"></div>
+                        </div>
+                    </div>
+                    <app-table *ngIf="transactions.length > 0" 
+                        [tableType]="tableType"
+                        [tableColumns]="tableColumns" 
+                        [tableData]="transactions"></app-table>
+                </ng-container>
             </ng-container>
         </div>
         <div class="main__top-gradient"></div>
