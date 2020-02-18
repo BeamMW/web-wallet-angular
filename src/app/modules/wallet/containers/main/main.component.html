@@ -32,7 +32,7 @@
                 </ng-container>
             </div>
             <ng-container *ngIf="transactions$ | async as transactions">
-                <ng-container *ngIf="transactions.length > 0">
+                <ng-container>
                     <div class="main__content__subtitle">TRANSACTIONS</div>
                     <div class="main__content__selector">
                         <div class="selector" *ngFor="let item of selectorValues" (click)="selectorItemClicked(item)">

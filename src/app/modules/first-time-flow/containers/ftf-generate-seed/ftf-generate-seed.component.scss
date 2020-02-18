@@ -131,6 +131,121 @@
     }
 }
 
+@media (min-width: 400px) {
+    .generate {
+        height: 100%;
+        
+        &__top-content {
+            margin-top: 50px;
+
+            &__header {
+                font-family: 'ProximaNovaSemiBold', sans-serif;
+                font-size: 36px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: center;
+                color: #ffffff;
+            }
+
+            &__text {
+                width: 730px;
+                margin: 30px auto 0 auto;
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.29;
+                letter-spacing: normal;
+                text-align: center;
+                color: #ffffff;
+            }
+        }
+
+        &__mid-content {
+            display: flex;
+            flex-direction: row;
+            width: 730px;
+            margin: 75px auto 0 auto;
+            justify-content: space-between;
+
+            &__eye {
+                height: 140px;
+                width: 200px;
+                display: flex;
+                flex-direction: column;
+
+                &__icon {
+                    margin: 0 auto;
+                    width: 74px;
+                    height: 53px;
+                }
+            }
+
+            &__pass {
+                width: 200px;
+                height: 165px;
+                display: flex;
+                flex-direction: column;
+
+                &__icon {
+                    margin: 0 auto;
+                    width: 74px;
+                    height: 44px;
+                }
+            }
+
+            &__copy {
+                width: 200px;
+                height: 135px;
+                display: flex;
+                flex-direction: column;
+
+                &__icon {
+                    margin: 0 auto;
+                    width: 52px;
+                    height: 57px;
+                }
+            }
+        }
+
+        &__bottom-content {
+            margin: auto auto 140px auto;
+            display: flex;
+            flex-direction: row;
+
+            &__generate-button {
+                margin-left: 20px;
+                
+                @include ui-button($btn-open-wallet, $btn-full-understand) {
+                }
+        
+                @include ui-button-ok-icon()
+            }
+
+            &__back-button {
+                
+                @include ui-button($btn-full-back, $btn-full-sm) {
+                }
+        
+                @include ui-button-back-icon()
+            }
+        }
+    }
+
+    .content-text {
+        text-align: center;
+        margin: auto 0;
+    }
+}
+
+p {
+    margin: 0;
+}
+
 .content-header {
     opacity: 0.5;
     font-family: 'ProximaNova', sans-serif;

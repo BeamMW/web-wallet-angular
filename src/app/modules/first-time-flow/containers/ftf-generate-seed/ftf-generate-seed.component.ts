@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
+import { WindowService } from '../../../../services';
 
 @Component({
   selector: 'app-ftf-generate-seed',
@@ -10,13 +11,18 @@ import { Router } from '@angular/router';
 export class FtfGenerateSeedComponent implements OnInit {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
 
-  public iconCopy: string = `${environment.assetsPath}/images/modules/first-time-flow/containers/ftf-generate-seed/copy-two-paper-sheets-interface-symbol.svg`;
+  public iconCopy: string =
+    `${environment.assetsPath}/images/modules/first-time-flow/containers/ftf-generate-seed/copy-two-paper-sheets-interface-symbol.svg`;
   public iconPass: string = `${environment.assetsPath}/images/modules/first-time-flow/containers/ftf-generate-seed/password.svg`;
   public iconEye: string = `${environment.assetsPath}/images/modules/first-time-flow/containers/ftf-generate-seed/eye.svg`;
 
   viewSeedRoute = '/initialize/view-seed';
+  isFullScreen = false;
 
-  constructor(public router: Router) { }
+  constructor(public router: Router,
+              private windowService: WindowService) {
+    this.isFullScreen = this.windowService.isFullSize();
+  }
 
   ngOnInit() {
   }

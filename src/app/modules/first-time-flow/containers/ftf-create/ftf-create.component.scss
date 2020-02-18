@@ -57,6 +57,8 @@
 
 @media (min-width: 400px) {
     .create {
+        height: 100%;
+        
         &__logo {
             margin: 140px auto 0 auto;
             width: 240px;
@@ -75,6 +77,30 @@
             text-align: center;
             color: #25c1ff;
             z-index: 10;
+        }
+
+        &__create-button {
+            margin-top: auto;
+            
+            @include ui-button($btn-open-wallet, $btn-full-xlg) {
+                font-size: 14px;
+            }
+    
+            @include ui-button-create-wallet-icon()
+        }
+
+        &__restore {
+            margin-top: 40px;
+            margin-bottom: 86px;
+            font-family: 'ProximaNovaBold', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: center;
+            color: #00f6d2;
         }
     }
 }

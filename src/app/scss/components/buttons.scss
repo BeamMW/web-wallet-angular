@@ -126,9 +126,19 @@
         width: 138px;
       }
 
+      @if($size == $btn-full-understand) {
+        height: 38px;
+        width: 166px;
+      }
+
       @if($size == $btn-full-lg) {
         height: 38px;
         width: 171px;
+      }
+
+      @if($size == $btn-full-xlg) {
+        height: 38px;
+        width: 198px;
       }
 
       @if($size == $btn-sm) {
