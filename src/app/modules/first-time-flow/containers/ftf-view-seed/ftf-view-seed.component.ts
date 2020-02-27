@@ -6,6 +6,7 @@ import { Store, select } from '@ngrx/store';
 import { selectWasmState } from '../../../../store/selectors/wallet-state.selectors';
 import { Observable, Subscription } from 'rxjs';
 import { addSeedPhrase } from './../../../../store/actions/wallet.actions';
+import { WindowService } from '../../../../services';
 
 @Component({
   selector: 'app-ftf-view-seed',
@@ -15,14 +16,20 @@ import { addSeedPhrase } from './../../../../store/actions/wallet.actions';
 export class FtfViewSeedComponent implements OnInit {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
   passwordCreateRoute = '/initialize/create-password';
+  passwordCompleteRoute = '/initialize/confirm-seed';
+
   seed: string;
   wasmState$: Observable<any>;
   private sub: Subscription;
+  public isFullScreen = false;
+  seedState = [];
 
   constructor(
       private store: Store<any>,
       private wasm: WasmService,
+      private windowService: WindowService,
       public router: Router) {
+    this.isFullScreen = this.windowService.isFullSize();
   }
   ngOnInit() {
     this.wasmState$ = this.store.pipe(select(selectWasmState));
@@ -35,6 +42,7 @@ export class FtfViewSeedComponent implements OnInit {
           }
         }
     });
+    this.seedState = this.seed.split(' ');
   }
 
   backClicked(event) {

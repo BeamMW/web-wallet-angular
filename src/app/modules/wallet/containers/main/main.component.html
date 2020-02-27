@@ -11,10 +11,13 @@
                     <img class="available__logo" [src]="iconBeamFull">
                     <div class="available__container">
                         <div class="available__container__title">Available</div>
-                        <span class="available__container__value">{{walletStatus.available | beam:'1.0-9'}} BEAM</span>
+                        <span class="available__container__value" *ngIf="!privacyMode">
+                            {{walletStatus.available | beam:'1.0-9'}} BEAM
+                        </span>
                     </div>
                 </div>
-                <ng-container *ngIf="walletStatusLoaded && (walletStatus.receiving > 0 || walletStatus.sending > 0)">
+                <ng-container 
+                    *ngIf="!privacyMode && walletStatusLoaded && (walletStatus.receiving > 0 || walletStatus.sending > 0)">
                     <div class="main__content__state__separator"></div>
                     <div class="in-progress">
                         <div class="in-progress__sent">
@@ -62,7 +65,7 @@
                 <div class="main__header__title">WALLET</div>
             </div>
             <div class="privacy-control-wrapper">
-                <img class="main__header__privacy-control" (click)="privacyControl()" 
+                <img class="main__header__privacy-control" (click)="privacyControlClicked()" 
                     [src]="privacyMode ? iconEnabledPrivacy : iconDisabledPrivacy"/>
             </div>
         </div>
@@ -72,12 +75,13 @@
         </div>
         <div class="main__available">
             <div class="main__available__title">AVAILABLE</div>
-            <div class="main__available__container">
+            <div class="main__available__container" *ngIf="!privacyMode">
                 <img class="main__available__container__logo" [src]="iconBeam">
                 <span class="main__available__container__value">{{walletStatus.available | beam:'1.0-9'}} BEAM</span>
             </div>
         </div>
-        <div class="main__in-progress" *ngIf="walletStatusLoaded && (walletStatus.receiving > 0 || walletStatus.sending > 0)">
+        <div class="main__in-progress" 
+            *ngIf="!privacyMode && walletStatusLoaded && (walletStatus.receiving > 0 || walletStatus.sending > 0)">
             <div class="main__in-progress__title">IN PROGRESS</div>
             <div class="main__in-progress__container-sent">
                 <img class="main__in-progress__container-sent__logo" [src]="iconSent">
@@ -116,7 +120,9 @@
                                     <div class="main__transactions__content__receive__value">
                                         <img class="tr-receive-icon" [src]="iconReceived"/>
                                         <span class="tr-receive-text">Receive</span>
-                                        <span class="tr-receive-value">+ {{ transaction.value | beam:'1.0-9'}} BEAM</span>        
+                                        <span class="tr-receive-value" *ngIf="!privacyMode">
+                                            + {{ transaction.value | beam:'1.0-9'}} BEAM
+                                        </span>        
                                     </div>
                                     <div class="main__transactions__content__receive__status">receiving</div>
                                 </div>
@@ -124,7 +130,9 @@
                                     <div class="main__transactions__content__send__value">
                                         <img class="tr-send-icon" [src]="iconSent">
                                         <span class="tr-send-text">Send</span>
-                                        <span class="tr-send-value">- {{ transaction.value | beam:'1.0-9'}} BEAM</span>        
+                                        <span class="tr-send-value" *ngIf="!privacyMode">
+                                            - {{ transaction.value | beam:'1.0-9'}} BEAM
+                                        </span>        
                                     </div>
                                     <div class="main__transactions__content__send__status">sent</div>
                                 </div>
@@ -132,14 +140,18 @@
                                     <div class="main__transactions__content__send__value">
                                         <img class="tr-send-icon" [src]="iconSent">
                                         <span class="tr-send-text">Send</span>
-                                        <span class="tr-send-value">- {{ transaction.value | beam:'1.0-9'}} BEAM</span>        
+                                        <span class="tr-send-value" *ngIf="!privacyMode">
+                                            - {{ transaction.value | beam:'1.0-9'}} BEAM
+                                        </span>        
                                     </div>
                                     <div class="main__transactions__content__send__status">sending</div>
                                 </div>
                                 <div class="main__transactions__content__send" *ngIf="transaction.status_string === 'cancelled'">
                                     <div class="main__transactions__content__send__value">
                                         <span class="tr-send-text">Cancelled</span>
-                                        <span class="tr-send-value">- {{ transaction.value | beam:'1.0-9'}} BEAM</span>        
+                                        <span class="tr-send-value" *ngIf="!privacyMode">
+                                            - {{ transaction.value | beam:'1.0-9'}} BEAM
+                                        </span>        
                                     </div>
                                 </div>
                             </ng-container>

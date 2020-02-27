@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import * as extensionizer from 'extensionizer';
 import { WalletState } from './../models/wallet-state.model';
 import { Store, select } from '@ngrx/store';
-import { selectAppState } from '../store/selectors/wallet-state.selectors';
+import { selectAppState, selectWalletOptions } from '../store/selectors/wallet-state.selectors';
 import { loadWalletState, saveWallet } from '../store/actions/wallet.actions';
 import { Observable } from 'rxjs';
 
@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
 })
 export class DataService {
   sendStore: any;
-
+  options$: Observable<any>;
   appState$: Observable<any>;
 
   // Observable string sources
@@ -29,6 +29,12 @@ export class DataService {
     this.sendStore = new ObservableStore();
   }
 
+  public optionsInit() {
+    extensionizer.storage.local.set({options: {
+      privacy: false
+    }});
+  }
+
   public saveWallet(data) {
     this.store.dispatch(saveWallet({wallet: data}));
     extensionizer.storage.local.set({wallet: data});
@@ -36,6 +42,13 @@ export class DataService {
 
   public saveAppState(value) {
     extensionizer.storage.local.set({state: value});
+  }
+
+  public saveWalletOptions() {
+    this.options$ = this.store.pipe(select(selectWalletOptions));
+    this.options$.subscribe((state) => {
+      extensionizer.storage.local.set({options: state});
+    });
   }
 
   loadAppState() {
@@ -50,6 +63,14 @@ export class DataService {
     return new Promise<string>((resolve, reject) => {
       extensionizer.storage.local.get('wallet', (result) => {
         resolve(result.wallet);
+      });
+    });
+  }
+
+  loadWalletOptions() {
+    return new Promise<string>((resolve, reject) => {
+      extensionizer.storage.local.get('options', (result) => {
+        resolve(result.options);
       });
     });
   }

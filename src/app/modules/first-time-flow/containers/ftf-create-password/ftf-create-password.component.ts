@@ -8,7 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import * as passworder from 'browser-passworder';
 import { WebsocketService } from '../../../websocket';
-import { DataService } from './../../../../services/data.service';
+import { DataService, WindowService } from './../../../../services';
 
 @Component({
   selector: 'app-ftf-create-password',
@@ -21,16 +21,19 @@ export class FtfCreatePasswordComponent implements OnInit {
   seedPhraseValue: string;
   private sub: Subscription;
   createForm: FormGroup;
+  isFullScreen = false;
 
   constructor(
       private store: Store<any>,
       private wasm: WasmService,
       public router: Router,
       private wsService: WebsocketService,
+      private windowService: WindowService,
       private dataService: DataService) {
+    this.isFullScreen = this.windowService.isFullSize();
     this.createForm = new FormGroup({
-      password: new FormControl(),
-      passwordConfirm: new FormControl()
+      password: new FormControl('', Validators.required),
+      passwordConfirm: new FormControl('', Validators.required)
     });
   }
 
@@ -69,6 +72,7 @@ export class FtfCreatePasswordComponent implements OnInit {
                 console.log('Encrypted: ', result);
                 //localStorage.setItem('wallet', result);
                 this.dataService.saveWallet(result);
+                this.dataService.optionsInit();
                 this.sub.unsubscribe();
                 this.router.navigate(['/wallet/login']);
                 // return passworder.decrypt(pass, result)

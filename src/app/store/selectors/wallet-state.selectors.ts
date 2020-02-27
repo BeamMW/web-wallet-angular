@@ -40,3 +40,8 @@ export const selectReceiveData = createSelector(
   selectAppState,
   state => state.receiveData
 );
+
+export const selectWalletOptions = createSelector(
+  selectAppState,
+  state => state.walletOptions
+);

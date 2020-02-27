@@ -4,11 +4,22 @@ import { WasmService } from './../../../../wasm.service';
 import { WebsocketService } from './../../../websocket';
 import { Subscription, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { loadAddresses, loadUtxo, loadTr, saveWalletStatus } from './../../../../store/actions/wallet.actions';
+import {
+  loadAddresses,
+  loadUtxo,
+  loadTr,
+  saveWalletStatus,
+  optionsUpdate
+} from './../../../../store/actions/wallet.actions';
 import { selectAllAddresses } from '../../../../store/selectors/address.selectors';
 import { selectAllUtxo } from '../../../../store/selectors/utxo.selectors';
-import { selectAllTr, selectInProgressTr, selectReceivedTr, selectSentTr } from '../../../../store/selectors/transaction.selectors';
-import { selectAppState } from '../../../../store/selectors/wallet-state.selectors';
+import {
+  selectAllTr,
+  selectInProgressTr,
+  selectReceivedTr,
+  selectSentTr
+} from '../../../../store/selectors/transaction.selectors';
+import { selectAppState, selectWalletOptions } from '../../../../store/selectors/wallet-state.selectors';
 import { DataService, WindowService } from './../../../../services';
 
 import { environment } from '@environment';
@@ -25,7 +36,7 @@ export class MainComponent implements OnInit, OnDestroy {
   public iconSent: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-sent.svg`;
   public iconMenu: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-menu.svg`;
   public iconEmpty: string = `${environment.assetsPath}/images/modules/wallet/containers/main/atomic-empty-state.svg`;
-  public iconDisabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye.svg`; 
+  public iconDisabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye.svg`;
   public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
 
   public sendRoute = '/send/addresses';
@@ -55,6 +66,7 @@ export class MainComponent implements OnInit, OnDestroy {
   addresses$: Observable<any>;
   utxos$: Observable<any>;
   transactions$: Observable<any>;
+  options$: Observable<any>;
   addressesColumns: string[] = ['address', 'created', 'comment'];
   utxoColumns: string[] = ['utxo', 'amount', 'status'];
   transcationsColumns: string[] = ['sender', 'value', 'txId'];
@@ -85,6 +97,11 @@ export class MainComponent implements OnInit, OnDestroy {
     this.addresses$ = this.store.pipe(select(selectAllAddresses));
     this.utxos$ = this.store.pipe(select(selectAllUtxo));
     this.transactions$ = this.store.pipe(select(selectAllTr));
+    this.options$ = this.store.pipe(select(selectWalletOptions));
+
+    this.options$.subscribe((state) => {
+      this.privacyMode = state.privacy;
+    });
 
     dataService.changeEmitted$.subscribe(emittedState => {
       this.modalOpened = emittedState;
@@ -226,9 +243,10 @@ export class MainComponent implements OnInit, OnDestroy {
     this.router.navigate(['/transactions/view']);
   }
 
-  privacyControl() {
+  privacyControlClicked() {
     this.privacyMode = !this.privacyMode;
-    // this.dataService.saveAppState();
+    this.store.dispatch(optionsUpdate({options: {privacy: this.privacyMode}}));
+    this.dataService.saveWalletOptions();
   }
 
   selectorItemClicked(item) {

@@ -106,6 +106,130 @@
     }
 }
 
+@media (min-width: 400px) {
+    .generate {
+        height: 100%;
+            
+        &__top-content {
+            margin-top: 50px;
+
+            &__header {
+                font-family: 'ProximaNovaSemiBold', sans-serif;
+                font-size: 36px;
+                font-weight: 600;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: center;
+                color: #ffffff;
+            }
+
+            &__text {
+                width: 730px;
+                margin: 30px auto 0 auto;
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.29;
+                letter-spacing: normal;
+                text-align: center;
+                color: #ffffff;
+            }
+        }
+
+        &__mid-content {
+            display: flex;
+            width: 730px;
+            height: 155px;
+            margin: 75px auto 0 auto;
+            flex-wrap: wrap;
+            align-content: space-between;
+            justify-content: space-between;
+
+            &__item {
+                height: 38px;
+                min-width: 160px;
+                border-radius: 30px;
+                border: solid 1px #1c435b;
+                display: flex;
+                align-items: center;
+
+                &__circle {
+                    margin-left: 9px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 20px;
+                    width: 20px;
+                    height: 20px;
+                    background-color: #1c435b;
+                    opacity: 0.5;
+                    font-family: 'SFProDisplayRegular', sans-serif;
+                    font-size: 10px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: normal;
+                    letter-spacing: normal;
+                    text-align: center;
+                    color: #ffffff;
+                }
+
+                &__seed {
+                    font-family: 'ProximaNova', sans-serif;
+                    margin-left: 30px;
+                    font-size: 14px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: 1.29;
+                    letter-spacing: normal;
+                    text-align: center;
+                    color: #ffffff;
+                }
+            }
+        }
+
+        &__bottom-content {
+            margin: auto auto 140px auto;
+            display: flex;
+            flex-direction: row;
+
+            &__verification-button {
+                margin-left: 20px;
+                
+                @include ui-button($btn-open-wallet, $btn-full-verification) {
+                    font-size: 14px;
+                }
+        
+                @include ui-button-verification-icon()
+            }
+
+            &__later-button {
+                margin-left: 20px;
+                
+                @include ui-button($btn-full-back, $btn-full-lg) {
+                    font-size: 14px;
+                }
+        
+                @include ui-button-later-icon()
+            }
+
+            &__back-button {
+                
+                @include ui-button($btn-full-back, $btn-full-sm) {
+                    font-size: 14px;
+                }
+        
+                @include ui-button-back-icon()
+            }
+        }
+    }
+}
+
 .content-header {
     opacity: 0.5;
     font-family: 'ProximaNova', sans-serif;
@@ -134,3 +258,13 @@
     display: flex;
     flex-direction: row-reverse;
 }
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Opera and Firefox */
+  }

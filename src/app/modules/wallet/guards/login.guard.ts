@@ -32,7 +32,7 @@ export class LoginGuard implements CanActivate {
                 }
             } else {
                 this.dataService.loadWalletData().then(walletData => {
-                    if(walletData.length > 0) {
+                    if (walletData.length > 0) {
                         console.log('Wallet: ', walletData);
                         this.store.dispatch(saveWallet({wallet: walletData}));
                         this.store.dispatch(ChangeWalletState({walletState: true}));

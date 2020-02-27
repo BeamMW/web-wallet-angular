@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { DataService, WindowService } from './../../../../services';
 import { environment } from '@environment';
 import { Store, select } from '@ngrx/store';
-import { ChangeWalletState, saveWallet } from './../../../../store/actions/wallet.actions';
+import { ChangeWalletState, saveWallet, optionsUpdate } from './../../../../store/actions/wallet.actions';
 import { selectWalletData } from './../../../../store/selectors/wallet-state.selectors';
 
 @Component({
@@ -49,6 +49,10 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.router.navigate(['/initialize/create']);
           return false;
       }
+    });
+
+    this.dataService.loadWalletOptions().then(optionsData => {
+      this.store.dispatch(optionsUpdate({options: optionsData}));
     });
   }
 

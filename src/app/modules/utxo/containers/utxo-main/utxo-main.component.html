@@ -9,7 +9,7 @@
                 <div class="utxo__header__title">UTXO</div>
             </div>
             <div class="privacy-control-wrapper">
-                <img class="utxo__header__privacy-control" (click)="privacyControl()" 
+                <img class="utxo__header__privacy-control" (click)="privacyControlClicked()" 
                     [src]="privacyMode ? iconEnabledPrivacy : iconDisabledPrivacy"/>
             </div>
         </div>
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div class="utxo__container">
+        <div class="utxo__container" *ngIf="!privacyMode">
             <ng-container *ngIf="utxos$ | async as utxos">
                 <div class="utxo__container__header">
                     <div class="utxo__container__header__title">
@@ -49,6 +49,10 @@
                     </ng-container>
                 </div>
             </ng-container>
+        </div>
+
+        <div class="utxo__container" *ngIf="privacyMode">
+            YOU UN SECURE MODE
         </div>
     </ng-container>
 

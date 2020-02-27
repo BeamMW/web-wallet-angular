@@ -141,6 +141,11 @@
         width: 198px;
       }
 
+      @if($size == $btn-full-verification) {
+        height: 38px;
+        width: 220px;
+      }
+
       @if($size == $btn-sm) {
         height: 36px;
         width: 117px;
@@ -267,6 +272,57 @@
 
       .ui-button__icon {
         background: url('/assets/images/shared/components/button/ic-send-blue-copy.svg');
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+
+        @content;
+      }
+
+      .ui-button__text {
+        margin-left: 10px;
+        font-family: 'ProximaNovaBold', sans-serif;
+      }
+    }
+  }
+}
+
+@mixin ui-button-later-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      .ui-button__icon {
+        background: url('/assets/images/modules/receive/containers/receive/icon-back.svg');
+        background-repeat: no-repeat;
+        display: inline-block;
+        transform: rotate(180deg);
+        width: 16px;
+        height: 16px;
+
+        @content;
+      }
+
+      .ui-button__text {
+        margin-left: 10px;
+        font-family: 'ProximaNovaBold', sans-serif;
+      }
+    }
+  }
+}
+
+@mixin ui-button-verification-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      .ui-button__icon {
+        background: url('/assets/images/modules/first-time-flow/containers/ftf-view-seed/icon-recovery.svg');
         background-repeat: no-repeat;
         display: inline-block;
         width: 16px;

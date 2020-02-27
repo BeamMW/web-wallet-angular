@@ -13,6 +13,9 @@ export interface WalletAppState {
         comment: string,
         address: string
     };
+    walletOptions: {
+        privacy: boolean
+    };
 }
 
 export const initialWalletAppState: WalletAppState = {
@@ -25,6 +28,9 @@ export const initialWalletAppState: WalletAppState = {
         amount: 0,
         comment: '',
         address: ''
+    },
+    walletOptions: {
+        privacy: false
     }
 };
 
@@ -36,7 +42,8 @@ const reducerWalletApp = createReducer(
     on(walletActions.addSeedPhrase, (state, { seedPhraseValue }) => ({ ...state, seedPhrase: seedPhraseValue })),
     on(walletActions.saveWallet, (state, { wallet }) => ({ ...state, walletData: wallet })),
     on(walletActions.saveWalletStatus, (state, { status }) => ({ ...state, walletStatus: status })),
-    on(walletActions.saveReceiveData, (state, { receive }) => ({ ...state, receiveData: receive }))
+    on(walletActions.saveReceiveData, (state, { receive }) => ({ ...state, receiveData: receive })),
+    on(walletActions.optionsUpdate, (state, { options }) => ({ ...state, walletOptions: options }))
 );
 
 export function reducer(state: WalletAppState | undefined, action: Action) {

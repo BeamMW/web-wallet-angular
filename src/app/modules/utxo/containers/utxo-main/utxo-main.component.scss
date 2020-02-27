@@ -52,7 +52,8 @@
     &__status {
         background-color: rgba(35, 193, 255, .1);
         margin: 40px 8px 0 8px;
-        height: 108px;
+        // height: 108px;
+        padding: 27px 25px 18px 20px;
         border-radius: 10px;
         z-index: 10;
         display: flex;
@@ -71,6 +72,7 @@
         }
 
         &__title-hash {
+            max-width: 144px;
             opacity: .5;
             font-family: 'ProximaNovaBold', sans-serif;
             font-size: 14px;
@@ -83,6 +85,7 @@
         }
 
         &__height {
+            margin-left: 20px;
             font-family: 'ProximaNova', sans-serif;
             font-size: 14px;
             font-weight: normal;
@@ -94,7 +97,7 @@
         }
 
         &__hash {
-            max-width: 245px;
+            max-width: 175px;
             word-wrap: break-word;
             font-family: 'ProximaNova', sans-serif;
             font-size: 14px;
@@ -226,14 +229,21 @@
         &__status {
             margin: 0;
             height: 93px;
+            height: 108px;
+            padding: 0;
             
             &__hash {
                 max-width: none;
             }
 
+            &__height {
+                margin-left: 0;
+            }
+
             &__title-height,
             &__title-hash {
-                width: 25%;
+                max-width: none;
+                width: 27%;
             }
         }
     }
@@ -246,6 +256,7 @@
     
     .hash-container {
         display: flex;
+        justify-content: flex-start !important;
         margin-left: 20px;
         margin-top: 12px;
     }
@@ -349,14 +360,12 @@
 }
 
 .height-container {
-    display: flex;
-    margin-top: 27px;
-    margin-left: 20px;
+    display: flex;;
 }
 
 .hash-container {
     display: flex;
-    margin-left: 20px;
+    justify-content: space-between;
     margin-top: 12px;
 }
 

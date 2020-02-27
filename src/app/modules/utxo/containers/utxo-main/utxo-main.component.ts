@@ -10,8 +10,13 @@ import {
   selectInProgressUtxo,
   selectSpentUtxo,
   selectUnavailableUtxo } from '../../../../store/selectors/utxo.selectors';
-import { selectWalletStatus } from '../../../../store/selectors/wallet-state.selectors';
+import {
+  selectWalletStatus,
+  selectWalletOptions } from '../../../../store/selectors/wallet-state.selectors';
 import { DataService, WindowService } from './../../../../services';
+import {
+  optionsUpdate
+} from './../../../../store/actions/wallet.actions';
 
 import { environment } from '@environment';
 
@@ -42,7 +47,9 @@ export class UtxoMainComponent implements OnInit {
 
   walletStatus$: Observable<any>;
   utxos$: Observable<any>;
+  options$: Observable<any>;
   isFullSize = false;
+  privacyMode = false;
 
   constructor(private store: Store<any>,
               private wasm: WasmService,
@@ -53,6 +60,12 @@ export class UtxoMainComponent implements OnInit {
     this.isFullSize = this.windowService.isFullSize();
     this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
     this.utxos$ = this.store.pipe(select(selectAvailableUtxo));
+
+    this.options$ = this.store.pipe(select(selectWalletOptions));
+
+    this.options$.subscribe((state) => {
+      this.privacyMode = state.privacy;
+    });
   }
 
   ngOnInit() {
@@ -61,6 +74,12 @@ export class UtxoMainComponent implements OnInit {
   sideMenuClicked(event) {
     event.stopPropagation();
     this.router.navigate([this.router.url, { outlets: { sidemenu: 'menu' }}]);
+  }
+
+  privacyControlClicked() {
+    this.privacyMode = !this.privacyMode;
+    this.store.dispatch(optionsUpdate({options: {privacy: this.privacyMode}}));
+    this.dataService.saveWalletOptions();
   }
 
   selectorItemClicked(item) {

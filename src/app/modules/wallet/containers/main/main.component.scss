@@ -72,14 +72,14 @@
     }
 
     &__available {
-        height: 88px;
+        max-height: 88px;
         border-radius: 10px;
         background-color: rgba(255, 255, 255, 0.06);
         margin: 20px 20px 0 20px;
+        padding: 20px;
 
         &__title {
             font-family: 'ProximaNovaBold', sans-serif;
-            margin: 20px 0 10px 20px;
             opacity: 0.5;
             font-size: 14px;
             font-weight: bold;
@@ -91,9 +91,9 @@
         }
 
         &__container {
+            margin-top: 10px;
             align-items: center;
             display: flex;
-            margin-left: 20px;
 
             &__logo {
                 width: 20px;

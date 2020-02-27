@@ -221,6 +221,7 @@
                 margin-left: 20px;
                 
                 @include ui-button($btn-open-wallet, $btn-full-understand) {
+                    font-size: 14px;
                 }
         
                 @include ui-button-ok-icon()
@@ -229,6 +230,7 @@
             &__back-button {
                 
                 @include ui-button($btn-full-back, $btn-full-sm) {
+                    font-size: 14px;
                 }
         
                 @include ui-button-back-icon()
