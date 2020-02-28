@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { WasmService } from './../../../../wasm.service';
-import { WebsocketService } from './../../../websocket';
 import { Subscription, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import {
@@ -20,7 +19,7 @@ import {
   selectSentTr
 } from '../../../../store/selectors/transaction.selectors';
 import { selectAppState, selectWalletOptions } from '../../../../store/selectors/wallet-state.selectors';
-import { DataService, WindowService } from './../../../../services';
+import { DataService, WindowService, WebsocketService, LoginService } from './../../../../services';
 
 import { environment } from '@environment';
 
@@ -91,7 +90,8 @@ export class MainComponent implements OnInit, OnDestroy {
               private wasm: WasmService,
               public router: Router,
               private windowService: WindowService,
-              private wsService: WebsocketService,
+              private websocketService: WebsocketService,
+              private loginService: LoginService,
               private dataService: DataService) {
     this.isFullScreen = windowService.isFullSize();
     this.addresses$ = this.store.pipe(select(selectAllAddresses));
@@ -109,7 +109,7 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   private transactionsUpdate() {
-    this.sub = this.wsService.on().subscribe((msg: any) => {
+    this.sub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.result) {
         console.log('[main-page] transactions');
         console.log(msg.result)
@@ -128,7 +128,7 @@ export class MainComponent implements OnInit, OnDestroy {
         }, 5000);
       }
     });
-    this.wsService.send({
+    this.websocketService.send({
       jsonrpc: '2.0',
       id: 0,
       method: 'tx_list'
@@ -136,7 +136,7 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   private utxoUpdate() {
-    this.sub = this.wsService.on().subscribe((msg: any) => {
+    this.sub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.result) {
         console.log('[main-page] utxo');
         console.log(msg.result)
@@ -150,7 +150,7 @@ export class MainComponent implements OnInit, OnDestroy {
         this.transactionsUpdate();
       }
     });
-    this.wsService.send({
+    this.websocketService.send({
       jsonrpc: '2.0',
       id: 0,
       method: 'get_utxo'
@@ -158,7 +158,7 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   private addressUpdate() {
-    this.sub = this.wsService.on().subscribe((msg: any) => {
+    this.sub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.result) {
         console.log('[main-page] addresses', msg.result)
         if (msg.result.length !== undefined) {
@@ -171,7 +171,7 @@ export class MainComponent implements OnInit, OnDestroy {
         this.utxoUpdate();
       }
     });
-    this.wsService.send({
+    this.websocketService.send({
       jsonrpc: '2.0',
       id: 0,
       method: 'addr_list',
@@ -183,7 +183,7 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   private update() {
-    this.sub = this.wsService.on().subscribe((msg: any) => {
+    this.sub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.result) {
         console.log('[main-page] update: ');
         console.dir(msg);
@@ -205,7 +205,7 @@ export class MainComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.wsService.send({
+    this.websocketService.send({
       jsonrpc: '2.0',
       id: 0,
       method: 'wallet_status'

@@ -15,7 +15,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FirstTimeFlowModule } from './modules/first-time-flow/first-time-flow.module';
 import { WalletModule } from './modules/wallet/wallet.module';
 import { SendModule } from './modules/send/send.module';
-import { WebsocketModule } from './modules/websocket';
 import { StorageModule } from '@ngx-pwa/local-storage';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 
@@ -32,7 +31,6 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
     HttpClientModule,
     BrowserAnimationsModule,
     SharedModule,
@@ -42,9 +40,6 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
     WalletModule,
     SendModule,
     TransactionsModule,
-    WebsocketModule.config({
-      url: environment.ws
-    }),
     StoreModule.forRoot(walletReducer.reducers, {
       runtimeChecks: {
         strictStateImmutability: true,

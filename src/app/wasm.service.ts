@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { WebsocketService } from './modules/websocket';
 
 import * as Module from './../../wasm/wasm-key-keeper.js';
 import '!!file-loader?name=wasm/wasm-key-keeper.wasm!../../wasm/wasm-key-keeper.wasm';
@@ -16,13 +15,11 @@ export class WasmService {
 
   wasmReady = new BehaviorSubject<boolean>(false);
 
-  constructor(private store: Store<any>, private wsService: WebsocketService) {
+  constructor(private store: Store<any>) {
   }
 
   init() {
-    this.instantiateWasm('wasm/wasm-key-keeper.wasm').then(() => {
-      this.store.dispatch(ChangeWasmState({wasmState: true}));
-    });
+    this.instantiateWasm('wasm/wasm-key-keeper.wasm');
   }
 
   private async instantiateWasm(url: string) {
@@ -39,6 +36,7 @@ export class WasmService {
       wasmBinary: binary,
       onRuntimeInitialized: () => {
         this.wasmReady.next(true);
+        this.store.dispatch(ChangeWasmState({wasmState: true}));
       }
     };
 
@@ -55,44 +53,24 @@ export class WasmService {
 
         // console.log(phrase);
         // return new this.module.KeyKeeper(phrase);
-        return new this.module.KeyKeeper(seed);
+        this.keyKeeper =  new this.module.KeyKeeper(seed);
       })
     );
-  }
-
-  private sendKeykeeperResult(id, result) {
-    console.log(`>>> keykeeper result: ${result}`);
-    this.wsService.send({
-      jsonrpc: '2.0',
-      id: id,
-      result: JSON.parse(result)
-    });
-  }
-
-  private sendKeykeeperError(id, error) {
-    console.log(`>>> keykeeper error: ${error}`);
-    this.wsService.send({
-      jsonrpc: '2.0',
-      id,
-      error
-    });
   }
 
   public generatePhrase() {
     return this.module.KeyKeeper.GeneratePhrase();
   }
 
-  public onkeykeeper(data) {
-    const handlers = {
-      get_kdf: () => this.sendKeykeeperResult(data.id, this.keyKeeper.get_Kdf(data.params.root, data.params.child_key_num)), 
-      get_slots: () => this.sendKeykeeperResult(data.id, this.keyKeeper.get_NumSlots()),
-      create_output: () => this.sendKeykeeperResult(data.id, this.keyKeeper.CreateOutput(data.params.scheme, data.params.id)),
-      sign_receiver: () => this.sendKeykeeperResult(data.id, this.keyKeeper.SignReceiver(data.params.inputs, data.params.outputs, data.params.kernel, data.params.non_conv, data.params.peer_id, data.params.my_id_key)),
-      sign_sender: () => this.sendKeykeeperResult(data.id, this.keyKeeper.SignSender(data.params.inputs, data.params.outputs, data.params.kernel, data.params.non_conv, data.params.peer_id, data.params.my_id_key, data.params.slot, data.params.agreement, data.params.my_id)),
-      sign_split: () => this.sendKeykeeperResult(data.id, this.keyKeeper.SignSplit(data.params.inputs, data.params.outputs, data.params.kernel, data.params.non_conv)),
-    };
-    handlers[data.method]
-      ? handlers[data.method]()
-      : this.sendKeykeeperError(data.id, `unknown method: ${data.method}`);
+  public getWalletID() {
+    return this.keyKeeper.getWalletID();
+  }
+
+  public getSbbsAddress() {
+    return this.keyKeeper.getSbbsAddress(8);
+  }
+
+  public getSbbsAddressPrivate() {
+    return this.keyKeeper.getSbbsAddressPrivate(8);
   }
 }

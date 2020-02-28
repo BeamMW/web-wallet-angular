@@ -8,9 +8,9 @@ import { WasmService } from './wasm.service';
 })
 export class AppComponent implements OnInit {
   constructor(private wasmService: WasmService) {
-    wasmService.init();
   }
 
   ngOnInit() {
+    this.wasmService.init();
   }
 }

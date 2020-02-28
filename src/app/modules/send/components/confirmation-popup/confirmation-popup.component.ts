@@ -3,12 +3,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router} from '@angular/router';
 import { environment } from '@environment';
 import { ActivatedRoute} from '@angular/router';
-import { DataService } from './../../../../services/data.service';
+import { DataService, WebsocketService } from './../../../../services';
 import { Subscription, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as passworder from 'browser-passworder';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
-import { WebsocketService } from './../../../websocket';
 import { selectWalletData } from './../../../../store/selectors/wallet-state.selectors';
 
 @Component({

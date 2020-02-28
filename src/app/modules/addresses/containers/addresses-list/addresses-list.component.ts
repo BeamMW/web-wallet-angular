@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
-import { DataService, WindowService } from './../../../../services';
-import { WebsocketService } from './../../../websocket';
+import { DataService, WindowService, WebsocketService } from './../../../../services';
 import { Store, select } from '@ngrx/store';
 import { loadAddresses } from './../../../../store/actions/wallet.actions';
 import { selectAllAddresses, selectExpiredAddresses, selectActiveAddresses } from '../../../../store/selectors/address.selectors';
