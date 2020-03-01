@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {DataService} from './../../../../services/data.service';
+import {DataService, WebsocketService} from './../../../../services';
 import {Router} from '@angular/router';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { Observable } from 'rxjs';
-import { WebsocketService } from './../../../websocket';
 import { environment } from '@environment';
 import { Store, select } from '@ngrx/store';
 import { selectWalletStatus } from '../../../../store/selectors/wallet-state.selectors';

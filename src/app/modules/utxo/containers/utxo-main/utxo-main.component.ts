@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { WasmService } from './../../../../wasm.service';
-import { WebsocketService } from './../../../websocket';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import {
@@ -13,7 +12,7 @@ import {
 import {
   selectWalletStatus,
   selectWalletOptions } from '../../../../store/selectors/wallet-state.selectors';
-import { DataService, WindowService } from './../../../../services';
+import { DataService, WindowService, WebsocketService } from './../../../../services';
 import {
   optionsUpdate
 } from './../../../../store/actions/wallet.actions';

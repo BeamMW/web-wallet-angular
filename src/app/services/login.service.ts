@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as ObservableStore from 'obs-store';
 import { Subject, Observable, Subscription } from 'rxjs';
-import { WebsocketService } from './../modules/websocket/websocket.service';
 import { webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { map } from 'rxjs/operators';
 import { WasmService } from './../wasm.service';

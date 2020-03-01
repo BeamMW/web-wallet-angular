@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {DataService} from './../../../../services/data.service';
+import {DataService, WebsocketService} from './../../../../services';
 import {Router} from '@angular/router';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { WebsocketService } from './../../../websocket';
 import { environment } from '@environment';
 
 @Component({

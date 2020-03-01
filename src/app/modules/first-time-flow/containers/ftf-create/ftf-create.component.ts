@@ -4,8 +4,7 @@ import {Router} from '@angular/router';
 import * as ObservableStore from 'obs-store';
 import { Subscription } from 'rxjs';
 import { environment } from '@environment';
-import { WebsocketService } from '../../../websocket';
-import { WindowService } from '../../../../services';
+import { WindowService, WebsocketService } from '../../../../services';
 
 @Component({
   selector: 'app-ftf-create',

@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
-import { DataService } from './../../../../services/data.service';
-import { WebsocketService } from './../../../websocket';
+import { DataService, WebsocketService } from './../../../../services';
 import { Store, select } from '@ngrx/store';
 import { loadTr } from './../../../../store/actions/wallet.actions';
 import { selectAllTr, selectInProgressTr, selectReceivedTr, selectSentTr } from '../../../../store/selectors/transaction.selectors';
