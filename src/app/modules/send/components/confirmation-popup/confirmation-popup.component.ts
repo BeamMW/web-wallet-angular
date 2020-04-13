@@ -8,7 +8,7 @@ import { Subscription, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as passworder from 'browser-passworder';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
-import { selectWalletData } from './../../../../store/selectors/wallet-state.selectors';
+import { selectWalletData, selectSendData } from './../../../../store/selectors/wallet-state.selectors';
 
 @Component({
   selector: 'app-confirmation-popup',
@@ -16,10 +16,11 @@ import { selectWalletData } from './../../../../store/selectors/wallet-state.sel
   styleUrls: ['./confirmation-popup.component.scss']
 })
 export class ConfirmationPopupComponent implements OnInit, OnDestroy {
-  receiveData$: Observable<any>;
+  sendData$: Observable<any>;
   wallet$: Observable<any>;
   confirmForm: FormGroup;
   sub: Subscription;
+  walletSub: Subscription;
   public send = {
     address: '',
     fee: 0,
@@ -32,6 +33,7 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
               public router: Router,
               private activatedRoute: ActivatedRoute,
               private dataService: DataService) {
+    this.sendData$ = this.store.pipe(select(selectSendData));
     this.confirmForm = new FormGroup({
       password: new FormControl()
     });
@@ -45,31 +47,46 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.dataService.emitChange(false);
+    if (this.sub !== undefined) {
+      this.sub.unsubscribe();
+    }
+
+    if (this.walletSub !== undefined) {
+      this.walletSub.unsubscribe();
+    }
   }
 
   submit($event) {
     $event.stopPropagation();
-    this.wallet$.subscribe(wallet => {
+    this.walletSub = this.wallet$.subscribe(wallet => {
       passworder.decrypt(this.confirmForm.value.password, wallet).then((result) => {
-        this.sub = this.wsService.on().subscribe((msg: any) => {
-          if (msg.result) {
-            if (msg.result !== undefined) {
-              this.router.navigate(['/wallet/main']);
-            }
+        this.sendData$.subscribe(sendData => {
+          this.sub = this.wsService.on().subscribe((msg: any) => {
+            if (msg.result) {
+              console.log('send result: ', msg);
+              if (msg.result !== undefined) {
+                this.router.navigate(['/wallet/main']);
+              }
 
-            this.sub.unsubscribe();
-          }
-        });
-        this.wsService.send({jsonrpc: '2.0',
-          id: 123,
-          method: 'tx_send',
-          params:
-          {
-            value : this.send.amount * 100000000,
-            fee : this.send.fee,
-            address : this.send.address,
-            comment : this.send.comment && this.send.comment.length > 0 ? this.send.comment : ''
-          }
+              this.sub.unsubscribe();
+              this.walletSub.unsubscribe();
+            }
+          });
+
+          console.log('send init: ', sendData);
+
+          this.wsService.send({
+            jsonrpc: '2.0',
+            id: 123,
+            method: 'tx_send',
+            params:
+            {
+              value : sendData.amount,
+              fee : sendData.fee,
+              address : sendData.address,
+              comment : sendData.comment && sendData.comment.length > 0 ? sendData.comment : ''
+            }
+          });
         });
       });
     });

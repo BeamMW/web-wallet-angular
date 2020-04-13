@@ -1,4 +1,4 @@
-<div class="settings" [class.blur-filter]="modalOpened">
+<div class="settings" [class.blur-filter]="!isFullScreen && (modalOpened || popupOpened)">
     <ng-container *ngIf="!isFullScreen">
         <div class="settings__header">
             <div class="menu-control-wrapper">
@@ -13,11 +13,15 @@
         </div>
     
         <div class="settings__list">
-            <div *ngFor="let item of menuItems" class="settings__list__item" 
-                    [routerLink]="item.path" (mouseover)="item.src = item.srcOn"
+            <div *ngFor="let item of menuItems" 
+                    (click)="menuItemClicked(item, $event)"
+                    class="settings__list__item" 
+                    (mouseover)="item.src = item.srcOn"
                     (mouseout)="item.src = item.srcOut"> 
                 <img class="settings__list__item__icon" [src]="item.src || item.srcOut"/>
-                <span class="settings__list__item__text" [class.remove]="item.class === 'remove'">{{item.title}}</span>
+                <span class="settings__list__item__text" [class.remove]="item.class === 'remove'">
+                    {{item.title}}
+                </span>
             </div>
         </div>
     </ng-container>
@@ -27,58 +31,72 @@
             <div class="settings__content__header">Settings</div>
             <div class="settings__content__list">
                 <ng-container *ngFor="let item of menuItems">
-                    <div class="settings__content__list__item" (click)="menuItemClickedFull(item)"
+                    <div class="settings__content__list__item" 
+                        (click)="menuItemClickedFull(item, $event)"
                         [class.expanded]="activeItem && item.title === activeItem.title && item.expandable"
-                        (mouseover)="item.src = item.srcOn"
+                        (mouseover)="item.src = item.srcOn" 
                         (mouseout)="item.src = item.srcOut"> 
                         <img class="settings__content__list__item__icon" [src]="item.src || item.srcOut"/>
-                        <span class="settings__content__list__item__text" [class.remove]="item.class === 'remove'">{{item.title}}</span>
+                        <span class="settings__content__list__item__text" 
+                            [class.remove]="item.class === 'remove'">
+                            {{item.title}}
+                        </span>
                     </div>
                     <ng-container *ngIf="activeItem">
-                        <div class="settings__content__list__details" *ngIf="item.title === activeItem.title && item.expandable">
+                        <div class="settings__content__list__details" 
+                            *ngIf="item.title === activeItem.title && item.expandable">
                             <!-- General -->
                             <ng-container *ngIf="item === menuItems[0]">
                                 <div class="general__logs">
                                     <span class="general-item-title">Save wallet logs</span>
                                     <app-dropdown class="general__logs__menu" 
-                                        (menuChanged)="logsDropdownSelected($event)" [(menuItems)]="logsMenuItems"></app-dropdown>
+                                        (menuChanged)="logsDropdownSelected($event)" 
+                                        [(menuItems)]="logsMenuItems"
+                                        [(selectedItem)]="saveLogsSelectedItem"></app-dropdown>
                                 </div>
                                 <div class="general__currency">
                                     <span class="general-item-title">Secondary currency</span>
                                     <app-dropdown class="general__currency__menu"
-                                        (menuChanged)="currencyDropdownSelected($event)" [(menuItems)]="currencyMenuItems"></app-dropdown>
+                                        (menuChanged)="currencyDropdownSelected($event)" 
+                                        [(menuItems)]="currencyMenuItems"
+                                        [(selectedItem)]="currencySelectedItem"></app-dropdown>
                                 </div>
-                                <div class="general__clear general-item-title">
+                                <div class="general__clear general-item-title" (click)="clearLocalWalletClicked($event)">
                                     Clear local wallet data
                                 </div>
                             </ng-container>
                             <!-- Server -->
                             <ng-container *ngIf="item === menuItems[1]">
                                 <div class="server">
-                                    <div class="server__dns">
+                                    <div class="server__dns" (click)="enterDnsClicked($event)">
                                         <span class="server-item-title">dns/ip</span>
-                                        <span class="server-item-value">www.server.com</span>
+                                        <span class="server-item-value" *ngIf="dnsSetting$ | async as dnsSetting">{{dnsSetting}}</span>
                                     </div>
-                                    <div class="server__ip">
+                                    <div class="server__ip" (click)="enterIpClicked($event)">
                                         <span class="server-item-title">ip:port</span>
-                                        <span class="server-item-value">12.123.123.1234</span>
+                                        <span class="server-item-value" *ngIf="ipSetting$ | async as ipSetting">{{ipSetting}}</span>
                                     </div>
                                 </div>
                             </ng-container>
                             <!-- Privacy -->
                             <ng-container *ngIf="item === menuItems[2]">
                                 <div class="privacy">
-                                    <div class="privacy__complete-vf">
-                                        <span class="privacy-item-title">Complete wallet verification</span>
+                                    <div class="privacy__ask-pass">
+                                        <span class="privacy-item-title">Ask for password on every Send</span>
+                                        <mat-slide-toggle class="privacy-item-slide" (change)="checkPasswordToggle($event)" 
+                                            [checked]="isCheckedPassword"></mat-slide-toggle>
                                     </div>
-                                    <div class="privacy__change-pass">
+                                    <div class="privacy__complete-vf" (click)="completeVerificationClicked($event)">
+                                        <span class="privacy-item-title">Complete seed verification</span>
+                                    </div>
+                                    <div class="privacy__change-pass" (click)="changePasswordClicked($event)">
                                         <span class="privacy-item-title">Change password</span>
                                     </div>
                                 </div>
                             </ng-container>
                             <!-- Utilities -->
                             <ng-container *ngIf="item === menuItems[3]">
-                                <div class="utilities__get-beams ">
+                                <div class="utilities__get-beams" (click)="getFromFaucet()">
                                     <span class="util-item-title">Get beams from the community faucet</span>
                                 </div>
                                 <div class="utilities__payment-proof">
@@ -91,7 +109,8 @@
             </div>
         </div>
     </ng-container>
-    
 
     <div class="settings__top-gradient"></div>
 </div>
+
+<div *ngIf="isFullScreen && popupOpened" class="full-popup-opened"></div>

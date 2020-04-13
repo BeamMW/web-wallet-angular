@@ -31,16 +31,8 @@ export class LoginGuard implements CanActivate {
                     this.walletSub.unsubscribe();
                 }
             } else {
-                this.dataService.loadWalletData().then(walletData => {
-                    if (walletData.length > 0) {
-                        console.log('Wallet: ', walletData);
-                        this.store.dispatch(saveWallet({wallet: walletData}));
-                        this.store.dispatch(ChangeWalletState({walletState: true}));
-                    } else {
-                        this.router.navigate(['/initialize/create']);
-                        return false;
-                    }
-                });
+                this.router.navigate(['/initialize/create']);
+                return false;
             }
         });
 

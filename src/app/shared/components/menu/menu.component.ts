@@ -31,19 +31,20 @@ export class MenuComponent implements OnInit, OnDestroy {
       src: '',
       srcOut: `${environment.assetsPath}/images/shared/components/menu/ic-utxo.svg`,
       srcOn: `${environment.assetsPath}/images/shared/components/menu/ic-utxo-active.svg`
-    }, {
-      path: '/settings/all',
-      title: 'Settings',
-      src: '',
-      srcOut: `${environment.assetsPath}/images/shared/components/menu/icon-settings.svg`,
-      srcOn: `${environment.assetsPath}/images/shared/components/menu/icon-settings-active.svg`
-    }, {
-      path: '',
-      title: 'Logout',
-      src: '',
-      srcOut: `${environment.assetsPath}/images/shared/components/menu/icon-logout.svg`,
-      srcOn: `${environment.assetsPath}/images/shared/components/menu/icon-logout-active.svg`
     }
+    // , {
+    //   path: '/settings/all',
+    //   title: 'Settings',
+    //   src: '',
+    //   srcOut: `${environment.assetsPath}/images/shared/components/menu/icon-settings.svg`,
+    //   srcOn: `${environment.assetsPath}/images/shared/components/menu/icon-settings-active.svg`
+    // }, {
+    //   path: '',
+    //   title: 'Logout',
+    //   src: '',
+    //   srcOut: `${environment.assetsPath}/images/shared/components/menu/icon-logout.svg`,
+    //   srcOn: `${environment.assetsPath}/images/shared/components/menu/icon-logout-active.svg`
+    // }
   ];
 
   constructor(

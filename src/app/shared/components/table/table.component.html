@@ -2,22 +2,38 @@
     <mat-table #table [dataSource]="dataSource">
       <!-- transactions table -->
       <ng-container matColumnDef="created">
-        <mat-header-cell *matHeaderCellDef> Created on </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.created"
+            (click)="sortClicked(sortParams.created)">
+          <span>Created on</span>
+          <img class="sort-icon" [src]="activeSortItem === sortParams.created ? iconSortActive : iconSort">
+        </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{ element.create_time * 1000 | date:'d MMM y | HH:MM'}} </mat-cell>
       </ng-container>
   
       <ng-container matColumnDef="from">
-        <mat-header-cell *matHeaderCellDef> From </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.from"
+            (click)="sortClicked(sortParams.from)">
+          <span>From</span> 
+          <img class="sort-icon" [src]="activeSortItem === sortParams.from ? iconSortActive : iconSort">
+        </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{(element.sender | slice:0:6)+'...'+(element.sender | slice:-6)}} </mat-cell>
       </ng-container>
   
       <ng-container matColumnDef="to">
-        <mat-header-cell *matHeaderCellDef> To </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.to"
+            (click)="sortClicked(sortParams.to)"> 
+          <span>To</span>
+          <img class="sort-icon" [src]="activeSortItem === sortParams.to ? iconSortActive : iconSort">
+        </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{(element.receiver | slice:0:6)+'...'+(element.receiver | slice:-6)}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="amount">
-        <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.amount"
+            (click)="sortClicked(sortParams.amount)"> 
+          <span>Amount</span>
+          <img class="sort-icon" [src]="activeSortItem === sortParams.amount ? iconSortActive : iconSort">
+        </mat-header-cell>
         <mat-cell *matCellDef="let element" class="amount-cell" 
             [class.sent]="element.status_string === 'sending' || element.status_string === 'sent'"
             [class.receive]="element.status_string === 'receiving' || element.status_string === 'received'">
@@ -44,8 +60,16 @@
       </ng-container>
 
       <ng-container matColumnDef="status">
-        <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-        <mat-cell class="status-cell" *matCellDef="let element"> {{element.status_string}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.status"
+            (click)="sortClicked(sortParams.status)"> 
+          <span>Status</span>
+          <img class="sort-icon" [src]="activeSortItem === sortParams.status ? iconSortActive : iconSort">
+        </mat-header-cell>
+        <mat-cell class="status-cell" *matCellDef="let element"
+          [class.sent]="element.status_string === 'sending' || element.status_string === 'sent'"
+          [class.receive]="element.status_string === 'receiving' || element.status_string === 'received'"> 
+            {{element.status_string}}
+        </mat-cell>
       </ng-container>
 
       <!-- utxos table -->
@@ -56,28 +80,33 @@
 
       <ng-container matColumnDef="utxo_maturity">
         <mat-header-cell *matHeaderCellDef> Maturity </mat-header-cell>
-        <mat-cell class="status-cell" *matCellDef="let element"> {{element.maturity}} </mat-cell>
+        <mat-cell class="utxo-cell" *matCellDef="let element"> {{element.maturity}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="utxo_amount">
         <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
-        <mat-cell class="status-cell" *matCellDef="let element"> {{ element.amount | beam:'1.0-9'}} BEAM </mat-cell>
+        <mat-cell class="utxo-cell" *matCellDef="let element"> {{ element.amount | beam:'1.0-9'}} BEAM </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="utxo_type">
         <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
-        <mat-cell class="status-cell" *matCellDef="let element"> {{element.type}} </mat-cell>
+        <mat-cell class="utxo-cell" *matCellDef="let element"> {{element.type}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <app-table-actions class="table-actions"></app-table-actions>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="expandedDetail">
         <mat-cell *matCellDef="let detail">
           <ng-container *ngIf="tableType === 'wallet'">
-              <div class="details">
+              <div class="details" *ngIf="expandedElement">
                   <div class="details__header">DETAILS</div>
                   <div class="details-title">DATE</div>
                   <div class="details-value">{{detail.element.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
-                  <div class="details-title">CONFIRMATION STATUS</div>
-                  <div class="details-value">Confirmed</div>
                   <div class="details-title">SENDER</div>
                   <div class="details-value">{{detail.element.sender}}</div>
                   <div class="details-title">RECEIVER</div>
@@ -119,7 +148,7 @@
               [class.expanded]="expandedElement == row"
               (click)="expandElement(row)"></mat-row>
       <mat-row class="row-details" *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
-              [@detailExpand]="row.element == expandedElement ? 'expanded' : 'collapsed'"> 
+              [@detailExpand]="getExpandedState(row.element)"> 
       </mat-row>
     </mat-table>
 </div>

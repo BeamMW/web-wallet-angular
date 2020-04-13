@@ -9,9 +9,9 @@ import { environment } from '@environment';
 export class DropdownComponent implements OnInit {
   @Output() menuChanged = new EventEmitter<string>();
   @Input() menuItems: any;
+  @Input() selectedItem: any;
 
   public iconDrop: string = `${environment.assetsPath}/images/modules/addresses/components/address-type-menu/arrow.svg`;
-  selectedItem = {};
   isDropdownVisible = false;
 
   constructor() {
@@ -33,7 +33,5 @@ export class DropdownComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.selectedItem = this.menuItems[0];
   }
-
 }

@@ -1,0 +1,246 @@
+@import 'ui-mixins';
+@import './styles';
+
+:host {
+    height: 0;
+}
+
+.proof {
+    position: absolute;
+	max-height: 700px;
+	width: 100%;
+	height: 100%;
+	margin: auto;
+    top: 0; 
+    left: 0; 
+    bottom: 0; 
+    right: 0;
+    z-index: 1100;
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        background-color: #003f6f;
+        position: absolute;
+        width: 460px;
+        min-height: 125px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1500;
+    }
+
+    &__title {
+        margin: 30px auto 0 auto;
+        font-family: 'ProximaNovaBold', sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.06;
+        letter-spacing: normal;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    &__content {
+        &__form {
+            display: flex;
+            flex-direction: column;
+            width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 30px;
+
+            &__error {
+                font-family: 'ProximaNova', sans-serif; 
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                text-align: center;
+                color: #ff625c;
+                margin: 20px auto 0 auto;
+            }
+    
+            &__input {
+                margin-top: 16px;
+                min-height: 30px;
+                background: rgba(255, 255, 255, 0);
+                font-family: 'ProximaNova', sans-serif;
+                border: none;
+                border-bottom: 2px solid #00f6d2;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+                resize: none;
+                overflow: auto;
+            }
+    
+            &__input.incorrect {
+                border-bottom: 2px solid #ff625c;
+                color: #ff625c;
+            }
+    
+            &__input:focus {
+                font-family: 'ProximaNova', sans-serif;
+                outline-width: 0;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+            }
+    
+            &__input.incorrect:focus {
+                color: #ff625c;
+            }
+    
+            &__input::placeholder {
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: rgba(255, 255, 255, .3);
+            }
+        }
+    }
+
+    &__controls {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        margin-bottom: 30px;
+
+        &__copy {
+            margin-left: 20px;
+            @include ui-button($btn-ok, $btn-nssm) {
+                width: 173px;
+            }
+
+            @include ui-button-copy-icon()
+        }
+
+        &__cancel {
+            @include ui-button($btn-cancel, $btn-nssm) {
+                width: 124px;
+            }
+
+            @include ui-button-cancel-icon()
+        }
+    }
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 378px;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 20px 30px;
+
+    &__header {
+        &__title {
+            font-family: 'ProximaNovaBold', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: 1px;
+            color: #ffffff;
+        }
+    }
+
+    &__item-title {
+        margin-top: 20px;
+        opacity: 0.5;
+        font-family: 'ProximaNovaBold', sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 1px;
+        color: #ffffff;
+    }
+
+    &__item-value {
+        margin-top: 10px;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #ffffff;
+        max-width: 460px;
+        word-wrap: break-word;
+    }
+
+    &__explorer-link {
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        text-align: center;
+        color: #00f6d2;
+        margin-top: 5px;
+        display: flex;
+        cursor: pointer;
+    }
+}
+
+
+@media (min-width: 400px) {
+    .proof {    
+        
+        //margin-top: -63px;
+
+        &__title {
+            font-size: 18px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: center;
+            color: #ffffff;
+        }
+
+    
+
+        &__controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+    
+            &__cancel {
+
+                @include ui-button($btn-cancel, $btn-nssm) {
+                    width: 133px;
+                }
+            }
+        }
+    }
+    
+    p {
+        max-width: none;
+    }
+}

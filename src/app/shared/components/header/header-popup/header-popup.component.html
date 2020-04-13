@@ -1,7 +1,43 @@
-<div class="menu-popup">
-    <div class="menu-popup__control">
-        <div class="menu-popup__control__dot"></div>
-        <div class="menu-popup__control__dot"></div>
-        <div class="menu-popup__control__dot"></div>
+<div class="control">
+    <div class="control__container" (click)="changeDropdownState($event)">
+        <div class="control__container__dot"></div>
+        <div class="control__container__dot middle"></div>
+        <div class="control__container__dot"></div>
+    </div>
+</div>
+<div class="dropdown" *ngIf="isDropdownVisible" appClickOutside (clickOutside)="onClickedOutside()">
+    <div class="dropdown__content">
+        <ul class="dropdown__column">
+            <li class="dropdown__item" (click)="fullViewClicked()">
+                <img class="dropdown__item__icon" [src]="fullViewIcon">
+                <span class="dropdown__item__text">Full view</span>
+            </li>
+            <div class="dropdown__separator"></div>
+            <li class="dropdown__item" (click)="paymentProofClicked($event)">
+                <img class="dropdown__item__icon" [src]="proofIcon">
+                <span class="dropdown__item__text">Payment proof</span>
+            </li>
+            <li class="dropdown__item">
+                <img class="dropdown__item__icon" [src]="exportIcon">
+                <span class="dropdown__item__text">Export data</span>
+            </li>
+            <li class="dropdown__item">
+                <img class="dropdown__item__icon" [src]="importIcon">
+                <span class="dropdown__item__text">Import data</span>
+            </li>
+            <li class="dropdown__item" (click)="buyBeamClicked()">
+                <img class="dropdown__item__icon" [src]="buyBeamIcon">
+                <span class="dropdown__item__text">Where to buy Beam</span>
+            </li>
+            <li class="dropdown__item" (click)="settingsClicked()">
+                <img class="dropdown__item__icon" [src]="settingsIcon">
+                <span class="dropdown__item__text">Settings</span>
+            </li>
+            <div class="dropdown__separator"></div>
+            <li class="dropdown__item" (click)="logoutClicked()">
+                <img class="dropdown__item__icon" [src]="logoutIcon">
+                <span class="dropdown__item__text">Logout</span>
+            </li>
+        </ul>
     </div>
 </div>

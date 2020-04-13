@@ -1,14 +1,73 @@
-.menu-popup {
-    &__control {
+@import 'ui-mixins';
+
+.control {
+    &__container {
+        width: 20px;
+        cursor: pointer;
+        align-items: center;
         display: flex;
-        margin-right: 20px;
+        flex-direction: column;
+        margin-right: 25px;
 
         &__dot {
-            width: 5px;
-            height: 5px;
-            background-color: #ffffff;
+            width: 4px;
+            height: 4px;
+            background-color: #92abba;
             border-radius: 50px;
-            margin-right: 5px;
         }
+
+        &__dot.middle {
+            margin: 4px 0;
+        }
+    }
+}
+
+.dropdown {
+    @include normal-text;
+    position: absolute;
+    width: 216px;
+    height: 342px;
+    right: 20px;
+    margin-top: 5px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.14);
+    background-color: #003f6f;
+    z-index: 10;
+
+    &__content {
+        margin: 20px 0;
+    }
+
+    &__column {
+        padding: 0;
+    }
+
+    &__item {
+        display: flex;
+        padding-left: 20px;
+        padding-right: 20px;
+        margin-top: 20px;
+        list-style-type: none;
+        cursor: pointer;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 16px;
+        color: #92abba;
+        
+        &__icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        &__text {
+            margin-left: 14px;
+        }
+    }
+
+    &__separator {
+        margin-top: 20px;
+        width: 216px;
+        height: 1px;
+        opacity: 0.2;
+        background-color: #ffffff;
     }
 }

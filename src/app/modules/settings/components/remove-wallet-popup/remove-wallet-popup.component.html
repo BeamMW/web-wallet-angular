@@ -1,0 +1,23 @@
+<div class="confirm" appClickOutside (clickOutside)="closePopup()">
+    <div class="confirm__title">Remove current wallet</div>
+    <div class="confirm__text">
+        <ng-container *ngIf="isFullScreen">
+            <p>All data will be erased. Make sure you’ve saved your seed</p>
+            <p>phrase if you want to restore this wallet later on!</p>
+            <p>Are you sure you want to remove your wallet?</p>
+        </ng-container>
+        <ng-container *ngIf="!isFullScreen">
+            <p>All data will be erased. Make sure you’ve saved</p>
+            <p>your seed phrase if you want to restore this</p>
+            <p>wallet later on!</p>
+            <p>Are you sure you want to remove your wallet?</p>
+        </ng-container>
+    <div class="confirm__controls">
+        <div class="confirm__controls__cancel">
+            <app-button class="copy-button" (click)="cancelClicked($event)" >cancel</app-button>
+        </div>
+        <div class="confirm__controls__remove">
+            <app-button class="copy-button" (click)="submit($event)" >remove</app-button>
+        </div>
+    </div>
+</div>

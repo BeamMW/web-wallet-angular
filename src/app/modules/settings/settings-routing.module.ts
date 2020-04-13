@@ -12,6 +12,17 @@ import { MainLayoutComponent } from '@shared/layouts';
 import { HeaderComponent } from '@shared/containers';
 import { LoginGuard } from '../wallet/guards/login.guard';
 import { MenuComponent, MenuFullComponent } from '@shared/components';
+import {
+  RemoveWalletConfirmationPopupComponent,
+  RemoveWalletPopupComponent,
+  ClearWalletPopupComponent,
+  EnterDnsPopupComponent,
+  EnterIpPopupComponent,
+  CheckPassConfirmationPopupComponent,
+  ChangePasswordPopupComponent,
+  SeedVerificationPopupComponent,
+  ReportPopupComponent
+ } from './components';
 
 const routes: Routes = [{
   path: '',
@@ -28,6 +39,24 @@ const routes: Routes = [{
         path: '', component: MenuFullComponent, outlet: 'sidemenu',
       }, {
         path: '', component: SettingsMainComponent
+      }, {
+        path: 'remove-wallet-popup', component: RemoveWalletPopupComponent, outlet: 'popup',
+      }, {
+        path: 'remove-wallet-confirmation-popup', component: RemoveWalletConfirmationPopupComponent, outlet: 'popup',
+      }, {
+        path: 'clear-wallet-popup', component: ClearWalletPopupComponent, outlet: 'popup',
+      }, {
+        path: 'enter-dns-popup', component: EnterDnsPopupComponent, outlet: 'popup',
+      }, {
+        path: 'enter-ip-popup', component: EnterIpPopupComponent, outlet: 'popup',
+      }, {
+        path: 'check-pass-confirmation-popup', component: CheckPassConfirmationPopupComponent, outlet: 'popup',
+      }, {
+        path: 'change-pass-popup', component: ChangePasswordPopupComponent, outlet: 'popup',
+      }, {
+        path: 'seed-verification-popup', component: SeedVerificationPopupComponent, outlet: 'popup',
+      }, {
+        path: 'report-popup', component: ReportPopupComponent, outlet: 'popup',
       }
     ]
   }, {

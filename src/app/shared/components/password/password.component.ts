@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormControl, Validators} from '@angular/forms';
-import { WindowService } from './../../../../services';
+import { WindowService } from './../../../services';
 
 export enum Colors {
   weak = '#ff5354',

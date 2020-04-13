@@ -1,23 +1,34 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StatusTitleComponent } from './components';
 import { MainLayoutComponent } from './layouts';
 import { HeaderComponent } from './containers';
 import { RouterModule } from '@angular/router';
 import { HeaderLogoComponent, HeaderPopupComponent, ButtonComponent, MenuComponent } from './components';
-import { MenuControlComponent } from './components/menu-control/menu-control.component';
 import { ClickOutsideDirective } from './directives/click-outside/click-outside.directive';
 import { BeamPipe } from 'app/pipes/beam.pipe';
 import { DecimalPipe } from '@angular/common';
-import { DropdownComponent } from './components/dropdown/dropdown.component';
-import { MenuFullComponent } from './components/menu-full/menu-full.component';
-import { TableComponent } from './components/table/table.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
+import { ClipboardModule } from 'ngx-clipboard';
 
 import {
   MatToolbarModule,
+  MatSortModule,
   MatTableModule,
+  MatMenuModule
 } from '@angular/material';
-import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
+
+import {
+  MenuControlComponent,
+  StatusTitleComponent,
+  TransactionListComponent,
+  DropdownComponent,
+  MenuFullComponent,
+  TableComponent,
+  PaymentProofComponent,
+  TableActionsComponent,
+  PasswordComponent
+ } from './components';
 
 @NgModule({
   declarations: [
@@ -34,14 +45,23 @@ import { TransactionListComponent } from './components/transaction-list/transact
     DropdownComponent,
     MenuFullComponent,
     TableComponent,
-    TransactionListComponent
+    TransactionListComponent,
+    PaymentProofComponent,
+    TableActionsComponent,
+    PasswordComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TextareaAutosizeModule,
+    ClipboardModule,
 
     MatToolbarModule,
+    MatSortModule,
     MatTableModule,
+    MatMenuModule
   ],
   exports: [
     StatusTitleComponent,
@@ -54,7 +74,8 @@ import { TransactionListComponent } from './components/transaction-list/transact
     BeamPipe,
     DropdownComponent,
     MenuFullComponent,
-    TableComponent
+    TableComponent,
+    PasswordComponent
   ],
   providers: [
     DecimalPipe

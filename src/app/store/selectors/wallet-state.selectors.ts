@@ -41,7 +41,58 @@ export const selectReceiveData = createSelector(
   state => state.receiveData
 );
 
-export const selectWalletOptions = createSelector(
+export const selectSendData = createSelector(
   selectAppState,
-  state => state.walletOptions
+  state => state.sendData
+);
+
+/* Settings */
+export const selectPrivacySetting = createSelector(
+  selectAppState,
+  state => state.privacySetting
+);
+
+export const selectSaveLogsSetting = createSelector(
+  selectAppState,
+  state => state.saveLogsSetting
+);
+
+export const selectCurrencySetting = createSelector(
+  selectAppState,
+  state => state.currencySetting
+);
+
+export const selectDnsSetting = createSelector(
+  selectAppState,
+  state => state.dnsSetting
+);
+
+export const selectIpSetting = createSelector(
+  selectAppState,
+  state => state.ipSetting
+);
+
+export const selectVerificatedSetting = createSelector(
+  selectAppState,
+  state => state.verificatedSetting
+);
+
+export const selectPasswordCheckSetting = createSelector(
+  selectAppState,
+  state => state.passwordCheck
+);
+
+export const selectWalletSetting = createSelector(
+  selectAppState,
+  state => {
+    return {
+      verificatedSetting: state.verificatedSetting,
+      ipSetting: state.ipSetting,
+      dnsSetting: state.dnsSetting,
+      currencySetting: state.currencySetting,
+      saveLogsSetting: state.saveLogsSetting,
+      privacySetting: state.privacySetting,
+      passwordCheck: state.passwordCheck
+    };
+  }
 );

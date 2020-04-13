@@ -11,10 +11,10 @@ import {
   selectUnavailableUtxo } from '../../../../store/selectors/utxo.selectors';
 import {
   selectWalletStatus,
-  selectWalletOptions } from '../../../../store/selectors/wallet-state.selectors';
+  selectPrivacySetting } from '../../../../store/selectors/wallet-state.selectors';
 import { DataService, WindowService, WebsocketService } from './../../../../services';
 import {
-  optionsUpdate
+  updatePrivacySetting
 } from './../../../../store/actions/wallet.actions';
 
 import { environment } from '@environment';
@@ -27,6 +27,7 @@ import { environment } from '@environment';
 export class UtxoMainComponent implements OnInit {
   public iconMenu: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-menu.svg`;
   public iconEmpty: string = `${environment.assetsPath}/images/modules/utxo/containers/utxo-main/icon-utxo-empty-state.svg`;
+  public iconSecure: string = `${environment.assetsPath}/images/modules/utxo/containers/utxo-main/icn-eye-crossed.svg`;
   public iconDisabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye.svg`; 
   public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
 
@@ -46,7 +47,7 @@ export class UtxoMainComponent implements OnInit {
 
   walletStatus$: Observable<any>;
   utxos$: Observable<any>;
-  options$: Observable<any>;
+  privacySetting$: Observable<any>;
   isFullSize = false;
   privacyMode = false;
 
@@ -60,10 +61,10 @@ export class UtxoMainComponent implements OnInit {
     this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
     this.utxos$ = this.store.pipe(select(selectAvailableUtxo));
 
-    this.options$ = this.store.pipe(select(selectWalletOptions));
+    this.privacySetting$ = this.store.pipe(select(selectPrivacySetting));
 
-    this.options$.subscribe((state) => {
-      this.privacyMode = state.privacy;
+    this.privacySetting$.subscribe((state) => {
+      this.privacyMode = state;
     });
   }
 
@@ -77,7 +78,7 @@ export class UtxoMainComponent implements OnInit {
 
   privacyControlClicked() {
     this.privacyMode = !this.privacyMode;
-    this.store.dispatch(optionsUpdate({options: {privacy: this.privacyMode}}));
+    this.store.dispatch(updatePrivacySetting({settingValue: this.privacyMode}));
     this.dataService.saveWalletOptions();
   }
 

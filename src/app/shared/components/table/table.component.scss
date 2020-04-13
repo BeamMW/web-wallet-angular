@@ -61,6 +61,12 @@
     letter-spacing: normal;
     color: #8da1ad;
     font-family: 'SFProDisplayRegular', sans-serif;
+    cursor: pointer;
+}
+
+.mat-header-cell.active {
+    color: #ffffff;
+    font-family: 'ProximaNovaBold', sans-serif;
 }
 
 .mat-cell {
@@ -75,6 +81,17 @@
 }
 
 .status-cell {
+    font-family: 'SFProDisplayItalic', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: italic;
+    line-height: normal;
+    letter-spacing: normal;
+}
+
+.utxo-cell {
+    opacity: .5;
     font-family: 'SFProDisplayItalic', sans-serif;
     font-size: 14px;
     font-weight: normal;
@@ -105,7 +122,7 @@
 .details-title {
     margin-top: 30px;
     font-family: 'ProximaNovaBold', sans-serif;
-    opacity: 0.5;
+    opacity: .5;
     font-size: 14px;
     font-weight: bold;
     font-stretch: normal;
@@ -170,4 +187,12 @@
         color: #ffffff;
         margin-bottom: 30px;
     }
+}
+
+.sort-icon {
+    margin-left: 5px;
+}
+
+.table-actions {
+    margin-left: auto;
 }

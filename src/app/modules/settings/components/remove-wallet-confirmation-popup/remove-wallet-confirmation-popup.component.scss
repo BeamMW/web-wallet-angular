@@ -1,0 +1,196 @@
+@import 'ui-mixins';
+@import './styles';
+
+:host {
+    height: 0;
+}
+
+.confirm {
+    border-radius: 10px;
+    background-color: #003f6f;
+    position: absolute;
+    width: 336px;
+    height: 206px;
+    z-index: 1500;
+    left: 50%;
+    margin-left: -168px;
+    top: 50%;
+    margin-top: -103px;
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+        margin: 30px auto 0 auto;
+        font-family: 'ProximaNovaBold', sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.06;
+        letter-spacing: normal;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        width: 295px;
+        margin-left: auto;
+        margin-right: auto;
+
+        &__input {
+            margin-top: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0);
+            font-family: 'ProximaNova', sans-serif;
+            border: none;
+            border-bottom: 2px solid #00f6d2;
+            font-size: 14px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: #ffffff;
+            resize:none;
+            max-height: 40px;
+        }
+
+        &__input.incorrect {
+            border-bottom: 2px solid #ff625c;
+            color: #ff625c;
+        }
+
+        &__input:focus {
+            font-family: 'ProximaNova', sans-serif;
+            outline-width: 0;
+            font-size: 14px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: #ffffff;
+        }
+
+        &__input.incorrect:focus {
+            color: #ff625c;
+        }
+
+        &__input::placeholder {
+            font-family: 'ProximaNova', sans-serif;
+            font-size: 14px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: rgba(255, 255, 255, .3);
+        }
+
+        &__validator {
+            margin-top: 5px;
+            font-family: 'ProximaNova', sans-serif;
+            font-size: 13px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.23;
+            letter-spacing: normal;
+            color: #ff625c;
+        }
+    }
+
+    &__controls {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+
+        &__remove {
+            margin-left: 20px;
+            
+            @include ui-button($btn-ok, $btn-nssm) {
+            }
+
+            @include ui-button-remove-icon()
+        }
+
+        &__cancel {
+            
+            @include ui-button($btn-cancel, $btn-nssm) {
+            }
+
+            @include ui-button-cancel-icon()
+        }
+    }
+
+    &__controls.incorrect {
+        margin-top: 10px;
+    }
+}
+
+p {
+    max-width: 295px;
+    display: flex;
+    margin: 0 auto;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+}
+
+
+@media (min-width: 400px) {
+    .confirm {    
+        width: 460px;
+        height: 190px;
+        margin-top: -95px;
+        margin-left: -230px;
+
+        &__title {
+            font-size: 18px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        &__form {
+            width: 400px;
+
+            &__input {
+                margin-top: 20px;
+            }
+        }
+
+        &__controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+    
+            &__cancel {
+
+                @include ui-button($btn-cancel, $btn-nssm) {
+                    width: 133px;
+                }
+            }
+        }
+
+        &__controls.incorrect {
+            margin-top: 0;
+        }
+    }
+    
+    p {
+        max-width: none;
+    }
+}

@@ -54,6 +54,7 @@
         margin: 22px 20px 0 20px;
 
         &__item {
+            @include normal-text;
             margin-top: 8px;
             cursor: pointer;
             font-family: 'ProximaNova', sans-serif;
@@ -62,11 +63,6 @@
             background-color: rgba(255, 255, 255, .03);
             border-radius: 10px;
             font-size: 16px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
             color: #92abba;
             display: flex;
             align-items: center;
@@ -109,6 +105,7 @@
                 margin-top: 25px;
         
                 &__item {
+                    @include normal-text;
                     margin-top: 8px;
                     cursor: pointer;
                     font-family: 'ProximaNova', sans-serif;
@@ -116,11 +113,6 @@
                     background-color: rgba(255, 255, 255, .03);
                     border-radius: 10px;
                     font-size: 16px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: normal;
                     color: #92abba;
                     display: flex;
                     align-items: center;
@@ -141,7 +133,7 @@
                 }
 
                 &__details {
-                    padding: 10px 60% 30px 30px;
+                    padding: 10px 70% 30px 30px;
                     background-color: rgba(255, 255, 255, .05);
                     border-bottom-left-radius: 10px;
                     border-bottom-right-radius: 10px;
@@ -151,14 +143,11 @@
     }
 
     .general-item-title {
+        @include normal-text;
+        cursor: default;
         margin-top: 20px;
         font-family: 'ProximaNova', sans-serif;
         font-size: 16px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
         color: #92abba;
     }
 
@@ -170,6 +159,8 @@
             display: flex;
 
             &__menu {
+                display: flex;
+                justify-content: flex-end;
                 margin-left: auto;
                 margin-top: 20px;
             }
@@ -179,6 +170,8 @@
             display: flex;
 
             &__menu {
+                display: flex;
+                justify-content: flex-end;
                 margin-left: auto;
                 margin-top: 20px;
             }
@@ -190,27 +183,17 @@
     }
 
     .server-item-title {
-        margin-top: 20px;
+        @include normal-text;
         font-family: 'ProximaNova', sans-serif;
         font-size: 16px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
         color: #92abba;
     }
     
     .server-item-value {
+        @include normal-text;
         margin-left: auto;
-        margin-top: 20px;
         font-family: 'ProximaNova', sans-serif;
         font-size: 16px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
         text-align: right;
         color: #ffffff;
     }
@@ -219,12 +202,9 @@
         display: flex;
         flex-direction: column;
 
+        &__ip,
         &__dns {
-            display: flex;
-            cursor: pointer;
-        }
-
-        &__ip {
+            margin-top: 20px;
             display: flex;
             cursor: pointer;
         }
@@ -234,26 +214,23 @@
         display: flex;
         flex-direction: column;
 
-        &__complete-vf {
+        &__ask-pass {
+            margin-top: 20px;
             display: flex;
-            cursor: pointer;
         }
 
-        &__change-pass {
+        &__change-pass,
+        &__complete-vf {
+            margin-top: 20px;
             display: flex;
             cursor: pointer;
         }
     }
 
     .privacy-item-title {
-        margin-top: 20px;
+        @include normal-text;
         font-family: 'ProximaNova', sans-serif;
         font-size: 16px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
         color: #92abba;
     }
 
@@ -261,28 +238,59 @@
         display: flex;
         flex-direction: column;
 
+        &__payment-proof,
         &__get-beams {
-            display: flex;
-            cursor: pointer;
-        }
-
-        &__payment-proof {
+            margin-top: 20px;
             display: flex;
             cursor: pointer;
         }
     }
 
     .util-item-title {
-        margin-top: 20px;
+        @include normal-text;
         font-family: 'ProximaNova', sans-serif;
         font-size: 16px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
         color: #92abba;
     }
+
+    .privacy-item-slide {
+        margin-left: 70px;
+    }
+    
+    ::ng-deep .mat-slide-toggle-thumb-container {
+        top: 0 !important;
+        left: 1px !important;
+    }
+    
+    ::ng-deep .mat-slide-toggle-thumb {
+        width: 16px !important;
+        height: 16px !important;
+        background-color: #8da1ad !important;
+    }
+    
+    ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+        width: 16px !important;
+        height: 16px !important;
+        box-shadow: 0 0 5px 0 rgba(0, 246, 210, 0.7);
+        background-color: #00f6d2 !important;
+    }
+    
+    ::ng-deep .mat-slide-toggle.mat-checked .mat-ripple-element  {
+        background-color: #00f6d2 !important;
+    }
+    
+    ::ng-deep .mat-slide-toggle-bar {
+        width: 36px !important;
+        height: 20px !important;
+        border-radius: 10px !important;
+        border: solid 1px #8da1ad !important;
+        background-color: rgba(141, 161, 173, 0.1);
+    }
+    
+    ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+        background-color: rgba(141, 161, 173, 0.1);
+    }
+    
 }
 
 .settings.blur-filter {
@@ -291,6 +299,16 @@
     -o-filter: blur(4px);
     -ms-filter: blur(4px);
     filter: blur(4px);
+}
+
+.full-popup-opened {
+    background-color: rgba(4, 37, 72, .5);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1000;
+    left: 0;
+    top: 0;
 }
 
 .menu-control-wrapper {

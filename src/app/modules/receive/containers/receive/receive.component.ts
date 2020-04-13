@@ -56,7 +56,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
 
   createAddress() {
     this.sub = this.wsService.on().subscribe((msg: any) => {
-      if (msg.result) {
+      if (msg.result !== undefined && msg.id === 1 && typeof msg.result === 'string') {
         this.generatedAddress = msg.result;
         this.dataToQr();
         this.sub.unsubscribe();
@@ -64,7 +64,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     });
     this.wsService.send({
         jsonrpc: '2.0',
-        id: 123,
+        id: 1,
         method: 'create_address',
         params:
         {

@@ -16,18 +16,18 @@
 
         <div class="utxo__status" *ngIf="walletStatus$ | async as walletStatus">
             <div class="height-container">
-                <span class="utxo__status__title-height">Blockchain Height:</span>
+                <span class="utxo__status__title-height">BLOCKCHAIN HEIGHT:</span>
                 <span class="utxo__status__height">{{walletStatus.current_height}}</span>
             </div>
             <div class="hash-container">
-                <span class="utxo__status__title-hash">Last block hash:</span>
+                <span class="utxo__status__title-hash">LAST BLOCK HEIGHT:</span>
                 <span class="utxo__status__hash">{{walletStatus.current_state_hash}}</span>
             </div>
         </div>
 
-        <div class="utxo__container" *ngIf="!privacyMode">
-            <ng-container *ngIf="utxos$ | async as utxos">
-                <div class="utxo__container__header">
+        <div class="utxo__container">
+            <ng-container *ngIf="!privacyMode && utxos$ | async as utxos">
+                <div class="utxo__container__header" *ngIf="utxos.length > 0">
                     <div class="utxo__container__header__title">
                         <span class="utxo__container__header__title__text">UTXO</span>
                     </div>
@@ -49,10 +49,13 @@
                     </ng-container>
                 </div>
             </ng-container>
-        </div>
-
-        <div class="utxo__container" *ngIf="privacyMode">
-            YOU UN SECURE MODE
+            <ng-container *ngIf="privacyMode">
+                <img class="utxo__container__secure-icon" [src]="iconSecure">
+                <div class="utxo__container__secure-text">
+                    <p>You’re currently in Security Mode.</p>
+                    <p>Turn it off to see your UTXO list</p>
+                </div>
+            </ng-container>
         </div>
     </ng-container>
 
@@ -83,10 +86,24 @@
             </div>
 
             <div class="content-table" *ngIf="utxos$ | async as utxos">
-                <app-table *ngIf="utxos.length > 0" 
-                    [tableType]="tableType"
-                    [tableColumns]="tableColumns" 
-                    [tableData]="utxos"></app-table>
+                <ng-container *ngIf="!privacyMode">
+                    <app-table *ngIf="utxos.length > 0" 
+                        [tableType]="tableType"
+                        [tableColumns]="tableColumns" 
+                        [tableData]="utxos"></app-table>
+                    <ng-container *ngIf="utxos.length === 0">
+                        <img class="content-table__empty-tr-icon" [src]="iconEmpty">
+                        <div class="content-table__empty-tr-text">Your UTXO list is empty</div>
+                    </ng-container>    
+                </ng-container>
+                <ng-container *ngIf="privacyMode">
+                    <img class="content-table__secure-icon" [src]="iconSecure">
+                    <div class="content-table__secure-text">
+                        <p>You’re currently in Security Mode.</p>
+                        <p>Turn it off to see your UTXO list</p>
+                    </div>
+                </ng-container>
+                
             </div>
         </div>
     </ng-container>

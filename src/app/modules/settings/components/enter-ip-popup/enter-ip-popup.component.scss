@@ -1,0 +1,169 @@
+@import 'ui-mixins';
+@import './styles';
+
+:host {
+    height: 0;
+}
+
+.ip {
+    width: 335px;
+    height: 206px;
+    border-radius: 10px;
+    background-color: #003f6f;
+    position: absolute;
+    z-index: 1500;
+    left: 50%;
+    margin-left: -167px;
+    top: 50%;
+    margin-top: -103px;
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+        margin: 30px auto 0 auto;
+        font-family: 'ProximaNovaBold', sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.06;
+        letter-spacing: normal;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    &__content {
+        &__form {
+            display: flex;
+            flex-direction: column;
+            width: 295px;
+            margin-left: auto;
+            margin-right: auto;
+    
+            &__input {
+                margin-top: 30px;
+                height: 30px;
+                background: rgba(255, 255, 255, 0);
+                font-family: 'ProximaNova', sans-serif;
+                border: none;
+                border-bottom: 2px solid #00f6d2;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+                resize:none;
+                max-height: 40px;
+            }
+    
+            &__input.incorrect {
+                border-bottom: 2px solid #ff625c;
+                color: #ff625c;
+            }
+    
+            &__input:focus {
+                font-family: 'ProximaNova', sans-serif;
+                outline-width: 0;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: #ffffff;
+            }
+    
+            &__input.incorrect:focus {
+                color: #ff625c;
+            }
+    
+            &__input::placeholder {
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: rgba(255, 255, 255, .3);
+            }
+        }
+    }
+
+    &__controls {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+
+        &__remove {
+            margin-left: 20px;
+            
+            @include ui-button($btn-ok, $btn-nssm) {
+                height: 38px;
+            }
+
+            @include ui-button-ok-icon()
+        }
+
+        &__cancel {
+            
+            @include ui-button($btn-cancel, $btn-nssm) {
+               
+            }
+
+            @include ui-button-cancel-icon()
+        }
+    }
+}
+
+@media (min-width: 400px) {
+    .ip {    
+        width: 400px;
+        height: 206px;
+        margin-left: -200px;
+        margin-top: -136px;
+
+        &__title {
+            font-size: 18px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        &__content {
+            &__form {
+                width: 360px;
+            }
+        }
+
+        &__controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+    
+            &__cancel {
+
+                @include ui-button($btn-cancel, $btn-nssm) {
+                    height: 38px;
+                    width: 133px;
+                }
+            }
+
+            &__remove {
+               @include ui-button($btn-ok, $btn-nssm) {
+                    height: 38px;
+               }
+            }
+        }
+    }
+    
+    p {
+        max-width: none;
+    }
+}

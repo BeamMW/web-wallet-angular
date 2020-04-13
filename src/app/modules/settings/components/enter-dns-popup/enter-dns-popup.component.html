@@ -1,0 +1,19 @@
+<div class="dns" appClickOutside (clickOutside)="closePopup()">
+    <div class="dns__title">Enter DNS name or IP address</div>
+    <div class="dns__content">
+        <form class="dns__content__form" [formGroup]="popupForm" autocomplete="off" novalidate (ngSubmit)="submit()">
+            <input class="dns__content__form__input" #passInput
+                    name="dns" formControlName="dns"
+                    placeholder="dns/ip"/>
+                    {{ passInput.focus() }}
+        </form>
+    </div>
+    <div class="dns__controls">
+        <div class="dns__controls__cancel">
+            <app-button class="copy-button" (click)="cancelClicked($event)" >cancel</app-button>
+        </div>
+        <div class="dns__controls__remove">
+            <app-button class="copy-button" (click)="submit($event)">save</app-button>
+        </div>
+    </div>
+</div>

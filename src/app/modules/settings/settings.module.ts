@@ -10,7 +10,21 @@ import {
   PrivacyComponent,
   UtilitiesComponent
  } from './containers';
+import {
+  RemoveWalletPopupComponent,
+  RemoveWalletConfirmationPopupComponent,
+  ClearWalletPopupComponent,
+  EnterIpPopupComponent,
+  EnterDnsPopupComponent,
+  CheckPassConfirmationPopupComponent,
+  ChangePasswordPopupComponent,
+  SeedVerificationPopupComponent,
+  ReportPopupComponent
+} from './components';
 
+import {
+  MatSlideToggleModule
+} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -18,14 +32,24 @@ import {
     GeneralComponent,
     ServerComponent,
     PrivacyComponent,
-    UtilitiesComponent
+    UtilitiesComponent,
+    RemoveWalletPopupComponent,
+    RemoveWalletConfirmationPopupComponent,
+    ClearWalletPopupComponent,
+    EnterIpPopupComponent,
+    EnterDnsPopupComponent,
+    CheckPassConfirmationPopupComponent,
+    ChangePasswordPopupComponent,
+    SeedVerificationPopupComponent,
+    ReportPopupComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     SettingsRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSlideToggleModule
   ]
 })
 export class SettingsModule { }

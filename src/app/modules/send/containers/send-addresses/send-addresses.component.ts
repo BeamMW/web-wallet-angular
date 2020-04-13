@@ -6,6 +6,7 @@ import { environment } from '@environment';
 import { DataService, WindowService, WebsocketService } from './../../../../services';
 import { Store, select } from '@ngrx/store';
 import { selectWalletStatus } from '../../../../store/selectors/wallet-state.selectors';
+import { saveSendData } from './../../../../store/actions/wallet.actions';
 
 @Component({
   selector: 'app-send-addresses',
@@ -69,9 +70,15 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   fullSubmit() {
-    this.dataService.sendStore.putState({send: {
-      address: this.sendForm.value.address
-    }});
+    this.store.dispatch(saveSendData({
+      send: {
+        address: this.fullSendForm.value.address,
+        fee: this.fullSendForm.value.fee,
+        amount: this.fullSendForm.value.amount * 100000000,
+        comment: this.fullSendForm.value.comment
+      }
+    }));
+
     this.router.navigate([this.router.url, { outlets: { popup: 'confirm-popup' }}]);
   }
 

@@ -38,8 +38,6 @@ export class LoginService {
 
     init() {
         this.loginParams.WalletID = this.wasm.getWalletID();
-        this.loginParams.SbbsAddress = this.wasm.getSbbsAddress();
-        this.loginParams.SbbsAddressPrivate = this.wasm.getSbbsAddressPrivate();
     }
 
     connect() {

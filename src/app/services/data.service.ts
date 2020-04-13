@@ -4,8 +4,20 @@ import { Subject } from 'rxjs';
 import * as extensionizer from 'extensionizer';
 import { WalletState } from './../models/wallet-state.model';
 import { Store, select } from '@ngrx/store';
-import { selectAppState, selectWalletOptions } from '../store/selectors/wallet-state.selectors';
-import { loadWalletState, saveWallet } from '../store/actions/wallet.actions';
+import {
+  selectAppState,
+  selectWalletSetting} from '../store/selectors/wallet-state.selectors';
+import {
+  loadWalletState,
+  saveWallet,
+  ChangeWalletState,
+  updatePrivacySetting,
+  updateCurrencySetting,
+  updateDnsSetting,
+  updateIpSetting,
+  updateSaveLogsSetting,
+  updateVerificatedSetting,
+  updatePasswordCheckSetting } from '../store/actions/wallet.actions';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -26,12 +38,28 @@ export class DataService {
   }
 
   constructor(private store: Store<any>) {
+    // TODO: remove!!!
     this.sendStore = new ObservableStore();
+
+    this.loadWalletData().then(walletData => {
+      if (walletData !== undefined && walletData.length > 0) {
+          console.log('Wallet: ', walletData);
+          this.store.dispatch(saveWallet({wallet: walletData}));
+          this.store.dispatch(ChangeWalletState({walletState: true}));
+      }
+    });
   }
 
-  public optionsInit() {
-    extensionizer.storage.local.set({options: {
-      privacy: false
+  public settingsInit() {
+    extensionizer.storage.local.set({
+      settings: {
+        privacySetting: false,
+        saveLogsSetting: 0,
+        currencySetting: 0,
+        dnsSetting: '',
+        ipSetting: '3.222.86.179:20000',
+        verificatedSetting: false,
+        passwordCheck: true
     }});
   }
 
@@ -45,9 +73,9 @@ export class DataService {
   }
 
   public saveWalletOptions() {
-    this.options$ = this.store.pipe(select(selectWalletOptions));
+    this.options$ = this.store.pipe(select(selectWalletSetting));
     this.options$.subscribe((state) => {
-      extensionizer.storage.local.set({options: state});
+      extensionizer.storage.local.set({settings: state});
     });
   }
 
@@ -67,11 +95,23 @@ export class DataService {
     });
   }
 
-  loadWalletOptions() {
-    return new Promise<string>((resolve, reject) => {
-      extensionizer.storage.local.get('options', (result) => {
-        resolve(result.options);
+  loadSettingsFromStore() {
+    return new Promise<any>((resolve, reject) => {
+      extensionizer.storage.local.get('settings', (result) => {
+        resolve(result.settings);
       });
+    });
+  }
+
+  loadWalletSettings() {
+    this.loadSettingsFromStore().then(settingsData => {
+      this.store.dispatch(updatePrivacySetting({settingValue: settingsData.privacySetting}));
+      this.store.dispatch(updateVerificatedSetting({settingValue: settingsData.verificatedSetting}));
+      this.store.dispatch(updateSaveLogsSetting({settingValue: settingsData.saveLogsSetting}));
+      this.store.dispatch(updateDnsSetting({settingValue: settingsData.dnsSetting}));
+      this.store.dispatch(updateIpSetting({settingValue: settingsData.ipSetting}));
+      this.store.dispatch(updateCurrencySetting({settingValue: settingsData.currencySetting}));
+      this.store.dispatch(updatePasswordCheckSetting({settingValue: settingsData.passwordCheck}));
     });
   }
 }

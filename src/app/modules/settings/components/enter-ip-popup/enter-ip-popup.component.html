@@ -1,0 +1,19 @@
+<div class="ip" appClickOutside (clickOutside)="closePopup()">
+    <div class="ip__title">Enter server IP address</div>
+    <div class="ip__content">
+        <form class="ip__content__form" [formGroup]="popupForm" autocomplete="off" novalidate (ngSubmit)="submit()">
+            <input class="ip__content__form__input" #passInput
+                    name="ip" formControlName="ip"
+                    placeholder="ip:port"/>
+                    {{ passInput.focus() }}
+        </form>
+    </div>
+    <div class="ip__controls">
+        <div class="ip__controls__cancel">
+            <app-button class="copy-button" (click)="cancelClicked($event)" >cancel</app-button>
+        </div>
+        <div class="ip__controls__remove">
+            <app-button class="copy-button" (click)="submit($event)">save</app-button>
+        </div>
+    </div>
+</div>

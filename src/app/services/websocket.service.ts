@@ -39,7 +39,11 @@ export class WebsocketService {
 
         this.subject.subscribe(
           (msg) => {
-            return this.wsMessages$.next(msg);
+            if (msg.result !== undefined || msg.error !== undefined){
+                this.wsMessages$.next(msg);
+            } else if (msg.method !== undefined) {
+                this.onkeykeeper(JSON.stringify(msg));
+            }
           },
           (err) => console.log(err),
           () => console.log('service connected')
@@ -47,12 +51,20 @@ export class WebsocketService {
         this.setConnected(true);
     }
 
+    complete() {
+        this.wsMessages$.complete();
+        this.wsMessages$ = new Subject();
+    }
+
     /*
     * on message event
     * */
     public on<T>(): Observable<T> {
         return this.wsMessages$.pipe(
-            map((message: any) => message)
+            map((message: any) => {
+                console.log("MESSAGE:", message);
+                return message;
+            })
         );
     }
 
@@ -78,47 +90,12 @@ export class WebsocketService {
         this.connected = connected;
     }
 
-    private sendKeykeeperResult(id, result) {
-        console.log(`[ws serivce] keykeeper result: ${result}`);
-        this.send({
-            jsonrpc: '2.0',
-            id: id,
-            result: JSON.parse(result)
-        });
-    }
-
-    private sendKeykeeperError(id, error) {
-        console.log(`[ws serivce] keykeeper error: ${error}`);
-        this.send({
-            jsonrpc: '2.0',
-            id,
-            error
-        });
-    }
-
-
     public onkeykeeper(data) {
-        const handlers = {
-            get_kdf: () => this.sendKeykeeperResult(data.id, this.wasmService.keyKeeper.get_Kdf(data.params.root, 
-                    data.params.child_key_num)),
-            get_slots: () => this.sendKeykeeperResult(data.id, this.wasmService.keyKeeper.get_NumSlots()),
-            create_output: () =>
-            this.sendKeykeeperResult(data.id, this.wasmService.keyKeeper.CreateOutput(data.params.scheme, data.params.id)),
-            sign_receiver: () =>
-            this.sendKeykeeperResult(data.id, this.wasmService.keyKeeper.SignReceiver(data.params.inputs,
-                data.params.outputs, data.params.kernel, data.params.non_conv, data.params.peer_id, data.params.my_id_key)),
-            sign_sender: () =>
-            this.sendKeykeeperResult(data.id, this.wasmService.keyKeeper.SignSender(data.params.inputs, data.params.outputs,
-                data.params.kernel, data.params.non_conv, data.params.peer_id, data.params.my_id_key, data.params.slot,
-                data.params.agreement, data.params.my_id)),
-            sign_split: () =>
-            this.sendKeykeeperResult(data.id, this.wasmService.keyKeeper.SignSplit(data.params.inputs, data.params.outputs,
-                data.params.kernel, data.params.non_conv)),
-        };
-
-        handlers[data.method]
-            ? handlers[data.method]()
-            : this.sendKeykeeperError(data.id, `unknown method: ${data.method}`);
+        console.log(`<<< keykeeper request: ${data}`);
+        const res = this.wasmService.keyKeeper.invokeServiceMethod(data);
+        const result = JSON.parse(res);
+        console.log(`>>> keykeeper response: ${res}`);
+        this.send(result);
     }
 
 

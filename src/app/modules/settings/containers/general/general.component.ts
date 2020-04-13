@@ -11,11 +11,11 @@ export class GeneralComponent implements OnInit {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
 
   public logsMenuItems = [{
-    title: 'For all time', id: 2, selected: true
+    title: 'For all time', id: 0, selected: true
   }, {
-    title: 'Last 5 days', id: 0, selected: false
+    title: 'Last 5 days', id: 1, selected: false
   }, {
-    title: 'Last 30 days', id: 1, selected: false
+    title: 'Last 30 days', id: 2, selected: false
   }];
 
   public currencyMenuItems = [{

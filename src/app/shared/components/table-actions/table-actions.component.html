@@ -1,0 +1,73 @@
+<a class="actions-control" (click)="menuTrigger.openMenu()" (click)="$event.stopPropagation()">
+    <button class="actions-control__button" mat-icon-button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="menu">
+        <img class="actions-icon" [src]="iconActions">
+    </button>
+</a>
+<mat-menu class="actions-container" #menu="matMenu">
+    <button mat-menu-item>
+        <img class="actions-icon" [src]="saveIcon" (click)="saveContactClicked()">
+        <span class="actions-text">Save contact</span>
+    </button>
+    <button mat-menu-item>
+        <img class="actions-icon" [src]="shareIcon">
+        <span class="actions-text">Share details</span>
+    </button>
+    <button mat-menu-item>
+        <img class="actions-icon" [src]="copyIcon">
+        <span class="actions-text">Copy details</span>
+    </button>
+    <button mat-menu-item>
+        <img class="actions-icon" [src]="repeatIcon">
+        <span class="actions-text">Repeat transaction</span>
+    </button>
+    <button mat-menu-item>
+        <img class="actions-icon" [src]="cancelIcon">
+        <span class="actions-text">Cancel transaction</span>
+    </button>
+    <button mat-menu-item>
+        <img class="actions-icon" [src]="deleteIcon">
+        <span class="actions-text">Delete transaction</span>
+    </button>
+</mat-menu>
+
+<!-- <div class="control">
+    <div class="control__container">
+        <img class="actions-icon" [src]="iconActions" (click)="changeDropdownState($event)">
+    </div>
+</div>
+<div class="dropdown" *ngIf="isDropdownVisible" appClickOutside (clickOutside)="onClickedOutside()">
+    <div class="dropdown__content">
+        <ul class="dropdown__column">
+            <li class="dropdown__item" (click)="fullViewClicked()">
+                <img class="dropdown__item__icon" [src]="fullViewIcon">
+                <span class="dropdown__item__text">Full view</span>
+            </li>
+            <div class="dropdown__separator"></div>
+            <li class="dropdown__item" (click)="paymentProofClicked()">
+                <img class="dropdown__item__icon" [src]="proofIcon">
+                <span class="dropdown__item__text">Payment proof</span>
+            </li>
+            <li class="dropdown__item">
+                <img class="dropdown__item__icon" [src]="exportIcon">
+                <span class="dropdown__item__text">Export data</span>
+            </li>
+            <li class="dropdown__item">
+                <img class="dropdown__item__icon" [src]="importIcon">
+                <span class="dropdown__item__text">Import data</span>
+            </li>
+            <li class="dropdown__item" (click)="buyBeamClicked()">
+                <img class="dropdown__item__icon" [src]="buyBeamIcon">
+                <span class="dropdown__item__text">Where to buy Beam</span>
+            </li>
+            <li class="dropdown__item" (click)="settingsClicked()">
+                <img class="dropdown__item__icon" [src]="settingsIcon">
+                <span class="dropdown__item__text">Settings</span>
+            </li>
+            <div class="dropdown__separator"></div>
+            <li class="dropdown__item" (click)="logoutClicked()">
+                <img class="dropdown__item__icon" [src]="logoutIcon">
+                <span class="dropdown__item__text">Logout</span>
+            </li>
+        </ul>
+    </div>
+</div> -->

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
 import { WasmService } from '../../../../wasm.service';
@@ -14,7 +14,7 @@ import { DataService, WindowService, LoginService, WebsocketService } from './..
   templateUrl: './ftf-create-password.component.html',
   styleUrls: ['./ftf-create-password.component.scss']
 })
-export class FtfCreatePasswordComponent implements OnInit {
+export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
   seedPhrase$: Observable<any>;
   seedPhraseValue: string;
@@ -112,12 +112,10 @@ export class FtfCreatePasswordComponent implements OnInit {
           passworder.encrypt(pass, {seed: this.seedPhraseValue, id: msg.result})
             .then((result) => {
               this.dataService.saveWallet(result);
-              this.dataService.optionsInit();
+              this.dataService.settingsInit();
               this.sub.unsubscribe();
               this.router.navigate(['/wallet/login']);
             });
-        } else {
-          this.websocketService.onkeykeeper(msg);
         }
       });
 
@@ -136,5 +134,15 @@ export class FtfCreatePasswordComponent implements OnInit {
   backClicked(event) {
     event.stopPropagation();
     this.router.navigate(['/initialize/view-seed']);
+  }
+
+  ngOnDestroy() {
+    if (this.sub !== undefined) {
+      this.sub.unsubscribe();
+    }
+
+    if (this.loginSub) {
+      this.loginSub.unsubscribe();
+    }
   }
 }

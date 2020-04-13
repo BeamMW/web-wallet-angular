@@ -32,14 +32,15 @@ export class MenuFullComponent implements OnInit {
       src: '',
       srcOut: `${environment.assetsPath}/images/shared/components/menu/ic-utxo.svg`,
       srcOn: `${environment.assetsPath}/images/shared/components/menu/ic-utxo-active.svg`
-    }, {
-      path: '/settings/all',
-      title: 'Settings',
-      hovered: false,
-      src: '',
-      srcOut: `${environment.assetsPath}/images/shared/components/menu/icon-settings.svg`,
-      srcOn: `${environment.assetsPath}/images/shared/components/menu/icon-settings-active.svg`
     }
+    // , {
+    //   path: '/settings/all',
+    //   title: 'Settings',
+    //   hovered: false,
+    //   src: '',
+    //   srcOut: `${environment.assetsPath}/images/shared/components/menu/icon-settings.svg`,
+    //   srcOn: `${environment.assetsPath}/images/shared/components/menu/icon-settings-active.svg`
+    // }
   ];
   isFullScreen = false;
   constructor(private windowService: WindowService,
@@ -47,9 +48,7 @@ export class MenuFullComponent implements OnInit {
     this.isFullScreen = windowService.isFullSize();
   }
 
-  itemClicked(item) {
-    
-  }
+  itemClicked(item) {}
 
   getItemSrc(item) {
     if (item.path === '/wallet/main' &&

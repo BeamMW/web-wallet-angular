@@ -8,7 +8,7 @@ import {
   loadUtxo,
   loadTr,
   saveWalletStatus,
-  optionsUpdate
+  updatePrivacySetting
 } from './../../../../store/actions/wallet.actions';
 import { selectAllAddresses } from '../../../../store/selectors/address.selectors';
 import { selectAllUtxo } from '../../../../store/selectors/utxo.selectors';
@@ -18,7 +18,7 @@ import {
   selectReceivedTr,
   selectSentTr
 } from '../../../../store/selectors/transaction.selectors';
-import { selectAppState, selectWalletOptions } from '../../../../store/selectors/wallet-state.selectors';
+import { selectAppState, selectPrivacySetting } from '../../../../store/selectors/wallet-state.selectors';
 import { DataService, WindowService, WebsocketService, LoginService } from './../../../../services';
 
 import { environment } from '@environment';
@@ -41,19 +41,19 @@ export class MainComponent implements OnInit, OnDestroy {
   public sendRoute = '/send/addresses';
   public receiveRoute = '/receive/page';
   public tableType = 'wallet';
-  public tableColumns = ['created', 'from', 'to', 'amount', 'status'];
+  public tableColumns = ['created', 'from', 'to', 'amount', 'status', 'actions'];
 
   public selectorValues = [{
-    title: 'All',
+    title: 'ALL',
     active: true
   }, {
-    title: 'In progress',
+    title: 'IN PROGRESS',
     active: false
   }, {
-    title: 'Sent',
+    title: 'SEND',
     active: false
   }, {
-    title: 'Received',
+    title: 'RECEIVED',
     active: false
   }];
   public activeSelectorItem = this.selectorValues[0];
@@ -65,7 +65,7 @@ export class MainComponent implements OnInit, OnDestroy {
   addresses$: Observable<any>;
   utxos$: Observable<any>;
   transactions$: Observable<any>;
-  options$: Observable<any>;
+  privacySetting$: Observable<any>;
   addressesColumns: string[] = ['address', 'created', 'comment'];
   utxoColumns: string[] = ['utxo', 'amount', 'status'];
   transcationsColumns: string[] = ['sender', 'value', 'txId'];
@@ -85,6 +85,7 @@ export class MainComponent implements OnInit, OnDestroy {
   privacyMode = false;
   isFullScreen = false;
   activeSidenavItem = '';
+  popupOpened = false;
 
   constructor(private store: Store<any>,
               private wasm: WasmService,
@@ -97,14 +98,18 @@ export class MainComponent implements OnInit, OnDestroy {
     this.addresses$ = this.store.pipe(select(selectAllAddresses));
     this.utxos$ = this.store.pipe(select(selectAllUtxo));
     this.transactions$ = this.store.pipe(select(selectAllTr));
-    this.options$ = this.store.pipe(select(selectWalletOptions));
+    this.privacySetting$ = this.store.pipe(select(selectPrivacySetting));
 
-    this.options$.subscribe((state) => {
-      this.privacyMode = state.privacy;
+    this.privacySetting$.subscribe((state) => {
+      this.privacyMode = state;
     });
 
     dataService.changeEmitted$.subscribe(emittedState => {
-      this.modalOpened = emittedState;
+      if (emittedState.popupOpened !== undefined) {
+        this.popupOpened = emittedState.popupOpened;
+      } else {
+        this.modalOpened = emittedState;
+      }
     });
   }
 
@@ -121,11 +126,11 @@ export class MainComponent implements OnInit, OnDestroy {
         this.transactionsLoaded = true;
 
         this.sub.unsubscribe();
-        setTimeout(() => {
-          if (this.mainActive) {
-            this.update();
-          }
-        }, 5000);
+        // setTimeout(() => {
+        //   if (this.mainActive) {
+        //    this.update();
+        //   }
+        // }, 5000);
       }
     });
     this.websocketService.send({
@@ -245,7 +250,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
   privacyControlClicked() {
     this.privacyMode = !this.privacyMode;
-    this.store.dispatch(optionsUpdate({options: {privacy: this.privacyMode}}));
+    this.store.dispatch(updatePrivacySetting({settingValue: this.privacyMode}));
     this.dataService.saveWalletOptions();
   }
 

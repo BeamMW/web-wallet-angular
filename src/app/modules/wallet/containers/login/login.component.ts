@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { DataService, WindowService, LoginService, WebsocketService } from './../../../../services';
 import { environment } from '@environment';
 import { Store, select } from '@ngrx/store';
-import { ChangeWalletState, saveWallet, optionsUpdate } from './../../../../store/actions/wallet.actions';
+import { ChangeWalletState, saveWallet } from './../../../../store/actions/wallet.actions';
 import { selectWalletData, selectWasmState } from './../../../../store/selectors/wallet-state.selectors';
 
 @Component({
@@ -45,40 +45,20 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.dataService.loadWalletData().then(walletData => {
-      if (walletData !== undefined && walletData.length > 0) {
-          console.log('Wallet: ', walletData);
-          this.store.dispatch(saveWallet({wallet: walletData}));
-          this.store.dispatch(ChangeWalletState({walletState: true}));
-      } else {
-          this.router.navigate(['/initialize/create']);
-          return false;
-      }
-    });
-
-    this.dataService.loadWalletOptions().then(optionsData => {
-      this.store.dispatch(optionsUpdate({options: optionsData}));
-    });
+    this.dataService.loadWalletSettings();
   }
 
   ngOnDestroy() {
     if (this.sub !== undefined) {
       this.sub.unsubscribe();
     }
+
+    if (this.loginSub !== undefined) {
+      this.loginSub.unsubscribe();
+    }
   }
 
-  // public submit(): void {
-  //   this.submitted.emit(pass);
-  // }
-
   private login() {
-    this.websocketService.on().subscribe((msg: any) => {
-      if (msg.method !== undefined) {
-        console.log('[ws service] on-subscribe: ', msg);
-        this.websocketService.onkeykeeper(msg);
-      }
-    });
-
     this.sub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.result && msg.result.length) {
         console.log(`[login] wallet session: ${msg.result}`);
