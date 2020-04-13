@@ -502,16 +502,6 @@
     filter: blur(4px);
 }
 
-.full-popup-opened {
-    background-color: rgba(4, 37, 72, .5);
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-}
-
 .tr-send-text,
 .tr-receive-text {
     font-family: 'ProximaNovaBold', sans-serif;

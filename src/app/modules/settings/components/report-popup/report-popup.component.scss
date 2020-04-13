@@ -1,0 +1,133 @@
+@import 'ui-mixins';
+@import './styles';
+
+:host {
+    height: 0;
+}
+
+.report {
+    width: 335px;
+    margin-left: -167px;
+    height: 264px;
+    margin-top: -132px;
+    border-radius: 10px;
+    background-color: #003f6f;
+    position: absolute;
+    z-index: 1500;
+    left: 50%;
+    top: 50%;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 20px;
+
+    &__title {
+        margin: 0 auto 0 auto;
+        font-family: 'ProximaNovaBold', sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.06;
+        letter-spacing: normal;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    &__content {
+        width: 400px;
+        height: 85px;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: #ffffff;
+        margin-top: 20px;
+    }
+
+    &__controls {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+
+        &__save{
+            margin-left: 20px;
+            
+            @include ui-button($btn-ok, $btn-nssm) {
+                height: 38px;
+            }
+
+            @include ui-button-save-icon()
+        }
+
+        &__cancel {
+            
+            @include ui-button($btn-cancel, $btn-nssm) {
+               
+            }
+
+            @include ui-button-cancel-icon()
+        }
+    }
+}
+
+p {
+    margin: 0;
+    max-width: none;
+}
+
+.report-link {
+    color: #00f6d2;
+    cursor: pointer;
+}
+
+@media (min-width: 400px) {
+    .report {
+        width: 460px;
+        margin-left: -230px;
+        height: 250px;
+        margin-top: -125px;
+        padding: 30px;
+
+        &__title {
+            font-size: 18px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        &__content {
+  
+        }
+
+        &__controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+    
+            &__cancel {
+                @include ui-button($btn-cancel, $btn-nssm) {
+                    height: 44px;
+                    width: 133px;
+                }
+
+                @include ui-button-cancel-icon()
+            }
+
+            &__save {
+               @include ui-button($btn-ok, $btn-nssm) {
+                    height: 44px;
+                    width: 202px;
+               }
+
+               @include ui-button-save-icon()
+            }
+        }
+    }
+}

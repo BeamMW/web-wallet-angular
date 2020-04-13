@@ -1,4 +1,4 @@
-<div class="receive" [class.blur-filter]="popupOpened">
+<div class="receive" [class.blur-filter]="!isFullScreen && (modalOpened || popupOpened)">
     <ng-container *ngIf="!isFullScreen">
         <div class="receive__header">
             <div class="menu-control-wrapper">

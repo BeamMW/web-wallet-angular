@@ -131,7 +131,7 @@ export class SettingsMainComponent implements OnInit {
       src: '',
       srcOut: `${environment.assetsPath}/images/modules/settings/containers/settings-main/icon-report.svg`,
       srcOn: `${environment.assetsPath}/images/modules/settings/containers/settings-main/icon-report-active.svg`,
-      class: '',
+      class: 'report',
       expandable: false
     }, {
       path: '',
@@ -155,6 +155,8 @@ export class SettingsMainComponent implements OnInit {
   menuItemClickedFull(item, event) {
     if (item.class === 'remove') {
       this.router.navigate([this.router.url, { outlets: { popup: 'remove-wallet-popup' }}]);
+    } else if (item.class === 'report') {
+      this.router.navigate([this.router.url, { outlets: { popup: 'report-popup' }}]);
     } else {
       this.activeItem = this.activeItem === item ? false : item;
     }
@@ -212,5 +214,10 @@ export class SettingsMainComponent implements OnInit {
 
   getFromFaucet() {
     window.open('https://faucet.beamprivacy.community', '_blank');
+  }
+
+  paymentProofClicked($event) {
+    $event.stopPropagation();
+    this.router.navigate([this.router.url, { outlets: { popup: 'payment-proof' }}]);
   }
 }

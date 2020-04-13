@@ -18,6 +18,7 @@ export class PaymentProofComponent implements OnInit, OnDestroy {
   parseError = false;
   proofForm: FormGroup;
   proofData: any;
+  popupOpened = false;
 
   constructor(private websocketService: WebsocketService,
               private windowSerivce: WindowService,
@@ -28,6 +29,12 @@ export class PaymentProofComponent implements OnInit, OnDestroy {
 
     this.proofForm = new FormGroup({
       proof: new FormControl()
+    });
+
+    dataService.changeEmitted$.subscribe(emittedState => {
+      if (emittedState.popupOpened !== undefined) {
+        this.popupOpened = emittedState.popupOpened;
+      }
     });
   }
 

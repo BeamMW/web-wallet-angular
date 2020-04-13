@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { TransactionDetailsComponent, TransactionsViewComponent } from './containers';
 import { MainLayoutComponent } from '@shared/layouts';
 import { HeaderComponent } from '@shared/containers';
+import {PaymentProofComponent} from '@shared/components';
 import { LoginGuard } from './../wallet/guards/login.guard';
 
 const routes: Routes = [{
@@ -17,6 +18,8 @@ const routes: Routes = [{
         path: '', component: HeaderComponent, outlet: 'header'
       }, {
         path: '', component: TransactionsViewComponent
+      }, {
+        path: 'payment-proof', component: PaymentProofComponent, outlet: 'popup',
       }
     ]
   }]
@@ -31,6 +34,8 @@ const routes: Routes = [{
         path: '', component: HeaderComponent, outlet: 'header'
       }, {
         path: '', component: TransactionDetailsComponent
+      }, {
+        path: 'payment-proof', component: PaymentProofComponent, outlet: 'popup',
       }
     ]
   }]

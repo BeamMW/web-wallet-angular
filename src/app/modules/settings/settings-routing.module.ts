@@ -8,10 +8,17 @@ import {
   SettingsMainComponent,
   UtilitiesComponent
 } from './containers';
+
 import { MainLayoutComponent } from '@shared/layouts';
 import { HeaderComponent } from '@shared/containers';
 import { LoginGuard } from '../wallet/guards/login.guard';
-import { MenuComponent, MenuFullComponent } from '@shared/components';
+
+import {
+  MenuComponent,
+  MenuFullComponent,
+  PaymentProofComponent
+} from '@shared/components';
+
 import {
   RemoveWalletConfirmationPopupComponent,
   RemoveWalletPopupComponent,
@@ -57,6 +64,8 @@ const routes: Routes = [{
         path: 'seed-verification-popup', component: SeedVerificationPopupComponent, outlet: 'popup',
       }, {
         path: 'report-popup', component: ReportPopupComponent, outlet: 'popup',
+      }, {
+        path: 'payment-proof', component: PaymentProofComponent, outlet: 'popup',
       }
     ]
   }, {
@@ -65,6 +74,8 @@ const routes: Routes = [{
         path: '', component: HeaderComponent, outlet: 'header'
       }, {
         path: '', component: GeneralComponent
+      }, {
+        path: 'payment-proof', component: PaymentProofComponent, outlet: 'popup',
       }
     ]
   }, {
@@ -73,6 +84,8 @@ const routes: Routes = [{
         path: '', component: HeaderComponent, outlet: 'header'
       }, {
         path: '', component: ServerComponent
+      }, {
+        path: 'payment-proof', component: PaymentProofComponent, outlet: 'popup',
       }
     ]
   }, {
@@ -81,6 +94,8 @@ const routes: Routes = [{
         path: '', component: HeaderComponent, outlet: 'header'
       }, {
         path: '', component: PrivacyComponent
+      }, {
+        path: 'payment-proof', component: PaymentProofComponent, outlet: 'popup',
       }
     ]
   }, {
@@ -89,6 +104,8 @@ const routes: Routes = [{
         path: '', component: HeaderComponent, outlet: 'header'
       }, {
         path: '', component: UtilitiesComponent
+      }, {
+        path: 'payment-proof', component: PaymentProofComponent, outlet: 'popup',
       }
     ]
   }]

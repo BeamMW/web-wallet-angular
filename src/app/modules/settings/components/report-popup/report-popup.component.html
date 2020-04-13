@@ -1,1 +1,17 @@
-<p>report-popup works!</p>
+<div class="report" appClickOutside (clickOutside)="closePopup()">
+    <div class="report__title">Report problem</div>
+    <div class="report__content">
+        <p>To report a problem:</p>
+        <p>1. Click “Save wallet logs” and choose a destination folder for log archive</p>
+        <p>2. Send email to <span class="report-link">support@beam.mw</span> or open a ticket in <span class="report-link">Github</span></p>
+        <p>3. Don’t forget to attach logs archive</p>
+    </div>
+    <div class="report__controls">
+        <div class="report__controls__cancel">
+            <app-button class="copy-button" (click)="cancelClicked($event)">cancel</app-button>
+        </div>
+        <div class="report__controls__save">
+            <app-button class="copy-button" (click)="submit($event)">save wallet logs</app-button>
+        </div>
+    </div>
+</div>

@@ -476,6 +476,26 @@
   }
 }
 
+@mixin ui-button-save-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      @include common-button-wrapper;
+
+      .ui-button__icon {
+        background: url('/assets/images/modules/settings/components/report-popup/icon-save.svg');
+        @include common-button-icon;
+
+        @content;
+      }
+
+      .ui-button__text {
+        @include common-button-text;
+        margin-left: 16px;
+      }
+    }
+  }
+}
+
 @mixin ui-button-back-icon {
   ::ng-deep {
     .ui-button__inner-wrapper {

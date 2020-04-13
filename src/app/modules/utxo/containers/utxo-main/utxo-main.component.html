@@ -1,4 +1,4 @@
-<div class="utxo" [class.blur-filter]="modalOpened">
+<div class="utxo" [class.blur-filter]="!isFullScreen && (modalOpened || popupOpened)">
     <ng-container *ngIf="!isFullSize">
         <div class="utxo__header">
             <div class="menu-control-wrapper">
