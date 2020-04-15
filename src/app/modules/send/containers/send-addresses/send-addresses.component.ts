@@ -8,6 +8,9 @@ import { Store, select } from '@ngrx/store';
 import { selectWalletStatus } from '../../../../store/selectors/wallet-state.selectors';
 import { saveSendData } from './../../../../store/actions/wallet.actions';
 
+const MIN_FEE_VALUE = 100;
+const GROTHS_IN_BEAM = 100000000;
+
 @Component({
   selector: 'app-send-addresses',
   templateUrl: './send-addresses.component.html',
@@ -15,6 +18,7 @@ import { saveSendData } from './../../../../store/actions/wallet.actions';
 })
 export class SendAddressesComponent implements OnInit, OnDestroy {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
+  public arrowIcon: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/arrow.svg`;
   send = {
     address: ''
   };
@@ -24,6 +28,19 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   walletStatus$: Observable<any>;
   walletStatusSub: Subscription;
   popupOpened = false;
+  sendFrom: string;
+
+  feeIsCorrect = true;
+  isOutgoingFull = true;
+  addressLoaded = false;
+  private sub: Subscription;
+
+  stats = {
+    totalUtxo: 0,
+    amountToSend: 0,
+    change: 0,
+    remaining: 0
+  };
 
   constructor(private dataService: DataService,
               public router: Router,
@@ -48,11 +65,11 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       address: new FormControl('',  [
         Validators.required
       ]),
-      fee: new FormControl(100, [
+      fee: new FormControl(MIN_FEE_VALUE, [
         Validators.required
       ]),
       comment: new FormControl(''),
-      amount: new FormControl(0, [
+      amount: new FormControl('', [
         Validators.required
       ])
     });
@@ -69,25 +86,34 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     this.router.navigate(['/send/amount']);
   }
 
-  fullSubmit() {
-    this.store.dispatch(saveSendData({
-      send: {
-        address: this.fullSendForm.value.address,
-        fee: this.fullSendForm.value.fee,
-        amount: this.fullSendForm.value.amount * 100000000,
-        comment: this.fullSendForm.value.comment
-      }
-    }));
+  fullSubmit($event) {
+    $event.stopPropagation();
+    if (this.feeIsCorrect) {
+      this.store.dispatch(saveSendData({
+        send: {
+          address: this.fullSendForm.value.address,
+          fee: this.fullSendForm.value.fee,
+          amount: this.fullSendForm.value.amount * GROTHS_IN_BEAM,
+          comment: this.fullSendForm.value.comment,
+          from: this.sendFrom
+        }
+      }));
 
-    this.router.navigate([this.router.url, { outlets: { popup: 'confirm-popup' }}]);
+      this.router.navigate([this.router.url, { outlets: { popup: 'confirm-popup' }}]);
+    }
   }
 
   ngOnInit() {
+    this.createAddress();
   }
 
   ngOnDestroy() {
     if (this.walletStatusSub) {
       this.walletStatusSub.unsubscribe();
+    }
+
+    if (this.sub) {
+      this.sub.unsubscribe();
     }
   }
 
@@ -100,9 +126,64 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     this.walletStatusSub = this.walletStatus$.subscribe((status) => {
       if (status.available > 0) {
         this.isFullScreen ?
-          this.fullSendForm.get('amount').setValue((status.available - this.fullSendForm.value.fee) / 100000000) :
-          this.sendForm.get('amount').setValue((status.available - this.sendForm.value.fee) / 100000000);
+          this.fullSendForm.get('amount').setValue((status.available - this.fullSendForm.value.fee) / GROTHS_IN_BEAM) :
+          this.sendForm.get('amount').setValue((status.available - this.sendForm.value.fee) / GROTHS_IN_BEAM);
       }
+    });
+  }
+
+  outgoingClicked($event) {
+    $event.stopPropagation();
+    this.isOutgoingFull = !this.isOutgoingFull;
+  }
+
+  stripFee(control: FormControl) {
+    const feeValue = control.value.replace(/[^0-9]/g, '');
+    this.feeIsCorrect = parseInt(feeValue, 10) >= MIN_FEE_VALUE;
+    control.setValue(feeValue);
+  }
+
+  changeAddressClicked($event) {
+    $event.stopPropagation();
+    this.createAddress();
+  }
+
+  amountChanged(value) {
+    this.walletStatusSub = this.walletStatus$.subscribe((status) => {
+      const feeFullValue = this.fullSendForm.value.fee / GROTHS_IN_BEAM;
+      const available = status.available / GROTHS_IN_BEAM;
+      if (status.available > 0) {
+        this.stats.totalUtxo = Math.ceil(value);
+        this.stats.amountToSend = value;
+        if (value > available) {
+          this.stats.change = 0;
+          this.stats.remaining = 0;
+        } else {
+          this.stats.change = this.stats.totalUtxo > value ?
+            (this.stats.totalUtxo - value - feeFullValue) :
+            (this.stats.totalUtxo + 1 - feeFullValue);
+          this.stats.remaining = available - value - feeFullValue;
+        }
+      }
+    });
+  }
+
+  createAddress() {
+    this.sub = this.wsService.on().subscribe((msg: any) => {
+      if (msg.result !== undefined && msg.id === 1 && typeof msg.result === 'string') {
+        this.sendFrom = msg.result;
+        this.addressLoaded = true;
+      }
+    });
+    this.wsService.send({
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'create_address',
+        params:
+        {
+            expiration : '24h',
+            comment : ''
+        }
     });
   }
 }

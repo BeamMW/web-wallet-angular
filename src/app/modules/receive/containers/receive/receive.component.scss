@@ -15,7 +15,7 @@
         position: absolute;
         width: 100%;
         height: 100px;
-        background-image: linear-gradient(to top, rgba(11, 204, 247, 0), #0bccf7);
+        background-image: linear-gradient(to top, rgba(11, 204, 247, 0), rgba(11, 204, 247, 0.5));
         z-index: 1;
     }
 
@@ -237,12 +237,12 @@
             }
 
             &__bottom {
-                margin-top: auto;
+                margin-top: 100px;
                 align-self: center;
 
                 &__info {
                     max-width: 335px;
-                    margin-bottom: 100px;
+                    margin-bottom: 30px;
                     opacity: 0.5;
                     font-family: 'ProximaNovaIT', sans-serif;
                     font-size: 14px;

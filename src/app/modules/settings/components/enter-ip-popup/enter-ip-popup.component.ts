@@ -14,7 +14,7 @@ import {
   templateUrl: './enter-ip-popup.component.html',
   styleUrls: ['./enter-ip-popup.component.scss']
 })
-export class EnterIpPopupComponent implements OnInit {
+export class EnterIpPopupComponent implements OnInit, OnDestroy {
   sub: Subscription;
   isFullScreen = false;
   popupForm: FormGroup;

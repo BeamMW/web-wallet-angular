@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { WalletState, Address, Utxo, Transaction } from '@app/models';
+import { WalletState, Address, Utxo, Transaction, Contact } from '@app/models';
 
 export const loadAddresses = createAction('[Addresses] Load Addresses', props<{ addresses: Address[] }>());
 export const loadUtxo = createAction('[Utxos] Load Utxos', props<{ utxos: Utxo[] }>());
@@ -24,3 +24,6 @@ export const updateDnsSetting = createAction('[Wallet state] Update dns setting'
 export const updateIpSetting = createAction('[Wallet state] Update ip setting', props<{ settingValue: string }>());
 export const updateVerificatedSetting = createAction('[Wallet state] Update verificated setting', props<{ settingValue: boolean }>());
 export const updatePasswordCheckSetting = createAction('[Wallet state] Update password check setting', props<{ settingValue: boolean }>());
+
+/* Contact list */
+export const saveContact = createAction('[Wallet state] Save contact', props<Contact>());

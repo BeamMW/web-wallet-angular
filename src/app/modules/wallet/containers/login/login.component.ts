@@ -26,6 +26,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   wallet$: Observable<any>;
   wasmState$: Observable<any>;
 
+  isCorrectPass = true;
+
   private id;
   private pass;
 
@@ -46,6 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.dataService.loadWalletSettings();
+    this.dataService.loadWalletContacts();
   }
 
   ngOnDestroy() {
@@ -121,6 +124,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.login();
           }
         });
+      }).catch(error => {
+        this.isCorrectPass = false;
       });
     });
   }

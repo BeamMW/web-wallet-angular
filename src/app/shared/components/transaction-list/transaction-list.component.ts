@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
 import { selectTrByAddress, selectTrsById } from '../../../store/selectors/transaction.selectors';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { environment } from '@environment';
 
 @Component({
   selector: 'app-transaction-list',
@@ -11,6 +12,8 @@ import { Observable } from 'rxjs';
 export class TransactionListComponent implements OnInit, OnChanges {
   @Input() address: any;
   @Input() txId: any;
+
+  emptyIcon = `${environment.assetsPath}/images/shared/components/table/transactions-empty-state.svg`;
 
   transactions$: Observable<any>;
 

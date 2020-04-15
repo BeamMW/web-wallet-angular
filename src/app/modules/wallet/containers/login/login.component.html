@@ -7,10 +7,11 @@
     <div class="login__container">
         <form class="send-form-cl" [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="submit()">
             <div class="form-group">
-                <input autofocus class="login__container__input" #passInput
+                <input autofocus class="login__container__input" #passInput [class.incorrect]="!isCorrectPass"
                     name="password" type="password" formControlName="password" 
                     placeholder="Password"/>
                     {{ passInput.focus() }}
+                <div class="login__container__validator" *ngIf="!isCorrectPass">Incorrect password</div>
             </div>
             <div class="login__container__button">
                 <app-button class="open-button">open your wallet</app-button>

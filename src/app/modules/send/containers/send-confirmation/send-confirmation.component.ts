@@ -18,7 +18,7 @@ export class SendConfirmationComponent implements OnInit {
     address: '',
     fee: 0,
     comment: '',
-    amount: 0
+    amount: ''
   };
   popupOpened = false;
   public walletRoute = '/wallet/main';

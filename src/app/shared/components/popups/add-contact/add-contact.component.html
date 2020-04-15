@@ -1,0 +1,19 @@
+<div class="contact" appClickOutside (clickOutside)="closePopup()">
+    <div class="contact__title">Save contact</div>
+    <div class="contact__content">
+        <form class="contact__content__form" [formGroup]="contactForm" autocomplete="off" novalidate (ngSubmit)="submit()">
+            <input class="contact__content__form__input" #nameInput
+                    name="name" formControlName="name"
+                    placeholder="Enter contact name"/>
+                    {{ nameInput.focus() }}
+        </form>
+    </div>
+    <div class="contact__controls">
+        <div class="contact__controls__cancel">
+            <app-button class="copy-button" (click)="cancelClicked($event)" >cancel</app-button>
+        </div>
+        <div class="contact__controls__remove">
+            <app-button class="copy-button" (click)="submit($event)">save</app-button>
+        </div>
+    </div>
+</div>

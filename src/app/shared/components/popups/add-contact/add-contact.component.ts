@@ -1,39 +1,44 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router} from '@angular/router';
-import { ActivatedRoute} from '@angular/router';
 import { DataService, WindowService } from './../../../../services';
 import { Subscription, Observable } from 'rxjs';
+import { environment } from '@environment';
 import { FormGroup, FormControl} from '@angular/forms';
-import * as passworder from 'browser-passworder';
-import { Store, select } from '@ngrx/store';
-import { selectWalletData } from './../../../../store/selectors/wallet-state.selectors';
+import { Store } from '@ngrx/store';
+import {
+  saveContact,
+} from './../../../../store/actions/wallet.actions';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
-  selector: 'app-seed-verification-popup',
-  templateUrl: './seed-verification-popup.component.html',
-  styleUrls: ['./seed-verification-popup.component.scss']
+  selector: 'app-add-contact',
+  templateUrl: './add-contact.component.html',
+  styleUrls: ['./add-contact.component.scss']
 })
-export class SeedVerificationPopupComponent implements OnInit, OnDestroy {
-  wallet$: Observable<any>;
+export class AddContactComponent implements OnInit, OnDestroy {
   sub: Subscription;
-  confirmForm: FormGroup;
   isFullScreen = false;
-  isCorrectPass = true;
+  contactForm: FormGroup;
+  address: string;
 
   constructor(private windowSerivce: WindowService,
+              private store: Store<any>,
               public router: Router,
               private activatedRoute: ActivatedRoute,
-              private store: Store<any>,
               private dataService: DataService) {
     this.isFullScreen = windowSerivce.isFullSize();
-    this.confirmForm = new FormGroup({
-      password: new FormControl()
+    this.contactForm = new FormGroup({
+      name: new FormControl()
     });
-    this.wallet$ = this.store.pipe(select(selectWalletData));
   }
 
   ngOnInit() {
     this.dataService.emitChange({popupOpened: true});
+    this.activatedRoute
+        .params
+        .subscribe(params => {
+            this.address = params['address'];
+        });
   }
 
   ngOnDestroy() {
@@ -45,14 +50,10 @@ export class SeedVerificationPopupComponent implements OnInit, OnDestroy {
 
   submit($event) {
     $event.stopPropagation();
-    this.wallet$.subscribe(wallet => {
-      passworder.decrypt(this.confirmForm.value.password, wallet).then((result) => {
-        // redirect to seed verification
-        this.closePopup(true);
-      }).catch(error => {
-        this.isCorrectPass = false;
-      });
-    });
+    this.store.dispatch(saveContact({name: this.contactForm.value.name, address: this.address}));
+    this.dataService.saveWalletContacts();
+    this.dataService.emitChange({popupOpened: false});
+    this.closePopup();
   }
 
   cancelClicked($event) {
@@ -60,7 +61,7 @@ export class SeedVerificationPopupComponent implements OnInit, OnDestroy {
     this.closePopup();
   }
 
-  closePopup(isCorrect = false) {
+  closePopup() {
     this.router.navigate([{ outlets: { popup: null }}], {relativeTo: this.activatedRoute.parent});
   }
 }

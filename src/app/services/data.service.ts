@@ -6,7 +6,9 @@ import { WalletState } from './../models/wallet-state.model';
 import { Store, select } from '@ngrx/store';
 import {
   selectAppState,
-  selectWalletSetting} from '../store/selectors/wallet-state.selectors';
+  selectWalletSetting,
+  selectContacts
+} from '../store/selectors/wallet-state.selectors';
 import {
   loadWalletState,
   saveWallet,
@@ -17,7 +19,8 @@ import {
   updateIpSetting,
   updateSaveLogsSetting,
   updateVerificatedSetting,
-  updatePasswordCheckSetting } from '../store/actions/wallet.actions';
+  updatePasswordCheckSetting,
+  saveContact } from '../store/actions/wallet.actions';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -79,6 +82,13 @@ export class DataService {
     });
   }
 
+  public saveWalletContacts() {
+    this.options$ = this.store.pipe(select(selectContacts));
+    this.options$.subscribe((state) => {
+      extensionizer.storage.local.set({contacts: state});
+    });
+  }
+
   loadAppState() {
     return new Promise<WalletState>((resolve, reject) => {
       extensionizer.storage.local.get('state', (result) => {
@@ -91,6 +101,14 @@ export class DataService {
     return new Promise<string>((resolve, reject) => {
       extensionizer.storage.local.get('wallet', (result) => {
         resolve(result.wallet);
+      });
+    });
+  }
+
+  loadContacts() {
+    return new Promise<any>((resolve, reject) => {
+      extensionizer.storage.local.get('contacts', (result) => {
+        resolve(result.contacts);
       });
     });
   }
@@ -112,6 +130,16 @@ export class DataService {
       this.store.dispatch(updateIpSetting({settingValue: settingsData.ipSetting}));
       this.store.dispatch(updateCurrencySetting({settingValue: settingsData.currencySetting}));
       this.store.dispatch(updatePasswordCheckSetting({settingValue: settingsData.passwordCheck}));
+    });
+  }
+
+  loadWalletContacts() {
+    this.loadContacts().then(contacts => {
+      if (contacts !== undefined && contacts.length > 0) {
+        contacts.forEach(element => {
+          this.store.dispatch(saveContact({name: element.name, address: element.address}));
+        });
+      }
     });
   }
 }

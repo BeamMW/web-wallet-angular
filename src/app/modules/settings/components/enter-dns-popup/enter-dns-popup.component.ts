@@ -5,7 +5,7 @@ import { DataService, WindowService } from './../../../../services';
 import { Subscription, Observable } from 'rxjs';
 import { environment } from '@environment';
 import { FormGroup, FormControl} from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { Store, On } from '@ngrx/store';
 
 import {
   updateDnsSetting
@@ -15,7 +15,7 @@ import {
   templateUrl: './enter-dns-popup.component.html',
   styleUrls: ['./enter-dns-popup.component.scss']
 })
-export class EnterDnsPopupComponent implements OnInit {
+export class EnterDnsPopupComponent implements OnInit, OnDestroy {
   sub: Subscription;
   isFullScreen = false;
   popupForm: FormGroup;

@@ -19,7 +19,7 @@ import {
   templateUrl: './check-pass-confirmation-popup.component.html',
   styleUrls: ['./check-pass-confirmation-popup.component.scss']
 })
-export class CheckPassConfirmationPopupComponent implements OnInit {
+export class CheckPassConfirmationPopupComponent implements OnInit, OnDestroy {
   wallet$: Observable<any>;
   sub: Subscription;
   confirmForm: FormGroup;

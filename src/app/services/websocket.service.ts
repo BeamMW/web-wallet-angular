@@ -61,10 +61,7 @@ export class WebsocketService {
     * */
     public on<T>(): Observable<T> {
         return this.wsMessages$.pipe(
-            map((message: any) => {
-                console.log("MESSAGE:", message);
-                return message;
-            })
+            map((message: any) => message)
         );
     }
 

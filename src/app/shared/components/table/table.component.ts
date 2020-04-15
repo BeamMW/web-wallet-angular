@@ -31,7 +31,11 @@ export class TableComponent implements OnInit, OnChanges {
     from: 'from',
     to: 'to',
     amount: 'amount',
-    status: 'status'
+    status: 'status',
+    address: 'address',
+    name: 'name',
+    exp_date: 'exp_date',
+    contactName: 'contactName'
   };
 
   public iconSort: string = `${environment.assetsPath}/images/shared/components/table/icon-sort.svg`;

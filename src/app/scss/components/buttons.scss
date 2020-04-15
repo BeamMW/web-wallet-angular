@@ -436,6 +436,26 @@
   }
 }
 
+@mixin ui-button-change-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      @include common-button-wrapper;
+
+      .ui-button__icon {
+        background: url('/assets/images/modules/send/containers/send-addresses/icon-change.svg');
+        @include common-button-icon;
+
+        @content;
+      }
+
+      .ui-button__text {
+        @include common-button-text;
+        margin-left: 16px;
+      }
+    }
+  }
+}
+
 @mixin ui-button-cancel-icon {
   ::ng-deep {
     .ui-button__inner-wrapper {

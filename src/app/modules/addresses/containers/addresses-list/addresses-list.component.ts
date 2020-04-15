@@ -4,7 +4,14 @@ import { Router } from '@angular/router';
 import { DataService, WindowService, WebsocketService } from './../../../../services';
 import { Store, select } from '@ngrx/store';
 import { loadAddresses } from './../../../../store/actions/wallet.actions';
-import { selectAllAddresses, selectExpiredAddresses, selectActiveAddresses } from '../../../../store/selectors/address.selectors';
+import {
+  selectAllAddresses,
+  selectExpiredAddresses,
+  selectActiveAddresses
+} from '../../../../store/selectors/address.selectors';
+import {
+  selectContacts
+} from '../../../../store/selectors/wallet-state.selectors';
 import { Subscription, Observable } from 'rxjs';
 
 @Component({
@@ -14,13 +21,17 @@ import { Subscription, Observable } from 'rxjs';
 })
 export class AddressesListComponent implements OnInit, OnDestroy {
   public iconMenu = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-menu.svg`;
+  public iconContactsEmpty = `${environment.assetsPath}/images/shared/components/table/transactions-empty-state.svg`;
+
   private sub: Subscription;
   private pageActive = false;
   public modalOpened = false;
   public isFullScreen = false;
   addresses$: Observable<any>;
   public tableType = 'addresses';
-  public tableColumns = ['name', 'address', 'expiration'];
+  public contactsTableType = 'contacts';
+  public tableColumns = ['name', 'address', 'expiration', 'actions'];
+  public contactsTableColumns = ['contactName', 'address'];
 
   public menuItems = [{
     title: 'My active', full: 'My active addresses', id: 0, selected: true
@@ -94,7 +105,7 @@ export class AddressesListComponent implements OnInit, OnDestroy {
     } else if (item === this.menuItems[1]) {
       this.addresses$ = this.store.pipe(select(selectExpiredAddresses));
     } else if (item === this.menuItems[2]) {
-      // this.addresses$ = this.store.pipe(select(selectAllAddresses));
+      this.addresses$ = this.store.pipe(select(selectContacts));
     }
   }
 
@@ -107,6 +118,8 @@ export class AddressesListComponent implements OnInit, OnDestroy {
       this.addresses$ = this.store.pipe(select(selectActiveAddresses));
     } else if (item.id === this.menuItems[1].id) {
       this.addresses$ = this.store.pipe(select(selectExpiredAddresses));
+    } else if (item.id === this.menuItems[2].id) {
+      this.addresses$ = this.store.pipe(select(selectContacts));
     }
   }
 }

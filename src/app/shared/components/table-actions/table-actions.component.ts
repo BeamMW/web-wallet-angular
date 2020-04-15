@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
+import { selectContact } from '../../../store/selectors/wallet-state.selectors';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-table-actions',
@@ -10,6 +12,11 @@ import { Store } from '@ngrx/store';
   encapsulation: ViewEncapsulation.None
 })
 export class TableActionsComponent implements OnInit {
+  @Input() tableType: any;
+  @Input() element: any;
+  address: string;
+  contact$: Observable<any>;
+
   isDropdownVisible = false;
   public iconActions: string = `${environment.assetsPath}/images/shared/components/table/icon-actions.svg`;
 
@@ -20,16 +27,30 @@ export class TableActionsComponent implements OnInit {
   public cancelIcon = `${environment.assetsPath}/images/shared/components/table-actions/icon-cancel-copy.svg`;
   public deleteIcon = `${environment.assetsPath}/images/shared/components/table-actions/ic-delete.svg`;
 
+  public editIcon = `${environment.assetsPath}/images/shared/components/table-actions/icon-edit-copy.svg`;
+  public expireIcon = `${environment.assetsPath}/images/shared/components/table-actions/icon-exp-copy-2.svg`;
+
   constructor(
     private store: Store<any>,
     public router: Router) {
   }
 
   ngOnInit() {
+    this.address = this.element.income ? this.element.sender : this.element.receiver;
   }
 
-  saveContactClicked() {
-
+  saveContactClicked($event) {
+    $event.stopPropagation();
+    this.contact$ = this.store.pipe(select(selectContact(this.address)));
+    this.contact$.subscribe((state) => {
+      if (state === undefined) {
+        this.router.navigate([this.router.url, {
+          outlets: {
+            popup: ['add-contact', this.address]
+          }
+        }]);
+      }
+    });
   }
 }
 

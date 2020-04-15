@@ -96,3 +96,16 @@ export const selectWalletSetting = createSelector(
     };
   }
 );
+
+export const selectContacts = createSelector(
+  selectAppState,
+  state => state.contacts
+);
+
+export const selectContact  = (address: string) => createSelector(
+  selectAppState,
+  state => {
+    return state.contacts
+            .find(contact => contact.address === address);
+  }
+);

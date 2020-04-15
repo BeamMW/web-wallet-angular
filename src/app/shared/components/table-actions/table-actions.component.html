@@ -4,30 +4,50 @@
     </button>
 </a>
 <mat-menu class="actions-container" #menu="matMenu">
-    <button mat-menu-item>
-        <img class="actions-icon" [src]="saveIcon" (click)="saveContactClicked()">
-        <span class="actions-text">Save contact</span>
-    </button>
-    <button mat-menu-item>
-        <img class="actions-icon" [src]="shareIcon">
-        <span class="actions-text">Share details</span>
-    </button>
-    <button mat-menu-item>
-        <img class="actions-icon" [src]="copyIcon">
-        <span class="actions-text">Copy details</span>
-    </button>
-    <button mat-menu-item>
-        <img class="actions-icon" [src]="repeatIcon">
-        <span class="actions-text">Repeat transaction</span>
-    </button>
-    <button mat-menu-item>
-        <img class="actions-icon" [src]="cancelIcon">
-        <span class="actions-text">Cancel transaction</span>
-    </button>
-    <button mat-menu-item>
-        <img class="actions-icon" [src]="deleteIcon">
-        <span class="actions-text">Delete transaction</span>
-    </button>
+    <ng-container *ngIf="tableType === 'wallet'">
+        <button mat-menu-item (click)="saveContactClicked($event)">
+            <img class="actions-icon" [src]="saveIcon">
+            <span class="actions-text">Save contact</span>
+        </button>
+        <button mat-menu-item>
+            <img class="actions-icon" [src]="shareIcon">
+            <span class="actions-text">Share details</span>
+        </button>
+        <button mat-menu-item>
+            <img class="actions-icon" [src]="copyIcon">
+            <span class="actions-text">Copy details</span>
+        </button>
+        <button mat-menu-item>
+            <img class="actions-icon" [src]="repeatIcon">
+            <span class="actions-text">Repeat transaction</span>
+        </button>
+        <button mat-menu-item>
+            <img class="actions-icon" [src]="cancelIcon">
+            <span class="actions-text">Cancel transaction</span>
+        </button>
+        <button mat-menu-item>
+            <img class="actions-icon" [src]="deleteIcon">
+            <span class="actions-text">Delete transaction</span>
+        </button>
+    </ng-container>
+    <ng-container *ngIf="tableType === 'addresses'">
+        <button mat-menu-item>
+            <img class="actions-icon" [src]="expireIcon" (click)="saveContactClicked($event)">
+            <span class="actions-text">Expire address</span>
+        </button>
+        <button mat-menu-item>
+            <img class="actions-icon" [src]="editIcon">
+            <span class="actions-text">Edit address</span>
+        </button>
+        <button mat-menu-item>
+            <img class="actions-icon" [src]="copyIcon">
+            <span class="actions-text">Copy address</span>
+        </button>
+        <button mat-menu-item>
+            <img class="actions-icon" [src]="deleteIcon">
+            <span class="actions-text">Delete address</span>
+        </button>
+    </ng-container>
 </mat-menu>
 
 <!-- <div class="control">

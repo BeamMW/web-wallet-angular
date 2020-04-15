@@ -10,7 +10,7 @@ import { environment } from '@environment';
   templateUrl: './clear-wallet-popup.component.html',
   styleUrls: ['./clear-wallet-popup.component.scss']
 })
-export class ClearWalletPopupComponent implements OnInit {
+export class ClearWalletPopupComponent implements OnInit, OnDestroy {
   wallet$: Observable<any>;
   sub: Subscription;
   isFullScreen = false;

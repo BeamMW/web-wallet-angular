@@ -32,14 +32,12 @@
         }
 
         &__title {
+            @include normal-text;
             font-family: 'ProximaNovaSemiBold', sans-serif;
             margin: 0 auto;
             color: #ffffff;
             font-size: 20px;
             font-weight: 600;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
             letter-spacing: 3px;
             text-align: center;
         }
@@ -79,13 +77,11 @@
         flex-grow: 1; 
 
         &__title {
+            @include normal-text;
             font-family: 'ProximaNovaBold', sans-serif;
             opacity: 0.5;
             font-size: 14px;
             font-weight: bold;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
             letter-spacing: 1px;
             color: #ffffff;
         }
@@ -98,42 +94,30 @@
             width:calc(100% - 20px);
 
             &__input {
+                @include normal-text;
                 background: rgba(255, 255, 255, 0);
                 font-family: 'ProximaNova', sans-serif;
                 border: none;
                 width: 291px;
                 border-bottom: 1px solid rgba(255, 255, 255, .3);
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #ffffff;
                 resize:none;
                 max-height: 40px;
             }
 
             &__input:focus {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 outline-width: 0;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #ffffff;
             }
 
             &__input::placeholder {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: rgba(255, 255, 255, .3);
             }
 
@@ -160,19 +144,16 @@
         &__content {
             height: 100%;
             z-index: 10;
-            padding: 30px 20px 0 90px;
+            padding: 30px 50px 0 90px;
             flex-grow: 1;
 
             &__header {
                 display: flex;
                 &__title {
+                    @include normal-text;
                     font-family: 'SFUIDisplay-Medium', sans-serif;
                     font-size: 36px;
                     font-weight: 500;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: normal;
                     color: #ffffff;
                 }
             }
@@ -192,32 +173,27 @@
         &__address {
             display: flex;
             flex-direction: column;
+            width: 49%;
             
             &__title {
+                @include normal-text;
                 font-family: 'ProximaNovaBold', sans-serif;
                 opacity: 0.5;
                 font-size: 14px;
                 font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
                 letter-spacing: 1px;
                 color: #ffffff;
                 margin-top: 40px;
             }
 
             &__input {
+                @include normal-text;
                 background: rgba(255, 255, 255, 0);
                 font-family: 'ProximaNova', sans-serif;
                 border: none;
-                width: 390px;
+                width: 100%;
                 border-bottom: 1px solid rgba(255, 255, 255, .3);
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #ffffff;
                 resize:none;
                 max-height: 55px;
@@ -225,168 +201,251 @@
             }
 
             &__input:focus {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 outline-width: 0;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #ffffff;
             }
 
             &__input::placeholder {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: rgba(255, 255, 255, .3);
             }
-            
         }
 
         &__values {
             display: flex;
             flex-direction: column;
             margin-left: 75px;
+            width: calc(51% - 75px);
 
             &__title-amount {
+                @include normal-text;
                 margin-top: 40px;
                 font-family: 'ProximaNovaBold', sans-serif;
                 opacity: 0.5;
                 font-size: 14px;
                 font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
                 letter-spacing: 1px;
                 color: #ffffff;
             }
 
             &__title-comment,
             &__title-fee {
+                @include normal-text;
                 margin-top: 30px;
                 font-family: 'ProximaNovaBold', sans-serif;
                 opacity: 0.5;
                 font-size: 14px;
                 font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
                 letter-spacing: 1px;
                 color: #ffffff;
             }
 
-            &__input-groth,
+            &__input-fee,
             &__input-comment,
             &__input-amount {
+                @include normal-text;
                 background: rgba(255, 255, 255, 0);
                 border: none;
-                width: 299px;
                 font-family: 'ProximaNovaSemibold', sans-serif;
                 border-bottom: 1px solid rgba(255, 255, 255, .3);
                 font-size: 18px;
                 font-weight: 600;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
                 letter-spacing: 0.34px;
                 color: #c061e0;
                 resize:none;
                 max-height: 40px;
                 margin-top: 10px;
             }
+            
+            &__input-amount {
+                width: calc(100% - 76px);
+            }
 
-            &__input-groth {
-                width: 289px;
+            &__input-fee {
+                width: calc(100% - 88px);
             }
 
             &__input-comment {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #ffffff;
-                width: 375px;
+                width: 100%;
             }
 
-            &__input-groth:focus,
+            &__input-fee:focus,
             &__input-amount:focus {
+                @include normal-text;
                 font-family: 'ProximaNovaSemibold', sans-serif;
                 outline-width: 0;
                 font-size: 18px;
                 font-weight: 600;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
                 letter-spacing: 0.34px;
                 color: #c061e0;
             }
 
             &__input-comment:focus {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 outline-width: 0;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #ffffff;
             }
 
-            &__input-groth::placeholder,
+            &__input-fee::placeholder,
             &__input-comment::placeholder,
             &__input-amount::placeholder {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: rgba(255, 255, 255, .3);
             }
 
             &__currency {
+                @include normal-text;
                 margin-left: 23px;
                 font-size: 16px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
                 letter-spacing: 2.4px;
                 text-align: right;
                 color: #ffffff;
             }
 
             &__info {
+                @include normal-text;
                 width: 335px;
                 margin-top: 30px;
                 font-family: 'ProximaNovaIT', sans-serif;
                 font-size: 14px;
                 opacity: .4;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 text-align: center;
+                color: #ffffff;
+            }
+
+            &__stats {
+                margin-top: 50px;
+                width: 100%;
+                height: 195px;
+                border-radius: 10px;
+                background-color: rgba(255, 255, 255, 0.1);
+                padding: 30px;
+                display: flex;
+                flex-direction: row;
+
+                &__titles {
+                    @include normal-text;
+                    font-family: 'SFProDisplayRegular', sans-serif;
+                    font-size: 14px;
+                    letter-spacing: 0.35px;
+                    color: #8da1ad;
+                }
+
+                &__values {
+                    @include normal-text;
+                    font-family: 'SFProDisplayRegular', sans-serif;
+                    margin-left: auto;
+                    font-size: 14px;
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+
+    .outgoing {
+        width: 100%;
+        height: 57px;
+        border-radius: 2px;
+        margin-top: 30px;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.05);
+        display: flex;
+        flex-direction: column;
+        -webkit-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+        -moz-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+        -o-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+        transition:width 300ms ease-in-out, height 300ms ease-in-out;
+
+        &__header {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            cursor: pointer;
+
+            &__title {
+                @include normal-text;
+                opacity: 0.5;
+                font-family: 'ProximaNovaBold', sans-serif;
+                font-size: 14px;
+                font-weight: bold;
+                letter-spacing: 1px;
+                color: #ffffff;
+            }
+
+            &__control {
+                margin-left: auto;
+            }
+
+            &__control.full {
+                transform: rotate(180deg);
+            }
+        }
+
+        &__address {
+            display: flex;
+            flex-direction: row;
+
+            &__value {
+                @include normal-text;
+                font-family: 'SFProDisplayRegular', sans-serif;
+                font-size: 14px;
+                letter-spacing: 0.26px;
+                color: #ffffff;
+                max-width: calc(100% - 145px);
+                word-wrap: break-word;
+                margin-top: 8px;
+            }
+
+            &__button {
+                margin-left: auto;
+                
+                @include ui-button($btn-add-all, $btn-sm) {
+                    width: 125px;
+                }
+        
+                @include ui-button-change-icon()
+            }
+        }
+
+        &__edit {
+            margin-top: auto;
+            display: flex;
+            flex-direction: row;
+            
+            &__title {
+                @include normal-text;
+                opacity: 0.5;
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 14px;
                 color: #ffffff;
             }
         }
     }
 
+    .outgoing.full {
+        height: 136px;
+    }
+
+    .row-item {
+        margin-top: 12px;
+    }
+
     .controls {
-        margin: auto auto 42px auto;
-        padding-bottom: 42px;
+        margin: 100px auto 0 auto;
+        padding-bottom: 80px;
 
         &__back-button {
             @include ui-button($btn-full-back, $btn-full-xsm) {
@@ -409,31 +468,26 @@
     .total {
         display: flex;
         flex-direction: row;
-        max-width: 335px;
+        width: 100%;
         margin-top: 30px;
     
         &__container {
             &__header {
+                @include normal-text;
                 font-family: 'ProximaNovaBold', sans-serif;
                 opacity: 0.5;
                 font-size: 14px;
                 font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
                 letter-spacing: 1px;
                 color: #ffffff;
             }
     
             &__value {
+                @include normal-text;
                 margin-top: 10px;
                 font-family: 'ProximaNovaBold', sans-serif;
                 font-size: 14px;
                 font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #ffffff;
             }
         }
@@ -448,6 +502,24 @@
             @include ui-button-add-all-icon()
         }
     }
+
+    .incorrect {
+        border-bottom: 2px solid #ff625c;
+        color: #ff625c;
+    }
+
+    .incorrect:focus {
+        color: #ff625c;
+    }
+
+    .incorrect-validator {
+        @include normal-text;
+        margin-top: 5px;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 13px;
+        line-height: 1.23;
+        color: #ff625c;
+    }
 }
 
 .send.blur-filter {
@@ -456,6 +528,16 @@
     -o-filter: blur(4px);
     -ms-filter: blur(4px);
     filter: blur(4px);
+}
+
+.full-popup-opened {
+    background-color: rgba(4, 37, 72, .5);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1000;
+    left: 0;
+    top: 0;
 }
 
 .send-form-cl {

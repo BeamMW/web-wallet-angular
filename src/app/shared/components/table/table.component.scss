@@ -111,6 +111,19 @@
     letter-spacing: normal;
 }
 
+.address-cell {
+    opacity: 0.5;
+    font-family: 'ProximaNova', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+}
+
 .sent {
     color: #da68f5;
 }
@@ -195,4 +208,26 @@
 
 .table-actions {
     margin-left: auto;
+}
+
+::ng-deep .copy-tooltip {
+    width: 155px;
+    height: 30px;
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    background-color: rgba(42, 95, 135, 0.72) !important;
+    font-family: 'ProximaNova', sans-serif;
+    display: flex;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.67;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+}
+
+::ng-deep .copy-tooltip::after {
+    border-color: transparent transparent rgba(42, 95, 135, 0.72) transparent !important;
 }

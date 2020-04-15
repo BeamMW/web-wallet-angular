@@ -10,6 +10,7 @@ import { DecimalPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
 import { ClipboardModule } from 'ngx-clipboard';
+import { TooltipModule } from 'ng2-tooltip-directive';
 
 import {
   MatToolbarModule,
@@ -27,7 +28,8 @@ import {
   TableComponent,
   PaymentProofComponent,
   TableActionsComponent,
-  PasswordComponent
+  PasswordComponent,
+  AddContactComponent
  } from './components';
 
 @NgModule({
@@ -48,7 +50,8 @@ import {
     TransactionListComponent,
     PaymentProofComponent,
     TableActionsComponent,
-    PasswordComponent
+    PasswordComponent,
+    AddContactComponent
   ],
   imports: [
     CommonModule,
@@ -57,6 +60,7 @@ import {
     ReactiveFormsModule,
     TextareaAutosizeModule,
     ClipboardModule,
+    TooltipModule,
 
     MatToolbarModule,
     MatSortModule,

@@ -1,14 +1,20 @@
 <div class="transactions" *ngIf="transactions$ | async as transactions">
-    <div class="transactions__item" *ngFor="let item of transactions">
-        <div class="transactions__item__created">{{ item.create_time * 1000 | date:'d MMM y | HH:MM' }}</div>
-        <div class="transactions__item__to">To: {{ (item.receiver | slice:0:6)+'...'+(item.receiver | slice:-6) }}</div>
-        <div class="transactions__item__amount"
-            [class.sent]="item.status_string === 'sending' || item.status_string === 'sent'"
-            [class.receive]="item.status_string === 'receiving' || item.status_string === 'received'">
-            <span *ngIf="item.status_string === 'receiving' || item.status_string === 'received'">+</span>
-            <span *ngIf="item.status_string === 'sending' || item.status_string === 'sent'">-</span>
-            {{ item.value | beam:'1.0-9'}} BEAM
+    <ng-container *ngIf="transactions.length > 0">
+        <div class="transactions__item" *ngFor="let item of transactions">
+            <div class="transactions__item__created">{{ item.create_time * 1000 | date:'d MMM y | HH:MM' }}</div>
+            <div class="transactions__item__to">To: {{ (item.receiver | slice:0:6)+'...'+(item.receiver | slice:-6) }}</div>
+            <div class="transactions__item__amount"
+                [class.sent]="item.status_string === 'sending' || item.status_string === 'sent'"
+                [class.receive]="item.status_string === 'receiving' || item.status_string === 'received'">
+                <span *ngIf="item.status_string === 'receiving' || item.status_string === 'received'">+</span>
+                <span *ngIf="item.status_string === 'sending' || item.status_string === 'sent'">-</span>
+                {{ item.value | beam:'1.0-9'}} BEAM
+            </div>
+            <div class="transactions__item__status"> {{item.status_string}} </div>
         </div>
-        <div class="transactions__item__status"> {{item.status_string}} </div>
+    </ng-container>
+    <div class="transactions__empty" *ngIf="transactions.length === 0">
+        <img [src]="emptyIcon">
+        <span class="transactions__empty__text"> Your transaction list is empty </span>
     </div>
 </div>

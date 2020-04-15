@@ -45,17 +45,36 @@
 
       <!-- addresses table -->
       <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-        <mat-cell *matCellDef="let element"> No name </mat-cell>
+        <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.name"
+        (click)="sortClicked(sortParams.name)"> 
+          Name
+          <img class="sort-icon" [src]="activeSortItem === sortParams.name ? iconSortActive : iconSort">
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.comment.length > 0 ? element.comment : 'No name'}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="address">
-        <mat-header-cell *matHeaderCellDef> Address </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{(element.address | slice:0:6)+'...'+(element.address | slice:-6)}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.address"
+          (click)="sortClicked(sortParams.address)"> 
+          Address
+          <img class="sort-icon" [src]="activeSortItem === sortParams.address ? iconSortActive : iconSort">
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="address-cell"> 
+          <div tooltip="Copy address to clipboard" tooltip-class="copy-tooltip" 
+              placement="bottom" show-delay="200"
+              (click)="$event.stopPropagation()"
+              ngxClipboard [cbContent]="element.address">
+            {{(element.address | slice:0:6)+'...'+(element.address | slice:-6)}}
+          </div>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="expiration">
-        <mat-header-cell *matHeaderCellDef> Expiration date </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.exp_date"
+          (click)="sortClicked(sortParams.exp_date)">
+          Expiration date
+          <img class="sort-icon" [src]="activeSortItem === sortParams.exp_date ? iconSortActive : iconSort">
+        </mat-header-cell>
         <mat-cell *matCellDef="let element">  {{ element.create_time * 1000 | date:'d MMM y | HH:MM'}}  </mat-cell>
       </ng-container>
 
@@ -70,6 +89,16 @@
           [class.receive]="element.status_string === 'receiving' || element.status_string === 'received'"> 
             {{element.status_string}}
         </mat-cell>
+      </ng-container>
+
+      <!-- contacts table -->
+      <ng-container matColumnDef="contactName">
+        <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.contactName"
+          (click)="sortClicked(sortParams.contactName)"> 
+          Name 
+          <img class="sort-icon" [src]="activeSortItem === sortParams.contactName ? iconSortActive : iconSort">
+        </mat-header-cell>
+        <mat-cell class="status-cell" *matCellDef="let element"> {{element.name}} </mat-cell>
       </ng-container>
 
       <!-- utxos table -->
@@ -96,12 +125,16 @@
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
         <mat-cell *matCellDef="let element">
-          <app-table-actions class="table-actions"></app-table-actions>
+          <app-table-actions class="table-actions" [tableType]="tableType" [element]="element"></app-table-actions>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="expandedDetail">
         <mat-cell *matCellDef="let detail">
+          <ng-container *ngIf="tableType !== 'contacts'">
+
+          </ng-container>
+
           <ng-container *ngIf="tableType === 'wallet'">
               <div class="details" *ngIf="expandedElement">
                   <div class="details__header">DETAILS</div>

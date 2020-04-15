@@ -30,15 +30,34 @@
             <div class="addresses__content__header"> Addresses </div>
             <div class="addresses__content__selector">
                 <div class="selector" *ngFor="let item of menuItems" (click)="selectorItemClicked(item)">
-                    <div class="selector__title" [class.active]="item.selected">{{item.title}}</div>
+                    <div class="selector__title" [class.active]="item.selected">{{item.full}}</div>
                     <div class="selector__bottom-line" *ngIf="item.selected"></div>
                 </div>
             </div>
             <div class="addresses__content__table" *ngIf="addresses$ | async as addresses">
-                <app-table *ngIf="addresses.length > 0" 
-                    [tableType]="tableType"
-                    [tableColumns]="tableColumns" 
-                    [tableData]="addresses"></app-table>
+                <ng-container *ngIf="activeSelectorItem.id !== menuItems[2].id">
+                    <app-table *ngIf="addresses.length > 0" 
+                        [tableType]="tableType"
+                        [tableColumns]="tableColumns" 
+                        [tableData]="addresses"></app-table>
+                </ng-container>
+                <ng-container *ngIf="activeSelectorItem.id === menuItems[2].id">
+                    <app-table *ngIf="addresses.length > 0" 
+                        [tableType]="contactsTableType"
+                        [tableColumns]="contactsTableColumns" 
+                        [tableData]="addresses"></app-table>
+                </ng-container>
+                
+                <ng-container *ngIf="addresses.length === 0">
+                    <div class="addresses__content__empty">
+                        <img class="addresses__content__empty__icon" [src]="iconContactsEmpty">
+                        <div class="addresses__content__empty__text">
+                            {{activeSelectorItem === menuItems[2] ? 
+                            'Your contacts list is empty' : 
+                            'Your addresses list is empty'}}
+                        </div>
+                    </div>
+                </ng-container>
             </div>
         </div>
     </ng-container>

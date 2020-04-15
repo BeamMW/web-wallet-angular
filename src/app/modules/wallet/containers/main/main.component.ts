@@ -126,11 +126,11 @@ export class MainComponent implements OnInit, OnDestroy {
         this.transactionsLoaded = true;
 
         this.sub.unsubscribe();
-        // setTimeout(() => {
-        //   if (this.mainActive) {
-        //    this.update();
-        //   }
-        // }, 5000);
+        setTimeout(() => {
+          if (this.mainActive) {
+           this.update();
+          }
+        }, 5000);
       }
     });
     this.websocketService.send({

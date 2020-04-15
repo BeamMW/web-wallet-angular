@@ -1,6 +1,7 @@
 import { Action, createReducer, on, State } from '@ngrx/store';
 import * as walletActions from '../actions/wallet.actions';
 import { NumberSymbol } from '@angular/common';
+import { Contact } from '@app/models';
 
 export interface WalletAppState {
     activated: boolean;
@@ -26,6 +27,7 @@ export interface WalletAppState {
         amount: number,
         comment: string
     };
+    contacts: Contact[];
 }
 
 export const initialWalletAppState: WalletAppState = {
@@ -51,7 +53,8 @@ export const initialWalletAppState: WalletAppState = {
         fee: 100,
         amount: 0,
         comment: ''
-    }
+    },
+    contacts: []
 };
 
 const reducerWalletApp = createReducer(
@@ -72,7 +75,18 @@ const reducerWalletApp = createReducer(
     on(walletActions.updateDnsSetting, (state, { settingValue }) => ({ ...state, dnsSetting: settingValue })),
     on(walletActions.updateIpSetting, (state, { settingValue }) => ({ ...state, ipSetting: settingValue })),
     on(walletActions.updateVerificatedSetting, (state, { settingValue }) => ({ ...state, verificatedSetting: settingValue })),
-    on(walletActions.updatePasswordCheckSetting, (state, { settingValue }) => ({ ...state, passwordCheck: settingValue }))
+    on(walletActions.updatePasswordCheckSetting, (state, { settingValue }) => ({ ...state, passwordCheck: settingValue })),
+
+    /* Contact list */
+    on(walletActions.saveContact, (state, contactData) => ({
+        ...state,
+        contacts: [
+            ...state.contacts, {
+                name: contactData.name,
+                address: contactData.address
+            }
+        ]
+    }))
 );
 
 export function reducer(state: WalletAppState | undefined, action: Action) {

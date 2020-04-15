@@ -14,7 +14,7 @@ import {
   templateUrl: './report-popup.component.html',
   styleUrls: ['./report-popup.component.scss']
 })
-export class ReportPopupComponent implements OnInit {
+export class ReportPopupComponent implements OnInit, OnDestroy {
   sub: Subscription;
   isFullScreen = false;
   popupForm: FormGroup;

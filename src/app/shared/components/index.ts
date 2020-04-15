@@ -6,6 +6,7 @@ export * from './menu/menu.component';
 export * from './menu-full/menu-full.component';
 export * from './table/table.component';
 export * from './popups/payment-proof/payment-proof.component';
+export * from './popups/add-contact/add-contact.component';
 export * from './password/password.component';
 export * from './transaction-list/transaction-list.component';
 export * from './menu-control/menu-control.component';

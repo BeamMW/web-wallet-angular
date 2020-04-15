@@ -38,6 +38,7 @@
     "extensionizer": "^1.0.1",
     "fs": "0.0.1-security",
     "hammerjs": "^2.0.8",
+    "ng2-tooltip-directive": "^2.9.20",
     "ngx-clipboard": "^12.3.0",
     "ngx-textarea-autosize": "^2.0.3",
     "obs-store": "^4.0.3",
