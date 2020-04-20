@@ -29,7 +29,8 @@ import {
   PaymentProofComponent,
   TableActionsComponent,
   PasswordComponent,
-  AddContactComponent
+  AddContactComponent,
+  PaymentProofExportedComponent
  } from './components';
 
 @NgModule({
@@ -51,7 +52,8 @@ import {
     PaymentProofComponent,
     TableActionsComponent,
     PasswordComponent,
-    AddContactComponent
+    AddContactComponent,
+    PaymentProofExportedComponent
   ],
   imports: [
     CommonModule,

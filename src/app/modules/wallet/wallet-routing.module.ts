@@ -8,7 +8,8 @@ import { HeaderComponent } from '@shared/containers';
 import { LoginGuard } from './guards/login.guard';
 import {
   PaymentProofComponent,
-  AddContactComponent
+  AddContactComponent,
+  PaymentProofExportedComponent
 } from '@shared/components';
 
 const routes: Routes = [{
@@ -27,6 +28,8 @@ const routes: Routes = [{
         path: '', component: MainComponent
       }, {
         path: 'payment-proof', component: PaymentProofComponent, outlet: 'popup',
+      }, {
+        path: 'payment-proof-exported', component: PaymentProofExportedComponent, outlet: 'popup',
       }, {
         path: 'add-contact/:address', component: AddContactComponent, outlet: 'popup',
       }

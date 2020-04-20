@@ -56,3 +56,10 @@ export const selectUnavailableUtxo = createSelector(
         (utxo.status_string !== 'spent' && utxo.status_string !== 'in progress' &&
         utxo.status_string !== 'available'))
 );
+
+export const selectUtxoById = (txId: string) => createSelector(
+    selectAllUtxo,
+    utxos => {
+        return utxos.filter(utxo => utxo.createTxId === txId);
+    }
+);

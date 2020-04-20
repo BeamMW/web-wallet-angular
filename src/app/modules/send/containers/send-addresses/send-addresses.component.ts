@@ -153,7 +153,8 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       const feeFullValue = this.fullSendForm.value.fee / GROTHS_IN_BEAM;
       const available = status.available / GROTHS_IN_BEAM;
       if (status.available > 0) {
-        this.stats.totalUtxo = Math.ceil(value);
+        const utxoVal = Math.ceil(value);
+        this.stats.totalUtxo = utxoVal === parseInt(value, 10) ? utxoVal + 1 : utxoVal;
         this.stats.amountToSend = value;
         if (value > available) {
           this.stats.change = 0;

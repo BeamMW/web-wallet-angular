@@ -27,3 +27,6 @@ export const updatePasswordCheckSetting = createAction('[Wallet state] Update pa
 
 /* Contact list */
 export const saveContact = createAction('[Wallet state] Save contact', props<Contact>());
+
+/* Proof export data */
+export const saveProofData = createAction('[Wallet state] Save proof data', props<{ proofData: any }>());

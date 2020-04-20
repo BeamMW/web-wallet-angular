@@ -135,21 +135,71 @@
 
           </ng-container>
 
-          <ng-container *ngIf="tableType === 'wallet'">
-              <div class="details" *ngIf="expandedElement">
-                  <div class="details__header">DETAILS</div>
+          <ng-container *ngIf="tableType === tableTypes.TRANSACTIONS">
+              <div class="tr-details" *ngIf="expandedElement">
+                <div class="tr-details__info">
+                  <div class="tr-details__info__header">DETAILS</div>
                   <div class="details-title">DATE</div>
                   <div class="details-value">{{detail.element.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
-                  <div class="details-title">SENDER</div>
+                  <div class="details-title">SENDING ADDRESS</div>
+                  <ng-container *ngIf="contact$ | async as contact">
+                    <div class="details-contact" *ngIf="detail.element.income">
+                      <img [src]="contactIcon" class="details-contact__icon">
+                      <div class="details-contact__name">{{contact.name}}</div>
+                    </div>
+                  </ng-container>
                   <div class="details-value">{{detail.element.sender}}</div>
-                  <div class="details-title">RECEIVER</div>
+                  <div class="details-title">RECEIVING ADDRESS</div>
+                  <ng-container *ngIf="contact$ | async as contact">
+                    <div class="details-contact" *ngIf="!detail.element.income">
+                      <img [src]="contactIcon" class="details-contact__icon">
+                      <div class="details-contact__name">{{contact.name}}</div>
+                    </div>
+                  </ng-container>
                   <div class="details-value">{{detail.element.receiver}}</div>
                   <div class="details-title">TRANSACTION FEE</div>
                   <div class="details-value">{{detail.element.fee}} GROTH</div>
+                  <ng-container *ngIf="detail.element.comment.length > 0">
+                    <div class="details-title">TRANSACTION COMMENT</div>
+                    <div class="details-value">{{detail.element.comment}}</div>
+                  </ng-container>
                   <div class="details-title">TRANSACTION ID</div>
                   <div class="details-value">{{detail.element.txId}}</div>
                   <div class="details-title">KERNEL ID</div>
-                  <div class="details-value">{{detail.element.kernel}} GROTH</div>
+                  <div class="details-value">{{detail.element.kernel}}</div>
+                </div>
+                <div class="tr-details__specs">
+                  <div class="tr-details__specs__utxo">
+                    <div class="tr-details__specs__utxo__header" (click)='utxoListHeaderClicked($event)'>
+                      <span>TRANSACTION UTXO LIST</span>
+                      <img class="tr-details__specs__utxo__header__icon" 
+                        [class.list-visible]="!isUtxoListVisible" [src]="arrowIcon">
+                    </div>
+                    <ng-container *ngIf="isUtxoListVisible">
+                      <div class="tr-details__specs__utxo__list" *ngIf="utxoList$ | async as utxoList">
+                        <div *ngFor="let item of utxoList">
+                          <div class="tr-details__specs__utxo__list__item">
+                            <img [src]="item.status_string === 'spent' ? sentIcon : receivedIcon">
+                            <span class="tr-details__specs__utxo__list__item__value"> 
+                              {{ item.amount | beam:'1.0-9'}} BEAM
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <div class="tr-details__specs__proof" *ngIf="!detail.element.income">
+                    <div class="tr-details__specs__proof__header">PAYMENT PROOF</div>
+                    <div class="tr-details__specs__proof__controls">
+                      <div class="tr-details__specs__proof__controls__details">
+                        <app-button (click)="proofDetailsClicked($event)">details</app-button>
+                      </div>
+                      <div class="tr-details__specs__proof__controls__copy">
+                          <app-button ngxClipboard [cbContent]="proofDataToCp()">copy</app-button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
           </ng-container>
           <ng-container *ngIf="tableType === 'addresses'">

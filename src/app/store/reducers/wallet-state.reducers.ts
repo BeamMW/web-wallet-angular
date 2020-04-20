@@ -22,12 +22,20 @@ export interface WalletAppState {
     passwordCheck: boolean;
     verificatedSetting: boolean;
     sendData: {
+        from: string,
         address: string,
         fee: number,
         amount: number,
         comment: string
     };
     contacts: Contact[];
+    proofDataValue: {
+        sender: string,
+        receiver: string,
+        amount: number,
+        kernelId: string,
+        code: string
+    };
 }
 
 export const initialWalletAppState: WalletAppState = {
@@ -49,12 +57,20 @@ export const initialWalletAppState: WalletAppState = {
     verificatedSetting: false,
     passwordCheck: true,
     sendData: {
+        from: '',
         address: '',
         fee: 100,
         amount: 0,
         comment: ''
     },
-    contacts: []
+    contacts: [],
+    proofDataValue: {
+        sender: '',
+        receiver: '',
+        amount: 0,
+        kernelId: '',
+        code: ''
+    }
 };
 
 const reducerWalletApp = createReducer(
@@ -86,7 +102,9 @@ const reducerWalletApp = createReducer(
                 address: contactData.address
             }
         ]
-    }))
+    })),
+
+    on(walletActions.saveProofData, (state, { proofData }) => ({ ...state, proofDataValue: proofData })),
 );
 
 export function reducer(state: WalletAppState | undefined, action: Action) {

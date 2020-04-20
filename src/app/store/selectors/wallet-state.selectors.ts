@@ -109,3 +109,8 @@ export const selectContact  = (address: string) => createSelector(
             .find(contact => contact.address === address);
   }
 );
+
+export const selectProofData = createSelector(
+  selectAppState,
+  state => state.proofDataValue
+);

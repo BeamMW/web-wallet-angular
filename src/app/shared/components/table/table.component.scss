@@ -1,3 +1,6 @@
+@import 'ui-mixins';
+@import './styles';
+
 .example-container {
     display: flex;
     flex-direction: column;
@@ -53,12 +56,8 @@
 
 
 .mat-header-cell {
+    @include normal-text;
     font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
     color: #8da1ad;
     font-family: 'SFProDisplayRegular', sans-serif;
     cursor: pointer;
@@ -70,56 +69,41 @@
 }
 
 .mat-cell {
+    @include normal-text;
     font-family: 'ProximaNova', sans-serif;
     font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
     line-height: 1.29;
-    letter-spacing: normal;
     color: #ffffff;
 }
 
 .status-cell {
+    @include normal-text;
     font-family: 'SFProDisplayItalic', sans-serif;
     font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
     font-style: italic;
-    line-height: normal;
-    letter-spacing: normal;
 }
 
 .utxo-cell {
+    @include normal-text;
     opacity: .5;
     font-family: 'SFProDisplayItalic', sans-serif;
     font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
     font-style: italic;
-    line-height: normal;
-    letter-spacing: normal;
 }
 
 .amount-cell {
+    @include normal-text;
     font-family: 'SFProDisplayBold', sans-serif;
     font-size: 14px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
 }
 
 .address-cell {
+    @include normal-text;
     opacity: 0.5;
     font-family: 'ProximaNova', sans-serif;
     font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
     line-height: 1.43;
-    letter-spacing: normal;
     text-align: center;
     color: #ffffff;
 }
@@ -133,27 +117,21 @@
 }
 
 .details-title {
+    @include normal-text;
     margin-top: 30px;
     font-family: 'ProximaNovaBold', sans-serif;
     opacity: .5;
     font-size: 14px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 1px;
     color: #ffffff;
 }
 
 .details-value {
+    @include normal-text;
     margin-top: 10px;
     font-family: 'ProximaNova', sans-serif;
     font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
     color: #ffffff;
     word-wrap: break-word;
 }
@@ -165,40 +143,169 @@
     width: 100%;
 
     &__header {
+        @include normal-text;
         font-family: 'ProximaNovaBold', sans-serif;
         font-size: 14px;
         font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
         letter-spacing: 1px;
         color: #ffffff;
     }
 
     &__subheader {
+        @include normal-text;
         margin-top: 20px;
         opacity: 0.5;
         font-family: 'ProximaNovaBold', sans-serif;
         font-size: 14px;
         font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
         letter-spacing: 1px;
         color: #ffffff;
     }
 
     &__value {
+        @include normal-text;
         margin-top: 5px;
         font-family: 'ProximaNova', sans-serif;
         font-size: 14px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
         line-height: 1.43;
-        letter-spacing: normal;
         color: #ffffff;
         margin-bottom: 30px;
+    }
+}
+
+.tr-details {
+    margin: 30px 30px 30px 6px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    &__info {
+        max-width: 600px;
+
+        &__header {
+            @include normal-text;
+            font-family: 'ProximaNovaBold', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #ffffff;
+        }
+    }
+
+    &__specs {
+        width: 270px;
+        margin-left: auto;
+        display: flex;
+        flex-direction: column;
+
+        &__utxo {
+            display: flex;
+            flex-direction: column;
+            
+            &__header {
+                @include normal-text;
+                display: flex;
+                flex-direction: row;
+                cursor: pointer;
+                font-family: 'ProximaNovaBold', sans-serif;
+                font-size: 14px;
+                font-weight: bold;
+                letter-spacing: 1px;
+                color: #ffffff;
+
+                &__icon {
+                    margin-left: 12px;
+                }
+
+                &__icon.list-visible {
+                    transform: rotate(180deg);
+                }
+            }
+
+            &__list {
+                display: flex;
+                flex-direction: column;
+
+                &__item {
+                    display: flex;
+                    flex-direction: row;
+                    margin-top: 20px;
+
+                    &__value {
+                        @include normal-text;
+                        margin-left: 10px;
+                        font-size: 14px;
+                        font-family: 'ProximaNova', sans-serif;
+                        color: #ffffff;
+                    }
+                }
+            }
+        }
+
+        &__proof {
+            margin-top: 60px;
+
+            &__header {
+                @include normal-text;
+                font-family: 'ProximaNovaBold', sans-serif;
+                font-size: 14px;
+                font-weight: bold;
+                letter-spacing: 1px;
+                color: #ffffff;
+            }
+
+            &__controls {
+                display: flex;
+                flex-direction: row;
+                margin-top: 15px;
+        
+                &__details {
+                    @include ui-button($btn-cancel, $btn-nssm) {
+                        height: 38px;
+                        width: 133px;
+                        font-size: 14px;
+                    }
+
+                    @include ui-button-proof-details-icon() {
+                        width: 21px;
+                        height: 14px;
+                    }
+                }
+    
+                &__copy {
+                   @include ui-button($btn-cancel, $btn-nssm) {
+                        height: 38px;
+                        width: 117px;
+                        font-size: 14px;
+                        margin-left: 20px;
+                   }
+
+                   @include ui-button-proof-copy-icon() {
+
+                   }
+                }
+            }
+        }
+    }
+}
+
+.details-contact {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+
+    &__icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    &__name {
+        @include normal-text;
+        margin-left: 15px;
+        font-family: 'ProximaNovaBold', sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        color: #ffffff;
     }
 }
 
@@ -211,6 +318,7 @@
 }
 
 ::ng-deep .copy-tooltip {
+    @include normal-text;
     width: 155px;
     height: 30px;
     -webkit-backdrop-filter: blur(15px);
@@ -219,11 +327,7 @@
     font-family: 'ProximaNova', sans-serif;
     display: flex;
     font-size: 12px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
     line-height: 1.67;
-    letter-spacing: normal;
     text-align: center;
     color: #ffffff;
 }

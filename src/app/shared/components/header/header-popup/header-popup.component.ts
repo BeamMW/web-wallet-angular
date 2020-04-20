@@ -46,29 +46,33 @@ export class HeaderPopupComponent implements OnInit {
       const extensionURL = extensionizer.runtime.getURL('index.html#wallet/main');
       extensionizer.tabs.create({ url: extensionURL });
     }
+    this.isDropdownVisible = false;
   }
 
   settingsClicked() {
+    this.isDropdownVisible = false;
     this.router.navigate(['/settings/all']);
   }
 
   logoutClicked() {
     this.store.dispatch(ChangeWalletState({walletState: false}));
     this.store.dispatch(saveWallet({wallet: {}}));
+    this.isDropdownVisible = false;
     this.router.navigate(['/wallet/login']);
   }
 
   paymentProofClicked($event) {
     $event.stopPropagation();
+    this.isDropdownVisible = false;
     this.router.navigate([this.router.url, { outlets: { popup: 'payment-proof' }}]);
   }
 
   buyBeamClicked() {
+    this.isDropdownVisible = false;
     window.open('https://beam.mw/#exchanges', '_blank');
   }
 
   onClickedOutside() {
     this.isDropdownVisible = !this.isDropdownVisible;
   }
-
 }

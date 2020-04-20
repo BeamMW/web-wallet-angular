@@ -1,18 +1,80 @@
 <div class="confirm" appClickOutside (clickOutside)="closePopup()">
-    <form class="send-form-cl" [formGroup]="confirmForm" autocomplete="off" novalidate (ngSubmit)="submit()">
-        <div class="confirm__title">Transaction confirmation</div>
-        <div class="form-group">
-            <input class="confirm__input" type="password"
-                name="password" formControlName="password" 
-                placeholder="Enter password"/>
+    <ng-container *ngIf="!isFullScreen">
+        <form class="send-form-cl" [formGroup]="confirmForm" autocomplete="off" novalidate (ngSubmit)="submit()">
+            <div class="confirm__title">Transaction confirmation</div>
+            <div class="form-group">
+                <input class="confirm__input" type="password"
+                    name="password" formControlName="password" 
+                    placeholder="Enter password"/>
+            </div>
+        </form>
+        <div class="confirm__controls">
+            <div class="confirm__controls__cancel">
+                <app-button class="copy-button" (click)="cancelClicked($event)" >cancel</app-button>
+            </div>
+            <div class="confirm__controls__ok">
+                <app-button class="copy-button" (click)="submit($event)" >ok</app-button>
+            </div>
         </div>
-    </form>
-    <div class="confirm__controls">
-        <div class="confirm__controls__cancel">
-            <app-button class="copy-button" (click)="cancelClicked($event)" >cancel</app-button>
+    </ng-container>
+    
+    <ng-container *ngIf="isFullScreen">
+        <div class="confirm__container" *ngIf="sendData$ | async as sendData">
+            <div class="confirm__container__title">Transaction confirmation</div>
+            <div class="confirm__container__send-title title-text">SEND TO</div>
+            <div class="confirm__container__send-value value-text">{{sendData.address}}</div>
+            <ng-container *ngIf="contact$ | async as contact">
+                <div class="details-contact" *ngIf="!detail.element.income">
+                  <img [src]="contactIcon" class="details-contact__icon">
+                  <div class="details-contact__name">{{contact.name}}</div>
+                </div>
+            </ng-container>
+            <div class="confirm__container__address-title title-text">OUTGOING ADDRESS</div>
+            <div class="confirm__container__address-value value-text">{{sendData.from}}</div>
+            <div class="confirm__container__line">
+                <div class="confirm__container__line__amount">
+                    <div class="confirm__container__line__amount__title title-text">
+                        AMOUNT
+                    </div>
+                    <div class="confirm__container__line__amount__value">
+                        {{sendData.amount | beam:'1.0-9'}} BEAM
+                    </div>
+                </div>
+                <div class="confirm__container__line__fee">
+                    <div class="confirm__container__line__fee__title title-text">
+                        TRANSACTION FEE
+                    </div>
+                    <div class="confirm__container__line__fee__value">
+                        {{sendData.fee}} GROTH
+                    </div>
+                </div>
+            </div>
+            <div class="confirm__container__utxo-title title-text">TOTAL UTXO VALUE</div>
+            <div class="confirm__container__utxo-value">{{getTotalUtxo()}}</div>
+            <div class="confirm__container__prompt">
+                <p>For the transaction to complete, the recipient must get online</p>
+                <p>within the next 12 hours and you should get online within 2 hours</p>
+                <p>afterwards.</p>
+            </div>
+            <form class="send-form-cl" *ngIf="isPassCheckEnabled"
+                [formGroup]="confirmForm" autocomplete="off" novalidate (ngSubmit)="submit()">
+                <div class="form-group">
+                    <input class="confirm__container__input" type="password"
+                        name="password" formControlName="password" [class.incorrect]="!isCorrectPass"
+                        placeholder="Enter password"/>
+                    <div class="confirm__container__validator" *ngIf="!isCorrectPass">Incorrect password</div>
+                </div>
+            </form>
+            <div class="confirm__container__controls">
+                <div class="confirm__container__controls__cancel">
+                    <app-button class="copy-button" (click)="cancelClicked($event)">cancel</app-button>
+                </div>
+                <div class="confirm__container__controls__send">
+                    <app-button class="copy-button" (click)="submit($event)">send</app-button>
+                </div>
+            </div>
         </div>
-        <div class="confirm__controls__ok">
-            <app-button class="copy-button" (click)="submit($event)" >ok</app-button>
-        </div>
-    </div>
+    </ng-container>
 </div>
+
+<div *ngIf="isFullScreen && popupOpened" class="full-popup-opened"></div>

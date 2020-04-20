@@ -555,3 +555,43 @@
     }
   }
 }
+
+@mixin ui-button-proof-details-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      @include common-button-wrapper;
+
+      .ui-button__icon {
+        background: url('/assets/images/shared/components/table/icon-proof-details.svg');
+        @include common-button-icon;
+
+        @content;
+      }
+
+      .ui-button__text {
+        @include common-button-text;
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+@mixin ui-button-proof-copy-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      @include common-button-wrapper;
+
+      .ui-button__icon {
+        background: url('/assets/images/shared/components/table/icon-proof-copy.svg');
+        @include common-button-icon;
+
+        @content;
+      }
+
+      .ui-button__text {
+        @include common-button-text;
+        margin-left: 10px;
+      }
+    }
+  }
+}
