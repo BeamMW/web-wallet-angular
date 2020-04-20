@@ -78,6 +78,7 @@
     "webpack-extension-reloader": "^1.1.4"
   },
   "resolutions": {
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.5",
+    "@babel/preset-env": "7.5.5"
   }
 }
