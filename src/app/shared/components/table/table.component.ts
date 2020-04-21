@@ -59,9 +59,12 @@ export class TableComponent implements OnInit, OnChanges {
     amount: 'value',
     status: 'status_string',
     address: 'address',
-    name: 'name',
-    exp_date: 'exp_date',
-    contactName: 'contactName'
+    name: 'comment',
+    exp_date: 'create_time',
+    contactName: 'name',
+    maturity: 'maturity',
+    utxo_amount: 'amount',
+    utxo_type: 'type'
   };
 
   public iconSort: string = `${environment.assetsPath}/images/shared/components/table/icon-sort.svg`;
@@ -140,8 +143,10 @@ export class TableComponent implements OnInit, OnChanges {
       if (this.tableType === TableTypes.TRANSACTIONS) {
         this.contact$ = row.income ? this.store.pipe(select(selectContact(row.sender))) :
           this.store.pipe(select(selectContact(row.receiver)));
-        this.utxoList$ = this.store.pipe(select(selectUtxoById(row.txId)));
-        this.loadPaymentProof(row);
+        if (row.status_string === 'sent') {
+          this.utxoList$ = this.store.pipe(select(selectUtxoById(row.txId)));
+          this.loadPaymentProof(row);
+        }
       }
     }
     this.isUtxoListVisible = true;

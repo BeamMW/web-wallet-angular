@@ -34,7 +34,9 @@
                 <span class="generate__content__copy__text content-text">Make at least 2 copies of the phrase in case of emergency</span>
             </div>
             <div class="generate__content__generate-button">
-                <app-button class="generate-button" [routerLink]="viewSeedRoute">generate seed phrase</app-button>
+                <app-button class="generate-button" [routerLink]="routesConsts.FTF_VIEW_SEED_ROUTE">
+                    generate seed phrase
+                </app-button>
             </div>
         </div>
     
@@ -66,7 +68,10 @@
         </div>
         <div class="generate__bottom-content">
             <app-button class="generate__bottom-content__back-button" (click)="backClicked($event)">back</app-button>
-            <app-button class="generate__bottom-content__generate-button" [routerLink]="viewSeedRoute">I understand</app-button>
+            <app-button class="generate__bottom-content__generate-button"
+                        [routerLink]="routesConsts.FTF_VIEW_SEED_ROUTE">
+                I understand
+            </app-button>
         </div>
     </ng-container>
 </div>

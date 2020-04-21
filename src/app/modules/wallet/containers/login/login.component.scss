@@ -30,17 +30,22 @@
     }
 
     &__header-text {
+        @include normal-text;
         margin-top: 70px;
         font-family: 'ProximaNova', sans-serif;
         font-size: 14px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
         text-align: center;
         color: #ffffff;
         z-index: 10;
+    }
+
+    &__subheader-text {
+        @include normal-text;
+        margin: 37px auto 0 auto;
+        font-family: 'ProximaNovaBold', sans-serif;
+        font-size: 18px;
+        font-weight: bold;
+        color: #25c1ff;
     }
 
     &__container {
@@ -50,17 +55,13 @@
         z-index: 10;
 
         &__input {
+            @include normal-text;
             background: rgba(255, 255, 255, 0);
             font-family: 'ProximaNova', sans-serif;
             border: none;
             width: 291px;
             border-bottom: 2px solid #00f6d2;
             font-size: 14px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
             color: #ffffff;
             resize:none;
             padding: 5px;
@@ -68,25 +69,17 @@
         }
 
         &__input:focus {
+            @include normal-text;
             font-family: 'ProximaNova', sans-serif;
             outline-width: 0;
             font-size: 14px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
             color: #ffffff;
         }
 
         &__input::placeholder {
+            @include normal-text;
             font-family: 'ProximaNova', sans-serif;
             font-size: 14px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
             color: rgba(255, 255, 255, .3);
         }
 
@@ -100,14 +93,11 @@
         }
 
         &__validator {
+            @include normal-text;
             margin-top: 5px;
             font-family: 'ProximaNova', sans-serif;
             font-size: 13px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
             line-height: 1.23;
-            letter-spacing: normal;
             color: #ff625c;
         }
 

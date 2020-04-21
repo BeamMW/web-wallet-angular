@@ -7,8 +7,8 @@ import { Router } from '@angular/router';
 import { DataService, WindowService, LoginService, WebsocketService } from './../../../../services';
 import { environment } from '@environment';
 import { Store, select } from '@ngrx/store';
-import { ChangeWalletState, saveWallet } from './../../../../store/actions/wallet.actions';
-import { selectWalletData, selectWasmState } from './../../../../store/selectors/wallet-state.selectors';
+import { ChangeWalletState } from './../../../../store/actions/wallet.actions';
+import { selectWalletData } from './../../../../store/selectors/wallet-state.selectors';
 
 @Component({
   selector: 'app-login',

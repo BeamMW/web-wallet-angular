@@ -82,7 +82,7 @@
                             </div>
                         </div>
                         <ng-container *ngIf="walletStatus$ | async as walletStatus">
-                            <div class="total" *ngIf="walletStatus.available > 0">
+                            <div class="total">
                                 <div class="total__container">
                                     <div class="total__container__header">TOTAL AVAILABLE</div>
                                     <div class="total__container__value">{{walletStatus.available | beam:'1.0-9'}} BEAM</div>

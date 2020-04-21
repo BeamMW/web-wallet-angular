@@ -31,14 +31,12 @@
         }
 
         &__title {
+            @include normal-text;
             font-family: 'ProximaNovaSemiBold', sans-serif;
             margin: 0 auto;
             color: #ffffff;
             font-size: 20px;
             font-weight: 600;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
             letter-spacing: 3px;
             text-align: center;
         }
@@ -79,13 +77,11 @@
         padding: 20px;
 
         &__title {
+            @include normal-text;
             font-family: 'ProximaNovaBold', sans-serif;
             opacity: 0.5;
             font-size: 14px;
             font-weight: bold;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
             letter-spacing: 1px;
             color: #ffffff;
         }
@@ -102,13 +98,9 @@
             }
 
             &__value {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 18px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #ffffff;
             }
         }
@@ -121,14 +113,12 @@
         margin: 20px 20px 0 20px;
 
         &__title {
+            @include normal-text;
             font-family: 'ProximaNovaBold', sans-serif;
             margin: 20px 0 10px 20px;
             opacity: 0.5;
             font-size: 14px;
             font-weight: bold;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
             letter-spacing: 1px;
             color: #ffffff;
         }
@@ -146,13 +136,9 @@
             }
 
             &__value {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 18px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #0bccf7;
             }
         }
@@ -169,13 +155,9 @@
             }
 
             &__value {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 18px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #da68f5;
             }
         }
@@ -188,25 +170,20 @@
             justify-content: space-between;
            
             &__title {
+                @include normal-text;
                 font-family: 'ProximaNovaBold', sans-serif;
                 font-size: 14px;
                 font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
                 letter-spacing: 1px;
                 color: #ffffff;
             }
 
             &__show-all {
+                @include normal-text;
                 font-family: 'ProximaNovaBold', sans-serif;
                 cursor: pointer;
                 font-size: 14px;
                 font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 text-align: center;
                 color: #00f6d2;
             }
@@ -225,14 +202,10 @@
                 }
 
                 &__status{
+                    @include normal-text;
                     margin-left: 35px;
                     margin-top: 4px;
                     font-size: 14px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: normal;
                     color: #0bccf7;
                     font-family: 'ProximaNovaIT', sans-serif;
                 }
@@ -250,14 +223,10 @@
                 }
 
                 &__status{
+                    @include normal-text;
                     margin-left: 35px;
                     margin-top: 4px;
                     font-size: 14px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: normal;
                     color: #da68f5;
                     font-family: 'ProximaNovaIT', sans-serif;
                 }
@@ -269,14 +238,11 @@
             }
 
             &__empty-tr-text {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 margin: 20px auto 95px auto;
                 font-size: 12px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
                 line-height: 1.67;
-                letter-spacing: normal;
                 text-align: center;
                 color: #ffffff;
                 opacity: .5;
@@ -298,13 +264,10 @@
             &__header {
                 display: flex;
                 &__title {
+                    @include normal-text;
                     font-family: 'SFUIDisplay-Medium', sans-serif;
                     font-size: 36px;
                     font-weight: 500;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: normal;
                     color: #ffffff;
                 }
 
@@ -347,15 +310,44 @@
                 max-width: 447px;
             }
 
+            &__validate {
+                width: 100%;
+                height: 98px;
+                border-radius: 10px;
+                background-color: rgba(0, 240, 255, 0.15);
+                margin-top: 20px;
+                display: flex;
+                flex-direction: column;
+
+                &__text {
+                    @include normal-text;
+                    font-family: 'ProximaNova', sans-serif;
+                    font-size: 14px;
+                    line-height: 1.29;
+                    text-align: center;
+                    color: #ffffff;
+                    margin-top: 22px;
+                }
+                
+                &__link {
+                    @include normal-text;
+                    font-family: ProximaNova;
+                    font-size: 14px;
+                    font-weight: bold;
+                    text-align: center;
+                    color: #00f6d2;
+                    margin-top: 20px;
+                    cursor: pointer;
+                }
+            }
+
             &__subtitle {
+                @include normal-text;
                 margin-top: 50px;
                 font-family: 'ProximaNovaBold', sans-serif;
                 opacity: 0.5;
                 font-size: 14px;
                 font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
                 letter-spacing: 4px;
                 color: #ffffff;
             }
@@ -382,25 +374,17 @@
             margin-left: 20px;
 
             &__title {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 12px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #92abba;
             }
 
             &__value {
+                @include normal-text;
                 font-family: 'SFProDisplayRegular', sans-serif;
                 margin-top: 5px;
                 font-size: 16px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #ffffff;
             }
         }
@@ -416,13 +400,9 @@
             margin-left: 20px;
 
             &__title {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 12px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #92abba;
             }
 
@@ -432,14 +412,10 @@
                 margin-top: 5px;
 
                 &__data {
+                    @include normal-text;
                     margin-left: 10px;
                     font-family: 'SFProDisplayRegular', sans-serif;
                     font-size: 16px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: normal;
                     color: #da68f5;
                 }
             }
@@ -452,14 +428,10 @@
             margin-left: 75px;
 
             &__value {
+                @include normal-text;
                 margin-left: 10px;
                 font-family: 'SFProDisplayRegular', sans-serif;
                 font-size: 16px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #0bccf7;
             }
         }
@@ -468,14 +440,11 @@
     .selector {
         cursor: pointer;
         &__title {
+            @include normal-text;
             margin: 3px 15px;
             font-family: 'ProximaNova', sans-serif;
             font-size: 12px;
             font-weight: 600;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
             color: #92abba;
         }
 
@@ -515,37 +484,28 @@
 
 .tr-send-text,
 .tr-receive-text {
+    @include normal-text;
     font-family: 'ProximaNovaBold', sans-serif;
     margin-left: 15px;
     font-size: 14px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
     color: #ffffff;
 }
 
 .tr-send-value {
+    @include normal-text;
     font-family: 'ProximaNovaBold', sans-serif;
     font-size: 16px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
     margin-left: auto;
     color: #da68f5;
 }
 
 .tr-receive-value {
+    @include normal-text;
     font-family: 'ProximaNovaBold', sans-serif;
     font-size: 16px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
     text-align: right;
     margin-left: auto;
     color: #0bccf7;

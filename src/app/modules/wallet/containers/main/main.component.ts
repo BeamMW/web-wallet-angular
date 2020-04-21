@@ -18,7 +18,10 @@ import {
   selectReceivedTr,
   selectSentTr
 } from '../../../../store/selectors/transaction.selectors';
-import { selectAppState, selectPrivacySetting } from '../../../../store/selectors/wallet-state.selectors';
+import {
+  selectPrivacySetting,
+  selectVerificatedSetting
+} from '../../../../store/selectors/wallet-state.selectors';
 import { DataService, WindowService, WebsocketService, LoginService } from './../../../../services';
 
 import { environment } from '@environment';
@@ -65,6 +68,7 @@ export class MainComponent implements OnInit, OnDestroy {
   addresses$: Observable<any>;
   utxos$: Observable<any>;
   transactions$: Observable<any>;
+  verificatedSetting$: Observable<any>;
   privacySetting$: Observable<any>;
   addressesColumns: string[] = ['address', 'created', 'comment'];
   utxoColumns: string[] = ['utxo', 'amount', 'status'];
@@ -82,6 +86,7 @@ export class MainComponent implements OnInit, OnDestroy {
     sending: ''
   };
 
+  verificatedSetting = null;
   privacyMode = false;
   isFullScreen = false;
   activeSidenavItem = '';
@@ -99,6 +104,11 @@ export class MainComponent implements OnInit, OnDestroy {
     this.utxos$ = this.store.pipe(select(selectAllUtxo));
     this.transactions$ = this.store.pipe(select(selectAllTr));
     this.privacySetting$ = this.store.pipe(select(selectPrivacySetting));
+    this.verificatedSetting$ = this.store.pipe(select(selectVerificatedSetting));
+
+    this.verificatedSetting$.subscribe((state) => {
+      this.verificatedSetting = state;
+    });
 
     this.privacySetting$.subscribe((state) => {
       this.privacyMode = state;
@@ -126,11 +136,11 @@ export class MainComponent implements OnInit, OnDestroy {
         this.transactionsLoaded = true;
 
         this.sub.unsubscribe();
-        // setTimeout(() => {
-        //   if (this.mainActive) {
-        //    this.update();
-        //   }
-        // }, 5000);
+        setTimeout(() => {
+          if (this.mainActive) {
+           this.update();
+          }
+        }, 5000);
       }
     });
     this.websocketService.send({

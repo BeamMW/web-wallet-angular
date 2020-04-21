@@ -38,6 +38,14 @@
                     </div>
                 </ng-container>
             </div>
+            <ng-container *ngIf="verificatedSetting !== null && !verificatedSetting">
+                <div class="main__content__validate">
+                    <div class="main__content__validate__text">
+                        Write down and validate your seed phrase so you can always recover your funds.
+                    </div>
+                    <div class="main__content__validate__link">Secure your phrase</div>
+                </div>
+            </ng-container>
             <ng-container *ngIf="transactions$ | async as transactions">
                 <ng-container>
                     <div class="main__content__subtitle">TRANSACTIONS</div>

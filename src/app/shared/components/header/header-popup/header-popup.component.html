@@ -8,11 +8,11 @@
 <div class="dropdown" *ngIf="isDropdownVisible" appClickOutside (clickOutside)="onClickedOutside()">
     <div class="dropdown__content">
         <ul class="dropdown__column">
-            <li class="dropdown__item" (click)="fullViewClicked()">
+            <li class="dropdown__item" *ngIf="!isFullScreen" (click)="fullViewClicked()">
                 <img class="dropdown__item__icon" [src]="fullViewIcon">
                 <span class="dropdown__item__text">Full view</span>
             </li>
-            <div class="dropdown__separator"></div>
+            <div class="dropdown__separator" *ngIf="!isFullScreen"></div>
             <li class="dropdown__item" (click)="paymentProofClicked($event)">
                 <img class="dropdown__item__icon" [src]="proofIcon">
                 <span class="dropdown__item__text">Payment proof</span>

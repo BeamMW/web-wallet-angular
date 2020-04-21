@@ -411,6 +411,7 @@
 
             &__button {
                 margin-left: auto;
+                margin-top: 8px;
                 
                 @include ui-button($btn-add-all, $btn-sm) {
                     width: 125px;

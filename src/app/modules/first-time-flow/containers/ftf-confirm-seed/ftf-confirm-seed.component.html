@@ -1,1 +1,54 @@
-<p>ftf-confirm-seed works!</p>
+<div class="confirm">
+    <ng-container *ngIf="!isFullScreen">
+        <div class="generate__header">
+            <div class="menu-control-wrapper">
+                <img class="generate__header__menu" (click)="backClicked($event)" [src]="iconBack"/>
+            </div>
+            <div class="title-wrapper">
+                <div class="generate__header__title">Confirm seed phrase</div>
+            </div>
+            <div class="save-addr-control-wrapper"></div>
+        </div>
+    
+        <div class="generate__content">
+            <div class="generate__content__first-row">
+                Your seed phrase is the access key to all the funds in 
+                your wallet. Print or write down the phrase to keep it in 
+                a safe or in a locked vault. Without the phrase you will 
+                not be able to recover your money.
+            </div>
+            <div class="generate__content__seed">{{seed}}</div>
+            <div class="generate__content__generate-button">
+                <app-button class="generate-button" [routerLink]="passwordCreateRoute">next</app-button>
+            </div>
+        </div>
+    
+        <div class="generate__top-gradient"></div>
+    </ng-container>
+    <ng-container *ngIf="isFullScreen">
+        <div class="confirm__top-content">
+            <div class="confirm__top-content__header">Confirm seed phrase</div>
+            <div class="confirm__top-content__text">
+                To ensure the seed phrase is written down correctly, please fill in the specific words below
+            </div>
+        </div>
+        <div class="confirm__mid-content">
+            <div class="confirm__mid-content__item" *ngFor="let item of seedStateToConfirm">
+                <div class="confirm__mid-content__item__circle"
+                     [class.error]="item.inProgress && !item.confirmed"
+                     [class.confirmed]="!item.inProgress && item.confirmed"> {{item.index + 1}} </div>
+                <input class="confirm__mid-content__item__input" 
+                       [class.error]="item.inProgress && !item.confirmed"
+                       (input)="wordInputUpdated($event, item)" type="text"/>
+            </div>
+        </div>
+        <div class="confirm__bottom-content">
+            <app-button class="confirm__bottom-content__back-button" (click)="backClicked($event)">back</app-button>
+            <app-button class="confirm__bottom-content__next-button"
+                        [class.disabled]="!seedConfirmed"
+                        (click)="nextClicked()">
+                next
+            </app-button>
+        </div>
+    </ng-container>
+</div>

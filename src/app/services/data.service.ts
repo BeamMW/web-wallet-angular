@@ -53,7 +53,7 @@ export class DataService {
     });
   }
 
-  public settingsInit() {
+  public settingsInit(seedConfirmed: boolean) {
     extensionizer.storage.local.set({
       settings: {
         privacySetting: false,
@@ -61,7 +61,7 @@ export class DataService {
         currencySetting: 0,
         dnsSetting: '',
         ipSetting: '3.222.86.179:20000',
-        verificatedSetting: false,
+        verificatedSetting: seedConfirmed,
         passwordCheck: true
     }});
   }

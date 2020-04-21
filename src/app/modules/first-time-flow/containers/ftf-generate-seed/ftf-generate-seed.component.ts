@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
 import { WindowService } from '../../../../services';
+import { routes } from '@consts';
 
 @Component({
   selector: 'app-ftf-generate-seed',
@@ -16,7 +17,7 @@ export class FtfGenerateSeedComponent implements OnInit {
   public iconPass: string = `${environment.assetsPath}/images/modules/first-time-flow/containers/ftf-generate-seed/password.svg`;
   public iconEye: string = `${environment.assetsPath}/images/modules/first-time-flow/containers/ftf-generate-seed/eye.svg`;
 
-  viewSeedRoute = '/initialize/view-seed';
+  routesConsts = routes;
   isFullScreen = false;
 
   constructor(public router: Router,
@@ -29,7 +30,7 @@ export class FtfGenerateSeedComponent implements OnInit {
 
   backClicked(event) {
     event.stopPropagation();
-    this.router.navigate(['/initialize/create']);
+    this.router.navigate([routes.FTF_CREATE_WALLET_ROUTE]);
   }
 
 }

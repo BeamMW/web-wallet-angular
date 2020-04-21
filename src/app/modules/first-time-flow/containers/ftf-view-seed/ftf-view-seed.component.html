@@ -42,12 +42,14 @@
         </div>
         <div class="generate__bottom-content">
             <app-button class="generate__bottom-content__back-button" (click)="backClicked($event)">back</app-button>
-            <app-button class="generate__bottom-content__later-button" [routerLink]="passwordCreateRoute">
+            <app-button class="generate__bottom-content__later-button" 
+                        (click)="laterClicked()">
                 I will do it later
             </app-button>
-            <!-- <app-button class="generate__bottom-content__verification-button" [routerLink]="passwordCompleteRoute">
+            <app-button class="generate__bottom-content__verification-button"
+                        (click)="completeVerificationClicked()">
                 complete verification
-            </app-button> -->
+            </app-button>
         </div>
     </ng-container>
 </div>
