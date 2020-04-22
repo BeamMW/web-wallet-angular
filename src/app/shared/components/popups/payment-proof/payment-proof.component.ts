@@ -40,8 +40,10 @@ export class PaymentProofComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.dataService.emitChange({popupOpened: true});
-    window.scroll(0, 0);
-    document.body.style.overflowY = 'hidden';
+    if (this.isFullScreen) {
+      window.scroll(0, 0);
+      document.body.style.overflowY = 'hidden';
+    }
   }
 
   ngOnDestroy() {
@@ -49,7 +51,9 @@ export class PaymentProofComponent implements OnInit, OnDestroy {
     if (this.sub !== undefined) {
       this.sub.unsubscribe();
     }
-    document.body.style.overflowY = 'auto';
+    if (this.isFullScreen) {
+      document.body.style.overflowY = 'auto';
+    }
   }
 
   submit($event) {

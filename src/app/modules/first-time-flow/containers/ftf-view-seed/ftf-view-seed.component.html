@@ -17,9 +17,21 @@
                 a safe or in a locked vault. Without the phrase you will 
                 not be able to recover your money.
             </div>
-            <div class="generate__content__seed">{{seed}}</div>
-            <div class="generate__content__generate-button">
-                <app-button class="generate-button" [routerLink]="passwordCreateRoute">next</app-button>
+            <div class="generate__content__seed">
+                <div class="generate__content__seed__item noselect" *ngFor="let item of seedState; let i = index">
+                    <div class="generate__content__seed__item__circle"> {{i + 1}} </div>
+                    <span class="generate__content__seed__item__seed"> {{item}} </span>
+                </div>
+            </div>
+            <div class="generate__content__controls">
+                <app-button class="generate__content__controls__verification-button"
+                            (click)="completeVerificationClicked()">
+                    complete verification
+                </app-button>
+                <app-button class="generate__content__controls__later-button" 
+                            (click)="laterClicked()">
+                    I will do it later
+                </app-button>
             </div>
         </div>
     

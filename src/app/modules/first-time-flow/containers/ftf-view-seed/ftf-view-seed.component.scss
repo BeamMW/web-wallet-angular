@@ -8,15 +8,11 @@
 
 
 .content-text {
+    @include normal-text;
     margin-left: 20px;
     max-width: 275px;
     font-family: 'ProximaNova', sans-serif;
     font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
     color: #ffffff;
 }
 
@@ -45,14 +41,12 @@
         }
 
         &__title {
+            @include normal-text;
             font-family: 'ProximaNovaSemiBold', sans-serif;
             margin: 0 auto;
             color: #ffffff;
             font-size: 20px;
             font-weight: 600;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
             letter-spacing: 3px;
             text-align: center;
         }
@@ -67,41 +61,90 @@
         margin-right: auto;
 
         &__first-row {
+            @include normal-text;
             max-width: 335px;
             font-family: 'ProximaNova', sans-serif;
             font-size: 14px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
             text-align: center;
             color: #ffffff;
         }
 
         &__seed {
-            margin-top: 20px;
-            max-width: 335px;
-            word-wrap: break-word;
-            font-family: 'ProximaNova', sans-serif;
-            font-size: 14px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
-            text-align: center;
-            color: #ffffff;
+            display: flex;
+            width: 330px;
+            margin: 20px auto 0 auto;
+            flex-wrap: wrap;
+            align-content: space-between;
+            justify-content: space-between;
+
+            &__item {
+                margin-top: 10px;
+                height: 38px;
+                min-width: 140px;
+                border-radius: 30px;
+                border: solid 1px #1c435b;
+                display: flex;
+                align-items: center;
+
+                &__circle {
+                    @include normal-text;
+                    margin-left: 9px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 20px;
+                    width: 20px;
+                    height: 20px;
+                    background-color: #1c435b;
+                    opacity: 0.5;
+                    font-family: 'SFProDisplayRegular', sans-serif;
+                    font-size: 10px;
+                    text-align: center;
+                    color: #ffffff;
+                }
+
+                &__seed {
+                    @include normal-text;
+                    font-family: 'ProximaNova', sans-serif;
+                    margin-left: 30px;
+                    font-size: 14px;
+                    line-height: 1.29;
+                    text-align: center;
+                    color: #ffffff;
+                }
+            }
         }
 
-        &__generate-button {
-            text-align: center;
-            margin-top: 30px;
-            
-            @include ui-button($btn-open-wallet, $btn-lg) {
+        &__controls {
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+
+            &__verification-button {
+                margin-top: 30px;
+                
+                @include ui-button($btn-open-wallet, $btn-full-verification) {
+                    font-family: 'ProximaNovaBold', sans-serif;
+                    font-size: 14px;
+                    width: 253px;
+                    height: 44px;
+                }
+        
+                @include ui-button-verification-icon()
             }
-    
-            @include ui-button-create-password-icon()
+
+            &__later-button {
+                margin-top: 10px;
+                
+                @include ui-button($btn-full-back, $btn-full-lg) {
+                    font-family: 'ProximaNovaBold', sans-serif;
+                    font-size: 14px;
+                    width: 253px;
+                    height: 44px;
+                }
+        
+                @include ui-button-later-icon()
+            }
         }
     }
 }
@@ -114,27 +157,21 @@
             margin-top: 50px;
 
             &__header {
+                @include normal-text;
                 font-family: 'ProximaNovaSemiBold', sans-serif;
                 font-size: 36px;
                 font-weight: 600;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 text-align: center;
                 color: #ffffff;
             }
 
             &__text {
+                @include normal-text;
                 width: 730px;
                 margin: 30px auto 0 auto;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
                 line-height: 1.29;
-                letter-spacing: normal;
                 text-align: center;
                 color: #ffffff;
             }
@@ -158,6 +195,7 @@
                 align-items: center;
 
                 &__circle {
+                    @include normal-text;
                     margin-left: 9px;
                     display: flex;
                     align-items: center;
@@ -169,24 +207,16 @@
                     opacity: 0.5;
                     font-family: 'SFProDisplayRegular', sans-serif;
                     font-size: 10px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: normal;
-                    letter-spacing: normal;
                     text-align: center;
                     color: #ffffff;
                 }
 
                 &__seed {
+                    @include normal-text;
                     font-family: 'ProximaNova', sans-serif;
                     margin-left: 30px;
                     font-size: 14px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    font-style: normal;
                     line-height: 1.29;
-                    letter-spacing: normal;
                     text-align: center;
                     color: #ffffff;
                 }
@@ -231,13 +261,11 @@
 }
 
 .content-header {
+    @include normal-text;
     opacity: 0.5;
     font-family: 'ProximaNova', sans-serif;
     font-size: 14px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 1px;
     color: #ffffff;
 }

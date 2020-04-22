@@ -6,6 +6,7 @@ import { MenuComponent, MenuFullComponent } from '@shared/components';
 import { MainLayoutComponent } from '@shared/layouts';
 import { HeaderComponent } from '@shared/containers';
 import { LoginGuard } from './guards/login.guard';
+import { InitializeGuard } from './guards/initialize.guard';
 import {
   PaymentProofComponent,
   AddContactComponent,
@@ -37,6 +38,7 @@ const routes: Routes = [{
   }]
 }, {
   path: '',
+  canActivate: [InitializeGuard],
   component: MainLayoutComponent,
   children: [
   {

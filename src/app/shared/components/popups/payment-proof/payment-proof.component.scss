@@ -9,13 +9,13 @@
     position: absolute;
 	max-height: 700px;
 	width: 100%;
-	height: 100%;
 	margin: auto;
     top: 0; 
     left: 0; 
     bottom: 0; 
     right: 0;
     z-index: 1100;
+    overflow: auto;
 
     &__container {
         display: flex;
@@ -23,12 +23,17 @@
         border-radius: 10px;
         background-color: #003f6f;
         position: absolute;
-        width: 460px;
+        width: 335px;
         min-height: 125px;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 1500;
+    }
+    
+    &__container.loaded {
+        margin-top: 125px;
+        margin-bottom: 20px;
     }
 
     &__title {
@@ -48,7 +53,7 @@
         &__form {
             display: flex;
             flex-direction: column;
-            width: 400px;
+            width: 295px;
             margin-left: auto;
             margin-right: auto;
             padding-bottom: 30px;
@@ -209,7 +214,9 @@
 
 
 @media (min-width: 400px) {
-    .proof {    
+    .proof {
+        height: 100%;
+        overflow: none;
         
         //margin-top: -63px;
 
@@ -222,6 +229,22 @@
             letter-spacing: normal;
             text-align: center;
             color: #ffffff;
+        }
+
+        &__container {
+            margin-top: 0;
+            width: 460px;
+        }
+
+        &__container.loaded {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        &__content {
+            &__form {
+                width: 400px;
+            }
         }
 
     

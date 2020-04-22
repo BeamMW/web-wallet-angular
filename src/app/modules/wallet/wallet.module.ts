@@ -8,6 +8,7 @@ import { MainComponent, LoginComponent } from './containers';
 import { WalletRoutingModule } from './wallet-routing.module';
 
 import { LoginGuard } from './guards/login.guard';
+import { InitializeGuard } from './guards/initialize.guard';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { LoginGuard } from './guards/login.guard';
     LoginComponent
   ],
   providers: [
-    LoginGuard
+    LoginGuard,
+    InitializeGuard
   ],
   imports: [
     SharedModule,

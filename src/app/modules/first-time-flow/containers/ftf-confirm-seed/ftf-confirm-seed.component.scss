@@ -58,50 +58,128 @@
         }
     }
 
-    &__content {
-        z-index: 10;
-        margin-top: 40px;
+    &__subtitle {
+        @include normal-text;
+        width: 315px;
+        margin: 35px auto 0 auto;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 14px;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    &__mid-content {
         display: flex;
-        flex-direction: column;
-        margin-left: auto;
-        margin-right: auto;
+        width: 315px;
+        height: 130px;
+        margin: 40px auto 0 auto;
+        flex-wrap: wrap;
+        align-content: space-between;
+        justify-content: space-between;
 
-        &__first-row {
-            max-width: 335px;
-            font-family: 'ProximaNova', sans-serif;
-            font-size: 14px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
-            text-align: center;
-            color: #ffffff;
-        }
+        &__item {
+            display: flex;
+            flex-direction: row;
 
-        &__seed {
-            margin-top: 20px;
-            max-width: 335px;
-            word-wrap: break-word;
-            font-family: 'ProximaNova', sans-serif;
-            font-size: 14px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
-            text-align: center;
-            color: #ffffff;
-        }
+            &__circle {
+                @include normal-text;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 20px;
+                width: 20px;
+                height: 20px;
+                background-color: rgba(255, 255, 255, 0);
+                border: solid 1px #8da1ad;
+                opacity: 0.5;
+                font-family: 'SFProDisplayRegular', sans-serif;
+                font-size: 10px;
+                text-align: center;
+                color: #8da1ad  ;
+            }
 
-        &__generate-button {
-            text-align: center;
-            margin-top: 30px;
-            
-            @include ui-button($btn-open-wallet, $btn-lg) {
+            &__circle.error {
+                color: #032e49;
+                box-shadow: 0 0 5px 0 rgba(255, 98, 92, 0.7);
+                background-color: #ff625c;
+                border: none;
+                opacity: 1;
+            }
+
+            &__circle.confirmed {
+                color: #032e49;
+                box-shadow: 0 0 5px 0 rgba(0, 246, 210, 0.7);
+                background-color: #00f6d2;
+                border: none;
+                opacity: 1;
+            }
+
+            &__input {
+                @include normal-text;
+                margin-left: 10px;
+                background: rgba(255, 255, 255, 0);
+                font-family: 'SFProDisplayRegular', sans-serif;
+                border: none;
+                width: 110px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                font-size: 14px;
+                color: #ffffff;
+                resize:none;
+                padding: 5px;
+                max-height: 20px;
+            }
+
+            &__input:focus.error {
+                color: #ff625c;
+            }
+
+            &__input.error {
+                border-bottom: 1px solid #ff625c;
+                color: #ff625c;
             }
     
-            @include ui-button-create-password-icon()
+            &__input:focus {
+                @include normal-text;
+                font-family: 'SFProDisplayRegular', sans-serif;
+                outline-width: 0;
+                font-size: 14px;
+                color: #ffffff;
+            }
+        }
+    }
+
+    &__bottom-content {
+        margin: 70px auto auto auto;
+        display: flex;
+        flex-direction: row;
+
+        &__next-button {
+            margin-left: 20px;
+            
+            @include ui-button($btn-open-wallet, $btn-full-verification) {
+                font-family: 'ProximaNovaBold', sans-serif;
+                font-size: 14px;
+                width: 253px;
+                height: 44px;
+            }
+    
+            @include ui-button-next-icon()
+        }
+
+        &__next-button.disabled {
+            margin-left: 20px;
+            
+            @include ui-button($btn-open-wallet, $btn-full-verification) {
+                font-family: 'ProximaNovaBold', sans-serif;
+                opacity: 0.2;
+                border-radius: 50px;
+                background-color: #00f6d2;
+                font-size: 14px;
+                width: 253px;
+                height: 44px;
+            }
+    
+            @include ui-button-next-icon()
         }
     }
 }
