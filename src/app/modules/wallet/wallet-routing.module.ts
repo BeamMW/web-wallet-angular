@@ -4,7 +4,7 @@ import { Routes, RouterModule, Router } from '@angular/router';
 import { MainComponent, LoginComponent } from './containers';
 import { MenuComponent, MenuFullComponent } from '@shared/components';
 import { MainLayoutComponent } from '@shared/layouts';
-import { HeaderComponent } from '@shared/containers';
+import { HeaderComponent, HeaderWithoutLogoComponent } from '@shared/containers';
 import { LoginGuard } from './guards/login.guard';
 import { InitializeGuard } from './guards/initialize.guard';
 import {
@@ -45,6 +45,8 @@ const routes: Routes = [{
     path: 'login',
     children: [
       {
+        path: '', component: HeaderWithoutLogoComponent, outlet: 'header'
+      }, {
         path: '', component: LoginComponent
       }
     ]

@@ -6,4 +6,6 @@ export enum routes {
     FTF_CREATE_WALLET_ROUTE = '/initialize/create',
 
     WALLET_MAIN_ROUTE = '/wallet/main',
+
+    TRANSACTION_DETAILS_ROUTE = '/transactions/details',
 }

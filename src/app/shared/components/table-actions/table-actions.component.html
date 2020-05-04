@@ -4,7 +4,7 @@
     </button>
 </a>
 <mat-menu class="actions-container" #menu="matMenu">
-    <ng-container *ngIf="tableType === 'wallet'">
+    <ng-container *ngIf="tableType === tableTypesConsts.TRANSACTIONS">
         <button mat-menu-item (click)="saveContactClicked($event)">
             <img class="actions-icon" [src]="saveIcon">
             <span class="actions-text">Save contact</span>
@@ -30,7 +30,17 @@
             <span class="actions-text">Delete transaction</span>
         </button>
     </ng-container>
-    <ng-container *ngIf="tableType === 'addresses'">
+    <ng-container *ngIf="tableType === tableTypesConsts.TRANSACTIONS_NOT_SENT">
+        <button mat-menu-item>
+            <img class="actions-icon" [src]="cancelIcon">
+            <span class="actions-text">Cancel transaction</span>
+        </button>
+        <button mat-menu-item>
+            <img class="actions-icon" [src]="deleteIcon">
+            <span class="actions-text">Delete transaction</span>
+        </button>
+    </ng-container>
+    <ng-container *ngIf="tableType === tableTypesConsts.ADDRESSES">
         <button mat-menu-item>
             <img class="actions-icon" [src]="expireIcon" (click)="saveContactClicked($event)">
             <span class="actions-text">Expire address</span>
@@ -39,7 +49,7 @@
             <img class="actions-icon" [src]="editIcon">
             <span class="actions-text">Edit address</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="copyAddressClicked()">
             <img class="actions-icon" [src]="copyIcon">
             <span class="actions-text">Copy address</span>
         </button>

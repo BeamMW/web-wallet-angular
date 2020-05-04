@@ -9,7 +9,10 @@ import {
   FtfViewSeedComponent} from './containers';
 
 import { MainLayoutComponent } from '@shared/layouts';
-import { HeaderComponent } from '@shared/containers';
+import {
+  HeaderWithoutLogoComponent,
+  HeaderWithLinkComponent
+} from '@shared/containers';
 
 const routes: Routes = [{
   path: '',
@@ -18,30 +21,40 @@ const routes: Routes = [{
   {
     path: 'create',
     children: [{
+        path: '', component: HeaderWithoutLogoComponent, outlet: 'header'
+      }, {
         path: '', component: FtfCreateComponent
       }
     ]
   }, {
     path: 'generate-seed',
     children: [{
+        path: '', component: HeaderWithLinkComponent, outlet: 'header'
+      }, {
         path: '', component: FtfGenerateSeedComponent
       }
     ]
   }, {
     path: 'confirm-seed',
     children: [{
+        path: '', component: HeaderWithLinkComponent, outlet: 'header'
+      }, {
         path: '', component: FtfConfirmSeedComponent
       }
     ]
   }, {
     path: 'create-password',
     children: [{
+        path: '', component: HeaderWithLinkComponent, outlet: 'header'
+      }, {
         path: '', component: FtfCreatePasswordComponent
       }
     ]
   }, {
     path: 'view-seed',
     children: [{
+        path: '', component: HeaderWithLinkComponent, outlet: 'header'
+      }, {
         path: '', component: FtfViewSeedComponent
       }
     ]

@@ -33,14 +33,6 @@ export class MenuFullComponent implements OnInit {
       srcOut: `${environment.assetsPath}/images/shared/components/menu/ic-utxo.svg`,
       srcOn: `${environment.assetsPath}/images/shared/components/menu/ic-utxo-active.svg`
     }
-    // , {
-    //   path: '/settings/all',
-    //   title: 'Settings',
-    //   hovered: false,
-    //   src: '',
-    //   srcOut: `${environment.assetsPath}/images/shared/components/menu/icon-settings.svg`,
-    //   srcOn: `${environment.assetsPath}/images/shared/components/menu/icon-settings-active.svg`
-    // }
   ];
   isFullScreen = false;
   constructor(private windowService: WindowService,
@@ -74,11 +66,9 @@ export class MenuFullComponent implements OnInit {
 
   itemMouseover(item) {
     item.src = item.srcOn;
-    //item.hovered = !item.hovered;
   }
 
   itemMouseout(item) {
     item.src = item.srcOut;
-    //item.hovered = !item.hovered;
   }
 }

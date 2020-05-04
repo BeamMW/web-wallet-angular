@@ -249,8 +249,8 @@ export class MainComponent implements OnInit, OnDestroy {
     // this.router.navigate([item.route], {relativeTo: this.route});
   }
 
-  sideMenuClicked(event) {
-    event.stopPropagation();
+  sideMenuClicked($event) {
+    this.dataService.clickedElement = $event.currentTarget;
     this.router.navigate([this.router.url, { outlets: { sidemenu: 'menu' }}]);
   }
 

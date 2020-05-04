@@ -3,7 +3,6 @@
         <div class="utxo__header">
             <div class="menu-control-wrapper">
                 <img class="utxo__header__menu" (click)="sideMenuClicked($event)" [src]="iconMenu"/>
-                <!-- <app-menu-control></app-menu-control> -->
             </div>
             <div class="title-wrapper">
                 <div class="utxo__header__title">UTXO</div>
@@ -96,13 +95,13 @@
                         <div class="content-table__empty-tr-text">Your UTXO list is empty</div>
                     </ng-container>    
                 </ng-container>
-                <ng-container *ngIf="privacyMode">
-                    <img class="content-table__secure-icon" [src]="iconSecure">
-                    <div class="content-table__secure-text">
+                <div class="content-table__secure" *ngIf="privacyMode">
+                    <img class="content-table__secure__icon" [src]="iconSecure">
+                    <div class="content-table__secure__text">
                         <p>You’re currently in Security Mode.</p>
                         <p>Turn it off to see your UTXO list</p>
                     </div>
-                </ng-container>
+                </div>
                 
             </div>
         </div>

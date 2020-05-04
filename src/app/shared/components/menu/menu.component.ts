@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import {Router} from '@angular/router';
 import { environment } from '@environment';
 import { ActivatedRoute} from '@angular/router';
@@ -54,5 +54,12 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   goToBuyBeam() {
     window.open('https://beam.mw/#exchanges', '_blank');
+  }
+
+  clickOutside(element) {
+    const controlClicked = this.dataService.clickedElement === element || this.dataService.clickedElement.contains(element);
+    if (!controlClicked) {
+      this.router.navigate([{ outlets: { sidemenu: null }}], {relativeTo: this.activatedRoute.parent});
+    }
   }
 }

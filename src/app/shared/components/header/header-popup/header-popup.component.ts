@@ -1,10 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import { environment } from '@environment';
 import * as extensionizer from 'extensionizer';
 import { Router } from '@angular/router';
-import { WindowService } from './../../../../services';
+import { WindowService, DataService } from './../../../../services';
 import { ChangeWalletState, saveWallet } from './../../../../store/actions/wallet.actions';
-import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import {
+  selectPrivacySetting
+} from '../../../../store/selectors/wallet-state.selectors';
+import {
+  updatePrivacySetting
+} from './../../../../store/actions/wallet.actions';
 
 @Component({
   selector: 'app-header-popup',
@@ -17,6 +24,10 @@ export class HeaderPopupComponent implements OnInit {
   isDropdownVisible = false;
   menuItems = [];
   public isFullScreen = false;
+  public privacyMode = false;
+  privacySetting$: Observable<any>;
+
+  @ViewChild('control', {static: true}) control: ElementRef;
 
   public fullViewIcon = `${environment.assetsPath}/images/shared/components/header-popup/icon-full-view.svg`;
   public exportIcon = `${environment.assetsPath}/images/shared/components/header-popup/ic-share-white.svg`;
@@ -25,19 +36,26 @@ export class HeaderPopupComponent implements OnInit {
   public buyBeamIcon = `${environment.assetsPath}/images/shared/components/header-popup/icon-where-to-buy-beam.svg`;
   public settingsIcon = `${environment.assetsPath}/images/shared/components/header-popup/icon-settings.svg`;
   public logoutIcon = `${environment.assetsPath}/images/shared/components/menu/icon-logout.svg`;
+  public iconDisabledPrivacy = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye.svg`;
+  public iconEnabledPrivacy = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
 
   constructor(
     private store: Store<any>,
     private windowService: WindowService,
+    private dataService: DataService,
     public router: Router) {
     this.isFullScreen = windowService.isFullSize();
+
+    this.privacySetting$ = this.store.pipe(select(selectPrivacySetting));
+    this.privacySetting$.subscribe((state) => {
+      this.privacyMode = state;
+    });
   }
 
   ngOnInit() {
   }
 
-  changeDropdownState(event) {
-    event.stopPropagation();
+  changeDropdownState() {
     this.isDropdownVisible = !this.isDropdownVisible;
   }
 
@@ -72,7 +90,17 @@ export class HeaderPopupComponent implements OnInit {
     window.open('https://beam.mw/#exchanges', '_blank');
   }
 
-  onClickedOutside() {
-    this.isDropdownVisible = !this.isDropdownVisible;
+  onClickedOutside(element) {
+    const controlClicked = this.control.nativeElement === element || this.control.nativeElement.contains(element);
+    if (!controlClicked) {
+      this.isDropdownVisible = !this.isDropdownVisible;
+    }
+  }
+
+  securityModeClicked() {
+    this.privacyMode = !this.privacyMode;
+    this.store.dispatch(updatePrivacySetting({settingValue: this.privacyMode}));
+    this.dataService.saveWalletOptions();
+    this.isDropdownVisible = false;
   }
 }

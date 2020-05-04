@@ -21,7 +21,7 @@ import { Subscription, Observable } from 'rxjs';
 })
 export class AddressesListComponent implements OnInit, OnDestroy {
   public iconMenu = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-menu.svg`;
-  public iconContactsEmpty = `${environment.assetsPath}/images/shared/components/table/transactions-empty-state.svg`;
+  public iconContactsEmpty = `${environment.assetsPath}/images/modules/addresses/containers/addresses-list/icon-addressbook-empty-state.svg`;
 
   private sub: Subscription;
   private pageActive = false;

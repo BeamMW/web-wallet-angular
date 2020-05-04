@@ -6,7 +6,7 @@ import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { DataService, WindowService, WebsocketService } from './../../../../services';
 import { Store, select } from '@ngrx/store';
 import { saveReceiveData } from './../../../../store/actions/wallet.actions';
-
+import { WasmService } from './../../../../wasm.service';
 
 @Component({
   selector: 'app-receive',
@@ -25,6 +25,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<any>,
               public router: Router,
+              private wasmService: WasmService,
               private dataService: DataService,
               private windowService: WindowService,
               private wsService: WebsocketService) {
@@ -57,7 +58,10 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   createAddress() {
     this.sub = this.wsService.on().subscribe((msg: any) => {
       if (msg.result !== undefined && msg.id === 1 && typeof msg.result === 'string') {
-        this.generatedAddress = msg.result;
+        const identity = this.wasmService.getIdentity(msg.result);
+        const token = this.wasmService.getSendToken(msg.result, identity);
+
+        this.generatedAddress = token;
         this.dataToQr();
         this.sub.unsubscribe();
       }

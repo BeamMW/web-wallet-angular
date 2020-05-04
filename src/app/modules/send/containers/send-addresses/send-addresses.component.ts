@@ -29,6 +29,10 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   walletStatusSub: Subscription;
   popupOpened = false;
   sendFrom: string;
+  isSendDataValid = false;
+  addressValidated = false;
+  addressValidation = true;
+  amountValidated = false;
 
   feeIsCorrect = true;
   isOutgoingFull = true;
@@ -88,7 +92,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
   fullSubmit($event) {
     $event.stopPropagation();
-    if (this.feeIsCorrect) {
+    if (this.feeIsCorrect && this.isSendDataValid) {
       this.store.dispatch(saveSendData({
         send: {
           address: this.fullSendForm.value.address,
@@ -167,6 +171,23 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    this.amountValidated = value.length > 0;
+    this.valuesValidationCheck();
+  }
+
+  addressInputUpdated(value) {
+    this.addressValidated = value.length > 0;
+    // TODO: ENABLE WHEN TOKEN VALIDATE WILL BE ADDED
+    // if (value === null || value.length === 0) {
+    //   this.addressValidation = true;
+    // } else {
+    //   this.validateAddress(value);
+    // }
+  }
+
+  valuesValidationCheck() {
+    this.isSendDataValid = this.amountValidated && this.addressValidated;
   }
 
   createAddress() {
@@ -174,6 +195,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       if (msg.result !== undefined && msg.id === 1 && typeof msg.result === 'string') {
         this.sendFrom = msg.result;
         this.addressLoaded = true;
+        this.sub.unsubscribe();
       }
     });
     this.wsService.send({
@@ -184,6 +206,26 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
         {
             expiration : '24h',
             comment : ''
+        }
+    });
+  }
+
+  validateAddress(addressValue: string) {
+    this.sub = this.wsService.on().subscribe((msg: any) => {
+      if (msg.result !== undefined && msg.id === 1 && msg.result.is_valid !== undefined) {
+        this.addressValidated = msg.result.is_valid;
+        this.addressValidation = msg.result.is_valid;
+        this.valuesValidationCheck();
+        this.sub.unsubscribe();
+      }
+    });
+    this.wsService.send({
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'validate_address',
+        params:
+        {
+            address : addressValue
         }
     });
   }

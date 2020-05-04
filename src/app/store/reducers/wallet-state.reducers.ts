@@ -52,7 +52,7 @@ export const initialWalletAppState: WalletAppState = {
     privacySetting: false,
     saveLogsSetting: 0,
     currencySetting: 0,
-    dnsSetting: '',
+    dnsSetting: 'wallet-service.beam.mw',
     ipSetting: '3.222.86.179:20000',
     verificatedSetting: false,
     passwordCheck: true,

@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router} from '@angular/router';
 import { ActivatedRoute} from '@angular/router';
 import { DataService, WindowService, WebsocketService } from './../../../../services';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl} from '@angular/forms';
+import { environment } from '@environment';
 
 @Component({
   selector: 'app-payment-proof',
@@ -19,6 +20,8 @@ export class PaymentProofComponent implements OnInit, OnDestroy {
   proofForm: FormGroup;
   proofData: any;
   popupOpened = false;
+
+  popupCloseIcon: string = `${environment.assetsPath}/images/shared/components/popups/payment-proof/ic-cancel-popup.svg`;
 
   constructor(private websocketService: WebsocketService,
               private windowSerivce: WindowService,

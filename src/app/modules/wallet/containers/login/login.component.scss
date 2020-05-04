@@ -20,18 +20,28 @@
 }
 
 .login {
-    min-height: 600px;
+    min-height: 550px;
     display: flex;
     flex-direction: column;
+
+    &__top-gradient {
+        position: absolute;
+        width: 100%;
+        height: 100px;
+        background: linear-gradient(to top, rgba(3, 91, 143, 0), #035b8f);
+        z-index: 1;
+    }
     
     &__logo {
-        margin-top: 70px;
+        width: 159px;
+        height: 139px;
+        margin: 70px auto 0 auto;
         z-index: 10;
     }
 
     &__header-text {
         @include normal-text;
-        margin-top: 70px;
+        margin-top: 40px;
         font-family: 'ProximaNova', sans-serif;
         font-size: 14px;
         text-align: center;
@@ -42,9 +52,10 @@
     &__subheader-text {
         @include normal-text;
         margin: 37px auto 0 auto;
-        font-family: 'ProximaNovaBold', sans-serif;
+        font-family: 'ProximaNova', sans-serif;
         font-size: 18px;
         font-weight: bold;
+        letter-spacing: .6px;
         color: #25c1ff;
         z-index: 10;
     }
@@ -104,12 +115,40 @@
 
         &__button {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 50px;
             
             @include ui-button($btn-open-wallet, $btn-lg) {
+                font-size: 14px;
             }
 
             @include ui-button-open-wallet-icon()
+        }
+    }
+}
+
+@media (min-width: 400px) {
+    .login {
+        &__logo {
+           width: 242px;
+           height: 210px;
+           margin: 140px auto 0 auto;
+        }
+
+        &__header-text {
+            margin-top: 30px;
+        }    
+
+        &__container {
+            &__button {
+                margin-top: 30px;
+
+                @include ui-button($btn-open-wallet, $btn-lg) {
+                    width: 192px;
+                    height: 38px;
+                }
+    
+                @include ui-button-open-wallet-icon()
+            } 
         }
     }
 }

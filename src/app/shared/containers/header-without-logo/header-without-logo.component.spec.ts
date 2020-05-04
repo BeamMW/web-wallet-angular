@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MenuControlComponent } from './menu-control.component';
+import { HeaderWithoutLogoComponent } from './header-without-logo.component';
 
-describe('MenuControlComponent', () => {
-  let component: MenuControlComponent;
-  let fixture: ComponentFixture<MenuControlComponent>;
+describe('HeaderWithoutLogoComponent', () => {
+  let component: HeaderWithoutLogoComponent;
+  let fixture: ComponentFixture<HeaderWithoutLogoComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MenuControlComponent ]
+      declarations: [ HeaderWithoutLogoComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MenuControlComponent);
+    fixture = TestBed.createComponent(HeaderWithoutLogoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

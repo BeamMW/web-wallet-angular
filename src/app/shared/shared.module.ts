@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MainLayoutComponent } from './layouts';
-import { HeaderComponent } from './containers';
 import { RouterModule } from '@angular/router';
 import { HeaderLogoComponent, HeaderPopupComponent, ButtonComponent, MenuComponent } from './components';
 import { ClickOutsideDirective } from './directives/click-outside/click-outside.directive';
@@ -20,7 +19,6 @@ import {
 } from '@angular/material';
 
 import {
-  MenuControlComponent,
   StatusTitleComponent,
   TransactionListComponent,
   DropdownComponent,
@@ -33,6 +31,12 @@ import {
   PaymentProofExportedComponent
  } from './components';
 
+import {
+  HeaderComponent,
+  HeaderWithLinkComponent,
+  HeaderWithoutLogoComponent
+} from './containers';
+
 @NgModule({
   declarations: [
     StatusTitleComponent,
@@ -42,7 +46,6 @@ import {
     HeaderPopupComponent,
     ButtonComponent,
     MenuComponent,
-    MenuControlComponent,
     ClickOutsideDirective,
     BeamPipe,
     DropdownComponent,
@@ -53,7 +56,9 @@ import {
     TableActionsComponent,
     PasswordComponent,
     AddContactComponent,
-    PaymentProofExportedComponent
+    PaymentProofExportedComponent,
+    HeaderWithLinkComponent,
+    HeaderWithoutLogoComponent,
   ],
   imports: [
     CommonModule,
@@ -75,13 +80,15 @@ import {
     HeaderComponent,
     ButtonComponent,
     MenuComponent,
-    MenuControlComponent,
     ClickOutsideDirective,
     BeamPipe,
     DropdownComponent,
     MenuFullComponent,
     TableComponent,
-    PasswordComponent
+    PasswordComponent,
+    HeaderWithLinkComponent,
+    HeaderWithoutLogoComponent,
+    TableActionsComponent
   ],
   providers: [
     DecimalPipe

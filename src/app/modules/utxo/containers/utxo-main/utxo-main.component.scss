@@ -375,29 +375,33 @@
             color: #ffffff;
         }
 
-        &__secure-icon {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            margin: 80px auto 0 auto;
-        }
+        &__secure {
+            padding-right: 70px;
 
-        &__secure-text {
-            margin: 20px auto 0 auto;
-            opacity: .5;
-            font-family: 'ProximaNova', sans-serif;
-            font-size: 12px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: 1.5;
-            letter-spacing: normal;
-            text-align: center;
-            color: #ffffff;
-        }
+            &__icon {
+                width: 40px;
+                height: 40px;
+                display: flex;
+                margin: 80px auto 0 auto;
+            }
 
-        &__secure-text p {
-            margin: 0;
+            &__text {
+                margin: 20px auto 0 auto;
+                opacity: .5;
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 12px;
+                font-weight: normal;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.5;
+                letter-spacing: normal;
+                text-align: center;
+                color: #ffffff;
+            }
+
+            &__text p {
+                margin: 0;
+            }
         }
     }
 }

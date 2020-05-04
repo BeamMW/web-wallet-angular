@@ -3,7 +3,9 @@ import { environment } from '@environment';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { selectContact } from '../../../store/selectors/wallet-state.selectors';
-import {Observable} from 'rxjs';
+import {Observable, from} from 'rxjs';
+import { ClipboardService } from 'ngx-clipboard';
+import { TableTypes } from '@consts';
 
 @Component({
   selector: 'app-table-actions',
@@ -16,6 +18,7 @@ export class TableActionsComponent implements OnInit {
   @Input() element: any;
   address: string;
   contact$: Observable<any>;
+  tableTypesConsts = TableTypes;
 
   isDropdownVisible = false;
   public iconActions: string = `${environment.assetsPath}/images/shared/components/table/icon-actions.svg`;
@@ -31,6 +34,7 @@ export class TableActionsComponent implements OnInit {
   public expireIcon = `${environment.assetsPath}/images/shared/components/table-actions/icon-exp-copy-2.svg`;
 
   constructor(
+    private _clipboardService: ClipboardService,
     private store: Store<any>,
     public router: Router) {
   }
@@ -51,6 +55,10 @@ export class TableActionsComponent implements OnInit {
         }]);
       }
     });
+  }
+
+  copyAddressClicked() {
+    this._clipboardService.copyFromContent(this.element.address);
   }
 }
 

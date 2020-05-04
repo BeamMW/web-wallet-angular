@@ -31,6 +31,7 @@ export class DataService {
   options$: Observable<any>;
   appState$: Observable<any>;
 
+  public clickedElement: HTMLElement;
   // Observable string sources
   private emitChangeSource = new Subject<any>();
   // Observable string streams
@@ -59,7 +60,7 @@ export class DataService {
         privacySetting: false,
         saveLogsSetting: 0,
         currencySetting: 0,
-        dnsSetting: '',
+        dnsSetting: 'wallet-service.beam.mw',
         ipSetting: '3.222.86.179:20000',
         verificatedSetting: seedConfirmed,
         passwordCheck: true
@@ -141,5 +142,9 @@ export class DataService {
         });
       }
     });
+  }
+
+  clearWalletData() {
+    extensionizer.storage.local.remove(['settings', 'wallet', 'contacts', 'state']);
   }
 }

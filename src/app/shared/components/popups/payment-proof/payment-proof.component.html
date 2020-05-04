@@ -1,5 +1,6 @@
 <div class="proof" (click)="closePopup($event)">
     <div class="proof__container" [class.loaded]="proofLoaded" #proofContainer (click)="$event.stopPropagation()">
+        <img class="proof__cancel-icon" [src]="popupCloseIcon" (click)="closePopup($event)">
         <div class="proof__title">Payment proof verification</div>
         <div class="proof__content">
             <form class="proof__content__form" [formGroup]="proofForm" autocomplete="off" novalidate (ngSubmit)="submit()">

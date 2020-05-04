@@ -1,11 +1,11 @@
 <div class="control">
-    <div class="control__container" (click)="changeDropdownState($event)">
+    <div #control class="control__container" (click)="changeDropdownState($event)">
         <div class="control__container__dot"></div>
         <div class="control__container__dot middle"></div>
         <div class="control__container__dot"></div>
     </div>
 </div>
-<div class="dropdown" *ngIf="isDropdownVisible" appClickOutside (clickOutside)="onClickedOutside()">
+<div class="dropdown" *ngIf="isDropdownVisible" appClickOutside (clickOutside)="onClickedOutside($event)">
     <div class="dropdown__content">
         <ul class="dropdown__column">
             <li class="dropdown__item" *ngIf="!isFullScreen" (click)="fullViewClicked()">
@@ -13,6 +13,10 @@
                 <span class="dropdown__item__text">Full view</span>
             </li>
             <div class="dropdown__separator" *ngIf="!isFullScreen"></div>
+            <li class="dropdown__item" *ngIf="isFullScreen" (click)="securityModeClicked($event)">
+                <img class="dropdown__item__icon" [src]="privacyMode ? iconEnabledPrivacy : iconDisabledPrivacy">
+                <span class="dropdown__item__text">Security mode</span>
+            </li>
             <li class="dropdown__item" (click)="paymentProofClicked($event)">
                 <img class="dropdown__item__icon" [src]="proofIcon">
                 <span class="dropdown__item__text">Payment proof</span>

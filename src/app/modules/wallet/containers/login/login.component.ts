@@ -123,10 +123,17 @@ export class LoginComponent implements OnInit, OnDestroy {
           } else {
             this.login();
           }
-        });
+         });
       }).catch(error => {
         this.isCorrectPass = false;
       });
     });
+  }
+
+  passUpdated($event) {
+    const valueFromInput = $event.target.value;
+    if (valueFromInput === null || valueFromInput.length === 0) {
+      this.isCorrectPass = true;
+    }
   }
 }

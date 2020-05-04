@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef, 
 import { DataSource } from '@angular/cdk/collections';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatTable } from '@angular/material';
+import { routes, transactionsStatuses, TableTypes } from '@consts';
 
 import { Observable, BehaviorSubject, of } from 'rxjs';
 // import 'rxjs/add/operator/startWith';
@@ -14,7 +15,6 @@ import {Router} from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { selectContact } from '../../../store/selectors/wallet-state.selectors';
 import { selectUtxoById } from '../../../store/selectors/utxo.selectors';
-import { TableTypes } from '@consts';
 
 import { WebsocketService } from './../../../services';
 import { Subscription } from 'rxjs';
@@ -22,6 +22,7 @@ import { Subscription } from 'rxjs';
 import {
   saveProofData
 } from './../../../store/actions/wallet.actions';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-table',
@@ -39,10 +40,25 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() tableData: any;
   @Input() tableColumns: any;
   @Input() tableType: any;
+  @Input() privacy = false;
   activeSortItem = null;
   isReversedSort = false;
   contact$: Observable<any>;
   utxoList$: Observable<any>;
+  tableTypesConsts = TableTypes;
+
+  private baseImgPath = `${environment.assetsPath}/images/statuses/`;
+  private iconExpired = this.baseImgPath + `icon-expired.svg`;
+  private iconReceiveCanceled = this.baseImgPath + `icon-receive-canceled.svg`;
+  private iconReceived = this.baseImgPath + `icon-received.svg`;
+  private iconReceiveFailed = this.baseImgPath + `icon-receive-failed.svg`;
+  private iconReceiving = this.baseImgPath + `icon-receiving.svg`;
+  private iconSendCanceled = this.baseImgPath + `icon-send-canceled.svg`;
+  private iconSendFailed = this.baseImgPath + `icon-send-failed.svg`;
+  private iconSending = this.baseImgPath + `icon-sending.svg`;
+  private iconSendingOwn = this.baseImgPath + `icon-sending-own.svg`;
+  private iconSent = this.baseImgPath + `icon-sent.svg`;
+  public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
 
   isUtxoListVisible = true;
   tableTypes = TableTypes;
@@ -222,6 +238,69 @@ export class TableComponent implements OnInit, OnChanges {
 
   proofDataToCp() {
     return this.proofValue;
+  }
+
+  isActionsVisible(item) {
+    return item.status_string === transactionsStatuses.SENT;
+  }
+
+  getTrIcon(item) {
+    let iconPath = '';
+    if (item.status_string === transactionsStatuses.CANCELED && item.income) {
+      iconPath = this.iconReceiveCanceled;
+    } else if (item.status_string === transactionsStatuses.CANCELED && !item.income) {
+      iconPath = this.iconSendCanceled;
+    } else if (item.status_string === transactionsStatuses.EXPIRED) {
+      iconPath = this.iconExpired;
+    } else if (item.status_string === transactionsStatuses.FAILED && item.income) {
+      iconPath = this.iconReceiveFailed;
+    } else if (item.status_string === transactionsStatuses.FAILED && !item.income) {
+      iconPath = this.iconSendFailed;
+    } else if ((item.status_string === transactionsStatuses.PENDING ||
+        item.status_string === transactionsStatuses.IN_PROGRESS ||
+        item.status_string === transactionsStatuses.WAITING_FOR_RECEIVER) && item.income) {
+      iconPath = this.iconReceiving;
+    } else if ((item.status_string === transactionsStatuses.SENDING ||
+        item.status_string === transactionsStatuses.PENDING ||
+        item.status_string === transactionsStatuses.IN_PROGRESS ||
+        item.status_string === transactionsStatuses.WAITING_FOR_SENDER) && !item.income) {
+      iconPath = this.iconSending;
+    } else if ((item.status_string === transactionsStatuses.RECEIVED) ||
+        (item.status_string === transactionsStatuses.COMPLETED && item.income)) {
+      iconPath = this.iconReceived;
+    } else if ((item.status_string === transactionsStatuses.SENT) ||
+        (item.status_string === transactionsStatuses.COMPLETED && !item.income)) {
+      iconPath = this.iconSent;
+    } else if (item.status_string === transactionsStatuses.SENDING_TO_OWN_ADDRESS) {
+      iconPath = this.iconSendingOwn;
+    }
+    return iconPath;
+  }
+
+  getContentClass(item) {
+    let className = '';
+    if (item.status_string === transactionsStatuses.CANCELED ||
+        item.status_string === transactionsStatuses.EXPIRED) {
+      className = 'canceled';
+    } else if (item.status_string === transactionsStatuses.FAILED) {
+      className = 'failed';
+    } else if ((item.status_string === transactionsStatuses.PENDING ||
+        item.status_string === transactionsStatuses.IN_PROGRESS ||
+        item.status_string === transactionsStatuses.COMPLETED ||
+        item.status_string === transactionsStatuses.SENDING ||
+        item.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
+        item.status_string === transactionsStatuses.SENT) && !item.income) {
+      className = 'send';
+    } else if ((item.status_string === transactionsStatuses.PENDING ||
+        item.status_string === transactionsStatuses.IN_PROGRESS ||
+        item.status_string === transactionsStatuses.COMPLETED ||
+        item.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
+        item.status_string === transactionsStatuses.RECEIVED) && item.income) {
+      className = 'receive';
+    } else if (item.status_string === transactionsStatuses.SENDING_TO_OWN_ADDRESS) {
+      className = 'own';
+    }
+    return className;
   }
 }
 

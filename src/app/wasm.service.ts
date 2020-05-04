@@ -73,4 +73,12 @@ export class WasmService {
   public getSbbsAddressPrivate() {
     return this.keyKeeper.getSbbsAddressPrivate(8);
   }
+
+  public getIdentity(keyIDBase64: string) {
+    return this.keyKeeper.getIdentity(keyIDBase64);
+  }
+
+  public getSendToken(sbbsAddressHex: string, identityStrHex: string, amountBase64: string = '') {
+    return this.keyKeeper.getSendToken(sbbsAddressHex, identityStrHex, '000000');
+  }
 }

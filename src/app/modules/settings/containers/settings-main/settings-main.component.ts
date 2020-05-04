@@ -32,13 +32,13 @@ export class SettingsMainComponent implements OnInit {
   popupOpened = false;
 
   public logsMenuItems = [{
-    title: 'For all time', id: 0
+    title: 'Last 5 days', id: 0
   }, {
-    title: 'Last 5 days', id: 1
+    title: 'Last 15 days', id: 1
   }, {
-    title: 'Last 15 days', id: 2
+    title: 'Last 30 days', id: 2
   }, {
-    title: 'Last 30 days', id: 3
+    title: 'For all time', id: 3
   }];
 
   savelogsSetting$: Observable<any>;

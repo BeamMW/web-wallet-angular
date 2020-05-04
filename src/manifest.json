@@ -11,9 +11,9 @@
         "scripts": ["background.js"],
         "persistent": false
     },
-    "icons": { "16": "assets/beam-logo-round@2x.png",
-        "48": "assets/beam-logo-round@2x.png",
-       "128": "assets/beam-logo-round@2x.png" },
+    "icons": { "16": "assets/chrome-extention-icon-16x16.png",
+        "48": "assets/chrome-extention-icon-48x48.png",
+       "128": "assets/chrome-extention-icon-128x128.png" },
     "permissions": [
         "storage"
     ],

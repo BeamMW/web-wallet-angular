@@ -1,4 +1,4 @@
-<div class="side-menu" id="sidemenu" appClickOutside (clickOutside)="closeMenu()">
+<div class="side-menu" id="sidemenu" appClickOutside (clickOutside)="clickOutside($event)">
     <img class="side-menu__close" (click)="closeMenu()" [src]="iconClose"/>
     <div class="side-menu__items" routerLinkActive="active">
         <div class="side-menu__items__item menu-item" *ngFor="let item of menuItems" 

@@ -3,6 +3,7 @@
     <form class="confirm__form" [formGroup]="confirmForm" autocomplete="off" novalidate (ngSubmit)="submit()">
         <input class="confirm__form__input" type="password" #passInput
                 name="password" formControlName="password" [class.incorrect]="!isCorrectPass"
+                (input)="passUpdated($event)"
                 placeholder="Enter password"/>
                 {{ passInput.focus() }}
         <div class="confirm__form__validator" *ngIf="!isCorrectPass">Incorrect password</div>

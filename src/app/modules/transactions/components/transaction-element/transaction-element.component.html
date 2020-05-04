@@ -1,67 +1,26 @@
-<div class="transaction" [routerLink]="['/transactions/details', transaction.txId]">
-    <div class="transaction__receive" [class.commented]="isCommentDefault(transaction.comment) && transaction.comment.length > 0" 
-            *ngIf="transaction.status_string === 'received' || transaction.status_string === 'completed'">
-        <div class="transaction__receive__value">
-            <img class="tr-receive-icon" [src]="iconReceived"/>
-            <span class="tr-receive-text">Receive</span>
-            <span class="tr-receive-value">+ {{ transaction.value | beam:'1.0-9'}} BEAM</span>
+<div class="transaction" (click)="transactionClicked()">
+    <div class="transaction__common">
+        <div class="transaction__common__top-content">
+            <img class="transaction__common__top-content__icon" [src]="getTrIcon()"/>
+            <span class="transaction__common__top-content__text">
+                {{transaction.income ? 'Receive' : 'Send'}}
+            </span>
+            <app-table-actions class="transaction__common__top-content__actions"
+                               *ngIf="isActionsVisible()"
+                               [tableType]="tableTypesConsts.TRANSACTIONS" 
+                               [element]="transaction"></app-table-actions>
+            <app-table-actions class="transaction__common__top-content__actions"
+                               *ngIf="!isActionsVisible()"
+                               [tableType]="tableTypesConsts.TRANSACTIONS_NOT_SENT" 
+                               [element]="transaction"></app-table-actions>
         </div>
-        <div class="transaction__receive__status">received</div>
-        <div class="tr-created">{{transaction.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
-        <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment) && transaction.comment.length > 0">
-            <img class="tr-comment__icon" [src]="iconComment"/>
-            <span class="tr-comment__text">"{{transaction.comment}}"</span>
+        <div [className]="'transaction__common__mid-content ' + getContentClass()">
+            <div class="transaction__common__mid-content__status">{{transaction.status_string}}</div>
+            <div class="transaction__common__mid-content__value">
+                <ng-container>{{getValueSign()}}</ng-container>
+                 {{ transaction.value | beam:'1.0-9'}} BEAM</div>
         </div>
-    </div>
-    <div class="transaction__receive" [class.commented]="isCommentDefault(transaction.comment)  && transaction.comment.length > 0" 
-            *ngIf="transaction.status_string === 'receiving'">
-        <div class="transaction__receive__value">
-            <img class="tr-receive-icon" [src]="iconReceived"/>
-            <span class="tr-receive-text">Receive</span>
-            <span class="tr-receive-value">+ {{ transaction.value | beam:'1.0-9'}} BEAM</span>
-        </div>
-        <div class="transaction__receive__status">receiving</div>
-        <div class="tr-created">{{transaction.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
-        <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment) && transaction.comment.length > 0">
-            <img class="tr-comment__icon" [src]="iconComment"/>
-            <span class="tr-comment__text">"{{transaction.comment}}"</span>
-        </div>
-    </div>
-    <div class="transaction__send" [class.commented]="isCommentDefault(transaction.comment) && transaction.comment.length > 0" 
-            *ngIf="transaction.status_string == 'sent'">
-        <div class="transaction__send__value">
-            <img class="tr-send-icon" [src]="iconSent">
-            <span class="tr-send-text">Send</span>
-            <span class="tr-send-value">- {{ transaction.value | beam:'1.0-9'}} BEAM</span>
-        </div>
-        <div class="transaction__send__status">sent</div>
-        <div class="tr-created">{{transaction.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
-        <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment) && transaction.comment.length > 0">
-            <img class="tr-comment__icon" [src]="iconComment"/>
-            <span class="tr-comment__text">"{{transaction.comment}}"</span>
-        </div>
-    </div>
-    <div class="transaction__send" [class.commented]="isCommentDefault(transaction.comment) && transaction.comment.length > 0" 
-            *ngIf="transaction.status_string == 'sending'">
-        <div class="transaction__send__value">
-            <img class="tr-send-icon" [src]="iconSent">
-            <span class="tr-send-text">Send</span>
-            <span class="tr-send-value">- {{ transaction.value | beam:'1.0-9'}} BEAM</span>
-        </div>
-        <div class="transaction__send__status">sending</div>
-        <div class="tr-created">{{transaction.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
-        <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment) && transaction.comment.length > 0">
-            <img class="tr-comment__icon" [src]="iconComment"/>
-            <span class="tr-comment__text">"{{transaction.comment}}"</span>
-        </div>
-    </div>
-    <div class="transaction__send" [class.commented]="isCommentDefault(transaction.comment) && transaction.comment.length > 0" 
-            *ngIf="transaction.status_string == 'cancelled'">
-        <div class="transaction__send__value">
-            <span class="tr-send-text">Cancelled</span>
-            <span class="tr-send-value">- {{ transaction.value | beam:'1.0-9'}} BEAM</span>
-        </div>
-        <div class="tr-created">{{transaction.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
+        <div class="transaction__common__created">{{transaction.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
         <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment) && transaction.comment.length > 0">
             <img class="tr-comment__icon" [src]="iconComment"/>
             <span class="tr-comment__text">"{{transaction.comment}}"</span>

@@ -1,154 +1,94 @@
+@import 'ui-mixins';
+@import './styles';
+
 .transaction {
     cursor: pointer;
     
-    &__receive {
+    &__common {
         display: flex;
         flex-direction: column;
-        height: 125px;
-        padding: 20px 20px 0 20px;
+        min-height: 105px;
+        padding: 22px 20px 15px 20px;
 
-        &__value {
+        &__top-content {
             align-items: center;
             display: flex;
+            flex-direction: row;
+
+            &__text {
+                @include normal-text;
+                font-family: 'ProximaNovaBold', sans-serif;
+                margin-left: 15px;
+                font-size: 14px;
+                font-weight: bold;
+                color: #ffffff;
+            }
+
+            &__actions {
+                margin-left: auto;
+            }
         }
 
-        &__status{
+        &__mid-content {
+            @include normal-text;
+            display: flex;
+            flex-direction: row;
             margin-left: 35px;
             margin-top: 4px;
             font-size: 14px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
             color: #0bccf7;
             font-family: 'ProximaNovaIT', sans-serif;
-        }
-    }
 
-    &__receive.commented {
-        height: 103px;
-    }
-
-    &__send {
-        display: flex;
-        flex-direction: column;
-        height: 125px;
-        padding: 20px 20px 0 20px;
-
-        &__value {
-            align-items: center;
-            display: flex;
+            &__value {
+                @include normal-text;
+                margin-left: auto;
+                font-family: 'ProximaNovaBold', sans-serif;
+                font-size: 16px;
+                font-weight: bold;
+            }
         }
 
-        &__status{
-            margin-left: 35px;
-            margin-top: 4px;
-            font-size: 14px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
+        &__mid-content.canceled {
+            color: #8da1ad;
+        }
+
+        &__mid-content.failed {
+            color: #ff746b;
+        }
+
+        &__mid-content.send {
             color: #da68f5;
-            font-family: 'ProximaNovaIT', sans-serif;
+        }
+
+        &__mid-content.receive {
+            color: #23c1ff;
+        }
+
+        &__mid-content.own {
+            color: #ffffff;
+        }
+
+        &__created {
+            @include normal-text;
+            opacity: .5;
+            font-family: 'ProximaNova', sans-serif;
+            font-size: 14px;
+            color: #ffffff;
+            margin-top: 5px;
+            margin-left: 35px;
         }
     }
-
-    &__send.commented {
-        height: 103px;
-    }
-    
-    &__empty-tr-icon {
-        display: flex;
-        margin: 95px auto 0 auto;
-    }
-
-    &__empty-tr-text {
-        font-family: 'ProximaNova', sans-serif;
-        margin: 20px auto 95px auto;
-        font-size: 12px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: 1.67;
-        letter-spacing: normal;
-        text-align: center;
-        color: #ffffff;
-        opacity: .5;
-    }
-}
-
-
-.tr-send-text,
-.tr-receive-text {
-    font-family: 'ProximaNovaBold', sans-serif;
-    margin-left: 15px;
-    font-size: 14px;
-    font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    color: #ffffff;
-}
-
-.tr-send-value {
-    font-family: 'ProximaNovaBold', sans-serif;
-    font-size: 16px;
-    font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    margin-left: auto;
-    color: #da68f5;
-}
-
-.tr-receive-value {
-    font-family: 'ProximaNovaBold', sans-serif;
-    font-size: 16px;
-    font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: right;
-    margin-left: auto;
-    color: #0bccf7;
-}
-
-.tr-created {
-    opacity: .5;
-    font-family: 'ProximaNova', sans-serif;
-    font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    color: #ffffff;
-    margin-top: 5px;
-    margin-left: 35px;
 }
 
 .tr-comment {
+    @include normal-text;
     opacity: .5;
     font-family: 'ProximaNova', sans-serif;
     font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
     color: #ffffff;
     margin-left: 35px;
     display: flex;
     margin-top: 5px;
-
-    &__icon {
-
-    }
 
     &__text {
         margin-left: 15px;

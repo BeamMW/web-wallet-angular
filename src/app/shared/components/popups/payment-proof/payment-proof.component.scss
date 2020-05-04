@@ -17,6 +17,13 @@
     z-index: 1100;
     overflow: auto;
 
+    &__cancel-icon {
+        margin: 10px 10px 0 auto;
+        width: 14px;
+        height: 14px;
+        cursor: pointer;
+    }
+
     &__container {
         display: flex;
         flex-direction: column;
@@ -37,14 +44,12 @@
     }
 
     &__title {
-        margin: 30px auto 0 auto;
+        @include normal-text;
+        margin: 6px auto 0 auto;
         font-family: 'ProximaNovaBold', sans-serif;
         font-size: 16px;
         font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
         line-height: 1.06;
-        letter-spacing: normal;
         text-align: center;
         color: #ffffff;
     }
@@ -59,19 +64,16 @@
             padding-bottom: 30px;
 
             &__error {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif; 
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 text-align: center;
                 color: #ff625c;
                 margin: 20px auto 0 auto;
             }
     
             &__input {
+                @include normal-text;
                 margin-top: 16px;
                 min-height: 30px;
                 background: rgba(255, 255, 255, 0);
@@ -79,11 +81,6 @@
                 border: none;
                 border-bottom: 2px solid #00f6d2;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #ffffff;
                 resize: none;
                 overflow: auto;
@@ -95,14 +92,10 @@
             }
     
             &__input:focus {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 outline-width: 0;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #ffffff;
             }
     
@@ -111,13 +104,9 @@
             }
     
             &__input::placeholder {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: rgba(255, 255, 255, .3);
             }
         }
@@ -158,52 +147,41 @@
 
     &__header {
         &__title {
+            @include normal-text;
             font-family: 'ProximaNovaBold', sans-serif;
             font-size: 14px;
             font-weight: bold;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
             letter-spacing: 1px;
             color: #ffffff;
         }
     }
 
     &__item-title {
+        @include normal-text;
         margin-top: 20px;
         opacity: 0.5;
         font-family: 'ProximaNovaBold', sans-serif;
         font-size: 14px;
         font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
         letter-spacing: 1px;
         color: #ffffff;
     }
 
     &__item-value {
+        @include normal-text;
         margin-top: 10px;
         font-family: 'ProximaNova', sans-serif;
         font-size: 14px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
         color: #ffffff;
         max-width: 460px;
         word-wrap: break-word;
     }
 
     &__explorer-link {
+        @include normal-text;
         font-family: 'ProximaNova', sans-serif;
         font-size: 14px;
         font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
         text-align: center;
         color: #00f6d2;
         margin-top: 5px;
@@ -221,12 +199,9 @@
         //margin-top: -63px;
 
         &__title {
+            @include normal-text;
             font-size: 18px;
             font-weight: bold;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
             text-align: center;
             color: #ffffff;
         }

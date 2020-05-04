@@ -9,7 +9,6 @@ export * from './popups/payment-proof/payment-proof.component';
 export * from './popups/add-contact/add-contact.component';
 export * from './password/password.component';
 export * from './transaction-list/transaction-list.component';
-export * from './menu-control/menu-control.component';
 export * from './table-actions/table-actions.component';
 export * from './dropdown/dropdown.component';
 export * from './popups/payment-proof-exported/payment-proof-exported.component';

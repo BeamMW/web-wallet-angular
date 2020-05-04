@@ -1,0 +1,36 @@
+:host {
+    display: block;
+    z-index: 100;
+}
+
+.header {
+    background: #042548;
+    align-items: center;
+    display: flex;
+    height: 50px;
+    width: 100%;
+
+    &__full-sc-control {
+        width: 20px;
+        height: 20px;
+        margin-right: 20px;
+        cursor: pointer;
+    }
+}
+
+.header-status-wrapper {
+    width: 50%;
+    flex-shrink: 1;
+    display: flex;
+}
+
+.header-logo-wrapper {
+    flex-shrink: 0;
+}
+
+.header-full-wrapper {
+    width: 50%;
+    flex-shrink: 1;
+    display: flex;
+    flex-direction: row-reverse;
+}

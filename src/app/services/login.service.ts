@@ -77,6 +77,7 @@ export class LoginService {
     disconnect(err?) {
         if (err) { console.error(err); }
         this.setConnected(false);
+        this.subject.complete();
         console.log('Disconnected');
     }
 

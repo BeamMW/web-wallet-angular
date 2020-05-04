@@ -1,0 +1,7 @@
+<header class="header" *ngIf="!isFullScreen">
+    <div class="header-status-wrapper"></div>
+    <div class="header-logo-wrapper"></div>
+    <div class="header-full-wrapper">
+        <img class="header__full-sc-control" (click)="openFull()" [src]="iconFull" />
+    </div>
+</header>

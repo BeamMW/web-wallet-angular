@@ -83,6 +83,26 @@
     font-style: italic;
 }
 
+.status-cell.canceled {
+    color: #8da1ad;
+}
+
+.status-cell.failed {
+    color: #ff746b;
+}
+
+.status-cell.send {
+    color: #da68f5;
+}
+
+.status-cell.receive {
+    color: #23c1ff;
+}
+
+.status-cell.own {
+    color: #ffffff;
+}
+
 .utxo-cell {
     @include normal-text;
     opacity: .5;

@@ -3,12 +3,13 @@
 </div>
 <div class="login">
     <img [src]="logoUrl" class="login__logo">
-    <div class="login__subheader-text">Scalable confidential cryptocurrency</div>
+    <div class="login__subheader-text" *ngIf="isFullScreen">Scalable confidential cryptocurrency</div>
     <div class="login__header-text">Enter your password to access the wallet</div>
     <div class="login__container">
         <form class="send-form-cl" [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="submit()">
             <div class="form-group">
                 <input autofocus class="login__container__input" #passInput [class.incorrect]="!isCorrectPass"
+                    (input)="passUpdated($event)"
                     name="password" type="password" formControlName="password" 
                     placeholder="Password"/>
                     {{ passInput.focus() }}
@@ -19,4 +20,6 @@
             </div>
         </form>
     </div>
+
+    <div class="login__top-gradient" *ngIf="!isFullScreen"></div>
 </div>

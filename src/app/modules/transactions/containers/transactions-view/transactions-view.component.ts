@@ -48,11 +48,11 @@ export class TransactionsViewComponent implements OnInit, OnDestroy {
         }
 
         this.sub.unsubscribe();
-        setTimeout(() => {
-          if (this.pageActive) {
-            this.transactionsUpdate();
-          }
-        }, 5000);
+        // setTimeout(() => {
+        //   if (this.pageActive) {
+        //     this.transactionsUpdate();
+        //   }
+        // }, 5000);
       }
     });
     this.wsService.send({

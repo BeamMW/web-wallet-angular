@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router} from '@angular/router';
 import { ActivatedRoute} from '@angular/router';
-import { DataService, WindowService } from './../../../../services';
+import { DataService, WindowService, LoginService, WebsocketService } from './../../../../services';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl} from '@angular/forms';
 import * as passworder from 'browser-passworder';
@@ -21,6 +21,8 @@ export class RemoveWalletConfirmationPopupComponent implements OnInit, OnDestroy
   isCorrectPass = true;
 
   constructor(private windowSerivce: WindowService,
+              private loginService: LoginService,
+              private websocketService: WebsocketService,
               public router: Router,
               private activatedRoute: ActivatedRoute,
               private store: Store<any>,
@@ -45,8 +47,11 @@ export class RemoveWalletConfirmationPopupComponent implements OnInit, OnDestroy
 
   submit($event) {
     $event.stopPropagation();
-    this.wallet$.subscribe(wallet => {
+    this.sub = this.wallet$.subscribe(wallet => {
       passworder.decrypt(this.confirmForm.value.password, wallet).then((result) => {
+        this.websocketService.disconnect();
+        this.loginService.disconnect();
+        this.dataService.clearWalletData();
         this.router.navigate(['/initialize/create']);
       }).catch(error => {
         this.isCorrectPass = false;
@@ -61,5 +66,12 @@ export class RemoveWalletConfirmationPopupComponent implements OnInit, OnDestroy
 
   closePopup() {
     this.router.navigate([{ outlets: { popup: null }}], {relativeTo: this.activatedRoute.parent});
+  }
+
+  passUpdated($event) {
+    const valueFromInput = $event.target.value;
+    if (valueFromInput === null || valueFromInput.length === 0) {
+      this.isCorrectPass = true;
+    }
   }
 }

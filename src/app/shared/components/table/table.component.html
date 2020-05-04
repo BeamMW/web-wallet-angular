@@ -34,12 +34,17 @@
           <span>Amount</span>
           <img class="sort-icon" [src]="activeSortItem === sortParams.amount ? iconSortActive : iconSort">
         </mat-header-cell>
-        <mat-cell *matCellDef="let element" class="amount-cell" 
+        <mat-cell *matCellDef="let element" class="amount-cell"
             [class.sent]="element.status_string === 'sending' || element.status_string === 'sent'"
             [class.receive]="element.status_string === 'receiving' || element.status_string === 'received'">
-            <span *ngIf="element.status_string === 'receiving' || element.status_string === 'received'">+</span>
-            <span *ngIf="element.status_string === 'sending' || element.status_string === 'sent'">-</span>
-            {{ element.value | beam:'1.0-9'}} BEAM
+            <ng-container *ngIf="!privacy">
+              <span *ngIf="element.status_string === 'receiving' || element.status_string === 'received'">+</span>
+              <span *ngIf="element.status_string === 'sending' || element.status_string === 'sent'">-</span>
+              {{ element.value | beam:'1.0-9'}} BEAM
+            </ng-container>
+            <ng-container *ngIf="privacy">
+              <img [src]="iconEnabledPrivacy">
+            </ng-container>
         </mat-cell>
       </ng-container>
 
@@ -84,9 +89,8 @@
           <span>Status</span>
           <img class="sort-icon" [src]="activeSortItem === sortParams.status ? iconSortActive : iconSort">
         </mat-header-cell>
-        <mat-cell class="status-cell" *matCellDef="let element"
-          [class.sent]="element.status_string === 'sending' || element.status_string === 'sent'"
-          [class.receive]="element.status_string === 'receiving' || element.status_string === 'received'"> 
+        <mat-cell [className]="'status-cell ' + getContentClass(element)" *matCellDef="let element">
+          <img class="transaction__common__top-content__icon" [src]="getTrIcon(element)"/>
             {{element.status_string}}
         </mat-cell>
       </ng-container>
@@ -146,7 +150,12 @@
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
         <mat-cell *matCellDef="let element">
-          <app-table-actions class="table-actions" [tableType]="tableType" [element]="element"></app-table-actions>
+          <app-table-actions class="table-actions" 
+                            [tableType]="tableType === tableTypesConsts.TRANSACTIONS ? 
+                              (isActionsVisible(element) ? tableType : tableTypes.TRANSACTIONS_NOT_SENT) :
+                              tableType" 
+                            [element]="element"></app-table-actions>
+
         </mat-cell>
       </ng-container>
 

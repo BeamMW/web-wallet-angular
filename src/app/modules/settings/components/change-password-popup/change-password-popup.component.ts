@@ -82,4 +82,11 @@ export class ChangePasswordPopupComponent implements OnInit, OnDestroy {
   closePopup(isCorrect = false) {
     this.router.navigate([{ outlets: { popup: null }}], {relativeTo: this.activatedRoute.parent});
   }
+
+  passUpdated($event) {
+    const valueFromInput = $event.target.value;
+    if (valueFromInput === null || valueFromInput.length === 0) {
+      this.isCorrectPass = true;
+    }
+  }
 }

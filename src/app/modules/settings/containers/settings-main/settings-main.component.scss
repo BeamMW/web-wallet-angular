@@ -256,10 +256,21 @@
     .privacy-item-slide {
         margin-left: 70px;
     }
+
+    ::ng-deep .mat-slide-toggle-label {
+        flex-direction: unset !important;
+        display: block !important;
+        flex: unset !important;
+    }
     
     ::ng-deep .mat-slide-toggle-thumb-container {
+        width: 16px !important;
+        height: 16px !important;
         top: 0 !important;
-        left: 1px !important;
+        left: 0 !important;
+        position: relative !important;
+        display: flex;
+        align-self: center;
     }
     
     ::ng-deep .mat-slide-toggle-thumb {
@@ -280,11 +291,13 @@
     }
     
     ::ng-deep .mat-slide-toggle-bar {
+        display: flex;
         width: 36px !important;
         height: 20px !important;
         border-radius: 10px !important;
         border: solid 1px #8da1ad !important;
         background-color: rgba(141, 161, 173, 0.1);
+        padding-left: 1px;
     }
     
     ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
