@@ -4,10 +4,6 @@ import { WasmService } from './../../../../wasm.service';
 import { Subscription, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import {
-  loadAddresses,
-  loadUtxo,
-  loadTr,
-  saveWalletStatus,
   updatePrivacySetting
 } from './../../../../store/actions/wallet.actions';
 import { selectAllAddresses } from '../../../../store/selectors/address.selectors';
@@ -20,12 +16,20 @@ import {
 } from '../../../../store/selectors/transaction.selectors';
 import {
   selectPrivacySetting,
-  selectVerificatedSetting
+  selectVerificatedSetting,
+  selectWalletStatus
 } from '../../../../store/selectors/wallet-state.selectors';
 import { DataService, WindowService, WebsocketService, LoginService } from './../../../../services';
+import { routes } from '@consts';
 
 import { environment } from '@environment';
 
+export enum selectorTitles {
+  ALL = 'All',
+  IN_PROGRESS = 'In progress',
+  SENT = 'Sent',
+  RECEIVED = 'Received'
+}
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -46,45 +50,19 @@ export class MainComponent implements OnInit, OnDestroy {
   public tableType = 'wallet';
   public tableColumns = ['created', 'from', 'to', 'amount', 'status', 'actions'];
 
-  public selectorValues = [{
-    title: 'ALL',
-    active: true
-  }, {
-    title: 'IN PROGRESS',
-    active: false
-  }, {
-    title: 'SEND',
-    active: false
-  }, {
-    title: 'RECEIVED',
-    active: false
-  }];
-  public activeSelectorItem = this.selectorValues[0];
+  selectorTitlesData = selectorTitles;
+  public trSelectorActiveTitle = selectorTitles.ALL;
 
-  private sub: Subscription;
-  private mainActive = false;
-  transactionsLoaded = false;
   modalOpened = false;
   addresses$: Observable<any>;
   utxos$: Observable<any>;
   transactions$: Observable<any>;
   verificatedSetting$: Observable<any>;
   privacySetting$: Observable<any>;
+  walletStatus$: Observable<any>;
   addressesColumns: string[] = ['address', 'created', 'comment'];
   utxoColumns: string[] = ['utxo', 'amount', 'status'];
   transcationsColumns: string[] = ['sender', 'value', 'txId'];
-
-  walletStatusLoaded = false;
-  walletStatus = {
-    available: 0,
-    currentHeight: 0,
-    current_state_hash: '',
-    difficulty: 0,
-    maturing: 0,
-    prev_state_hash: '',
-    receiving: '',
-    sending: ''
-  };
 
   verificatedSetting = null;
   privacyMode = false;
@@ -121,133 +99,13 @@ export class MainComponent implements OnInit, OnDestroy {
         this.modalOpened = emittedState;
       }
     });
+
+    this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
   }
 
-  private transactionsUpdate() {
-    this.sub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.result) {
-        console.log('[main-page] transactions');
-        console.log(msg.result)
-        if (msg.result.length !== undefined) {
-          this.store.dispatch(loadTr({transactions: msg.result}));
-        } else {
-          this.store.dispatch(loadTr({transactions: [msg.result]}));
-        }
-        this.transactionsLoaded = true;
+  ngOnInit() {}
 
-        this.sub.unsubscribe();
-        setTimeout(() => {
-          if (this.mainActive) {
-           this.update();
-          }
-        }, 5000);
-      }
-    });
-    this.websocketService.send({
-      jsonrpc: '2.0',
-      id: 0,
-      method: 'tx_list'
-    });
-  }
-
-  private utxoUpdate() {
-    this.sub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.result) {
-        console.log('[main-page] utxo');
-        console.log(msg.result)
-        if (msg.result.length !== undefined) {
-          this.store.dispatch(loadUtxo({utxos: msg.result}));
-        } else {
-          this.store.dispatch(loadUtxo({utxos: [msg.result]}));
-        }
-
-        this.sub.unsubscribe();
-        this.transactionsUpdate();
-      }
-    });
-    this.websocketService.send({
-      jsonrpc: '2.0',
-      id: 0,
-      method: 'get_utxo'
-    });
-  }
-
-  private addressUpdate() {
-    this.sub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.result) {
-        console.log('[main-page] addresses', msg.result)
-        if (msg.result.length !== undefined) {
-          this.store.dispatch(loadAddresses({addresses: msg.result}));
-        } else {
-          this.store.dispatch(loadAddresses({addresses: [msg.result]}));
-        }
-
-        this.sub.unsubscribe();
-        this.utxoUpdate();
-      }
-    });
-    this.websocketService.send({
-      jsonrpc: '2.0',
-      id: 0,
-      method: 'addr_list',
-      params:
-      {
-        own: true
-      }
-    });
-  }
-
-  private update() {
-    this.sub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.result) {
-        console.log('[main-page] update: ');
-        console.dir(msg);
-
-        this.store.dispatch(saveWalletStatus({status: msg.result}));
-
-        this.walletStatus.available = msg.result.available;
-        this.walletStatus.currentHeight = msg.result.current_height;
-        this.walletStatus.current_state_hash = msg.result.current_state_hash;
-        this.walletStatus.difficulty = msg.result.difficulty;
-        this.walletStatus.maturing = msg.result.maturing;
-        this.walletStatus.prev_state_hash = msg.result.prev_state_hash;
-        this.walletStatus.receiving = msg.result.receiving;
-        this.walletStatus.sending = msg.result.sending;
-
-        this.sub.unsubscribe();
-        this.walletStatusLoaded = true;
-        this.addressUpdate();
-      }
-    });
-
-    this.websocketService.send({
-      jsonrpc: '2.0',
-      id: 0,
-      method: 'wallet_status'
-    });
-  }
-
-  ngOnInit() {
-    this.mainActive = true;
-    this.update();
-  }
-
-  ngOnDestroy() {
-    if (this.sub !== undefined) {
-      this.sub.unsubscribe();
-    }
-    this.mainActive = false;
-  }
-
-  expandedView() {
-    // const extensionURL = chrome.runtime.getURL('index.html#wallet/main');
-    // chrome.tabs.create({ url: extensionURL });
-  }
-
-  sidenavItemClicked(item) {
-    // this.activeSidenavItem = item;
-    // this.router.navigate([item.route], {relativeTo: this.route});
-  }
+  ngOnDestroy() {}
 
   sideMenuClicked($event) {
     this.dataService.clickedElement = $event.currentTarget;
@@ -255,7 +113,7 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   showAllTransactions() {
-    this.router.navigate(['/transactions/view']);
+    this.router.navigate([routes.TRANSACTIONS_LIST_ROUTE]);
   }
 
   privacyControlClicked() {
@@ -264,20 +122,24 @@ export class MainComponent implements OnInit, OnDestroy {
     this.dataService.saveWalletOptions();
   }
 
-  selectorItemClicked(item) {
-    this.activeSelectorItem.active = false;
-    item.active = true;
-    this.activeSelectorItem = item;
+  selectorItemAllClicked() {
+    this.transactions$ = this.store.pipe(select(selectAllTr));
+    this.trSelectorActiveTitle = selectorTitles.ALL;
+  }
 
-    if (item.title === this.selectorValues[0].title) {
-      this.transactions$ = this.store.pipe(select(selectAllTr));
-    } else if (item.title === this.selectorValues[1].title) {
-      this.transactions$ = this.store.pipe(select(selectInProgressTr));
-    } else if (item.title === this.selectorValues[2].title) {
-      this.transactions$ = this.store.pipe(select(selectSentTr));
-    } else if (item.title === this.selectorValues[3].title) {
-      this.transactions$ = this.store.pipe(select(selectReceivedTr));
-    }
+  selectorItemInProgressClicked() {
+    this.transactions$ = this.store.pipe(select(selectInProgressTr));
+    this.trSelectorActiveTitle = selectorTitles.IN_PROGRESS;
+  }
+
+  selectorItemSentClicked() {
+    this.transactions$ = this.store.pipe(select(selectSentTr));
+    this.trSelectorActiveTitle = selectorTitles.SENT;
+  }
+
+  selectorItemReceivedClicked() {
+    this.transactions$ = this.store.pipe(select(selectReceivedTr));
+    this.trSelectorActiveTitle = selectorTitles.RECEIVED;
   }
 }
 

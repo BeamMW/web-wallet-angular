@@ -47,12 +47,6 @@ export class WasmService {
   public keykeeperInit(seed) {
     return this.wasmReady.pipe(filter(value => value === true)).pipe(
       map(() => {
-        // const wordList = new this.module.WordList();
-        // seed.split(' ').forEach((word) => wordList.push_back(word));
-        // const phrase = this.module.KeyKeeper.GeneratePhrase();
-
-        // console.log(phrase);
-        // return new this.module.KeyKeeper(phrase);
         this.keyKeeper =  new this.module.KeyKeeper(seed);
       })
     );
@@ -66,19 +60,19 @@ export class WasmService {
     return this.keyKeeper.getWalletID();
   }
 
-  public getSbbsAddress() {
-    return this.keyKeeper.getSbbsAddress(8);
+  public getSbbsAddress(identityStrHex: string) {
+    return this.keyKeeper.getSbbsAddress(identityStrHex);
   }
 
-  public getSbbsAddressPrivate() {
-    return this.keyKeeper.getSbbsAddressPrivate(8);
+  public getSbbsAddressPrivate(identityStrHex: string) {
+    return this.keyKeeper.getSbbsAddressPrivate(identityStrHex);
   }
 
   public getIdentity(keyIDBase64: string) {
     return this.keyKeeper.getIdentity(keyIDBase64);
   }
 
-  public getSendToken(sbbsAddressHex: string, identityStrHex: string, amountBase64: string = '') {
-    return this.keyKeeper.getSendToken(sbbsAddressHex, identityStrHex, '000000');
+  public getSendToken(sbbsAddressHex: string, identityStrHex: string, amountBase64: number) {
+    return this.keyKeeper.getSendToken(sbbsAddressHex, identityStrHex, amountBase64);
   }
 }

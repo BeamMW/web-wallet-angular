@@ -1,49 +1,51 @@
 <ng-container *ngIf="isFullScreen">
     <div class="main">
         <div class="main__content">
-            <div class="main__content__header">
-                <div class="main__content__header__title">Wallet</div>
-                <app-button class="main__content__header__send-button" [routerLink]="sendRoute">send</app-button>
-                <app-button class="main__content__header__receive-button" [routerLink]="receiveRoute">receive</app-button>
-            </div>
-            <div class="main__content__state" *ngIf="walletStatusLoaded"
-                [class.reduced]="walletStatus.receiving === 0 && walletStatus.sending === 0">
-                <div class="available">
-                    <img class="available__logo" [src]="iconBeamFull">
-                    <div class="available__container">
-                        <div class="available__container__title">Available</div>
-                        <span class="available__container__value" *ngIf="!privacyMode && walletStatusLoaded">
-                            {{walletStatus.available | beam:'1.0-9'}} BEAM
-                        </span>
-                        <img class="available__container__value" [src]="iconEnabledPrivacy" 
-                             *ngIf="privacyMode && walletStatusLoaded">
-                    </div>
+            <ng-container *ngIf="walletStatus$ | async as walletStatus">
+                <div class="main__content__header">
+                    <div class="main__content__header__title">Wallet</div>
+                    <app-button class="main__content__header__send-button" [routerLink]="sendRoute">send</app-button>
+                    <app-button class="main__content__header__receive-button" [routerLink]="receiveRoute">receive</app-button>
                 </div>
-                <ng-container *ngIf="walletStatusLoaded && (walletStatus.receiving > 0 || walletStatus.sending > 0)">
-                    <div class="main__content__state__separator"></div>
-                    <div class="in-progress">
-                        <div class="in-progress__sent">
-                            <div class="in-progress__sent__title">In progress</div>
-                            <div class="in-progress__sent__value">
-                                <img class="in-progress__sent__value__logo" [src]="iconSent">
-                                <span class="in-progress__sent__value__data" *ngIf="!privacyMode">
-                                    -{{walletStatus.sending | beam:'1.0-9'}} BEAM
+                <div class="main__content__state"
+                    [class.reduced]="walletStatus.receiving === 0 && walletStatus.sending === 0">
+                    <div class="available">
+                        <img class="available__logo" [src]="iconBeamFull">
+                        <div class="available__container">
+                            <div class="available__container__title">Available</div>
+                            <span class="available__container__value" *ngIf="!privacyMode">
+                                {{walletStatus.available | beam:'1.0-9'}} BEAM
+                            </span>
+                            <img class="available__container__value" [src]="iconEnabledPrivacy" 
+                                *ngIf="privacyMode">
+                        </div>
+                    </div>
+                    <ng-container *ngIf="(walletStatus.receiving > 0 || walletStatus.sending > 0)">
+                        <div class="main__content__state__separator"></div>
+                        <div class="in-progress">
+                            <div class="in-progress__sent">
+                                <div class="in-progress__sent__title">In progress</div>
+                                <div class="in-progress__sent__value">
+                                    <img class="in-progress__sent__value__logo" [src]="iconSent">
+                                    <span class="in-progress__sent__value__data" *ngIf="!privacyMode">
+                                        -{{walletStatus.sending | beam:'1.0-9'}} BEAM
+                                    </span>
+                                    <img class="in-progress__sent__value__data" [src]="iconEnabledPrivacy" 
+                                        *ngIf="privacyMode">
+                                </div>
+                            </div>
+                            <div class="in-progress__receive">
+                                <img class="in-progress__receive__logo" [src]="iconReceived">
+                                <span class="in-progress__receive__value" *ngIf="!privacyMode">
+                                    +{{walletStatus.receiving | beam:'1.0-9'}} BEAM
                                 </span>
-                                <img class="in-progress__sent__value__data" [src]="iconEnabledPrivacy" 
+                                <img class="in-progress__receive__value" [src]="iconEnabledPrivacy" 
                                     *ngIf="privacyMode">
                             </div>
                         </div>
-                        <div class="in-progress__receive">
-                            <img class="in-progress__receive__logo" [src]="iconReceived">
-                            <span class="in-progress__receive__value" *ngIf="!privacyMode">
-                                +{{walletStatus.receiving | beam:'1.0-9'}} BEAM
-                            </span>
-                            <img class="in-progress__receive__value" [src]="iconEnabledPrivacy" 
-                                 *ngIf="privacyMode">
-                        </div>
-                    </div>
-                </ng-container>
-            </div>
+                    </ng-container>
+                </div>
+            </ng-container>
             <ng-container *ngIf="verificatedSetting !== null && !verificatedSetting">
                 <div class="main__content__validate">
                     <div class="main__content__validate__text">
@@ -56,9 +58,33 @@
                 <ng-container>
                     <div class="main__content__subtitle">TRANSACTIONS</div>
                     <div class="main__content__selector">
-                        <div class="selector" *ngFor="let item of selectorValues" (click)="selectorItemClicked(item)">
-                            <div class="selector__title" [class.active]="item.active">{{item.title}}</div>
-                            <div class="selector__bottom-line" *ngIf="item.active"></div>
+                        <div class="selector" (click)="selectorItemAllClicked()">
+                            <div class="selector__title" 
+                                [class.active]="trSelectorActiveTitle === selectorTitlesData.ALL">
+                                {{selectorTitlesData.ALL}}</div>
+                            <div class="selector__bottom-line"
+                                *ngIf="trSelectorActiveTitle === selectorTitlesData.ALL"></div>
+                        </div>
+                        <div class="selector" (click)="selectorItemInProgressClicked()">
+                            <div class="selector__title" 
+                                [class.active]="trSelectorActiveTitle === selectorTitlesData.IN_PROGRESS">
+                                {{selectorTitlesData.IN_PROGRESS}}</div>
+                            <div class="selector__bottom-line"
+                                *ngIf="trSelectorActiveTitle === selectorTitlesData.IN_PROGRESS"></div>
+                        </div>
+                        <div class="selector" (click)="selectorItemSentClicked()">
+                            <div class="selector__title" 
+                                [class.active]="trSelectorActiveTitle === selectorTitlesData.SENT">
+                                {{selectorTitlesData.SENT}}</div>
+                            <div class="selector__bottom-line" 
+                                *ngIf="trSelectorActiveTitle === selectorTitlesData.SENT"></div>
+                        </div>
+                        <div class="selector" (click)="selectorItemReceivedClicked()">
+                            <div class="selector__title" 
+                                [class.active]="trSelectorActiveTitle === selectorTitlesData.RECEIVED">
+                                {{selectorTitlesData.RECEIVED}}</div>
+                            <div class="selector__bottom-line" 
+                                *ngIf="trSelectorActiveTitle === selectorTitlesData.RECEIVED"></div>
                         </div>
                     </div>
                     <app-table *ngIf="transactions.length > 0"
@@ -75,47 +101,49 @@
 
 <ng-container *ngIf="!isFullScreen">
     <div class="main" [class.blur-filter]="!isFullScreen && (modalOpened || popupOpened)">
-        <div class="main__header">
-            <div class="menu-control-wrapper">
-                <img #sidemenu class="main__header__menu" (click)="sideMenuClicked($event)" [src]="iconMenu"/>
+        <ng-container *ngIf="walletStatus$ | async as walletStatus">
+            <div class="main__header">
+                <div class="menu-control-wrapper">
+                    <img #sidemenu class="main__header__menu" (click)="sideMenuClicked($event)" [src]="iconMenu"/>
+                </div>
+                <div class="title-wrapper">
+                    <div class="main__header__title">WALLET</div>
+                </div>
+                <div class="privacy-control-wrapper">
+                    <img class="main__header__privacy-control" (click)="privacyControlClicked()" 
+                        [src]="privacyMode ? iconEnabledPrivacy : iconDisabledPrivacy"/>
+                </div>
             </div>
-            <div class="title-wrapper">
-                <div class="main__header__title">WALLET</div>
+            <div class="main__controls">
+                <app-button class="main__controls__send-button" [routerLink]="sendRoute">send</app-button>
+                <app-button class="main__controls__receive-button" [routerLink]="receiveRoute">receive</app-button>
             </div>
-            <div class="privacy-control-wrapper">
-                <img class="main__header__privacy-control" (click)="privacyControlClicked()" 
-                    [src]="privacyMode ? iconEnabledPrivacy : iconDisabledPrivacy"/>
+            <div class="main__available">
+                <div class="main__available__title">AVAILABLE</div>
+                <div class="main__available__container" *ngIf="!privacyMode">
+                    <img class="main__available__container__logo" [src]="iconBeam">
+                    <span class="main__available__container__value" *ngIf="!privacyMode">
+                        {{walletStatus.available | beam:'1.0-9'}} BEAM
+                    </span>
+                </div>
             </div>
-        </div>
-        <div class="main__controls">
-            <app-button class="main__controls__send-button" [routerLink]="sendRoute">send</app-button>
-            <app-button class="main__controls__receive-button" [routerLink]="receiveRoute">receive</app-button>
-        </div>
-        <div class="main__available">
-            <div class="main__available__title">AVAILABLE</div>
-            <div class="main__available__container" *ngIf="!privacyMode">
-                <img class="main__available__container__logo" [src]="iconBeam">
-                <span class="main__available__container__value" *ngIf="!privacyMode">
-                    {{walletStatus.available | beam:'1.0-9'}} BEAM
-                </span>
+            <div class="main__in-progress" 
+                *ngIf="!privacyMode && (walletStatus.receiving > 0 || walletStatus.sending > 0)">
+                <div class="main__in-progress__title">IN PROGRESS</div>
+                <div class="main__in-progress__container-sent">
+                    <img class="main__in-progress__container-sent__logo" [src]="iconSent">
+                    <span class="main__in-progress__container-sent__value" *ngIf="!privacyMode">
+                        - {{walletStatus.sending | beam:'1.0-9'}} BEAM
+                    </span>
+                </div>
+                <div class="main__in-progress__container-receive">
+                    <img class="main__in-progress__container-receive__logo" [src]="iconReceived">
+                    <span class="main__in-progress__container-receive__value" *ngIf="!privacyMode">
+                        + {{walletStatus.receiving | beam:'1.0-9'}} BEAM
+                    </span>
+                </div>
             </div>
-        </div>
-        <div class="main__in-progress" 
-            *ngIf="!privacyMode && walletStatusLoaded && (walletStatus.receiving > 0 || walletStatus.sending > 0)">
-            <div class="main__in-progress__title">IN PROGRESS</div>
-            <div class="main__in-progress__container-sent">
-                <img class="main__in-progress__container-sent__logo" [src]="iconSent">
-                <span class="main__in-progress__container-sent__value" *ngIf="!privacyMode">
-                    - {{walletStatus.sending | beam:'1.0-9'}} BEAM
-                </span>
-            </div>
-            <div class="main__in-progress__container-receive">
-                <img class="main__in-progress__container-receive__logo" [src]="iconReceived">
-                <span class="main__in-progress__container-receive__value" *ngIf="!privacyMode">
-                    + {{walletStatus.receiving | beam:'1.0-9'}} BEAM
-                </span>
-            </div>
-        </div>
+        </ng-container>
 
         <div class="main__transactions">
             <ng-container *ngIf="transactions$ | async as transactions">
@@ -123,12 +151,12 @@
                     <div class="main__transactions__header__title">
                         <span class="main__transactions__header__title__text">TRANSACTIONS</span>
                     </div>
-                    <div class="main__transactions__header__show-all" *ngIf="transactionsLoaded && transactions.length > 0">
+                    <div class="main__transactions__header__show-all" *ngIf="transactions.length > 0">
                         <span class="main__transactions__header__show-all__text" (click)="showAllTransactions()">Show all</span>
                     </div>
                 </div>
                 <div class="main__transactions__content">
-                    <ng-container *ngIf="transactionsLoaded && transactions.length > 0">
+                    <ng-container *ngIf="transactions.length > 0">
                         <div class="transcaction-container" *ngFor="let transaction of transactions; let i = index">
                             <ng-container *ngIf="i < 5">
                                 <div class="main__transactions__content__receive" 
@@ -183,7 +211,7 @@
                             </ng-container>
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="transactionsLoaded && transactions.length === 0">
+                    <ng-container *ngIf="transactions.length === 0">
                         <img class="main__transactions__content__empty-tr-icon" [src]="iconEmpty">
                         <div class="main__transactions__content__empty-tr-text">Your transaction list is empty</div>
                     </ng-container>

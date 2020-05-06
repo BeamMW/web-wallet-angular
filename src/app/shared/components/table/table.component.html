@@ -189,7 +189,7 @@
                   <div class="details-value">{{detail.element.receiver}}</div>
                   <div class="details-title">TRANSACTION FEE</div>
                   <div class="details-value">{{detail.element.fee}} GROTH</div>
-                  <ng-container *ngIf="detail.element.comment.length > 0">
+                  <ng-container *ngIf="detail.element.comment !== undefined && detail.element.comment.length > 0">
                     <div class="details-title">TRANSACTION COMMENT</div>
                     <div class="details-value">{{detail.element.comment}}</div>
                   </ng-container>

@@ -18,6 +18,7 @@ export enum transactionsStatuses {
     WAITING_FOR_SENDER = 'waiting for sender',
     SENT = 'sent',
     RECEIVED = 'received',
+    RECEIVING = 'receiving',
     CANCELED = 'canceled',
     EXPIRED = 'expired',
     FAILED = 'failed',

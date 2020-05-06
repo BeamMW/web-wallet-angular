@@ -258,6 +258,7 @@ export class TableComponent implements OnInit, OnChanges {
       iconPath = this.iconSendFailed;
     } else if ((item.status_string === transactionsStatuses.PENDING ||
         item.status_string === transactionsStatuses.IN_PROGRESS ||
+        item.status_string === transactionsStatuses.RECEIVING ||
         item.status_string === transactionsStatuses.WAITING_FOR_RECEIVER) && item.income) {
       iconPath = this.iconReceiving;
     } else if ((item.status_string === transactionsStatuses.SENDING ||
@@ -293,6 +294,7 @@ export class TableComponent implements OnInit, OnChanges {
       className = 'send';
     } else if ((item.status_string === transactionsStatuses.PENDING ||
         item.status_string === transactionsStatuses.IN_PROGRESS ||
+        item.status_string === transactionsStatuses.RECEIVING ||
         item.status_string === transactionsStatuses.COMPLETED ||
         item.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
         item.status_string === transactionsStatuses.RECEIVED) && item.income) {

@@ -7,6 +7,7 @@ import { DataService, WindowService, WebsocketService } from './../../../../serv
 import { Store, select } from '@ngrx/store';
 import { saveReceiveData } from './../../../../store/actions/wallet.actions';
 import { WasmService } from './../../../../wasm.service';
+import { GlobalConsts } from '@consts';
 
 @Component({
   selector: 'app-receive',
@@ -16,6 +17,8 @@ import { WasmService } from './../../../../wasm.service';
 export class ReceiveComponent implements OnInit, OnDestroy {
   public iconBack = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
   public generatedAddress = '';
+  public generatedToken = '';
+  public identity = '';
 
   private sub: Subscription;
   receiveForm: FormGroup;
@@ -57,18 +60,17 @@ export class ReceiveComponent implements OnInit, OnDestroy {
 
   createAddress() {
     this.sub = this.wsService.on().subscribe((msg: any) => {
-      if (msg.result !== undefined && msg.id === 1 && typeof msg.result === 'string') {
-        const identity = this.wasmService.getIdentity(msg.result);
-        const token = this.wasmService.getSendToken(msg.result, identity);
-
-        this.generatedAddress = token;
-        this.dataToQr();
+      if (msg.result !== undefined && msg.id === 10) {
+        this.identity = this.wasmService.getIdentity(msg.result);
+        this.generatedAddress = this.wasmService.getSbbsAddress(this.identity);
+        this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, this.identity, 0);
+        this.updateQr();
         this.sub.unsubscribe();
       }
     });
     this.wsService.send({
         jsonrpc: '2.0',
-        id: 1,
+        id: 10,
         method: 'create_address',
         params:
         {
@@ -79,13 +81,15 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   }
 
   stripText(control: FormControl) {
-    control.setValue(control.value.replace(/[^0-9]/g, ''));
-    this.dataToQr(control.value);
+    // control.setValue(control.value.replace(/[^0-9]/g, ''));
+    const amount = parseInt(control.value, 10) * GlobalConsts.GROTHS_IN_BEAM;
+    this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, this.identity, amount);
+    this.updateQr();
   }
 
   updateComment(control: FormControl) {
     control.setValue(control.value);
-    this.dataToQr(control.value);
+    this.updateQr();
   }
 
   editAddress() {
@@ -114,9 +118,11 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     this.submit();
   }
 
-  dataToQr(comment = '', amount = '') {
-    this.qrCode = 'beam:' + this.generatedAddress + (amount ? ('?amount=' + amount) : '') +
-      (comment && comment.length > 0 ? ('?comment=' + comment) : '');
+  updateQr() {
+    this.qrCode = 'beam:' + this.generatedAddress + (this.receiveForm.value.amount ?
+      ('?amount=' + this.receiveForm.value.amount) : '') +
+      (this.receiveForm.value.comment && this.receiveForm.value.comment.length > 0 ?
+      ('?comment=' + this.receiveForm.value.comment) : '');
   }
 
   submit() {

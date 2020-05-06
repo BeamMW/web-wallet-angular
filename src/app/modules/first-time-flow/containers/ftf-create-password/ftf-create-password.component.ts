@@ -32,7 +32,7 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
 
   constructor(
       private store: Store<any>,
-      private wasm: WasmService,
+      private wasmService: WasmService,
       public router: Router,
       private websocketService: WebsocketService,
       private windowService: WindowService,
@@ -58,96 +58,36 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.loginToService();
-  }
-
-  loginToService() {
-    this.wasmState$ = this.store.pipe(select(selectWasmState));
-    this.wasmState$.subscribe((state) => {
-      if (state) {
-        this.wasm.keykeeperInit(this.seed).subscribe(value => {
-          if (this.wasm.keyKeeper !== undefined) {
-            this.loginService.init();
-            this.loginService.connect();
-            this.loginService.send({
-                jsonrpc: '2.0',
-                id: 123,
-                method: 'login',
-                params: this.loginService.loginParams
-            });
-
-            this.loginSub = this.loginService.on().subscribe((msg: any) => {
-              if (msg.result) {
-                  if (msg.id === 123) {
-                      console.log('login_ws: OK, endpoint is ', msg.result.endpoint);
-                      const endpoint = ['ws://',  msg.result.endpoint].join('');
-                      this.websocketService.url = endpoint;
-                      this.websocketService.connect();
-                  }
-              } else {
-                  console.log('login_ws: failed');
-                  if (msg.error) {
-                      console.log(`login_ws: error code:${msg.error.code} text:${msg.error.data}`)
-                  }
-              }
-
-              if (this.loginSub) {
-                this.loginSub.unsubscribe();
-              }
-            });
-          }
-        });
-      }
-    });
-  }
-
-  private loginToCreatedWallet(id: string, pass: string) {
-    this.sub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.result && msg.result.length) {
-        console.log(`[login] wallet session: ${msg.result}`);
-        this.sub.unsubscribe();
-        this.store.dispatch(ChangeWalletState({walletState: true}));
-        this.router.navigate([routes.WALLET_MAIN_ROUTE]);
-      }
-    });
-
-    this.websocketService.send({
-      jsonrpc: '2.0',
-      id: 0,
-      method: 'open_wallet',
-      params: {
-        pass,
-        id
-      }
-    });
+    this.dataService.loginToService(this.seed, false);
   }
 
   public submit(): void {
     const pass = this.createForm.value.password;
     const confirmPass = this.createForm.value.passwordConfirm;
 
-    if (confirmPass === pass && this.websocketService.connected) {
+    if (confirmPass === pass) {
       console.log(`[create-wallet] Creating new wallet with seed phrase: ${this.seed}`);
-      const ownerKey = this.wasm.keyKeeper.getOwnerKey(pass);
-      console.log('[create-wallet] ownerKey is: data:application/octet-stream;base64,' + ownerKey);
+      this.wasmService.keykeeperInit(this.seed).subscribe(value => {
+        const ownerKey = this.wasmService.keyKeeper.getOwnerKey(pass);
+        console.log('[create-wallet] ownerKey is: data:application/octet-stream;base64,' + ownerKey);
 
-      this.sub = this.websocketService.on().subscribe((msg: any) => {
-        console.log('[create-wallet] got response: ');
-        console.dir(msg);
-        if (msg.result && msg.result.length) {
-          console.log(`[create-wallet] wallet session: ${msg.result}`);
+        this.sub = this.websocketService.on().subscribe((msg: any) => {
+          console.log('[create-wallet] got response: ');
+          console.dir(msg);
+          if (msg.result && msg.result.length) {
+            console.log(`[create-wallet] wallet session: ${msg.result}`);
 
-          passworder.encrypt(pass, {seed: this.seed, id: msg.result})
-            .then((result) => {
-              this.dataService.saveWallet(result);
-              this.dataService.settingsInit(this.seedConfirmed);
-              this.sub.unsubscribe();
-              this.loginToCreatedWallet(msg.result, pass);
-            });
-        }
-      });
+            passworder.encrypt(pass, {seed: this.seed, id: msg.result})
+              .then((result) => {
+                this.dataService.saveWallet(result);
+                this.dataService.settingsInit(this.seedConfirmed);
+                this.sub.unsubscribe();
+                this.dataService.loginToWallet(msg.result, pass);
+              });
+          }
+        });
 
-      this.websocketService.send({
+        this.websocketService.send({
           jsonrpc: '2.0',
           id: 0,
           method: 'create_wallet',
@@ -155,6 +95,7 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
             pass: pass,
             ownerkey: ownerKey
           }
+      });
       });
     }
   }

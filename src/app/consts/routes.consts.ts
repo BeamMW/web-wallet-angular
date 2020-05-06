@@ -8,4 +8,5 @@ export enum routes {
     WALLET_MAIN_ROUTE = '/wallet/main',
 
     TRANSACTION_DETAILS_ROUTE = '/transactions/details',
+    TRANSACTIONS_LIST_ROUTE = '/transactions/view'
 }

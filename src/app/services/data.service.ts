@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as ObservableStore from 'obs-store';
-import { Subject } from 'rxjs';
+import { Subject, from, Subscription, Observable, Subscribable } from 'rxjs';
 import * as extensionizer from 'extensionizer';
 import { WalletState } from './../models/wallet-state.model';
 import { Store, select } from '@ngrx/store';
@@ -11,6 +11,10 @@ import {
 } from '../store/selectors/wallet-state.selectors';
 import {
   loadWalletState,
+  loadAddresses,
+  loadUtxo,
+  loadTr,
+  saveWalletStatus,
   saveWallet,
   ChangeWalletState,
   updatePrivacySetting,
@@ -21,7 +25,11 @@ import {
   updateVerificatedSetting,
   updatePasswordCheckSetting,
   saveContact } from '../store/actions/wallet.actions';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { WasmService } from './../wasm.service';
+import { LoginService } from './login.service';
+import { WebsocketService } from './websocket.service';
+import { routes } from '@consts';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +38,13 @@ export class DataService {
   sendStore: any;
   options$: Observable<any>;
   appState$: Observable<any>;
+
+  private loginProcessSub: Subscription;
+  private openWalletSub: Subscription;
+  private statusSub: Subscription;
+  private addressesSub: Subscription;
+  private utxoSub: Subscription;
+  private trsSub: Subscription;
 
   public clickedElement: HTMLElement;
   // Observable string sources
@@ -41,7 +56,12 @@ export class DataService {
       this.emitChangeSource.next(change);
   }
 
-  constructor(private store: Store<any>) {
+  constructor(
+    private loginService: LoginService,
+    private websocketService: WebsocketService,
+    public router: Router,
+    private wasmService: WasmService,
+    private store: Store<any>) {
     // TODO: remove!!!
     this.sendStore = new ObservableStore();
 
@@ -146,5 +166,146 @@ export class DataService {
 
   clearWalletData() {
     extensionizer.storage.local.remove(['settings', 'wallet', 'contacts', 'state']);
+  }
+
+  loginToService(seed: string, loginToWallet: boolean = true, walletId?: string, pass?: string) {
+    this.wasmService.keykeeperInit(seed).subscribe(value => {
+      if (!this.loginService.connected) {
+        this.loginProcessSub = this.loginService.on().subscribe((msg: any) => {
+          if (msg.result && msg.id === 123) {
+            console.log('login_ws: OK, endpoint is ', msg.result.endpoint);
+            const endpoint = ['ws://',  msg.result.endpoint].join('');
+            this.websocketService.url = endpoint;
+            this.websocketService.connect();
+            if (loginToWallet) {
+              this.loginToWallet(walletId, pass);
+            }
+          } else {
+            console.log('login_ws: failed');
+            if (msg.error) {
+              console.log(`login_ws: error code:${msg.error.code} text:${msg.error.data}`)
+            }
+          }
+
+          if (this.loginProcessSub) {
+            this.loginProcessSub.unsubscribe();
+          }
+        });
+
+        this.loginService.init();
+        this.loginService.connect();
+        this.loginService.send({
+            jsonrpc: '2.0',
+            id: 123,
+            method: 'login',
+            params: this.loginService.loginParams
+        });
+      } else if (loginToWallet) {
+        this.loginToWallet(walletId, pass);
+      }
+    });
+  }
+
+  loginToWallet(walletId: string, password: string) {
+    this.openWalletSub = this.websocketService.on().subscribe((msg: any) => {
+      if (msg.result && msg.id === 124 && msg.result.length) {
+        console.log(`[login] wallet session: ${msg.result}`);
+        if (this.openWalletSub) {
+          this.openWalletSub.unsubscribe();
+        }
+        this.store.dispatch(ChangeWalletState({walletState: true}));
+        this.walletDataUpdate();
+        setInterval(() => {
+          this.walletDataUpdate();
+        }, 5000);
+        this.router.navigate([routes.WALLET_MAIN_ROUTE]);
+      }
+    });
+
+    this.websocketService.send({
+      jsonrpc: '2.0',
+      id: 124,
+      method: 'open_wallet',
+      params: {
+        pass: password,
+        id: walletId
+      }
+    });
+  }
+
+  private transactionsUpdate() {
+    this.trsSub = this.websocketService.on().subscribe((msg: any) => {
+      if (msg.result && msg.id === 6) {
+        console.log('[data-service] transactions: ');
+        console.dir(msg.result);
+        this.store.dispatch(loadTr({transactions: msg.result.length !== undefined ? msg.result : [msg.result]}));
+        this.trsSub.unsubscribe();
+        console.log('----------update finished----------');
+      }
+    });
+    this.websocketService.send({
+      jsonrpc: '2.0',
+      id: 6,
+      method: 'tx_list'
+    });
+  }
+
+  private utxoUpdate() {
+    this.utxoSub = this.websocketService.on().subscribe((msg: any) => {
+      if (msg.result && msg.id === 7) {
+        console.log('[data-service] utxo: ');
+        console.dir(msg.result);
+        this.store.dispatch(loadUtxo({utxos: msg.result.length ? msg.result : [msg.result]}));
+        this.utxoSub.unsubscribe();
+        this.transactionsUpdate();
+      }
+    });
+    this.websocketService.send({
+      jsonrpc: '2.0',
+      id: 7,
+      method: 'get_utxo'
+    });
+  }
+
+
+  private addressesUpdate() {
+    this.addressesSub = this.websocketService.on().subscribe((msg: any) => {
+      if (msg.result && msg.id === 8) {
+        console.log('[data-service] addresses: ');
+        console.dir(msg.result);
+        this.store.dispatch(loadAddresses({addresses: msg.result.length !== undefined ? msg.result : [msg.result]}));
+
+        this.addressesSub.unsubscribe();
+        this.utxoUpdate();
+      }
+    });
+    this.websocketService.send({
+      jsonrpc: '2.0',
+      id: 8,
+      method: 'addr_list',
+      params:
+      {
+        own: true
+      }
+    });
+  }
+
+  walletDataUpdate() {
+    this.statusSub = this.websocketService.on().subscribe((msg: any) => {
+      if (msg.result && msg.id === 5) {
+        console.log('[data-service] status: ');
+        console.dir(msg);
+        this.store.dispatch(saveWalletStatus({status: msg.result}));
+        this.statusSub.unsubscribe();
+        this.addressesUpdate();
+      }
+    });
+
+    console.log('----------update started----------');
+    this.websocketService.send({
+      jsonrpc: '2.0',
+      id: 5,
+      method: 'wallet_status'
+    });
   }
 }
