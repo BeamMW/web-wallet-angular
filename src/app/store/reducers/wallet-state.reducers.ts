@@ -16,7 +16,10 @@ export interface WalletAppState {
     };
     privacySetting: boolean;
     saveLogsSetting: number;
-    currencySetting: number;
+    currencySetting: {
+        value: number,
+        updated: number
+    }
     dnsSetting: string;
     ipSetting: string;
     passwordCheck: boolean;
@@ -51,7 +54,10 @@ export const initialWalletAppState: WalletAppState = {
     },
     privacySetting: false,
     saveLogsSetting: 0,
-    currencySetting: 0,
+    currencySetting: {
+        value: 0,
+        updated: 0
+    },
     dnsSetting: 'wallet-service.beam.mw',
     ipSetting: '3.222.86.179:20000',
     verificatedSetting: false,

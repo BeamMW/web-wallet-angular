@@ -15,7 +15,7 @@
                                [element]="transaction"></app-table-actions>
         </div>
         <div [className]="'transaction__common__mid-content ' + getContentClass()">
-            <div class="transaction__common__mid-content__status">{{transaction.status_string}}</div>
+            <div class="transaction__common__mid-content__status">{{getStatus(transaction)}}</div>
             <div class="transaction__common__mid-content__value">
                 <ng-container>{{getValueSign()}}</ng-container>
                  {{ transaction.value | beam:'1.0-9'}} BEAM</div>

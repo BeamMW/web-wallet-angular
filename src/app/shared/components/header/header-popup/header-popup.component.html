@@ -17,6 +17,7 @@
                 <img class="dropdown__item__icon" [src]="privacyMode ? iconEnabledPrivacy : iconDisabledPrivacy">
                 <span class="dropdown__item__text">Security mode</span>
             </li>
+            <div class="dropdown__separator" *ngIf="isFullScreen"></div>
             <li class="dropdown__item" (click)="paymentProofClicked($event)">
                 <img class="dropdown__item__icon" [src]="proofIcon">
                 <span class="dropdown__item__text">Payment proof</span>

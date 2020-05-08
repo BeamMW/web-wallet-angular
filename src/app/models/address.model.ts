@@ -6,4 +6,5 @@ export interface Address {
   own: boolean;
   comment: string;
   category: string;
+  identity: string;
 }

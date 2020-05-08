@@ -22,6 +22,8 @@ export enum transactionsStatuses {
     CANCELED = 'canceled',
     EXPIRED = 'expired',
     FAILED = 'failed',
-    SENDING_TO_OWN_ADDRESS = 'self sending',
-    COMPLETED = 'completed'
+    SELF_SENDING = 'self sending',
+    COMPLETED = 'completed',
+    SENDING_TO_OWN_ADDRESS = 'sending to own address',
+    SENT_TO_OWN_ADDRESS = 'sent to own address'
 }

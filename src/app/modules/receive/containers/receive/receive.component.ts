@@ -6,6 +6,9 @@ import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { DataService, WindowService, WebsocketService } from './../../../../services';
 import { Store, select } from '@ngrx/store';
 import { saveReceiveData } from './../../../../store/actions/wallet.actions';
+
+
+import { selectAddress } from './../../../../store/selectors/address.selectors';
 import { WasmService } from './../../../../wasm.service';
 import { GlobalConsts } from '@consts';
 
@@ -61,9 +64,16 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   createAddress() {
     this.sub = this.wsService.on().subscribe((msg: any) => {
       if (msg.result !== undefined && msg.id === 10) {
-        this.identity = this.wasmService.getIdentity(msg.result);
-        this.generatedAddress = this.wasmService.getSbbsAddress(this.identity);
-        this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, this.identity, 0);
+        this.dataService.addressesUpdate();
+        const address$ = this.store.pipe(select(selectAddress(msg.result)));
+        address$.subscribe(val => {
+          if (val !== undefined) {
+            this.generatedAddress = val.address;
+            this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, val.identity, 0);
+          }
+        });
+        console.log('[create_address:]');
+        console.dir(msg);
         this.updateQr();
         this.sub.unsubscribe();
       }

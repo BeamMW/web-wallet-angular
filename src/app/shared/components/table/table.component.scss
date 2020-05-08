@@ -81,24 +81,40 @@
     font-family: 'SFProDisplayItalic', sans-serif;
     font-size: 14px;
     font-style: italic;
+
+    &__text {
+        margin-left: 10px;
+    }
 }
 
+.amount-cell {
+    @include normal-text;
+    font-family: 'SFProDisplayBold', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.amount-cell.canceled,
 .status-cell.canceled {
     color: #8da1ad;
 }
 
+.amount-cell.failed,
 .status-cell.failed {
     color: #ff746b;
 }
 
+.amount-cell.send,
 .status-cell.send {
     color: #da68f5;
 }
 
+.amount-cell.receive,
 .status-cell.receive {
     color: #23c1ff;
 }
 
+.amount-cell.own,
 .status-cell.own {
     color: #ffffff;
 }
@@ -109,13 +125,6 @@
     font-family: 'SFProDisplayItalic', sans-serif;
     font-size: 14px;
     font-style: italic;
-}
-
-.amount-cell {
-    @include normal-text;
-    font-family: 'SFProDisplayBold', sans-serif;
-    font-size: 14px;
-    font-weight: bold;
 }
 
 .address-cell {

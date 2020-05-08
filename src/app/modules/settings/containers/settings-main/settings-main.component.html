@@ -2,7 +2,9 @@
     <ng-container *ngIf="!isFullScreen">
         <div class="settings__header">
             <div class="menu-control-wrapper">
-                <img class="settings__header__menu" (click)="sideMenuClicked($event)" [src]="iconMenu"/>
+                <img class="settings__header__menu"
+                     (click)="sideMenuClicked($event)"
+                     [src]="iconMenu"/>
             </div>
             <div class="title-wrapper">
                 <div class="settings__header__title">SETTINGS</div>
@@ -54,13 +56,19 @@
                                         [(selectedItem)]="saveLogsSelectedItem"></app-dropdown>
                                 </div>
                                 <div class="general__currency">
-                                    <span class="general-item-title">Secondary currency</span>
+                                    <div class="general-item-title">
+                                        <span>Show amounts in</span>
+                                    </div>
                                     <app-dropdown class="general__currency__menu"
                                         (menuChanged)="currencyDropdownSelected($event)" 
                                         [(menuItems)]="currencyMenuItems"
                                         [(selectedItem)]="currencySelectedItem"></app-dropdown>
                                 </div>
-                                <div class="general__clear general-item-title" (click)="clearLocalWalletClicked($event)">
+                                <span class="general__currency-updated">
+                                    (last updated on {{currencyUpdated | date:'d MMM, y'}})
+                                </span>
+                                <div class="general__clear general-item-title" 
+                                        (click)="clearLocalWalletClicked($event)">
                                     Clear local wallet data
                                 </div>
                             </ng-container>
@@ -69,11 +77,17 @@
                                 <div class="server">
                                     <div class="server__dns" (click)="enterDnsClicked($event)">
                                         <span class="server-item-title">dns/ip</span>
-                                        <span class="server-item-value" *ngIf="dnsSetting$ | async as dnsSetting">{{dnsSetting}}</span>
+                                        <span class="server-item-value" 
+                                                *ngIf="dnsSetting$ | async as dnsSetting">
+                                            {{dnsSetting}}
+                                        </span>
                                     </div>
                                     <div class="server__ip" (click)="enterIpClicked($event)">
                                         <span class="server-item-title">ip:port</span>
-                                        <span class="server-item-value" *ngIf="ipSetting$ | async as ipSetting">{{ipSetting}}</span>
+                                        <span class="server-item-value" 
+                                                *ngIf="ipSetting$ | async as ipSetting">
+                                            {{ipSetting}}
+                                        </span>
                                     </div>
                                 </div>
                             </ng-container>
@@ -82,8 +96,9 @@
                                 <div class="privacy">
                                     <div class="privacy__ask-pass">
                                         <span class="privacy-item-title">Ask for password on every Send</span>
-                                        <mat-slide-toggle class="privacy-item-slide" (change)="checkPasswordToggle($event)" 
-                                            [checked]="isCheckedPassword"></mat-slide-toggle>
+                                        <mat-slide-toggle class="privacy-item-slide" 
+                                                        (change)="checkPasswordToggle($event)" 
+                                                        [checked]="isCheckedPassword"></mat-slide-toggle>
                                     </div>
                                     <div class="privacy__complete-vf" (click)="completeVerificationClicked($event)">
                                         <span class="privacy-item-title">Complete seed verification</span>
@@ -95,10 +110,12 @@
                             </ng-container>
                             <!-- Utilities -->
                             <ng-container *ngIf="item === menuItems[3]">
-                                <div class="utilities__get-beams" (click)="getFromFaucet()">
+                                <div class="utilities__get-beams" 
+                                        (click)="getFromFaucet()">
                                     <span class="util-item-title">Get beams from the community faucet</span>
                                 </div>
-                                <div class="utilities__payment-proof" (click)="paymentProofClicked($event)">
+                                <div class="utilities__payment-proof" 
+                                        (click)="paymentProofClicked($event)">
                                     <span class="util-item-title">Payment proof</span>
                                 </div>
                             </ng-container>

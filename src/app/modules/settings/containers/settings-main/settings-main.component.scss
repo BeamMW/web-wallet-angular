@@ -133,7 +133,7 @@
                 }
 
                 &__details {
-                    padding: 10px 70% 30px 30px;
+                    padding: 10px 30px 30px;
                     background-color: rgba(255, 255, 255, .05);
                     border-bottom-left-radius: 10px;
                     border-bottom-right-radius: 10px;
@@ -149,24 +149,16 @@
         font-family: 'ProximaNova', sans-serif;
         font-size: 16px;
         color: #92abba;
+        display: flex;
+        flex-direction: column;
     }
 
     .general {
         display: flex;
         flex-direction: column;
 
-        &__logs {
-            display: flex;
-
-            &__menu {
-                display: flex;
-                justify-content: flex-end;
-                margin-left: auto;
-                margin-top: 20px;
-            }
-        }
-
         &__currency {
+            width: 450px;
             display: flex;
 
             &__menu {
@@ -176,6 +168,29 @@
                 margin-top: 20px;
             }
         }
+
+        &__currency-updated {
+            @include normal-text;
+            cursor: default;
+            font-family: 'ProximaNova', sans-serif;
+            font-size: 12px;
+            color: #92abba;
+            display: flex;
+            flex-direction: column;
+        }
+
+        &__logs {    
+            width: 450px;
+            display: flex;
+
+            &__menu {
+                display: flex;
+                justify-content: flex-end;
+                margin-left: auto;
+                margin-top: 20px;
+            }
+        }
+        
 
         &__clear {
             cursor: pointer;
@@ -187,15 +202,17 @@
         font-family: 'ProximaNova', sans-serif;
         font-size: 16px;
         color: #92abba;
+        width: 50px;
     }
     
     .server-item-value {
         @include normal-text;
-        margin-left: auto;
+        margin-left: 190px;
         font-family: 'ProximaNova', sans-serif;
         font-size: 16px;
-        text-align: right;
         color: #ffffff;
+        width: 200px;
+        border-bottom: 1px solid rgba(255, 255, 255, .1);
     }
 
     .server {
@@ -204,6 +221,7 @@
 
         &__ip,
         &__dns {
+            width: 450px;
             margin-top: 20px;
             display: flex;
             cursor: pointer;

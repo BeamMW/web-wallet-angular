@@ -44,6 +44,7 @@ export class MainComponent implements OnInit, OnDestroy {
   public iconEmpty: string = `${environment.assetsPath}/images/modules/wallet/containers/main/atomic-empty-state.svg`;
   public iconDisabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye.svg`;
   public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
+  public iconEnabledPrivacyGrayed: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed-gray.svg`;
 
   public sendRoute = '/send/addresses';
   public receiveRoute = '/receive/page';

@@ -14,13 +14,20 @@
         <div class="general__container__logs">
             <span class="general-item-title">Save wallet logs</span>
             <app-dropdown class="general__container__logs__menu" 
-                (menuChanged)="logsDropdownSelected($event)" [(menuItems)]="logsMenuItems"></app-dropdown>
+                (menuChanged)="logsDropdownSelected($event)"
+                [(selectedItem)]="saveLogsSelectedItem" 
+                [(menuItems)]="logsMenuItems"></app-dropdown>
         </div>
         <div class="general__container__currency">
-            <span class="general-item-title">Secondary currency</span>
+            <span class="general-item-title">Show amounts in</span>
             <app-dropdown class="general__container__currency__menu"
-                (menuChanged)="currencyDropdownSelected($event)" [(menuItems)]="currencyMenuItems"></app-dropdown>
+                (menuChanged)="currencyDropdownSelected($event)" 
+                [(menuItems)]="currencyMenuItems"
+                [(selectedItem)]="currencySelectedItem"></app-dropdown>
         </div>
+        <span class="general__container__currency-updated">
+            (last updated on {{currencyUpdated | date:'d MMM, y'}})
+        </span>
         <div class="general__container__clear general-item-title">
             Clear local wallet data
         </div>

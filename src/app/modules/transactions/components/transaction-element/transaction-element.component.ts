@@ -2,6 +2,8 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
 import { routes, transactionsStatuses, TableTypes } from '@consts';
+import { Store, select } from '@ngrx/store';
+import { selectAddress } from '../../../../store/selectors/address.selectors';
 
 @Component({
   selector: 'app-transaction-element',
@@ -28,7 +30,24 @@ export class TransactionElementComponent implements OnInit {
 
   constructor(
     public router: Router,
+    private store: Store<any>,
   ) {
+  }
+
+  getStatus(item) {
+    let status = item.status_string;
+    if (item.status_string === transactionsStatuses.SELF_SENDING) {
+      status = transactionsStatuses.SENDING_TO_OWN_ADDRESS;
+    } else if (item.status_string === transactionsStatuses.COMPLETED) {
+      const address$ = this.store.pipe(select(selectAddress(item.receiver)));
+      address$.subscribe(val => {
+        if (val !== undefined && val.own) {
+          status = transactionsStatuses.SENT_TO_OWN_ADDRESS;
+        }
+      });
+    }
+
+    return status;
   }
 
   getTrIcon() {
@@ -53,14 +72,21 @@ export class TransactionElementComponent implements OnInit {
         this.transaction.status_string === transactionsStatuses.IN_PROGRESS ||
         this.transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER) && !this.transaction.income) {
       iconPath = this.iconSending;
-    } else if ((this.transaction.status_string === transactionsStatuses.RECEIVED) ||
-        (this.transaction.status_string === transactionsStatuses.COMPLETED && this.transaction.income)) {
+    } else if (this.transaction.status_string === transactionsStatuses.RECEIVED) {
       iconPath = this.iconReceived;
-    } else if ((this.transaction.status_string === transactionsStatuses.SENT) ||
-        (this.transaction.status_string === transactionsStatuses.COMPLETED && !this.transaction.income)) {
+    } else if (this.transaction.status_string === transactionsStatuses.SENT) {
       iconPath = this.iconSent;
-    } else if (this.transaction.status_string === transactionsStatuses.SENDING_TO_OWN_ADDRESS) {
+    }
+
+    if (this.transaction.status_string === transactionsStatuses.SELF_SENDING) {
       iconPath = this.iconSendingOwn;
+    } else if (this.transaction.status_string === transactionsStatuses.COMPLETED) {
+      const address$ = this.store.pipe(select(selectAddress(this.transaction.receiver)));
+      address$.subscribe(val => {
+        if (val !== undefined && val.own) {
+          iconPath = this.iconSentOwn;
+        }
+      });
     }
     return iconPath;
   }
@@ -94,8 +120,17 @@ export class TransactionElementComponent implements OnInit {
         this.transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
         this.transaction.status_string === transactionsStatuses.RECEIVED) && this.transaction.income) {
       className = 'receive';
-    } else if (this.transaction.status_string === transactionsStatuses.SENDING_TO_OWN_ADDRESS) {
+    }
+
+    if (this.transaction.status_string === transactionsStatuses.SELF_SENDING) {
       className = 'own';
+    } else if (this.transaction.status_string === transactionsStatuses.COMPLETED) {
+      const address$ = this.store.pipe(select(selectAddress(this.transaction.receiver)));
+      address$.subscribe(val => {
+        if (val !== undefined && val.own) {
+          className = 'own';
+        }
+      });
     }
     return className;
   }

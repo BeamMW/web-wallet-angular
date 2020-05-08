@@ -79,7 +79,10 @@ export class DataService {
       settings: {
         privacySetting: false,
         saveLogsSetting: 0,
-        currencySetting: 0,
+        currencySetting: {
+          value: 0,
+          updated: new Date().getTime()
+        },
         dnsSetting: 'wallet-service.beam.mw',
         ipSetting: '3.222.86.179:20000',
         verificatedSetting: seedConfirmed,
@@ -149,7 +152,10 @@ export class DataService {
       this.store.dispatch(updateSaveLogsSetting({settingValue: settingsData.saveLogsSetting}));
       this.store.dispatch(updateDnsSetting({settingValue: settingsData.dnsSetting}));
       this.store.dispatch(updateIpSetting({settingValue: settingsData.ipSetting}));
-      this.store.dispatch(updateCurrencySetting({settingValue: settingsData.currencySetting}));
+      this.store.dispatch(updateCurrencySetting({settingValue: {
+        value: settingsData.currencySetting.value,
+        updated: settingsData.currencySetting.updated,
+      }}));
       this.store.dispatch(updatePasswordCheckSetting({settingValue: settingsData.passwordCheck}));
     });
   }
@@ -268,7 +274,7 @@ export class DataService {
   }
 
 
-  private addressesUpdate() {
+  addressesUpdate() {
     this.addressesSub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.result && msg.id === 8) {
         console.log('[data-service] addresses: ');

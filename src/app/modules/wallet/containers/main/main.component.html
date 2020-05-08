@@ -12,11 +12,11 @@
                     <div class="available">
                         <img class="available__logo" [src]="iconBeamFull">
                         <div class="available__container">
-                            <div class="available__container__title">Available</div>
+                            <div class="available__container__title" [class.grayed]="privacyMode">Available</div>
                             <span class="available__container__value" *ngIf="!privacyMode">
                                 {{walletStatus.available | beam:'1.0-9'}} BEAM
                             </span>
-                            <img class="available__container__value" [src]="iconEnabledPrivacy" 
+                            <img class="available__container__value" [src]="iconEnabledPrivacyGrayed" 
                                 *ngIf="privacyMode">
                         </div>
                     </div>
@@ -24,23 +24,21 @@
                         <div class="main__content__state__separator"></div>
                         <div class="in-progress">
                             <div class="in-progress__sent">
-                                <div class="in-progress__sent__title">In progress</div>
+                                <div class="in-progress__sent__title" [class.grayed]="privacyMode">In progress</div>
                                 <div class="in-progress__sent__value">
-                                    <img class="in-progress__sent__value__logo" [src]="iconSent">
+                                    <img class="in-progress__sent__value__logo" *ngIf="!privacyMode" [src]="iconSent">
                                     <span class="in-progress__sent__value__data" *ngIf="!privacyMode">
                                         -{{walletStatus.sending | beam:'1.0-9'}} BEAM
                                     </span>
-                                    <img class="in-progress__sent__value__data" [src]="iconEnabledPrivacy" 
+                                    <img [src]="iconEnabledPrivacyGrayed" 
                                         *ngIf="privacyMode">
                                 </div>
                             </div>
-                            <div class="in-progress__receive">
+                            <div class="in-progress__receive" *ngIf="!privacyMode">
                                 <img class="in-progress__receive__logo" [src]="iconReceived">
                                 <span class="in-progress__receive__value" *ngIf="!privacyMode">
                                     +{{walletStatus.receiving | beam:'1.0-9'}} BEAM
                                 </span>
-                                <img class="in-progress__receive__value" [src]="iconEnabledPrivacy" 
-                                    *ngIf="privacyMode">
                             </div>
                         </div>
                     </ng-container>

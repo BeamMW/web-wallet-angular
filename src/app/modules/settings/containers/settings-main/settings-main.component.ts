@@ -56,6 +56,7 @@ export class SettingsMainComponent implements OnInit {
 
   currencySetting$: Observable<any>;
   currencySelectedItem = this.currencyMenuItems[0];
+  currencyUpdated = null;
   dnsSetting$: Observable<any>;
   ipSetting$: Observable<any>;
   checkPasswordSetting$: Observable<any>;
@@ -75,15 +76,14 @@ export class SettingsMainComponent implements OnInit {
     });
 
     this.savelogsSetting$ = this.store.pipe(select(selectSaveLogsSetting));
-
     this.savelogsSetting$.subscribe((state) => {
       this.saveLogsSelectedItem = this.logsMenuItems[state];
     });
 
     this.currencySetting$ = this.store.pipe(select(selectCurrencySetting));
-
     this.currencySetting$.subscribe((state) => {
-      this.currencySelectedItem = this.currencyMenuItems[state];
+      this.currencySelectedItem = this.currencyMenuItems[state.value];
+      this.currencyUpdated = state.updated;
     });
 
     this.dnsSetting$ = this.store.pipe(select(selectDnsSetting));
@@ -180,7 +180,7 @@ export class SettingsMainComponent implements OnInit {
   }
 
   currencyDropdownSelected(item) {
-    this.store.dispatch(updateCurrencySetting({settingValue: item.id}));
+    this.store.dispatch(updateCurrencySetting({settingValue: {value: item.id, updated: new Date().getTime()}}));
     this.dataService.saveWalletOptions();
   }
 

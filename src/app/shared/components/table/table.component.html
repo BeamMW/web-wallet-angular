@@ -34,12 +34,9 @@
           <span>Amount</span>
           <img class="sort-icon" [src]="activeSortItem === sortParams.amount ? iconSortActive : iconSort">
         </mat-header-cell>
-        <mat-cell *matCellDef="let element" class="amount-cell"
-            [class.sent]="element.status_string === 'sending' || element.status_string === 'sent'"
-            [class.receive]="element.status_string === 'receiving' || element.status_string === 'received'">
+        <mat-cell *matCellDef="let element" [className]="'amount-cell ' + getContentClass(element)">
             <ng-container *ngIf="!privacy">
-              <span *ngIf="element.status_string === 'receiving' || element.status_string === 'received'">+</span>
-              <span *ngIf="element.status_string === 'sending' || element.status_string === 'sent'">-</span>
+              <ng-container>{{getValueSign(element)}}</ng-container>
               {{ element.value | beam:'1.0-9'}} BEAM
             </ng-container>
             <ng-container *ngIf="privacy">
@@ -90,8 +87,8 @@
           <img class="sort-icon" [src]="activeSortItem === sortParams.status ? iconSortActive : iconSort">
         </mat-header-cell>
         <mat-cell [className]="'status-cell ' + getContentClass(element)" *matCellDef="let element">
-          <img class="transaction__common__top-content__icon" [src]="getTrIcon(element)"/>
-            {{element.status_string}}
+          <img [src]="getTrIcon(element)"/>
+          <span class="status-cell__">{{ getStatus(element) }}</span>
         </mat-cell>
       </ng-container>
 
@@ -144,7 +141,9 @@
           Type
           <img class="sort-icon" [src]="activeSortItem === sortParams.utxo_type ? iconSortActive : iconSort">
         </mat-header-cell>
-        <mat-cell class="utxo-cell" *matCellDef="let element"> {{element.type}} </mat-cell>
+        <mat-cell class="utxo-cell" *matCellDef="let element">
+          {{element.type === 'norm' ? 'regular' : 'change'}}
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="actions">

@@ -5,9 +5,6 @@ import { MatTable } from '@angular/material';
 import { routes, transactionsStatuses, TableTypes } from '@consts';
 
 import { Observable, BehaviorSubject, of } from 'rxjs';
-// import 'rxjs/add/operator/startWith';
-// import 'rxjs/add/observable/merge';
-// import 'rxjs/add/operator/map';
 
 import { environment } from '@environment';
 import {Router} from '@angular/router';
@@ -15,6 +12,7 @@ import {Router} from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { selectContact } from '../../../store/selectors/wallet-state.selectors';
 import { selectUtxoById } from '../../../store/selectors/utxo.selectors';
+import { selectAddress } from '../../../store/selectors/address.selectors';
 
 import { WebsocketService } from './../../../services';
 import { Subscription } from 'rxjs';
@@ -22,7 +20,6 @@ import { Subscription } from 'rxjs';
 import {
   saveProofData
 } from './../../../store/actions/wallet.actions';
-import { element } from 'protractor';
 
 @Component({
   selector: 'app-table',
@@ -41,7 +38,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() tableColumns: any;
   @Input() tableType: any;
   @Input() privacy = false;
-  activeSortItem = null;
+
   isReversedSort = false;
   contact$: Observable<any>;
   utxoList$: Observable<any>;
@@ -57,8 +54,9 @@ export class TableComponent implements OnInit, OnChanges {
   private iconSendFailed = this.baseImgPath + `icon-send-failed.svg`;
   private iconSending = this.baseImgPath + `icon-sending.svg`;
   private iconSendingOwn = this.baseImgPath + `icon-sending-own.svg`;
+  private iconSentOwn = this.baseImgPath + `icon-sent-own.svg`;
   private iconSent = this.baseImgPath + `icon-sent.svg`;
-  public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
+  public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed-gray.svg`;
 
   isUtxoListVisible = true;
   tableTypes = TableTypes;
@@ -82,6 +80,7 @@ export class TableComponent implements OnInit, OnChanges {
     utxo_amount: 'amount',
     utxo_type: 'type'
   };
+  activeSortItem = null;
 
   public iconSort: string = `${environment.assetsPath}/images/shared/components/table/icon-sort.svg`;
   public iconSortActive: string = `${environment.assetsPath}/images/shared/components/table/icon-sort-active.svg`;
@@ -114,11 +113,13 @@ export class TableComponent implements OnInit, OnChanges {
     return expState;
   }
 
-  ngOnInit() {
-    //this.dataSource = new ExampleDataSource(this.exampleDatabase);
-  }
+  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
+    if (this.activeSortItem === null) {
+      this.activeSortItem = this.tableType === TableTypes.TRANSACTIONS ? this.sortParams.created : null;
+    }
+
     if (changes.tableData) {
       if (this.expandedElement === null && this.tableType === TableTypes.TRANSACTIONS) {
         this.expandedElement = {txId: null};
@@ -135,13 +136,6 @@ export class TableComponent implements OnInit, OnChanges {
       }
 
       this.dataSource = new ExampleDataSource(updatedData);
-
-
-      // if (this.exampleDatabase.data.length > 0) {
-      //   changes.tableData.currentValue.forEach(element => this.exampleDatabase.updateItem(element));
-      // } else {
-      //   changes.tableData.currentValue.forEach(element => this.exampleDatabase.addItem(element));
-      // }
     }
   }
 
@@ -244,6 +238,22 @@ export class TableComponent implements OnInit, OnChanges {
     return item.status_string === transactionsStatuses.SENT;
   }
 
+  getStatus(item) {
+    let status = item.status_string;
+    if (item.status_string === transactionsStatuses.SELF_SENDING) {
+      status = transactionsStatuses.SENDING_TO_OWN_ADDRESS;
+    } else if (item.status_string === transactionsStatuses.COMPLETED) {
+      const address$ = this.store.pipe(select(selectAddress(item.receiver)));
+      address$.subscribe(val => {
+        if (val !== undefined && val.own) {
+          status = transactionsStatuses.SENT_TO_OWN_ADDRESS;
+        }
+      });
+    }
+
+    return status;
+  }
+
   getTrIcon(item) {
     let iconPath = '';
     if (item.status_string === transactionsStatuses.CANCELED && item.income) {
@@ -266,15 +276,23 @@ export class TableComponent implements OnInit, OnChanges {
         item.status_string === transactionsStatuses.IN_PROGRESS ||
         item.status_string === transactionsStatuses.WAITING_FOR_SENDER) && !item.income) {
       iconPath = this.iconSending;
-    } else if ((item.status_string === transactionsStatuses.RECEIVED) ||
-        (item.status_string === transactionsStatuses.COMPLETED && item.income)) {
+    } else if (item.status_string === transactionsStatuses.RECEIVED) {
       iconPath = this.iconReceived;
-    } else if ((item.status_string === transactionsStatuses.SENT) ||
-        (item.status_string === transactionsStatuses.COMPLETED && !item.income)) {
+    } else if (item.status_string === transactionsStatuses.SENT) {
       iconPath = this.iconSent;
-    } else if (item.status_string === transactionsStatuses.SENDING_TO_OWN_ADDRESS) {
-      iconPath = this.iconSendingOwn;
     }
+
+    if (item.status_string === transactionsStatuses.SELF_SENDING) {
+      iconPath = this.iconSendingOwn;
+    } else if (item.status_string === transactionsStatuses.COMPLETED) {
+      const address$ = this.store.pipe(select(selectAddress(item.receiver)));
+      address$.subscribe(val => {
+        if (val !== undefined && val.own) {
+          iconPath = this.iconSentOwn;
+        }
+      });
+    }
+
     return iconPath;
   }
 
@@ -299,10 +317,23 @@ export class TableComponent implements OnInit, OnChanges {
         item.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
         item.status_string === transactionsStatuses.RECEIVED) && item.income) {
       className = 'receive';
-    } else if (item.status_string === transactionsStatuses.SENDING_TO_OWN_ADDRESS) {
+    }
+
+    if (item.status_string === transactionsStatuses.SELF_SENDING) {
       className = 'own';
+    } else if (item.status_string === transactionsStatuses.COMPLETED) {
+      const address$ = this.store.pipe(select(selectAddress(item.receiver)));
+      address$.subscribe(val => {
+        if (val !== undefined && val.own) {
+          className = 'own';
+        }
+      });
     }
     return className;
+  }
+
+  getValueSign(element) {
+    return element.income ? '+' : '-';
   }
 }
 
@@ -318,55 +349,3 @@ export class ExampleDataSource extends DataSource<any> {
   }
   disconnect() {}
 }
-
-
-// export class ExampleDatabase {
-//   /** Stream that emits whenever the data has been modified. */
-//   dataChange: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-//   get data(): any[] { return this.dataChange.value; }
-
-//   constructor() {
-//   }
-
-//   addItem(data) {
-//     const copiedData = this.data.slice();
-//     copiedData.push(data, { detailRow: true, element: data });
-//     this.dataChange.next(copiedData);
-//   }
-
-//   updateItem(data) {
-//     const updatedArray = this.dataChange.value.map(item => {
-//       if (item.txId === data.txId) {
-//         return data;
-//       } else if (item.element !== undefined && item.element.txId === data.txId) {
-//         return { detailRow: true, element: data };
-//       } else {
-//         return item;
-//       }
-//     });
-
-//     this.dataChange.next(updatedArray);
-//   }
-
-//   sortItems() {
-//     console.log(1);
-//   }
-// }
-
-// export class ExampleDataSource extends DataSource<any> {
-//   constructor(private _exampleDatabase: ExampleDatabase) {
-//     super();
-//   }
-
-//   // connect(): Observable<any[]> {
-//   //   const rows = [];
-//   //   this.DataArray.forEach(element => rows.push(element, { detailRow: true, element }));
-//   //   return of(rows);
-//   // }
-
-//   connect(): Observable<any[]> {
-//     return this._exampleDatabase.dataChange;
-//   }
-
-//   disconnect() {}
-// }
