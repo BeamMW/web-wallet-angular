@@ -19,13 +19,6 @@ export class MenuFullComponent implements OnInit {
       srcOut: `${environment.assetsPath}/images/shared/components/menu/ic-wallet.svg`,
       srcOn: `${environment.assetsPath}/images/shared/components/menu/ic-wallet-active.svg`
     }, {
-      path: '/addresses/list',
-      title: 'Addresses',
-      hovered: false,
-      src: '',
-      srcOut: `${environment.assetsPath}/images/shared/components/menu/ic-addressbook.svg`,
-      srcOn: `${environment.assetsPath}/images/shared/components/menu/ic-addressbook-active.svg`
-    }, {
       path: '/utxo/info',
       title: 'UTXO',
       hovered: false,

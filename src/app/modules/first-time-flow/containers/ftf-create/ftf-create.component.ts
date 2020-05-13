@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { webSocket } from 'rxjs/webSocket';
-import {Router} from '@angular/router';
-import * as ObservableStore from 'obs-store';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { environment } from '@environment';
-import { WindowService, WebsocketService } from '../../../../services';
+import { WindowService, DataService } from '../../../../services';
+import { routes } from '@consts';
+import { popupRoutes } from '@consts';
 
 @Component({
   selector: 'app-ftf-create',
@@ -12,28 +12,32 @@ import { WindowService, WebsocketService } from '../../../../services';
   styleUrls: ['./ftf-create.component.scss']
 })
 export class FtfCreateComponent implements OnInit, OnDestroy {
-  public bgUrl: string = `${environment.assetsPath}/images/modules/wallet/containers/login/bg.svg`;
+  public bgUrl: string;
   public logoUrl: string = `${environment.assetsPath}/images/modules/wallet/containers/login/logo.svg`;
   public isFullScreen = false;
-
-  generateSeedRoute = '/initialize/generate-seed';
-
-  sub: Subscription;
+  public popupOpened = false;
 
   constructor(public router: Router,
-              private windowService: WindowService,
-              private wasmService: WebsocketService) { 
+              private dataService: DataService,
+              private windowService: WindowService) {
     this.isFullScreen = windowService.isFullSize();
     this.bgUrl = `${environment.assetsPath}/images/modules/wallet/containers/login/` +
       (this.isFullScreen ? 'bg-full.svg' : 'bg.svg');
+
+    dataService.changeEmitted$.subscribe(emittedState => {
+      if (emittedState.popupOpened !== undefined) {
+        this.popupOpened = emittedState.popupOpened;
+      }
+    });
   }
 
   ngOnInit() {
   }
 
   ngOnDestroy() {
-    if (this.sub !== undefined) {
-      this.sub.unsubscribe();
-    }
+  }
+
+  newWalletClicked() {
+    this.router.navigate([routes.FTF_GENERATE_SEED_ROUTE]);
   }
 }

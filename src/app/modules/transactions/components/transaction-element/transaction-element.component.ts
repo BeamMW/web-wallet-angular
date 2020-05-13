@@ -4,6 +4,10 @@ import { Router } from '@angular/router';
 import { routes, transactionsStatuses, TableTypes } from '@consts';
 import { Store, select } from '@ngrx/store';
 import { selectAddress } from '../../../../store/selectors/address.selectors';
+import { Observable } from 'rxjs';
+import {
+  selectPrivacySetting
+} from '../../../../store/selectors/wallet-state.selectors';
 
 @Component({
   selector: 'app-transaction-element',
@@ -13,6 +17,8 @@ import { selectAddress } from '../../../../store/selectors/address.selectors';
 export class TransactionElementComponent implements OnInit {
   @Input() transaction: any;
   tableTypesConsts = TableTypes;
+  privacySetting$: Observable<any>;
+  privacyMode = false;
 
   private baseImgPath = `${environment.assetsPath}/images/statuses/`;
   private iconExpired = this.baseImgPath + `icon-expired.svg`;
@@ -32,6 +38,10 @@ export class TransactionElementComponent implements OnInit {
     public router: Router,
     private store: Store<any>,
   ) {
+    this.privacySetting$ = this.store.pipe(select(selectPrivacySetting));
+    this.privacySetting$.subscribe((state) => {
+      this.privacyMode = state;
+    });
   }
 
   getStatus(item) {

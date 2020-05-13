@@ -45,6 +45,7 @@ export class DataService {
   private addressesSub: Subscription;
   private utxoSub: Subscription;
   private trsSub: Subscription;
+  private refreshIntervalId;
 
   public clickedElement: HTMLElement;
   // Observable string sources
@@ -172,6 +173,7 @@ export class DataService {
 
   clearWalletData() {
     extensionizer.storage.local.remove(['settings', 'wallet', 'contacts', 'state']);
+    clearInterval(this.refreshIntervalId);
   }
 
   loginToService(seed: string, loginToWallet: boolean = true, walletId?: string, pass?: string) {
@@ -221,7 +223,7 @@ export class DataService {
         }
         this.store.dispatch(ChangeWalletState({walletState: true}));
         this.walletDataUpdate();
-        setInterval(() => {
+        this.refreshIntervalId = setInterval(() => {
           this.walletDataUpdate();
         }, 5000);
         this.router.navigate([routes.WALLET_MAIN_ROUTE]);

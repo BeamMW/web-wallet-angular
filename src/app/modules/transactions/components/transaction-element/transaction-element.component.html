@@ -16,7 +16,7 @@
         </div>
         <div [className]="'transaction__common__mid-content ' + getContentClass()">
             <div class="transaction__common__mid-content__status">{{getStatus(transaction)}}</div>
-            <div class="transaction__common__mid-content__value">
+            <div class="transaction__common__mid-content__value" *ngIf="!privacyMode">
                 <ng-container>{{getValueSign()}}</ng-container>
                  {{ transaction.value | beam:'1.0-9'}} BEAM</div>
         </div>

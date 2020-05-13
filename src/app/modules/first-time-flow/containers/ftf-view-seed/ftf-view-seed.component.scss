@@ -224,7 +224,7 @@
         }
 
         &__bottom-content {
-            margin: auto auto 140px auto;
+            margin: auto auto 143px auto;
             display: flex;
             flex-direction: row;
 
@@ -233,6 +233,8 @@
                 
                 @include ui-button($btn-open-wallet, $btn-full-verification) {
                     font-size: 14px;
+                    width: 220px;
+                    height: 38px;
                 }
         
                 @include ui-button-verification-icon()
@@ -243,6 +245,8 @@
                 
                 @include ui-button($btn-full-back, $btn-full-lg) {
                     font-size: 14px;
+                    width: 179px;
+                    height: 38px;
                 }
         
                 @include ui-button-later-icon()
@@ -252,6 +256,8 @@
                 
                 @include ui-button($btn-full-back, $btn-full-sm) {
                     font-size: 14px;
+                    width: 117px;
+                    height: 38px;
                 }
         
                 @include ui-button-back-icon()

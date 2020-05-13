@@ -7,15 +7,11 @@
 }
 
 .content-text {
+    @include normal-text;
     margin-left: 20px;
     max-width: 275px;
     font-family: 'ProximaNova', sans-serif;
     font-size: 14px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
     color: #ffffff;
 }
 
@@ -44,14 +40,12 @@
         }
 
         &__title {
+            @include normal-text;
             font-family: 'ProximaNovaSemiBold', sans-serif;
             margin: 0 auto;
             color: #ffffff;
             font-size: 20px;
             font-weight: 600;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
             letter-spacing: 3px;
             text-align: center;
         }
@@ -66,28 +60,20 @@
         margin-right: auto;
 
         &__first-row {
+            @include normal-text;
             max-width: 335px;
             font-family: 'ProximaNova', sans-serif;
             font-size: 14px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
             text-align: center;
             color: #ffffff;
         }
 
         &__second-row {
+            @include normal-text;
             margin-top: 20px;
             max-width: 335px;
             font-family: 'ProximaNova', sans-serif;
             font-size: 14px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
             text-align: center;
             color: #ffffff;
         }
@@ -123,6 +109,9 @@
             margin-top: 30px;
             
             @include ui-button($btn-open-wallet, $btn-lg) {
+                width: 253px;
+                height: 44px;
+                font-size: 14px;
             }
     
             @include ui-button-generate-seed-icon()
@@ -138,27 +127,21 @@
             margin-top: 50px;
 
             &__header {
+                @include normal-text;
                 font-family: 'ProximaNovaSemiBold', sans-serif;
                 font-size: 36px;
                 font-weight: 600;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 text-align: center;
                 color: #ffffff;
             }
 
             &__text {
+                @include normal-text;
                 width: 730px;
                 margin: 30px auto 0 auto;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
                 line-height: 1.29;
-                letter-spacing: normal;
                 text-align: center;
                 color: #ffffff;
             }
@@ -212,7 +195,7 @@
         }
 
         &__bottom-content {
-            margin: auto auto 140px auto;
+            margin: auto auto 143px auto;
             display: flex;
             flex-direction: row;
 
@@ -221,6 +204,8 @@
                 
                 @include ui-button($btn-open-wallet, $btn-full-understand) {
                     font-size: 14px;
+                    width: 166px;
+                    height: 38px;
                 }
         
                 @include ui-button-ok-icon()
@@ -230,6 +215,8 @@
                 
                 @include ui-button($btn-full-back, $btn-full-sm) {
                     font-size: 14px;
+                    width: 122px;
+                    height: 38px;
                 }
         
                 @include ui-button-back-icon()
@@ -248,13 +235,11 @@ p {
 }
 
 .content-header {
+    @include normal-text;
     opacity: 0.5;
     font-family: 'ProximaNova', sans-serif;
     font-size: 14px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 1px;
     color: #ffffff;
 }

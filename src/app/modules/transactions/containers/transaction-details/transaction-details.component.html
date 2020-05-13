@@ -10,8 +10,10 @@
     </div>
     <ng-container *ngIf="transaction$ | async as data">
         <div class="details__amount" [class.receive]="data.income" [class.send]="!data.income">
-            <div class="details__amount__value">{{ data.value | beam:'1.0-9'}} BEAM</div>
-            <div class="details__amount__status">{{ data.status_string }}</div>
+            <div class="details__amount__value" *ngIf="!privacyMode">{{ data.value | beam:'1.0-9'}} BEAM</div>
+            <div class="details__amount__status" [class.privacy-enabled]="privacyMode">
+                {{ data.status_string }}
+            </div>
         </div>
         <div class="details__container">
             <div class="details__container__header">DETAILS</div>

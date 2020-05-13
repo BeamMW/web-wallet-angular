@@ -70,11 +70,11 @@ export class ReceiveComponent implements OnInit, OnDestroy {
           if (val !== undefined) {
             this.generatedAddress = val.address;
             this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, val.identity, 0);
+            this.updateQr();
           }
         });
         console.log('[create_address:]');
         console.dir(msg);
-        this.updateQr();
         this.sub.unsubscribe();
       }
     });
@@ -129,7 +129,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   }
 
   updateQr() {
-    this.qrCode = 'beam:' + this.generatedAddress + (this.receiveForm.value.amount ?
+    this.qrCode = 'beam:' + this.generatedToken + (this.receiveForm.value.amount ?
       ('?amount=' + this.receiveForm.value.amount) : '') +
       (this.receiveForm.value.comment && this.receiveForm.value.comment.length > 0 ?
       ('?comment=' + this.receiveForm.value.comment) : '');

@@ -8,7 +8,8 @@ import {
   FtfGenerateSeedComponent,
   FtfConfirmSeedComponent,
   FtfCreatePasswordComponent,
-  FtfViewSeedComponent} from './containers';
+  FtfViewSeedComponent
+} from './containers';
 
 import { FirstTimeFlowRoutingModule } from './first-time-flow-routing.module';
 

@@ -27,6 +27,9 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
   private loginSub: Subscription;
   createForm: FormGroup;
   isFullScreen = false;
+  isNewPassValidated = true;
+  emptyPass = false;
+  emptyConfirmPass = false;
 
   private wasmState$: Observable<any>;
 
@@ -65,7 +68,7 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
     const pass = this.createForm.value.password;
     const confirmPass = this.createForm.value.passwordConfirm;
 
-    if (confirmPass === pass) {
+    if (confirmPass === pass && pass.length > 0) {
       console.log(`[create-wallet] Creating new wallet with seed phrase: ${this.seed}`);
       this.wasmService.keykeeperInit(this.seed).subscribe(value => {
         const ownerKey = this.wasmService.keyKeeper.getOwnerKey(pass);
@@ -95,9 +98,20 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
             pass: pass,
             ownerkey: ownerKey
           }
+        });
       });
-      });
+    } else if (pass.length === 0 || confirmPass.length === 0) {
+      this.emptyPass = pass.length === 0;
+      this.emptyConfirmPass = confirmPass.length === 0;
+    } else {
+      this.isNewPassValidated = false;
     }
+  }
+
+  passInputUpdated(event) {
+    this.emptyPass = false;
+    this.emptyConfirmPass = false;
+    this.isNewPassValidated = true;
   }
 
   backClicked(event) {

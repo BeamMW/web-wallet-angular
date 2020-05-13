@@ -16,6 +16,7 @@ import { selectAddress } from '../../../store/selectors/address.selectors';
 
 import { WebsocketService } from './../../../services';
 import { Subscription } from 'rxjs';
+import { WasmService } from './../../../wasm.service';
 
 import {
   saveProofData
@@ -98,9 +99,9 @@ export class TableComponent implements OnInit, OnChanges {
     private store: Store<any>,
     private router: Router,
     private websocketService: WebsocketService,
-    private changeDetectorRefs: ChangeDetectorRef) {
-
-  }
+    private changeDetectorRefs: ChangeDetectorRef,
+    private wasmService: WasmService
+    ) {}
 
   getExpandedState(data) {
     let expState = 'collapsed';
@@ -335,6 +336,10 @@ export class TableComponent implements OnInit, OnChanges {
   getValueSign(element) {
     return element.income ? '+' : '-';
   }
+
+  // getToken(data) {
+  //   return this.wasmService.getSendToken(data.sender, val.identity, 0);
+  // }
 }
 
 export class ExampleDataSource extends DataSource<any> {

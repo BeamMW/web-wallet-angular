@@ -57,9 +57,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   passUpdated($event) {
-    const valueFromInput = $event.target.value;
-    if (valueFromInput === null || valueFromInput.length === 0) {
-      this.isCorrectPass = true;
-    }
+    this.isCorrectPass = true;
   }
 }

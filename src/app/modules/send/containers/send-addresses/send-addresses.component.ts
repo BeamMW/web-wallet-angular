@@ -36,7 +36,6 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
   feeIsCorrect = true;
   isOutgoingFull = true;
-  addressLoaded = false;
   private sub: Subscription;
 
   stats = {
@@ -108,7 +107,6 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.createAddress();
   }
 
   ngOnDestroy() {
@@ -147,11 +145,6 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     control.setValue(feeValue);
   }
 
-  changeAddressClicked($event) {
-    $event.stopPropagation();
-    this.createAddress();
-  }
-
   amountChanged(value) {
     this.walletStatusSub = this.walletStatus$.subscribe((status) => {
       const feeFullValue = this.fullSendForm.value.fee / GROTHS_IN_BEAM;
@@ -188,26 +181,6 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
   valuesValidationCheck() {
     this.isSendDataValid = this.amountValidated && this.addressValidated;
-  }
-
-  createAddress() {
-    this.sub = this.wsService.on().subscribe((msg: any) => {
-      if (msg.result !== undefined && msg.id === 1 && typeof msg.result === 'string') {
-        this.sendFrom = msg.result;
-        this.addressLoaded = true;
-        this.sub.unsubscribe();
-      }
-    });
-    this.wsService.send({
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'create_address',
-        params:
-        {
-            expiration : '24h',
-            comment : ''
-        }
-    });
   }
 
   validateAddress(addressValue: string) {

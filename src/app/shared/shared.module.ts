@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MainLayoutComponent } from './layouts';
 import { RouterModule } from '@angular/router';
 import { HeaderLogoComponent, HeaderPopupComponent, ButtonComponent, MenuComponent } from './components';
-import { ClickOutsideDirective } from './directives/click-outside/click-outside.directive';
 import { BeamPipe } from 'app/pipes/beam.pipe';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -36,6 +35,10 @@ import {
   HeaderWithLinkComponent,
   HeaderWithoutLogoComponent
 } from './containers';
+import {
+  ClickOutsideDirective,
+  DetectCapsDirective
+} from './directives';
 
 @NgModule({
   declarations: [
@@ -59,6 +62,7 @@ import {
     PaymentProofExportedComponent,
     HeaderWithLinkComponent,
     HeaderWithoutLogoComponent,
+    DetectCapsDirective,
   ],
   imports: [
     CommonModule,
@@ -88,7 +92,8 @@ import {
     PasswordComponent,
     HeaderWithLinkComponent,
     HeaderWithoutLogoComponent,
-    TableActionsComponent
+    TableActionsComponent,
+    DetectCapsDirective
   ],
   providers: [
     DecimalPipe

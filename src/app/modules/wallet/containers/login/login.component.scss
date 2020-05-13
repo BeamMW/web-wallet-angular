@@ -100,6 +100,7 @@
             color: #ff625c;
         }
 
+        &__input.incorrect::placeholder,
         &__input.incorrect:focus {
             color: #ff625c;
         }

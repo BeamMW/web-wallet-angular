@@ -6,7 +6,9 @@ import {
   FtfGenerateSeedComponent,
   FtfConfirmSeedComponent,
   FtfCreatePasswordComponent,
-  FtfViewSeedComponent} from './containers';
+  FtfViewSeedComponent
+} from './containers';
+
 
 import { MainLayoutComponent } from '@shared/layouts';
 import {

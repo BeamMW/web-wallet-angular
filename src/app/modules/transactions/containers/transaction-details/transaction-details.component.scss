@@ -73,6 +73,10 @@
             line-height: normal;
             letter-spacing: normal;
         }
+
+        &__status.privacy-enabled {
+            margin-top: 60px;
+        }
     }
 
     &__container {

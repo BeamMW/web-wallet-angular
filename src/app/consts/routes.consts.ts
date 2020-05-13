@@ -4,6 +4,7 @@ export enum routes {
     FTF_GENERATE_SEED_ROUTE = '/initialize/generate-seed',
     FTF_VIEW_SEED_ROUTE = '/initialize/view-seed',
     FTF_CREATE_WALLET_ROUTE = '/initialize/create',
+    //RESTORE_WALLET_ROUTE = '/initialize/restore',
 
     WALLET_MAIN_ROUTE = '/wallet/main',
 

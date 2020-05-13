@@ -148,12 +148,12 @@
 
         &__controls {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             margin-top: auto;
         }
 
         &__button-qr {
-            margin: auto 0 20px 0;
+            margin: 20px auto 10px auto;
 
             @include ui-button($btn-show-qr, $btn-md) {
                 margin-right: 7px;
@@ -164,9 +164,10 @@
         }
 
         &__button-copy {
-            margin: auto auto 20px 0;
+            margin: 10px auto 20px auto;
 
             @include ui-button($btn-receive, $btn-md) {
+                width: 241px;
             }
 
             @include ui-button-copy-icon()
@@ -274,6 +275,7 @@
                         margin: auto auto 45px 0;
             
                         @include ui-button($btn-receive, $btn-full-lg) {
+                            width: 241px;
                         }
             
                         @include ui-button-copy-icon()

@@ -45,7 +45,9 @@ export class WebsocketService {
                 this.onkeykeeper(JSON.stringify(msg));
             }
           },
-          (err) => console.log(err),
+          (err) => {
+            console.log('error from socket:', err)
+          },
           () => console.log('service connected')
         );
         this.setConnected(true);

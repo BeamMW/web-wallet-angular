@@ -13,9 +13,6 @@ const routes: Routes = [
     path: 'send',
     loadChildren: () => import('./modules/send/send.module').then(m => m.SendModule)
   }, {
-    path: 'addresses',
-    loadChildren: () => import('./modules/addresses/addresses.module').then(m => m.AddressesModule)
-  }, {
     path: 'transactions',
     loadChildren: () => import('./modules/transactions/transactions.module').then(m => m.TransactionsModule)
   }, {

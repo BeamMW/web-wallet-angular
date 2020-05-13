@@ -6,6 +6,9 @@ import { Store, select } from '@ngrx/store';
 import { environment } from '@environment';
 import {Router} from '@angular/router';
 import { selectTrById } from '../../../../store/selectors/transaction.selectors';
+import {
+  selectPrivacySetting
+} from '../../../../store/selectors/wallet-state.selectors';
 
 @Component({
   selector: 'app-transaction-details',
@@ -13,14 +16,20 @@ import { selectTrById } from '../../../../store/selectors/transaction.selectors'
   styleUrls: ['./transaction-details.component.scss']
 })
 export class TransactionDetailsComponent implements OnInit {
-
+  privacySetting$: Observable<any>;
+  privacyMode = false;
   transaction$: Observable<any>;
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
 
   constructor(
     private route: ActivatedRoute,
     public store: Store<any>,
-    public router: Router) { }
+    public router: Router) {
+      this.privacySetting$ = this.store.pipe(select(selectPrivacySetting));
+      this.privacySetting$.subscribe((state) => {
+        this.privacyMode = state;
+      });
+    }
 
   ngOnInit() {
     const txId = this.route.snapshot.params['id'];

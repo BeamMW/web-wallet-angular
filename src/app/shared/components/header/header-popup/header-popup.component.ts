@@ -36,8 +36,8 @@ export class HeaderPopupComponent implements OnInit {
   public buyBeamIcon = `${environment.assetsPath}/images/shared/components/header-popup/icon-where-to-buy-beam.svg`;
   public settingsIcon = `${environment.assetsPath}/images/shared/components/header-popup/icon-settings.svg`;
   public logoutIcon = `${environment.assetsPath}/images/shared/components/menu/icon-logout.svg`;
-  public iconDisabledPrivacy = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye.svg`;
-  public iconEnabledPrivacy = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
+  public iconDisabledPrivacy = `${environment.assetsPath}/images/shared/components/header-popup/icn-eye.svg`;
+  public iconEnabledPrivacy = `${environment.assetsPath}/images/shared/components/header-popup/icn-eye-crossed.svg`;
 
   constructor(
     private store: Store<any>,

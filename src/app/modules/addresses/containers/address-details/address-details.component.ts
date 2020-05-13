@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { environment } from '@environment';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { selectTrByAddress } from '../../../../store/selectors/transaction.selectors';
 
 @Component({

@@ -47,9 +47,17 @@ export class WasmService {
   public keykeeperInit(seed) {
     return this.wasmReady.pipe(filter(value => value === true)).pipe(
       map(() => {
-        this.keyKeeper =  new this.module.KeyKeeper(seed);
+        this.keyKeeper = new this.module.KeyKeeper(seed);
       })
     );
+  }
+
+  public isAllowedWord(word: string) {
+    return this.module.KeyKeeper.IsAllowedWord(word);
+  }
+
+  public isValidPhrase(phrase: string) {
+    return this.module.KeyKeeper.IsValidPhrase(phrase);
   }
 
   public generatePhrase() {
