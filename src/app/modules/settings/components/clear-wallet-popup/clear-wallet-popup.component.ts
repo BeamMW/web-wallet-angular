@@ -55,15 +55,7 @@ export class ClearWalletPopupComponent implements OnInit, OnDestroy {
     this.router.navigate([{ outlets: { popup: null }}], {relativeTo: this.activatedRoute.parent});
   }
 
-  clearAddressesClicked() {
-    this.deleteAddressesChecked = !this.deleteAddressesChecked;
-  }
-
   clearTransactionsClicked() {
     this.deleteTransactionsChecked = !this.deleteTransactionsChecked;
-  }
-
-  clearContactsClicked() {
-    this.deleteContactsChecked = !this.deleteContactsChecked;
   }
 }

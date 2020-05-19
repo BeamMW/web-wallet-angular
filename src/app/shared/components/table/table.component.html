@@ -178,6 +178,8 @@
                     </div>
                   </ng-container>
                   <div class="details-value">{{detail.element.sender}}</div>
+                  <div class="details-title">TOKEN</div>
+                  <div class="details-value">{{detail.element.token}}</div>
                   <div class="details-title">RECEIVING ADDRESS</div>
                   <ng-container *ngIf="contact$ | async as contact">
                     <div class="details-contact" *ngIf="!detail.element.income">

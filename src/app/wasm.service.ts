@@ -80,7 +80,7 @@ export class WasmService {
     return this.keyKeeper.getIdentity(keyIDBase64);
   }
 
-  public getSendToken(sbbsAddressHex: string, identityStrHex: string, amountBase64: number) {
+  public getSendToken(sbbsAddressHex: string, identityStrHex: string, amountBase64: string) {
     return this.keyKeeper.getSendToken(sbbsAddressHex, identityStrHex, amountBase64);
   }
 }

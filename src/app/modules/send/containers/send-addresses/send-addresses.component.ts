@@ -171,6 +171,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
   addressInputUpdated(value) {
     this.addressValidated = value.length > 0;
+    this.valuesValidationCheck();
     // TODO: ENABLE WHEN TOKEN VALIDATE WILL BE ADDED
     // if (value === null || value.length === 0) {
     //   this.addressValidation = true;

@@ -4,6 +4,7 @@ import {
     ActionReducerMap,
   } from '@ngrx/store';
 import * as fromUtxo from './../reducers/utxo.reducers';
+import { utxoStatuses } from '@consts';
 
 export interface State {
     utxos: fromUtxo.UtxoState;
@@ -37,29 +38,30 @@ export const selectUtxoTotal = createSelector(
 
 export const selectAvailableUtxo = createSelector(
     selectAllUtxo,
-    utxos => utxos.filter(utxo => utxo.status_string === 'available')
+    utxos => utxos.filter(utxo => utxo.status_string === utxoStatuses.AVAILABLE)
 );
 
 export const selectInProgressUtxo = createSelector(
     selectAllUtxo,
-    utxos => utxos.filter(utxo => utxo.status_string === 'in progress')
+    utxos => utxos.filter(utxo => utxo.status_string === utxoStatuses.IN_PROGRESS ||
+        utxo.status_string === utxoStatuses.INCOMING ||
+        utxo.status_string === utxoStatuses.OUTGOING)
 );
 
 export const selectSpentUtxo = createSelector(
     selectAllUtxo,
-    utxos => utxos.filter(utxo => utxo.status_string === 'spent')
+    utxos => utxos.filter(utxo => utxo.status_string === utxoStatuses.SPENT)
 );
 
 export const selectUnavailableUtxo = createSelector(
     selectAllUtxo,
-    utxos => utxos.filter(utxo => utxo.status_string === 'unavailable' ||
-        (utxo.status_string !== 'spent' && utxo.status_string !== 'in progress' &&
-        utxo.status_string !== 'available'))
+    utxos => utxos.filter(utxo => utxo.status_string === utxoStatuses.UNAVAILABLE)
 );
+
 
 export const selectUtxoById = (txId: string) => createSelector(
     selectAllUtxo,
     utxos => {
-        return utxos.filter(utxo => utxo.createTxId === txId);
+        return utxos.filter(utxo => utxo.createTxId === txId ||  utxo.spentTxId === txId);
     }
 );

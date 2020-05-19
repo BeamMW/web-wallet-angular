@@ -7,18 +7,16 @@
     <div class="login__header-text">Enter your password to access the wallet</div>
     <div class="login__container">
         <form class="send-form-cl" [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="submit()">
-            <div class="form-group">
-                <input autofocus class="login__container__input" #passInput [class.incorrect]="!isCorrectPass"
-                    (input)="passUpdated($event)"
-                    name="password" type="password" formControlName="password" 
-                    placeholder="Password"/>
-                    {{ passInput.focus() }}
-                <div class="login__container__validator" *ngIf="!isCorrectPass">Incorrect password</div>
-            </div>
-            <div class="login__container__button">
-                <app-button class="open-button">open your wallet</app-button>
-            </div>
+            <input autofocus class="login__container__input" #passInput [class.incorrect]="!isCorrectPass"
+                (input)="passUpdated($event)"
+                name="password" type="password" formControlName="password" 
+                placeholder="Password"/>
+                {{ passInput.focus() }}
+            <div class="login__container__validator" *ngIf="!isCorrectPass">Incorrect password</div>
         </form>
+    </div>
+    <div class="login__controls">
+        <app-button class="open-button" (click)="submit()">open your wallet</app-button>
     </div>
 
     <div class="login__top-gradient" *ngIf="!isFullScreen"></div>

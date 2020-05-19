@@ -168,6 +168,8 @@ export class SettingsMainComponent implements OnInit {
   menuItemClicked(item, event) {
     if (item.class === 'remove') {
       this.router.navigate([this.router.url, { outlets: { popup: 'remove-wallet-popup' }}]);
+    } else if (item.class === 'report') {
+      this.router.navigate([this.router.url, { outlets: { popup: 'report-popup' }}]);
     } else {
       this.router.navigate([item.path]);
     }

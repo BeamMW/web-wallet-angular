@@ -63,4 +63,8 @@ export class SeedVerificationPopupComponent implements OnInit, OnDestroy {
   closePopup(isCorrect = false) {
     this.router.navigate([{ outlets: { popup: null }}], {relativeTo: this.activatedRoute.parent});
   }
+
+  inputUpdated() {
+    this.isCorrectPass = true;
+  }
 }

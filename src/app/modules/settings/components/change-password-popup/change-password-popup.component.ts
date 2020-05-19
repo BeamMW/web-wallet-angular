@@ -21,6 +21,9 @@ export class ChangePasswordPopupComponent implements OnInit, OnDestroy {
   isCorrectPass = true;
   isPassValidated = false;
   isNewPassValidated = true;
+  emptyPass = false;
+  emptyConfirmPass = false;
+  isSameOld = false;
 
   private walletData: any;
 
@@ -62,16 +65,32 @@ export class ChangePasswordPopupComponent implements OnInit, OnDestroy {
   }
 
   validatedSubmit($event) {
+    const newPass = this.confirmForm.value.newPassword;
+    const newPassConfirm = this.confirmForm.value.newPasswordConfirm;
+    const oldPass = this.confirmForm.value.password;
     $event.stopPropagation();
-    if (this.confirmForm.value.newPassword === this.confirmForm.value.newPasswordConfirm) {
-      passworder.encrypt(this.confirmForm.value.newPassword, {seed: this.walletData.seed, id: this.walletData.id})
-        .then((result) => {
-          this.dataService.saveWallet(result);
+    if (newPass === newPassConfirm && (newPass !== null && newPass.length > 0)) {
+      if (newPass !== oldPass) {
+        passworder.encrypt(newPass, {seed: this.walletData.seed, id: this.walletData.id}).then((result) => {
+            this.dataService.saveWallet(result);
         });
-      this.closePopup();
+        this.closePopup();
+      } else {
+        this.isSameOld = true;
+      }
+    } else if (newPass === null || newPassConfirm === null || newPass === 0 || newPassConfirm === 0) {
+      this.emptyPass = newPass === 0 || newPass === null;
+      this.emptyConfirmPass = newPassConfirm === 0 || newPassConfirm === null;
     } else {
       this.isNewPassValidated = false;
     }
+  }
+
+  passInputUpdated(event) {
+    this.emptyPass = false;
+    this.emptyConfirmPass = false;
+    this.isNewPassValidated = true;
+    this.isSameOld = false;
   }
 
   cancelClicked($event) {
@@ -84,9 +103,6 @@ export class ChangePasswordPopupComponent implements OnInit, OnDestroy {
   }
 
   passUpdated($event) {
-    const valueFromInput = $event.target.value;
-    if (valueFromInput === null || valueFromInput.length === 0) {
-      this.isCorrectPass = true;
-    }
+    this.isCorrectPass = true;
   }
 }

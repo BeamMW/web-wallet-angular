@@ -19,11 +19,20 @@ export enum transactionsStatuses {
     SENT = 'sent',
     RECEIVED = 'received',
     RECEIVING = 'receiving',
-    CANCELED = 'canceled',
+    CANCELED = 'cancelled',
     EXPIRED = 'expired',
     FAILED = 'failed',
     SELF_SENDING = 'self sending',
     COMPLETED = 'completed',
     SENDING_TO_OWN_ADDRESS = 'sending to own address',
-    SENT_TO_OWN_ADDRESS = 'sent to own address'
+    SENT_TO_OWN_ADDRESS = 'sent to own address',
+}
+
+export enum utxoStatuses {
+    INCOMING = 'incoming',
+    OUTGOING = 'outgoing',
+    AVAILABLE = 'available',
+    UNAVAILABLE = 'unavailable',
+    IN_PROGRESS = 'in progress',
+    SPENT = 'spent'
 }

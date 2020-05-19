@@ -15,13 +15,13 @@
             <span class="send__progress__empty"></span>
         </div>
         <div class="send__container">
-            <div class="send__container__title">SEND TO</div>
+            <div class="send__container__title">TRANSACTION TOKEN</div>
             <div class="send__container__content">
                 <form class="send-form-cl" novalidate [formGroup]="sendForm" autocomplete="off" (ngSubmit)="submit()">
                     <div class="form-group">
                         <textarea class="send__container__content__input" autosize maxlength="270"
                              name="address" formControlName="address"
-                            placeholder="Search by address, name or comment"></textarea>
+                            placeholder="Please specify transaction token"></textarea>
                     </div>
                     <div class="send__container__content__button">
                         <app-button [disabled]="sendForm.invalid" class="send-button">next</app-button>
@@ -43,6 +43,7 @@
                         <div class="container__address__title">TRANSACTION TOKEN</div>
                         <textarea class="container__address__input" autosize maxlength="300"
                                   name="address" formControlName="address"
+                                  placeholder="Please specify transaction token"
                                   (input)="addressInputUpdated($event.target.value)"
                                   [class.incorrect]="!addressValidation"></textarea>
                         <div class="container__address__validator" *ngIf="!addressValidation">Invalid wallet address</div>

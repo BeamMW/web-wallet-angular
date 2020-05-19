@@ -1,14 +1,6 @@
 <div class="clear" appClickOutside (clickOutside)="closePopup()">
     <div class="clear__title">Clear data</div>
     <div class="clear__content">
-        <div class="clear__content__addresses" (click)="clearAddressesClicked()">
-            <div>Delete all addresses</div>
-            <img class="clear-data-checkbox" [src]="deleteAddressesChecked ? iconFilledCheckbox : iconCheckbox">
-        </div>
-        <div class="clear__content__contacts" (click)="clearContactsClicked()">
-            <div>Delete all contacts</div>
-            <img class="clear-data-checkbox" [src]="deleteContactsChecked ? iconFilledCheckbox : iconCheckbox">
-        </div>
         <div class="clear__content__transactions" (click)="clearTransactionsClicked()">
             <div>Delete all transactions</div>
             <img class="clear-data-checkbox" [src]="deleteTransactionsChecked ? iconFilledCheckbox : iconCheckbox">

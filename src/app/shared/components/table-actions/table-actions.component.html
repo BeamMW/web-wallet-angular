@@ -5,10 +5,6 @@
 </a>
 <mat-menu class="actions-container" #menu="matMenu">
     <ng-container *ngIf="tableType === tableTypesConsts.TRANSACTIONS">
-        <button mat-menu-item (click)="saveContactClicked($event)">
-            <img class="actions-icon" [src]="saveIcon">
-            <span class="actions-text">Save contact</span>
-        </button>
         <button mat-menu-item>
             <img class="actions-icon" [src]="shareIcon">
             <span class="actions-text">Share details</span>
@@ -21,7 +17,7 @@
             <img class="actions-icon" [src]="repeatIcon">
             <span class="actions-text">Repeat transaction</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="cancelTransactionClicked()">
             <img class="actions-icon" [src]="cancelIcon">
             <span class="actions-text">Cancel transaction</span>
         </button>
@@ -31,7 +27,7 @@
         </button>
     </ng-container>
     <ng-container *ngIf="tableType === tableTypesConsts.TRANSACTIONS_NOT_SENT">
-        <button mat-menu-item>
+        <button mat-menu-item (click)="cancelTransactionClicked()">
             <img class="actions-icon" [src]="cancelIcon">
             <span class="actions-text">Cancel transaction</span>
         </button>

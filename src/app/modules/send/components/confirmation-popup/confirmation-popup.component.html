@@ -21,7 +21,7 @@
     <ng-container *ngIf="isFullScreen">
         <div class="confirm__container" *ngIf="sendData$ | async as sendData">
             <div class="confirm__container__title">Transaction confirmation</div>
-            <div class="confirm__container__send-title title-text">SEND TO</div>
+            <div class="confirm__container__send-title title-text">TRANSACTION TOKEN</div>
             <div class="confirm__container__send-value value-text">{{sendData.address}}</div>
             <ng-container *ngIf="contact$ | async as contact">
                 <div class="details-contact" *ngIf="!detail.element.income">
@@ -29,8 +29,6 @@
                   <div class="details-contact__name">{{contact.name}}</div>
                 </div>
             </ng-container>
-            <div class="confirm__container__address-title title-text">OUTGOING ADDRESS</div>
-            <div class="confirm__container__address-value value-text">{{sendData.from}}</div>
             <div class="confirm__container__line">
                 <div class="confirm__container__line__amount">
                     <div class="confirm__container__line__amount__title title-text">
@@ -59,7 +57,7 @@
             <form class="send-form-cl" *ngIf="isPassCheckEnabled"
                 [formGroup]="confirmForm" autocomplete="off" novalidate (ngSubmit)="submit()">
                 <div class="form-group">
-                    <input class="confirm__container__input" type="password"
+                    <input class="confirm__container__input" type="password" (input)="passUpdated()"
                         name="password" formControlName="password" [class.incorrect]="!isCorrectPass"
                         placeholder="Enter password"/>
                     <div class="confirm__container__validator" *ngIf="!isCorrectPass">Incorrect password</div>

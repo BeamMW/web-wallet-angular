@@ -1,7 +1,7 @@
 <div class="confirm" appClickOutside (clickOutside)="closePopup()">
     <div class="confirm__title">Seed verification</div>
     <form class="confirm__form" [formGroup]="confirmForm" autocomplete="off" novalidate (ngSubmit)="submit()">
-        <input class="confirm__form__input" type="password" #passInput
+        <input class="confirm__form__input" type="password" #passInput (input)="inputUpdated()"
                 name="password" formControlName="password" [class.incorrect]="!isCorrectPass"
                 placeholder="Enter password"/>
                 {{ passInput.focus() }}

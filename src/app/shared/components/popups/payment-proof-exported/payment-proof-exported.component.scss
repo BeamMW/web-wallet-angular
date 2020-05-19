@@ -17,6 +17,13 @@
     right: 0;
     z-index: 1100;
 
+    &__cancel-icon {
+        margin: 10px 10px 0 auto;
+        width: 14px;
+        height: 14px;
+        cursor: pointer;
+    }
+
     &__container {
         display: flex;
         flex-direction: column;
@@ -32,7 +39,7 @@
     }
 
     &__title {
-        margin: 30px auto 0 auto;
+        margin: 6px auto 0 auto;
         font-family: 'ProximaNovaBold', sans-serif;
         font-size: 16px;
         font-weight: bold;
@@ -127,7 +134,7 @@
         &__copy {
             margin-left: 20px;
             @include ui-button($btn-ok, $btn-nssm) {
-                width: 173px;
+                width: 165px;
             }
 
             @include ui-button-copy-icon()
@@ -135,7 +142,7 @@
 
         &__copy-code {
             @include ui-button($btn-cancel, $btn-nssm) {
-                width: 124px;
+                width: 165px;
             }
 
             @include ui-button-proof-copy-icon()
@@ -231,11 +238,20 @@
             justify-content: center;
             margin-top: 20px;
     
-            &__cancel {
-
-                @include ui-button($btn-cancel, $btn-nssm) {
-                    width: 133px;
+            &__copy {
+                @include ui-button($btn-ok, $btn-nssm) {
+                    width: 170px;
                 }
+    
+                @include ui-button-copy-icon()
+            }
+    
+            &__copy-code {
+                @include ui-button($btn-cancel, $btn-nssm) {
+                    width: 170px;
+                }
+    
+                @include ui-button-proof-copy-icon()
             }
         }
     }

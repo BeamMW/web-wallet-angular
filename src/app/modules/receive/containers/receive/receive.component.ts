@@ -24,6 +24,9 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   public identity = '';
 
   private sub: Subscription;
+  private serviceSub: Subscription;
+  private popupSub: Subscription;
+
   receiveForm: FormGroup;
   popupOpened = false;
   isFullScreen = false;
@@ -41,7 +44,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
       comment: new FormControl()
     });
 
-    dataService.changeEmitted$.subscribe(emittedState => {
+    this.popupSub = dataService.changeEmitted$.subscribe(emittedState => {
       this.popupOpened = emittedState;
     });
   }
@@ -54,6 +57,14 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     if (this.sub !== undefined) {
       this.sub.unsubscribe();
     }
+
+    if (this.popupSub !== undefined) {
+      this.popupSub.unsubscribe();
+    }
+
+    if (this.serviceSub !== undefined) {
+      this.serviceSub.unsubscribe();
+    }
   }
 
   backClicked(event) {
@@ -62,20 +73,21 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   }
 
   createAddress() {
-    this.sub = this.wsService.on().subscribe((msg: any) => {
+    this.serviceSub = this.wsService.on().subscribe((msg: any) => {
       if (msg.result !== undefined && msg.id === 10) {
         this.dataService.addressesUpdate();
         const address$ = this.store.pipe(select(selectAddress(msg.result)));
-        address$.subscribe(val => {
+        const addrSub = address$.subscribe(val => {
           if (val !== undefined) {
             this.generatedAddress = val.address;
-            this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, val.identity, 0);
+            this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, val.identity, '');
             this.updateQr();
+            addrSub.unsubscribe();
           }
         });
         console.log('[create_address:]');
         console.dir(msg);
-        this.sub.unsubscribe();
+        this.serviceSub.unsubscribe();
       }
     });
     this.wsService.send({
@@ -93,7 +105,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   stripText(control: FormControl) {
     // control.setValue(control.value.replace(/[^0-9]/g, ''));
     const amount = parseInt(control.value, 10) * GlobalConsts.GROTHS_IN_BEAM;
-    this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, this.identity, amount);
+    this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, this.identity, amount.toString());
     this.updateQr();
   }
 
@@ -137,7 +149,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
 
   submit() {
     this.store.dispatch(saveReceiveData({receive: {
-      address: this.generatedAddress,
+      address: this.generatedToken,
       amount: this.receiveForm.value.amount,
       comment: this.receiveForm.value.comment
     }}));

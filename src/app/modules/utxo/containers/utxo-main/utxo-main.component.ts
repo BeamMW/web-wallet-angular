@@ -50,6 +50,8 @@ export class UtxoMainComponent implements OnInit {
   privacySetting$: Observable<any>;
   isFullSize = false;
   privacyMode = false;
+  popupOpened = false;
+  modalOpened = false;
 
   constructor(private store: Store<any>,
               private wasm: WasmService,
@@ -65,6 +67,14 @@ export class UtxoMainComponent implements OnInit {
 
     this.privacySetting$.subscribe((state) => {
       this.privacyMode = state;
+    });
+
+    dataService.changeEmitted$.subscribe(emittedState => {
+      if (emittedState.popupOpened !== undefined) {
+        this.popupOpened = emittedState.popupOpened;
+      } else {
+        this.modalOpened = emittedState;
+      }
     });
   }
 

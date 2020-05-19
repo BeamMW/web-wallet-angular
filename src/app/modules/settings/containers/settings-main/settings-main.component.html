@@ -20,7 +20,7 @@
                     (mouseover)="item.src = item.srcOn"
                     (mouseout)="item.src = item.srcOut"> 
                 <img class="settings__list__item__icon" [src]="item.src || item.srcOut"/>
-                <span class="settings__list__item__text" [class.remove]="item.class === 'remove'">
+                <span [className]="'settings__list__item__text ' + item.class">
                     {{item.title}}
                 </span>
             </div>

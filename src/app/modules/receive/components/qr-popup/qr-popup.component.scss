@@ -78,6 +78,7 @@
         margin: auto auto 30px auto;
 
         @include ui-button($btn-receive, $btn-nsmd) {
+            width: 230px;
         }
 
         @include ui-button-copy-icon()

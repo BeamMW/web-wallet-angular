@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environment';
 import { Router, NavigationExtras } from '@angular/router';
 import { WasmService } from '../../../../wasm.service';
@@ -14,7 +14,7 @@ import { routes } from '@consts';
   templateUrl: './ftf-view-seed.component.html',
   styleUrls: ['./ftf-view-seed.component.scss']
 })
-export class FtfViewSeedComponent implements OnInit {
+export class FtfViewSeedComponent implements OnInit, OnDestroy {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
 
   seed: string;
@@ -30,6 +30,7 @@ export class FtfViewSeedComponent implements OnInit {
       public router: Router) {
     this.isFullScreen = this.windowService.isFullSize();
   }
+
   ngOnInit() {
     this.wasmState$ = this.store.pipe(select(selectWasmState));
     this.sub = this.wasmState$.subscribe((state) => {
@@ -42,6 +43,12 @@ export class FtfViewSeedComponent implements OnInit {
           }
         }
     });
+  }
+
+  ngOnDestroy() {
+    if (this.sub !== undefined) {
+      this.sub.unsubscribe();
+    }
   }
 
   completeVerificationClicked() {

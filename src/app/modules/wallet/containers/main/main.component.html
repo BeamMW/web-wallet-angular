@@ -150,60 +150,25 @@
                         <span class="main__transactions__header__title__text">TRANSACTIONS</span>
                     </div>
                     <div class="main__transactions__header__show-all" *ngIf="transactions.length > 0">
-                        <span class="main__transactions__header__show-all__text" (click)="showAllTransactions()">Show all</span>
+                        <span class="main__transactions__header__show-all__text"
+                            (click)="showAllTransactions()">Show all</span>
                     </div>
                 </div>
                 <div class="main__transactions__content">
                     <ng-container *ngIf="transactions.length > 0">
                         <div class="transcaction-container" *ngFor="let transaction of transactions; let i = index">
                             <ng-container *ngIf="i < 5">
-                                <div class="main__transactions__content__receive" 
-                                    *ngIf="transaction.status_string === 'received' || transaction.status_string === 'completed'">
-                                    <div class="main__transactions__content__receive__value">
-                                        <img class="tr-receive-icon" [src]="iconReceived"/>
-                                        <span class="tr-receive-text">Receive</span>
+                                <div [className]="'main__transactions__content__common-item ' + getContentClass(transaction)">
+                                    <div class="main__transactions__content__common-item__value">
+                                        <img class="tr-receive-icon" [src]="getTrIcon(transaction)"/>
+                                        <span class="tr-receive-text">{{transaction.income ? 'Receive' : 'Send'}}</span>
                                         <span class="tr-receive-value" *ngIf="!privacyMode">
-                                            + {{ transaction.value | beam:'1.0-9'}} BEAM
+                                            <ng-container>{{getValueSign(transaction)}}</ng-container>
+                                             {{ transaction.value | beam:'1.0-9'}} BEAM
                                         </span>        
                                     </div>
-                                    <div class="main__transactions__content__receive__status">received</div>
-                                </div>
-                                <div class="main__transactions__content__receive" *ngIf="transaction.status_string === 'receiving'">
-                                    <div class="main__transactions__content__receive__value">
-                                        <img class="tr-receive-icon" [src]="iconReceived"/>
-                                        <span class="tr-receive-text">Receive</span>
-                                        <span class="tr-receive-value" *ngIf="!privacyMode">
-                                            + {{ transaction.value | beam:'1.0-9'}} BEAM
-                                        </span>        
-                                    </div>
-                                    <div class="main__transactions__content__receive__status">receiving</div>
-                                </div>
-                                <div class="main__transactions__content__send" *ngIf="transaction.status_string === 'sent'">
-                                    <div class="main__transactions__content__send__value">
-                                        <img class="tr-send-icon" [src]="iconSent">
-                                        <span class="tr-send-text">Send</span>
-                                        <span class="tr-send-value" *ngIf="!privacyMode">
-                                            - {{ transaction.value | beam:'1.0-9'}} BEAM
-                                        </span>        
-                                    </div>
-                                    <div class="main__transactions__content__send__status">sent</div>
-                                </div>
-                                <div class="main__transactions__content__send" *ngIf="transaction.status_string === 'sending'">
-                                    <div class="main__transactions__content__send__value">
-                                        <img class="tr-send-icon" [src]="iconSent">
-                                        <span class="tr-send-text">Send</span>
-                                        <span class="tr-send-value" *ngIf="!privacyMode">
-                                            - {{ transaction.value | beam:'1.0-9'}} BEAM
-                                        </span>        
-                                    </div>
-                                    <div class="main__transactions__content__send__status">sending</div>
-                                </div>
-                                <div class="main__transactions__content__send" *ngIf="transaction.status_string === 'cancelled'">
-                                    <div class="main__transactions__content__send__value">
-                                        <span class="tr-send-text">Cancelled</span>
-                                        <span class="tr-send-value" *ngIf="!privacyMode">
-                                            - {{ transaction.value | beam:'1.0-9'}} BEAM
-                                        </span>        
+                                    <div class="main__transactions__content__common-item__status">
+                                        {{ transaction.status_string }}
                                     </div>
                                 </div>
                             </ng-container>

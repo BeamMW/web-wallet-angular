@@ -113,22 +113,27 @@
             line-height: 1.23;
             color: #ff625c;
         }
+    }
 
-        &__button {
-            text-align: center;
-            margin-top: 50px;
-            
-            @include ui-button($btn-open-wallet, $btn-lg) {
-                font-size: 14px;
-            }
-
-            @include ui-button-open-wallet-icon()
+    &__controls {
+        text-align: center;
+        margin: auto auto 132px auto;
+        z-index: 10;
+        
+        @include ui-button($btn-open-wallet, $btn-lg) {
+            font-size: 14px;
+            width: 253px;
+            height: 44px;
         }
+
+        @include ui-button-open-wallet-icon()
     }
 }
 
 @media (min-width: 400px) {
     .login {
+        height: 100%;
+
         &__logo {
            width: 242px;
            height: 210px;
@@ -136,20 +141,23 @@
         }
 
         &__header-text {
-            margin-top: 30px;
-        }    
+            margin-top: auto;
+        }
 
         &__container {
-            &__button {
-                margin-top: 30px;
+            margin-top: 30px;
+        }
 
-                @include ui-button($btn-open-wallet, $btn-lg) {
-                    width: 192px;
-                    height: 38px;
-                }
-    
-                @include ui-button-open-wallet-icon()
-            } 
+        &__controls {
+            margin: 33px auto 143px auto;
+
+            @include ui-button($btn-open-wallet, $btn-lg) {
+                width: 192px;
+                height: 38px;
+                font-size: 14px;
+            }
+
+            @include ui-button-open-wallet-icon()
         }
 
         &__subheader-text {

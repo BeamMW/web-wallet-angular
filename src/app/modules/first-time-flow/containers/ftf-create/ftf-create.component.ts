@@ -17,6 +17,8 @@ export class FtfCreateComponent implements OnInit, OnDestroy {
   public isFullScreen = false;
   public popupOpened = false;
 
+  private popupSub: Subscription;
+
   constructor(public router: Router,
               private dataService: DataService,
               private windowService: WindowService) {
@@ -24,7 +26,7 @@ export class FtfCreateComponent implements OnInit, OnDestroy {
     this.bgUrl = `${environment.assetsPath}/images/modules/wallet/containers/login/` +
       (this.isFullScreen ? 'bg-full.svg' : 'bg.svg');
 
-    dataService.changeEmitted$.subscribe(emittedState => {
+    this.popupSub = dataService.changeEmitted$.subscribe(emittedState => {
       if (emittedState.popupOpened !== undefined) {
         this.popupOpened = emittedState.popupOpened;
       }
@@ -35,6 +37,7 @@ export class FtfCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.popupSub.unsubscribe();
   }
 
   newWalletClicked() {

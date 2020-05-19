@@ -24,12 +24,15 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
   private seed: string;
 
   private sub: Subscription;
-  private loginSub: Subscription;
-  createForm: FormGroup;
-  isFullScreen = false;
-  isNewPassValidated = true;
-  emptyPass = false;
-  emptyConfirmPass = false;
+  private keeperSub: Subscription;
+  public createForm: FormGroup;
+
+  public localParams = {
+    isFullScreen: false,
+    isNewPassValidated: true,
+    emptyPass: false,
+    emptyConfirmPass: false
+  };
 
   private wasmState$: Observable<any>;
 
@@ -41,7 +44,7 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
       private windowService: WindowService,
       private loginService: LoginService,
       private dataService: DataService) {
-    this.isFullScreen = this.windowService.isFullSize();
+    this.localParams.isFullScreen = this.windowService.isFullSize();
     this.createForm = new FormGroup({
       password: new FormControl('', Validators.required),
       passwordConfirm: new FormControl('', Validators.required)
@@ -68,9 +71,9 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
     const pass = this.createForm.value.password;
     const confirmPass = this.createForm.value.passwordConfirm;
 
-    if (confirmPass === pass && pass.length > 0) {
+    if (confirmPass === pass && (pass !== null && pass.length > 0)) {
       console.log(`[create-wallet] Creating new wallet with seed phrase: ${this.seed}`);
-      this.wasmService.keykeeperInit(this.seed).subscribe(value => {
+      this.keeperSub = this.wasmService.keykeeperInit(this.seed).subscribe(value => {
         const ownerKey = this.wasmService.keyKeeper.getOwnerKey(pass);
         console.log('[create-wallet] ownerKey is: data:application/octet-stream;base64,' + ownerKey);
 
@@ -85,6 +88,7 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
                 this.dataService.saveWallet(result);
                 this.dataService.settingsInit(this.seedConfirmed);
                 this.sub.unsubscribe();
+                this.keeperSub.unsubscribe();
                 this.dataService.loginToWallet(msg.result, pass);
               });
           }
@@ -100,18 +104,19 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
           }
         });
       });
-    } else if (pass.length === 0 || confirmPass.length === 0) {
-      this.emptyPass = pass.length === 0;
-      this.emptyConfirmPass = confirmPass.length === 0;
+    } else if (pass === null || confirmPass === null ||
+        pass.length === 0 || confirmPass.length === 0) {
+      this.localParams.emptyPass = pass.length === 0 || pass === null;
+      this.localParams.emptyConfirmPass = confirmPass.length === 0 || confirmPass === null;
     } else {
-      this.isNewPassValidated = false;
+      this.localParams.isNewPassValidated = false;
     }
   }
 
   passInputUpdated(event) {
-    this.emptyPass = false;
-    this.emptyConfirmPass = false;
-    this.isNewPassValidated = true;
+    this.localParams.emptyPass = false;
+    this.localParams.emptyConfirmPass = false;
+    this.localParams.isNewPassValidated = true;
   }
 
   backClicked(event) {
@@ -124,8 +129,8 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
       this.sub.unsubscribe();
     }
 
-    if (this.loginSub) {
-      this.loginSub.unsubscribe();
+    if (this.keeperSub) {
+      this.keeperSub.unsubscribe();
     }
   }
 }

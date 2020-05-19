@@ -22,14 +22,18 @@ import { GlobalConsts } from '@consts';
   styleUrls: ['./confirmation-popup.component.scss']
 })
 export class ConfirmationPopupComponent implements OnInit, OnDestroy {
-  sendData$: Observable<any>;
   private loadedSendData: any;
+
+  sendData$: Observable<any>;
   wallet$: Observable<any>;
   contact$: Observable<any>;
   passwordCheckSetting$: Observable<any>;
   confirmForm: FormGroup;
-  sub: Subscription;
-  walletSub: Subscription;
+
+  private sub: Subscription;
+  private walletSub: Subscription;
+  private subscriptions: Subscription[] = [];
+
   scrollOffset = 0;
   isFullScreen = false;
   isCorrectPass = true;
@@ -57,14 +61,14 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
     this.wallet$ = this.store.pipe(select(selectWalletData));
     this.passwordCheckSetting$ = this.store.pipe(select(selectPasswordCheckSetting));
 
-    this.sendData$.subscribe(sendData => {
+    this.subscriptions.push(this.sendData$.subscribe(sendData => {
       this.contact$ = this.store.pipe(select(selectContact(sendData.address)));
       this.loadedSendData = sendData;
-    });
+    }));
 
-    this.passwordCheckSetting$.subscribe(settingValue => {
+    this.subscriptions.push(this.passwordCheckSetting$.subscribe(settingValue => {
       this.isPassCheckEnabled = settingValue;
-    });
+    }));
   }
 
   ngOnInit() {
@@ -84,6 +88,7 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
     if (this.walletSub !== undefined) {
       this.walletSub.unsubscribe();
     }
+    this.subscriptions.forEach(s => s.unsubscribe());
     window.scroll(0, this.scrollOffset);
     document.body.style.overflowY = 'auto';
   }
@@ -124,7 +129,8 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
     if (this.isPassCheckEnabled) {
       this.walletSub = this.wallet$.subscribe(wallet => {
         passworder.decrypt(this.confirmForm.value.password, wallet).then((result) => {
-         this.startSend();
+          this.startSend();
+          this.walletSub.unsubscribe();
         }).catch(error => {
           this.isCorrectPass = false;
         });
@@ -146,5 +152,9 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
   closePopup() {
     this.dataService.emitChange(false);
     this.router.navigate([{ outlets: { popup: null }}], {relativeTo: this.activatedRoute.parent});
+  }
+
+  passUpdated($event) {
+    this.isCorrectPass = true;
   }
 }

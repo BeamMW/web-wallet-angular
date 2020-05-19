@@ -88,7 +88,6 @@ export class PaymentProofComponent implements OnInit, OnDestroy {
           this.parseError = true;
         }
         this.sub.unsubscribe();
-        this.websocketService.complete();
       }
     });
 

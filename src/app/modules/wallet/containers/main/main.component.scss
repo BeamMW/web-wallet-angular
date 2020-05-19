@@ -190,7 +190,7 @@
         }
 
         &__content {
-            &__receive {
+            &__common-item {
                 display: flex;
                 flex-direction: column;
                 height: 69px;
@@ -206,31 +206,29 @@
                     margin-left: 35px;
                     margin-top: 4px;
                     font-size: 14px;
-                    color: #0bccf7;
                     font-family: 'ProximaNovaIT', sans-serif;
                 }
             }
 
-            &__send {
-                display: flex;
-                flex-direction: column;
-                height: 69px;
-                padding: 20px 20px 0 20px;
-
-                &__value {
-                    align-items: center;
-                    display: flex;
-                }
-
-                &__status{
-                    @include normal-text;
-                    margin-left: 35px;
-                    margin-top: 4px;
-                    font-size: 14px;
-                    color: #da68f5;
-                    font-family: 'ProximaNovaIT', sans-serif;
-                }
-            }  
+            &__common-item.canceled {
+                color: #8da1ad;
+            }
+    
+            &__common-item.failed {
+                color: #ff746b;
+            }
+    
+            &__common-item.send {
+                color: #da68f5;
+            }
+    
+            &__common-item.receive {
+                color: #23c1ff;
+            }
+    
+            &__common-item.own {
+                color: #ffffff;
+            }
             
             &__empty-tr-icon {
                 display: flex;
@@ -507,7 +505,6 @@
     font-weight: bold;
     text-align: right;
     margin-left: auto;
-    color: #0bccf7;
 }
 
 .menu-control-wrapper {

@@ -3,9 +3,10 @@ import { environment } from '@environment';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { selectContact } from '../../../store/selectors/wallet-state.selectors';
-import {Observable, from} from 'rxjs';
+import {Observable, from, Subscription} from 'rxjs';
 import { ClipboardService } from 'ngx-clipboard';
 import { TableTypes } from '@consts';
+import { DataService, WindowService, WebsocketService } from './../../../services';
 
 @Component({
   selector: 'app-table-actions',
@@ -19,6 +20,7 @@ export class TableActionsComponent implements OnInit {
   address: string;
   contact$: Observable<any>;
   tableTypesConsts = TableTypes;
+  private sub: Subscription;
 
   isDropdownVisible = false;
   public iconActions: string = `${environment.assetsPath}/images/shared/components/table/icon-actions.svg`;
@@ -36,6 +38,9 @@ export class TableActionsComponent implements OnInit {
   constructor(
     private _clipboardService: ClipboardService,
     private store: Store<any>,
+    private dataService: DataService,
+    private windowService: WindowService,
+    private wsService: WebsocketService,
     public router: Router) {
   }
 
@@ -43,22 +48,25 @@ export class TableActionsComponent implements OnInit {
     this.address = this.element.income ? this.element.sender : this.element.receiver;
   }
 
-  saveContactClicked($event) {
-    $event.stopPropagation();
-    this.contact$ = this.store.pipe(select(selectContact(this.address)));
-    this.contact$.subscribe((state) => {
-      if (state === undefined) {
-        this.router.navigate([this.router.url, {
-          outlets: {
-            popup: ['add-contact', this.address]
-          }
-        }]);
-      }
-    });
-  }
-
   copyAddressClicked() {
     this._clipboardService.copyFromContent(this.element.address);
+  }
+
+  cancelTransactionClicked() {
+    this.sub = this.wsService.on().subscribe((msg: any) => {
+      if (msg.id === 15) {
+        this.sub.unsubscribe();
+      }
+    });
+    this.wsService.send({
+        jsonrpc: '2.0',
+        id: 15,
+        method: 'tx_cancel',
+        params:
+        {
+          txId : this.element.txId,
+        }
+    });
   }
 }
 

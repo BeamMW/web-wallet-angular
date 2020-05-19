@@ -92,6 +92,7 @@ export class DataService {
   }
 
   public saveWallet(data) {
+    extensionizer.storage.local.remove(['wallet']);
     this.store.dispatch(saveWallet({wallet: data}));
     extensionizer.storage.local.set({wallet: data});
   }

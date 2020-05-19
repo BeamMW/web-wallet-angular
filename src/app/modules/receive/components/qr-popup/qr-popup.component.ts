@@ -39,4 +39,8 @@ export class QrPopupComponent implements OnInit, OnDestroy {
     return 'beam:' + value.address + (value.amount ? ('?amount=' + value.amount) : '') +
       (value.comment && value.comment.length > 0 ? ('?comment=' + value.comment) : '');
   }
+
+  copyTokenClicked() {
+    this.closePopup();
+  }
 }

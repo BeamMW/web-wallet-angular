@@ -1,6 +1,7 @@
 export interface Transaction {
     create_time: string;
     receiver: string;
+    token: string;
     sender: string;
     value: number;
     status: number;

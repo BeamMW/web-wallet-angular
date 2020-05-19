@@ -5,6 +5,7 @@ import { DataService, WindowService, WebsocketService } from './../../../../serv
 import { Subscription, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { selectProofData } from '../../../../store/selectors/wallet-state.selectors';
+import { environment } from '@environment';
 
 @Component({
   selector: 'app-payment-proof-exported',
@@ -19,6 +20,8 @@ export class PaymentProofExportedComponent implements OnInit, OnDestroy {
   popupOpened = false;
   scrollOffset = 0;
   proofData$: Observable<any>;
+
+  popupCloseIcon: string = `${environment.assetsPath}/images/shared/components/popups/payment-proof/ic-cancel-popup.svg`;
 
   constructor(private websocketService: WebsocketService,
               private windowSerivce: WindowService,
