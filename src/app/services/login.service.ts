@@ -47,10 +47,18 @@ export class LoginService {
           (msg) => {
             return this.wsMessages$.next(msg);
           },
-          (err) => console.log(err),
+          (err) => {
+            this.setConnected(false);
+            console.log(err);
+          },
           () => console.log('login connected')
         );
         this.setConnected(true);
+    }
+
+    complete() {
+        this.wsMessages$.complete();
+        this.wsMessages$ = new Subject();
     }
 
     /*

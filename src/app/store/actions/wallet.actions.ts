@@ -16,6 +16,7 @@ export const saveWalletStatus = createAction('[Wallet state] Save wallet status'
 export const saveReceiveData = createAction('[Wallet state] Save receive data', props<{ receive: any }>());
 export const saveSendData = createAction('[Wallet state] Save send data', props<{ send: any }>());
 
+export const needToReconnect = createAction('[Wallet state] Reconnect trigger', props<{ isNeedValue: boolean }>());
 /* Settings */
 export const updatePrivacySetting = createAction('[Wallet state] Update privacy setting', props<{ settingValue: boolean }>());
 export const updateSaveLogsSetting = createAction('[Wallet state] Update save logs setting', props<{ settingValue: number }>());

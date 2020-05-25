@@ -37,7 +37,8 @@ import {
 } from './containers';
 import {
   ClickOutsideDirective,
-  DetectCapsDirective
+  DetectCapsDirective,
+  NumbersOnlyDirective
 } from './directives';
 
 @NgModule({
@@ -63,6 +64,7 @@ import {
     HeaderWithLinkComponent,
     HeaderWithoutLogoComponent,
     DetectCapsDirective,
+    NumbersOnlyDirective,
   ],
   imports: [
     CommonModule,
@@ -93,7 +95,8 @@ import {
     HeaderWithLinkComponent,
     HeaderWithoutLogoComponent,
     TableActionsComponent,
-    DetectCapsDirective
+    DetectCapsDirective,
+    NumbersOnlyDirective
   ],
   providers: [
     DecimalPipe

@@ -323,6 +323,25 @@
                 color: rgba(255, 255, 255, .3);
             }
 
+            &__input-amount.incorrect-amount {
+                border-bottom: 2px solid #ff625c;
+                color: #ff625c;
+            }
+    
+            &__input-amount.incorrect-amount:focus,
+            &__input-amount.incorrect-amount::placeholder {
+                color: #ff625c;
+            }
+
+            &__amount-validator {
+                @include normal-text;
+                margin-top: 10px;
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 13px;
+                line-height: 1.23;
+                color: #ff625c;
+            }
+
             &__currency {
                 @include normal-text;
                 margin-left: 23px;
@@ -367,6 +386,10 @@
                     margin-left: auto;
                     font-size: 14px;
                     color: #ffffff;
+                }
+
+                &__values.incorrect-amount {
+                    color: #ff625c;
                 }
             }
         }
@@ -460,6 +483,10 @@
 
     .row-item {
         margin-top: 12px;
+    }
+
+    .row-item-last {
+        margin-top: 28px;
     }
 
     .controls {

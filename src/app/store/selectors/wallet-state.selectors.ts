@@ -114,3 +114,8 @@ export const selectProofData = createSelector(
   selectAppState,
   state => state.proofDataValue
 );
+
+export const selectIsNeedToReconnect = createSelector(
+  selectAppState,
+  state => state.isNeedToReconnect
+);

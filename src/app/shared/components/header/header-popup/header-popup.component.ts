@@ -3,7 +3,6 @@ import { environment } from '@environment';
 import * as extensionizer from 'extensionizer';
 import { Router } from '@angular/router';
 import { WindowService, DataService } from './../../../../services';
-import { ChangeWalletState, saveWallet } from './../../../../store/actions/wallet.actions';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import {
@@ -73,8 +72,7 @@ export class HeaderPopupComponent implements OnInit {
   }
 
   logoutClicked() {
-    this.store.dispatch(ChangeWalletState({walletState: false}));
-    this.store.dispatch(saveWallet({wallet: {}}));
+    this.dataService.deactivateWallet();
     this.isDropdownVisible = false;
     this.router.navigate(['/wallet/login']);
   }

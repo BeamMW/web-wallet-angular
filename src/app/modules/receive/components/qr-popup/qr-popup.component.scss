@@ -32,44 +32,36 @@
     }
 
     &__address {
+        @include normal-text;
         margin-left: 20px;
         margin-top: 10px;
         font-family: 'ProximaNova', sans-serif;
         max-width: 295px;
         word-wrap: break-word;
         font-size: 14px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
         color: #ffffff;
     }
 
     &__address-header,
     &__amount-header {
+        @include normal-text;
         margin-left: 20px;
         margin-top: 30px;
         opacity: 0.5;
         font-family: 'ProximaNovaBold', sans-serif;
         font-size: 14px;
         font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
         letter-spacing: 1px;
         color: #ffffff;
     }
 
     &__amount {
+        @include normal-text;
         margin-left: 20px;
         margin-top: 7px;
         font-family: 'ProximaNovaSemiBold', sans-serif;
         font-size: 18px;
         font-weight: 600;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
         letter-spacing: 0.34px;
         color: #0bccf7;
     }
@@ -82,5 +74,34 @@
         }
 
         @include ui-button-copy-icon()
+    }
+}
+
+.snackbar {
+    @include normal-text;
+    z-index: 100;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 16px;
+    margin-left: 42px;
+    width: 290px;
+    height: 44px;
+    border-radius: 10px;
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    background-color: rgba(42, 95, 135, 0.72);
+    -webkit-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+    -moz-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+    -o-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+    transition:width 300ms ease-in-out, height 300ms ease-in-out;
+    display: flex;
+
+    &__text {
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 12px;
+        line-height: 1.67;
+        text-align: center;
+        color: #ffffff;
+        margin: 12px auto 0 auto;
     }
 }

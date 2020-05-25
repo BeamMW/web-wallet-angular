@@ -75,11 +75,13 @@ export class TransactionElementComponent implements OnInit {
     } else if ((this.transaction.status_string === transactionsStatuses.PENDING ||
         this.transaction.status_string === transactionsStatuses.IN_PROGRESS ||
         this.transaction.status_string === transactionsStatuses.RECEIVING ||
-        this.transaction.status_string === transactionsStatuses.WAITING_FOR_RECEIVER) && this.transaction.income) {
+        this.transaction.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
+        this.transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER) && this.transaction.income) {
       iconPath = this.iconReceiving;
     } else if ((this.transaction.status_string === transactionsStatuses.PENDING ||
         this.transaction.status_string === transactionsStatuses.SENDING ||
         this.transaction.status_string === transactionsStatuses.IN_PROGRESS ||
+        this.transaction.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
         this.transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER) && !this.transaction.income) {
       iconPath = this.iconSending;
     } else if (this.transaction.status_string === transactionsStatuses.RECEIVED) {
@@ -120,6 +122,7 @@ export class TransactionElementComponent implements OnInit {
         this.transaction.status_string === transactionsStatuses.IN_PROGRESS ||
         this.transaction.status_string === transactionsStatuses.COMPLETED ||
         this.transaction.status_string === transactionsStatuses.SENDING ||
+        this.transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
         this.transaction.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
         this.transaction.status_string === transactionsStatuses.SENT) && !this.transaction.income) {
       className = 'send';
@@ -128,6 +131,7 @@ export class TransactionElementComponent implements OnInit {
         this.transaction.status_string === transactionsStatuses.RECEIVING ||
         this.transaction.status_string === transactionsStatuses.COMPLETED ||
         this.transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
+        this.transaction.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
         this.transaction.status_string === transactionsStatuses.RECEIVED) && this.transaction.income) {
       className = 'receive';
     }

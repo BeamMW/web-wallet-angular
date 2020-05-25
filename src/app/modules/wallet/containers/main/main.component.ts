@@ -176,12 +176,14 @@ export class MainComponent implements OnInit, OnDestroy {
     } else if ((transaction.status_string === transactionsStatuses.PENDING ||
         transaction.status_string === transactionsStatuses.IN_PROGRESS ||
         transaction.status_string === transactionsStatuses.RECEIVING ||
-        transaction.status_string === transactionsStatuses.WAITING_FOR_RECEIVER) && transaction.income) {
+        transaction.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
+        transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER) && transaction.income) {
       iconPath = this.iconReceiving;
     } else if ((transaction.status_string === transactionsStatuses.PENDING ||
         transaction.status_string === transactionsStatuses.SENDING ||
         transaction.status_string === transactionsStatuses.IN_PROGRESS ||
-        transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER) && !transaction.income) {
+        transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
+        transaction.status_string === transactionsStatuses.WAITING_FOR_RECEIVER) && !transaction.income) {
       iconPath = this.iconSending;
     } else if (transaction.status_string === transactionsStatuses.RECEIVED) {
       iconPath = this.iconReceived;
@@ -214,12 +216,14 @@ export class MainComponent implements OnInit, OnDestroy {
         transaction.status_string === transactionsStatuses.COMPLETED ||
         transaction.status_string === transactionsStatuses.SENDING ||
         transaction.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
+        transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
         transaction.status_string === transactionsStatuses.SENT) && !transaction.income) {
       className = 'send';
     } else if ((transaction.status_string === transactionsStatuses.PENDING ||
         transaction.status_string === transactionsStatuses.IN_PROGRESS ||
         transaction.status_string === transactionsStatuses.RECEIVING ||
         transaction.status_string === transactionsStatuses.COMPLETED ||
+        transaction.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
         transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
         transaction.status_string === transactionsStatuses.RECEIVED) && transaction.income) {
       className = 'receive';

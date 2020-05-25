@@ -4,6 +4,8 @@ import { Subject, Observable, Subscription } from 'rxjs';
 import { webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { map } from 'rxjs/operators';
 import { WasmService } from './../wasm.service';
+import { Store } from '@ngrx/store';
+import { needToReconnect } from '../store/actions/wallet.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +31,7 @@ export class WebsocketService {
 
 
     constructor(
+        private store: Store<any>,
         private wasmService: WasmService
     ) {
         this.wsMessages$ = new Subject();
@@ -46,7 +49,12 @@ export class WebsocketService {
             }
           },
           (err) => {
-            console.log('error from socket:', err)
+              if (err.code === 1006) {
+                console.log('[reconnect triggered]')
+                this.store.dispatch(needToReconnect({isNeedValue: true}));
+              }
+              this.setConnected(false);
+              console.log('error from socket:', err)
           },
           () => console.log('service connected')
         );
@@ -97,26 +105,4 @@ export class WebsocketService {
         console.log(`>>> keykeeper response: ${res}`);
         this.send(result);
     }
-
-
-    /*
-    * reconnect if not connecting or errors
-    * */
-    // private reconnect(): void {
-    //     this.reconnection$ = interval(this.reconnectInterval)
-    //         .pipe(takeWhile((v, index) => index < this.reconnectAttempts && !this.websocket$));
-
-    //     this.reconnection$.subscribe(
-    //         () => this.connect(),
-    //         null,
-    //         () => {
-    //             // Subject complete if reconnect attemts ending
-    //             this.reconnection$ = null;
-
-    //             if (!this.websocket$) {
-    //                 this.wsMessages$.complete();
-    //                 this.connection$.complete();
-    //             }
-    //         });
-    // }
 }

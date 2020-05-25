@@ -1,5 +1,5 @@
-<div class="send" [class.blur-filter]="!isFullScreen && (modalOpened || popupOpened)">
-    <ng-container *ngIf="!isFullScreen">
+<div class="send" [class.blur-filter]="!localParams.isFullScreen && localParams.popupOpened">
+    <ng-container *ngIf="!localParams.isFullScreen">
         <div class="send__header">
             <div class="back-control-wrapper">
                 <img class="send__header__back" (click)="backConfirmationClicked()" [src]="iconBack"/>
@@ -32,7 +32,7 @@
         <div class="send__top-gradient"></div>
     </ng-container>
     
-    <ng-container *ngIf="isFullScreen">
+    <ng-container *ngIf="localParams.isFullScreen">
         <div class="send__content">
             <div class="send__content__header">
                 <div class="send__content__header__title">Send</div>
@@ -45,8 +45,10 @@
                                   name="address" formControlName="address"
                                   placeholder="Please specify transaction token"
                                   (input)="addressInputUpdated($event.target.value)"
-                                  [class.incorrect]="!addressValidation"></textarea>
-                        <div class="container__address__validator" *ngIf="!addressValidation">Invalid wallet address</div>
+                                  [class.incorrect]="!localParams.addressValidation"></textarea>
+                        <div class="container__address__validator" *ngIf="!localParams.addressValidation">
+                            Invalid wallet address
+                        </div>
                     </div>
                     <div class="container__values">
                         <div class="container__values__title-amount">AMOUNT</div>
@@ -54,16 +56,22 @@
                             <input class="container__values__input-amount"
                                 name="amount" formControlName="amount" 
                                 (input)="amountChanged($event.target.value)"
+                                appNumbersOnly
+                                [class.incorrect-amount]="localParams.isNotEnoughAmount"
                                 placeholder="Enter amount"/>
                             <span class="container__values__currency">BEAM</span>
+                        </div>
+                        <div class="container__values__amount-validator" *ngIf="localParams.isNotEnoughAmount">
+                            Insufficient funds: you would need {{localParams.notEnoughtValue}} BEAM to complete the transaction
                         </div>
                         <div class="container__values__title-fee">TRANSACTION FEE</div>
                         <div class="form-group">
                             <input class="container__values__input-fee" (input)="stripFee(fullSendForm.get('fee'))"
-                                type="text" name="fee" formControlName="fee" [class.incorrect]="!feeIsCorrect"
+                                type="text" name="fee" formControlName="fee" 
+                                [class.incorrect]="!localParams.feeIsCorrect"
                                 placeholder="Enter fee"/>
                             <span class="container__values__currency">GROTH</span>
-                            <div class="incorrect-validator" *ngIf="!feeIsCorrect">
+                            <div class="incorrect-validator" *ngIf="!localParams.feeIsCorrect">
                                 The minimum fee is 100 GROTH
                             </div>
                         </div>
@@ -74,7 +82,7 @@
                                     <div class="total__container__value">{{walletStatus.available | beam:'1.0-9'}} BEAM</div>
                                 </div>
                                 <div class="total__add-all">
-                                    <app-button class="add-all-button" (click)="addAll($event)">add all</app-button>
+                                    <app-button class="add-all-button" (click)="addAllClicked($event)">add all</app-button>
                                 </div>
                             </div>
                         </ng-container>
@@ -89,13 +97,16 @@
                                 <div>Total UTXO value:</div>
                                 <div class="row-item">Amount to send:</div>
                                 <div class="row-item">Change:</div>
+                                <div>
+                                    (will be locked till the transaction will succeed or expire)
+                                </div>
                                 <div class="row-item">Remaining:</div>
                             </div>
-                            <div class="container__values__stats__values">
-                                <div>{{stats.totalUtxo}}</div>
-                                <div class="row-item">{{stats.amountToSend}}</div>
-                                <div class="row-item">{{stats.change}}</div>
-                                <div class="row-item">{{stats.remaining}}</div>
+                            <div class="container__values__stats__values" [class.incorrect-amount]="localParams.isNotEnoughAmount">
+                                <div>{{stats.totalUtxo}} BEAM</div>
+                                <div class="row-item">{{stats.amountToSend}} BEAM</div>
+                                <div class="row-item">{{stats.change}} BEAM</div>
+                                <div class="row-item-last">{{stats.remaining}} BEAM</div>
                             </div>
                         </div>
                     </div>
@@ -103,7 +114,7 @@
                 
                 <div class="controls">
                     <app-button class="controls__back-button" (click)="backConfirmationClicked()">back</app-button>
-                    <app-button [class.disabled]="!isSendDataValid" 
+                    <app-button [class.disabled]="!localParams.isSendDataValid" 
                                 (click)="fullSubmit($event)" 
                                 class="controls__send-button">next</app-button>
                 </div>
@@ -113,4 +124,4 @@
     </ng-container>
 </div>
 
-<div *ngIf="isFullScreen && popupOpened" class="full-popup-opened"></div>
+<div *ngIf="localParams.isFullScreen && localParams.popupOpened" class="full-popup-opened"></div>

@@ -7,7 +7,8 @@ import { Store, select } from '@ngrx/store';
 import {
   selectAppState,
   selectWalletSetting,
-  selectContacts
+  selectContacts,
+  selectIsNeedToReconnect
 } from '../store/selectors/wallet-state.selectors';
 import {
   loadWalletState,
@@ -24,6 +25,7 @@ import {
   updateSaveLogsSetting,
   updateVerificatedSetting,
   updatePasswordCheckSetting,
+  needToReconnect,
   saveContact } from '../store/actions/wallet.actions';
 import { Router } from '@angular/router';
 import { WasmService } from './../wasm.service';
@@ -38,6 +40,7 @@ export class DataService {
   sendStore: any;
   options$: Observable<any>;
   appState$: Observable<any>;
+  private needToReconnect$: Observable<any>;
 
   private loginProcessSub: Subscription;
   private openWalletSub: Subscription;
@@ -46,6 +49,13 @@ export class DataService {
   private utxoSub: Subscription;
   private trsSub: Subscription;
   private refreshIntervalId;
+  private refreshReconnectIntervalId;
+
+  private walletParams = {
+    seed: '',
+    pass: '',
+    walletId: ''
+  };
 
   public clickedElement: HTMLElement;
   // Observable string sources
@@ -66,11 +76,15 @@ export class DataService {
     // TODO: remove!!!
     this.sendStore = new ObservableStore();
 
-    this.loadWalletData().then(walletData => {
-      if (walletData !== undefined && walletData.length > 0) {
-          console.log('Wallet: ', walletData);
-          this.store.dispatch(saveWallet({wallet: walletData}));
-          this.store.dispatch(ChangeWalletState({walletState: true}));
+    this.needToReconnect$ = this.store.pipe(select(selectIsNeedToReconnect));
+    this.needToReconnect$.subscribe((state) => {
+      if (state) {
+        this.refreshReconnectIntervalId = setInterval(() => {
+          this.disconnectWallet();
+          clearInterval(this.refreshIntervalId);
+          this.loginToService(this.walletParams.seed, true, this.walletParams.walletId, this.walletParams.pass);
+          console.log('[reconnecting...]');
+        }, 10000);
       }
     });
   }
@@ -105,14 +119,14 @@ export class DataService {
     this.options$ = this.store.pipe(select(selectWalletSetting));
     this.options$.subscribe((state) => {
       extensionizer.storage.local.set({settings: state});
-    });
+    }).unsubscribe();
   }
 
   public saveWalletContacts() {
     this.options$ = this.store.pipe(select(selectContacts));
     this.options$.subscribe((state) => {
       extensionizer.storage.local.set({contacts: state});
-    });
+    }).unsubscribe();
   }
 
   loadAppState() {
@@ -162,6 +176,30 @@ export class DataService {
     });
   }
 
+  public activateWallet() {
+    this.loadWalletData().then(walletData => {
+      if (walletData !== undefined && walletData.length > 0) {
+          console.log('Wallet: ', walletData);
+          this.store.dispatch(saveWallet({wallet: walletData}));
+          this.store.dispatch(ChangeWalletState({walletState: true}));
+      }
+    });
+  }
+
+  public disconnectWallet() {
+    this.loginService.complete();
+    this.websocketService.complete();
+    this.websocketService.disconnect();
+    this.loginService.disconnect();
+  }
+
+  public deactivateWallet() {
+    this.disconnectWallet();
+    this.store.dispatch(saveWallet({wallet: {}}));
+    this.store.dispatch(ChangeWalletState({walletState: false}));
+    clearInterval(this.refreshIntervalId);
+  }
+
   loadWalletContacts() {
     this.loadContacts().then(contacts => {
       if (contacts !== undefined && contacts.length > 0) {
@@ -178,6 +216,10 @@ export class DataService {
   }
 
   loginToService(seed: string, loginToWallet: boolean = true, walletId?: string, pass?: string) {
+    this.walletParams.pass = pass;
+    this.walletParams.seed = seed;
+    this.walletParams.walletId = loginToWallet ? walletId : this.loginService.loginParams.WalletID;
+
     this.wasmService.keykeeperInit(seed).subscribe(value => {
       if (!this.loginService.connected) {
         this.loginProcessSub = this.loginService.on().subscribe((msg: any) => {
@@ -212,7 +254,7 @@ export class DataService {
       } else if (loginToWallet) {
         this.loginToWallet(walletId, pass);
       }
-    });
+    }).unsubscribe();
   }
 
   loginToWallet(walletId: string, password: string) {
@@ -227,6 +269,10 @@ export class DataService {
         this.refreshIntervalId = setInterval(() => {
           this.walletDataUpdate();
         }, 5000);
+
+        clearInterval(this.refreshReconnectIntervalId);
+        this.store.dispatch(needToReconnect({isNeedValue: false}));
+
         this.router.navigate([routes.WALLET_MAIN_ROUTE]);
       }
     });
@@ -247,7 +293,7 @@ export class DataService {
       if (msg.result && msg.id === 6) {
         console.log('[data-service] transactions: ');
         console.dir(msg.result);
-        this.store.dispatch(loadTr({transactions: msg.result.length !== undefined ? msg.result : [msg.result]}));
+        this.store.dispatch(loadTr({transactions: msg.result.length > 0 ? msg.result : []}));
         this.trsSub.unsubscribe();
         console.log('----------update finished----------');
       }
@@ -264,7 +310,7 @@ export class DataService {
       if (msg.result && msg.id === 7) {
         console.log('[data-service] utxo: ');
         console.dir(msg.result);
-        this.store.dispatch(loadUtxo({utxos: msg.result.length ? msg.result : [msg.result]}));
+        this.store.dispatch(loadUtxo({utxos: msg.result.length > 0 ? msg.result : []}));
         this.utxoSub.unsubscribe();
         this.transactionsUpdate();
       }
@@ -282,7 +328,7 @@ export class DataService {
       if (msg.result && msg.id === 8) {
         console.log('[data-service] addresses: ');
         console.dir(msg.result);
-        this.store.dispatch(loadAddresses({addresses: msg.result.length !== undefined ? msg.result : [msg.result]}));
+        this.store.dispatch(loadAddresses({addresses: msg.result.length > 0 ? msg.result : []}));
 
         this.addressesSub.unsubscribe();
         this.utxoUpdate();

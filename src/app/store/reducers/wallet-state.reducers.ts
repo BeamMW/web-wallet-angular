@@ -39,6 +39,7 @@ export interface WalletAppState {
         kernelId: string,
         code: string
     };
+    isNeedToReconnect: boolean;
 }
 
 export const initialWalletAppState: WalletAppState = {
@@ -56,7 +57,7 @@ export const initialWalletAppState: WalletAppState = {
     saveLogsSetting: 0,
     currencySetting: {
         value: 0,
-        updated: 0
+        updated: new Date().getTime()
     },
     dnsSetting: 'wallet-service.beam.mw',
     ipSetting: '3.222.86.179:20000',
@@ -76,7 +77,8 @@ export const initialWalletAppState: WalletAppState = {
         amount: 0,
         kernelId: '',
         code: ''
-    }
+    },
+    isNeedToReconnect: false,
 };
 
 const reducerWalletApp = createReducer(
@@ -89,6 +91,7 @@ const reducerWalletApp = createReducer(
     on(walletActions.saveWalletStatus, (state, { status }) => ({ ...state, walletStatus: status })),
     on(walletActions.saveReceiveData, (state, { receive }) => ({ ...state, receiveData: receive })),
     on(walletActions.saveSendData, (state, { send }) => ({ ...state, sendData: send })),
+    on(walletActions.needToReconnect, (state, { isNeedValue }) => ({ ...state, isNeedToReconnect: isNeedValue })),
 
     /* Settings */
     on(walletActions.updatePrivacySetting, (state, { settingValue }) => ({ ...state, privacySetting: settingValue })),

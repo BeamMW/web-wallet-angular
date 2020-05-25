@@ -15,6 +15,7 @@ import { Store, select } from '@ngrx/store';
 export class QrPopupComponent implements OnInit, OnDestroy {
   public iconClose = `${environment.assetsPath}/images/modules/receive/components/qr-popup/ic-cancel.svg`;
   receiveData$: Observable<any>;
+  isSnackbarVisible = false;
 
   constructor(private store: Store<any>,
               public router: Router,
@@ -41,6 +42,10 @@ export class QrPopupComponent implements OnInit, OnDestroy {
   }
 
   copyTokenClicked() {
-    this.closePopup();
+    this.isSnackbarVisible = true;
+    setTimeout(() => {
+      this.isSnackbarVisible = false;
+    }, 3000);
+    // this.closePopup();
   }
 }

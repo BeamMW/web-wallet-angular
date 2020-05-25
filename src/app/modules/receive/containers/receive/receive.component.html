@@ -13,8 +13,6 @@
         <div class="receive__content" *ngIf="generatedAddress.length > 0">
             <div class="content-header token-header">MY TOKEN (auto-generated)</div>
             <div class="address-value">{{generatedToken}}</div>
-
-
             <form class="receive-form-cl" [formGroup]="receiveForm" autocomplete="off" novalidate (ngSubmit)="submit()">
                 <div class="form-group">
                     <div class="receive__content__amount-header content-header">REQUESTED AN AMOUNT (optional)</div>

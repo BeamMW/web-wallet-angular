@@ -24,18 +24,21 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   };
   sendForm: FormGroup;
   fullSendForm: FormGroup;
-  isFullScreen = false;
   walletStatus$: Observable<any>;
-  walletStatusSub: Subscription;
-  popupOpened = false;
   sendFrom: string;
-  isSendDataValid = false;
-  addressValidated = false;
-  addressValidation = true;
-  amountValidated = false;
 
-  feeIsCorrect = true;
-  isOutgoingFull = true;
+  localParams = {
+    addressValidated: false,
+    addressValidation: true,
+    amountValidated: false,
+    feeIsCorrect: true,
+    isNotEnoughAmount: false,
+    notEnoughtValue: 0,
+    popupOpened: false,
+    isSendDataValid: false,
+    isFullScreen: false,
+  };
+
   private sub: Subscription;
 
   stats = {
@@ -51,7 +54,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
               private windowService: WindowService,
               private wsService: WebsocketService) {
     this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
-    this.isFullScreen = windowService.isFullSize();
+    this.localParams.isFullScreen = windowService.isFullSize();
     this.send = this.dataService.sendStore.getState().send;
     let address = '';
     if (this.send !== undefined && this.send.address !== undefined) {
@@ -77,8 +80,8 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       ])
     });
 
-    dataService.changeEmitted$.subscribe(emittedState => {
-      this.popupOpened = emittedState;
+    this.sub = dataService.changeEmitted$.subscribe(emittedState => {
+      this.localParams.popupOpened = emittedState;
     });
   }
 
@@ -91,7 +94,8 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
   fullSubmit($event) {
     $event.stopPropagation();
-    if (this.feeIsCorrect && this.isSendDataValid) {
+    if (this.localParams.feeIsCorrect &&
+          this.localParams.isSendDataValid) {
       this.store.dispatch(saveSendData({
         send: {
           address: this.fullSendForm.value.address,
@@ -110,10 +114,6 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.walletStatusSub) {
-      this.walletStatusSub.unsubscribe();
-    }
-
     if (this.sub) {
       this.sub.unsubscribe();
     }
@@ -123,54 +123,64 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     this.router.navigate(['/wallet/main']);
   }
 
-  addAll($event) {
+  addAllClicked($event) {
     $event.preventDefault();
-    this.walletStatusSub = this.walletStatus$.subscribe((status) => {
+    this.walletStatus$.subscribe((status) => {
       if (status.available > 0) {
-        this.isFullScreen ?
-          this.fullSendForm.get('amount').setValue((status.available - this.fullSendForm.value.fee) / GROTHS_IN_BEAM) :
-          this.sendForm.get('amount').setValue((status.available - this.sendForm.value.fee) / GROTHS_IN_BEAM);
+        const allAmount = (status.available - this.fullSendForm.value.fee) / GROTHS_IN_BEAM;
+        this.amountChanged(allAmount);
+        this.localParams.isFullScreen ?
+          this.fullSendForm.get('amount').setValue(allAmount) :
+          this.sendForm.get('amount').setValue(allAmount);
       }
-    });
+    }).unsubscribe();
   }
 
   outgoingClicked($event) {
     $event.stopPropagation();
-    this.isOutgoingFull = !this.isOutgoingFull;
   }
 
   stripFee(control: FormControl) {
     const feeValue = control.value.replace(/[^0-9]/g, '');
-    this.feeIsCorrect = parseInt(feeValue, 10) >= MIN_FEE_VALUE;
+    this.localParams.feeIsCorrect = parseInt(feeValue, 10) >= MIN_FEE_VALUE;
     control.setValue(feeValue);
   }
 
-  amountChanged(value) {
-    this.walletStatusSub = this.walletStatus$.subscribe((status) => {
+  amountChanged(amountInputValue) {
+    this.walletStatus$.subscribe((status) => {
       const feeFullValue = this.fullSendForm.value.fee / GROTHS_IN_BEAM;
       const available = status.available / GROTHS_IN_BEAM;
+      amountInputValue = parseFloat(amountInputValue);
+
+      if ((amountInputValue + feeFullValue) > available) {
+        this.localParams.isNotEnoughAmount = true;
+        this.localParams.notEnoughtValue = amountInputValue + feeFullValue;
+      } else {
+        this.localParams.isNotEnoughAmount = false;
+      }
+
       if (status.available > 0) {
-        const utxoVal = Math.ceil(value);
-        this.stats.totalUtxo = utxoVal === parseInt(value, 10) ? utxoVal + 1 : utxoVal;
-        this.stats.amountToSend = value;
-        if (value > available) {
+        const utxoVal = Math.ceil(amountInputValue);
+        this.stats.totalUtxo = utxoVal === amountInputValue ? utxoVal + 1 : utxoVal;
+        this.stats.amountToSend = amountInputValue.length > 0 ? amountInputValue : 0;
+        if (amountInputValue > available) {
           this.stats.change = 0;
           this.stats.remaining = 0;
         } else {
-          this.stats.change = this.stats.totalUtxo > value ?
-            (this.stats.totalUtxo - value - feeFullValue) :
+          this.stats.change = this.stats.totalUtxo > amountInputValue ?
+            (this.stats.totalUtxo - amountInputValue - feeFullValue) :
             (this.stats.totalUtxo + 1 - feeFullValue);
-          this.stats.remaining = available - value - feeFullValue;
+          this.stats.remaining = available - amountInputValue - feeFullValue;
         }
       }
-    });
+    }).unsubscribe();
 
-    this.amountValidated = value.length > 0;
+    this.localParams.amountValidated = amountInputValue > 0;
     this.valuesValidationCheck();
   }
 
   addressInputUpdated(value) {
-    this.addressValidated = value.length > 0;
+    this.localParams.addressValidated = value.length > 0;
     this.valuesValidationCheck();
     // TODO: ENABLE WHEN TOKEN VALIDATE WILL BE ADDED
     // if (value === null || value.length === 0) {
@@ -181,26 +191,28 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   valuesValidationCheck() {
-    this.isSendDataValid = this.amountValidated && this.addressValidated;
+    this.localParams.isSendDataValid = this.localParams.amountValidated && 
+      this.localParams.addressValidated &&
+      !this.localParams.isNotEnoughAmount;
   }
 
-  validateAddress(addressValue: string) {
-    this.sub = this.wsService.on().subscribe((msg: any) => {
-      if (msg.result !== undefined && msg.id === 1 && msg.result.is_valid !== undefined) {
-        this.addressValidated = msg.result.is_valid;
-        this.addressValidation = msg.result.is_valid;
-        this.valuesValidationCheck();
-        this.sub.unsubscribe();
-      }
-    });
-    this.wsService.send({
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'validate_address',
-        params:
-        {
-            address : addressValue
-        }
-    });
-  }
+  // validateAddress(addressValue: string) {
+  //   this.sub = this.wsService.on().subscribe((msg: any) => {
+  //     if (msg.result !== undefined && msg.id === 1 && msg.result.is_valid !== undefined) {
+  //       this.localParams.addressValidated = msg.result.is_valid;
+  //       this.localParams.addressValidation = msg.result.is_valid;
+  //       this.valuesValidationCheck();
+  //       this.sub.unsubscribe();
+  //     }
+  //   });
+  //   this.wsService.send({
+  //       jsonrpc: '2.0',
+  //       id: 1,
+  //       method: 'validate_address',
+  //       params:
+  //       {
+  //           address : addressValue
+  //       }
+  //   });
+  // }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import * as passworder from 'browser-passworder';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { DataService, WindowService } from './../../../../services';
 import { environment } from '@environment';
@@ -19,6 +19,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isFullScreen: boolean;
   public bgUrl: string = '';
   public logoUrl: string = `${environment.assetsPath}/images/modules/wallet/containers/login/logo.svg`;
+
+  private sub: Subscription;
 
   wallet$: Observable<any>;
   wasmState$: Observable<any>;
@@ -38,21 +40,29 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.dataService.activateWallet();
     this.dataService.loadWalletSettings();
     this.dataService.loadWalletContacts();
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    if (this.sub !== undefined) {
+      this.sub.unsubscribe();
+    }
+  }
 
   public submit(): void {
     const pass = this.loginForm.value.password;
     this.wallet$ = this.store.pipe(select(selectWalletData));
-    this.wallet$.subscribe(wallet => {
+    this.sub = this.wallet$.subscribe(wallet => {
       passworder.decrypt(pass, wallet).then((result) => {
         this.dataService.loginToService(result.seed, true, result.id, pass);
       }).catch(error => {
         this.isCorrectPass = false;
       });
+      if (this.sub !== undefined) {
+        this.sub.unsubscribe();
+      }
     });
   }
 
