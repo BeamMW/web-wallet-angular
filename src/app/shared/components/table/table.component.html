@@ -34,7 +34,7 @@
           <span>Amount</span>
           <img class="sort-icon" [src]="activeSortItem === sortParams.amount ? iconSortActive : iconSort">
         </mat-header-cell>
-        <mat-cell *matCellDef="let element" [className]="'amount-cell ' + getContentClass(element)">
+        <mat-cell *matCellDef="let element" class="amount-cell" appStatusColor [appStatusColorTransaction]="element">
             <ng-container *ngIf="!privacy">
               <ng-container>{{getValueSign(element)}}</ng-container>
               {{ element.value | beam:'1.0-9'}} BEAM
@@ -86,9 +86,9 @@
           <span>Status</span>
           <img class="sort-icon" [src]="activeSortItem === sortParams.status ? iconSortActive : iconSort">
         </mat-header-cell>
-        <mat-cell [className]="'status-cell ' + getContentClass(element)" *matCellDef="let element">
-          <img [src]="getTrIcon(element)"/>
-          <span class="status-cell__">{{ getStatus(element) }}</span>
+        <mat-cell class="status-cell" appStatusColor [appStatusColorTransaction]="element" *matCellDef="let element">
+          <app-status-icon [(transaction)]="element"></app-status-icon>
+          <span class="status-cell__value">{{ getStatus(element) }}</span>
         </mat-cell>
       </ng-container>
 

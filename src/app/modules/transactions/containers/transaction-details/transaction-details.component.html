@@ -8,29 +8,34 @@
         </div>
         <div class="right-wrapper"></div>
     </div>
-    <ng-container *ngIf="transaction$ | async as data">
-        <div class="details__amount" [class.receive]="data.income" [class.send]="!data.income">
-            <div class="details__amount__value" *ngIf="!privacyMode">{{ data.value | beam:'1.0-9'}} BEAM</div>
+    <ng-container *ngIf="transaction$ | async as transaction">
+        <div class="details__amount"  appStatusColor [appStatusColorTransaction]="transaction">
+            <div class="details__amount__circle"  appStatusColor [appCircleColorTransaction]="transaction">
+                <app-status-icon [(transaction)]="transaction"></app-status-icon>
+            </div>
+            <div class="details__amount__value" *ngIf="!privacyMode">{{ transaction.value | beam:'1.0-9'}} BEAM</div>
             <div class="details__amount__status" [class.privacy-enabled]="privacyMode">
-                {{ data.status_string }}
+                {{ transaction.status_string | titlecase}}
             </div>
         </div>
         <div class="details__container">
             <div class="details__container__header">DETAILS</div>
             <div class="details-title">DATE</div>
-            <div class="details-value">{{data.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
+            <div class="details-value">{{transaction.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
+            <ng-container *ngIf="transaction.token !== undefined && transaction.token.length > 0">
+                <div class="details-title">TOKEN</div>
+                <div class="details-value">{{transaction.token}}</div>
+            </ng-container>
             <div class="details-title">SENDER</div>
-            <div class="details-value">{{data.sender}}</div>
-            <div class="details-title">TOKEN</div>
-            <div class="details-value">{{data.token}}</div>
+            <div class="details-value">{{transaction.sender}}</div>
             <div class="details-title">RECEIVER</div>
-            <div class="details-value">{{data.receiver}}</div>
+            <div class="details-value">{{transaction.receiver}}</div>
             <div class="details-title">TRANSACTION FEE</div>
-            <div class="details-value">{{data.fee}} GROTH</div>
+            <div class="details-value">{{transaction.fee}} GROTH</div>
             <div class="details-title">TRANSACTION ID</div>
-            <div class="details-value">{{data.txId}}</div>
+            <div class="details-value">{{transaction.txId}}</div>
             <div class="details-title">KERNEL ID</div>
-            <div class="details-value">{{data.kernel}} GROTH</div>
+            <div class="details-value">{{transaction.kernel}} GROTH</div>
         </div>
     </ng-container>
     

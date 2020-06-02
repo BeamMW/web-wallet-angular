@@ -209,26 +209,6 @@
                     font-family: 'ProximaNovaIT', sans-serif;
                 }
             }
-
-            &__common-item.canceled {
-                color: #8da1ad;
-            }
-    
-            &__common-item.failed {
-                color: #ff746b;
-            }
-    
-            &__common-item.send {
-                color: #da68f5;
-            }
-    
-            &__common-item.receive {
-                color: #23c1ff;
-            }
-    
-            &__common-item.own {
-                color: #ffffff;
-            }
             
             &__empty-tr-icon {
                 display: flex;

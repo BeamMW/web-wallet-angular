@@ -64,9 +64,33 @@
                 <div class="content-header__left-wrapper">
                     <div class="content-header__left-wrapper__title">UTXO</div>
                     <div class="content-header__left-wrapper__selector">
-                        <div class="selector" *ngFor="let item of menuItems" (click)="selectorItemClicked(item)">
-                            <div class="selector__title" [class.active]="item.selected">{{item.title}}</div>
-                            <div class="selector__bottom-line" *ngIf="item.selected"></div>
+                        <div class="selector" (click)="selectorItemAvailableClicked()">
+                            <div class="selector__title" 
+                                [class.active]="utxoSelectorActiveTitle === selectorTitlesData.AVAILABLE">
+                                {{selectorTitlesData.AVAILABLE}}</div>
+                            <div class="selector__bottom-line"
+                                *ngIf="utxoSelectorActiveTitle === selectorTitlesData.AVAILABLE"></div>
+                        </div>
+                        <div class="selector" (click)="selectorItemInProgressClicked()">
+                            <div class="selector__title" 
+                                [class.active]="utxoSelectorActiveTitle === selectorTitlesData.IN_PROGRESS">
+                                {{selectorTitlesData.IN_PROGRESS}}</div>
+                            <div class="selector__bottom-line"
+                                *ngIf="utxoSelectorActiveTitle === selectorTitlesData.IN_PROGRESS"></div>
+                        </div>
+                        <div class="selector" (click)="selectorItemSpentClicked()">
+                            <div class="selector__title" 
+                                [class.active]="utxoSelectorActiveTitle === selectorTitlesData.SPENT">
+                                {{selectorTitlesData.SPENT}}</div>
+                            <div class="selector__bottom-line" 
+                                *ngIf="utxoSelectorActiveTitle === selectorTitlesData.SPENT"></div>
+                        </div>
+                        <div class="selector" (click)="selectorItemUnavailableClicked()">
+                            <div class="selector__title" 
+                                [class.active]="utxoSelectorActiveTitle === selectorTitlesData.UNAVAILABLE">
+                                {{selectorTitlesData.UNAVAILABLE}}</div>
+                            <div class="selector__bottom-line" 
+                                *ngIf="utxoSelectorActiveTitle === selectorTitlesData.UNAVAILABLE"></div>
                         </div>
                     </div>
                 </div>

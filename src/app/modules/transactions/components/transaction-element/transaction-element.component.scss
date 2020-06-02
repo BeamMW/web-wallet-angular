@@ -48,26 +48,6 @@
             }
         }
 
-        &__mid-content.canceled {
-            color: #8da1ad;
-        }
-
-        &__mid-content.failed {
-            color: #ff746b;
-        }
-
-        &__mid-content.send {
-            color: #da68f5;
-        }
-
-        &__mid-content.receive {
-            color: #23c1ff;
-        }
-
-        &__mid-content.own {
-            color: #ffffff;
-        }
-
         &__created {
             @include normal-text;
             opacity: .5;

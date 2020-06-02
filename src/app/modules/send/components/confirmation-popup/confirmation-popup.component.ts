@@ -95,7 +95,7 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
 
   private startSend() {
     this.sub = this.wsService.on().subscribe((msg: any) => {
-      if (msg.result) {
+      if (msg.result && msg.id === 125) {
         console.log('send result: ', msg);
         if (msg.result !== undefined) {
           this.router.navigate(['/wallet/main']);
@@ -110,7 +110,7 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
 
     this.wsService.send({
       jsonrpc: '2.0',
-      id: 123,
+      id: 125,
       method: 'tx_send',
       params:
       {

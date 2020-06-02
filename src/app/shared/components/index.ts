@@ -1,4 +1,4 @@
-export * from './status-title/status-title.component';
+export * from './wallet-status-title/wallet-status-title.component';
 export * from './header/header-logo/header-logo.component';
 export * from './header/header-popup/header-popup.component';
 export * from './button/button.component';
@@ -12,3 +12,4 @@ export * from './transaction-list/transaction-list.component';
 export * from './table-actions/table-actions.component';
 export * from './dropdown/dropdown.component';
 export * from './popups/payment-proof-exported/payment-proof-exported.component';
+export * from './status-icon/status-icon.component';

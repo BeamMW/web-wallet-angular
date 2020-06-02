@@ -45,18 +45,6 @@ export class TableComponent implements OnInit, OnChanges {
   utxoList$: Observable<any>;
   tableTypesConsts = TableTypes;
 
-  private baseImgPath = `${environment.assetsPath}/images/statuses/`;
-  private iconExpired = this.baseImgPath + `icon-expired.svg`;
-  private iconReceiveCanceled = this.baseImgPath + `icon-receive-canceled.svg`;
-  private iconReceived = this.baseImgPath + `icon-received.svg`;
-  private iconReceiveFailed = this.baseImgPath + `icon-receive-failed.svg`;
-  private iconReceiving = this.baseImgPath + `icon-receiving.svg`;
-  private iconSendCanceled = this.baseImgPath + `icon-send-canceled.svg`;
-  private iconSendFailed = this.baseImgPath + `icon-send-failed.svg`;
-  private iconSending = this.baseImgPath + `icon-sending.svg`;
-  private iconSendingOwn = this.baseImgPath + `icon-sending-own.svg`;
-  private iconSentOwn = this.baseImgPath + `icon-sent-own.svg`;
-  private iconSent = this.baseImgPath + `icon-sent.svg`;
   public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed-gray.svg`;
 
   isUtxoListVisible = true;
@@ -206,7 +194,7 @@ export class TableComponent implements OnInit, OnChanges {
 
   private loadPaymentProof(transaction) {
     this.sub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.id === 4) {
+      if (msg.id === 24) {
         if (msg.result && msg.result.payment_proof) {
           this.proofValue = msg.result.payment_proof;
           this.store.dispatch(saveProofData({proofData: {
@@ -223,7 +211,7 @@ export class TableComponent implements OnInit, OnChanges {
 
     this.websocketService.send({
       jsonrpc: '2.0',
-      id: 4,
+      id: 24,
       method: 'export_payment_proof',
       params: {
         txId: transaction.txId
@@ -253,88 +241,6 @@ export class TableComponent implements OnInit, OnChanges {
     }
 
     return status;
-  }
-
-  getTrIcon(item) {
-    let iconPath = '';
-    if (item.status_string === transactionsStatuses.CANCELED && item.income) {
-      iconPath = this.iconReceiveCanceled;
-    } else if (item.status_string === transactionsStatuses.CANCELED && !item.income) {
-      iconPath = this.iconSendCanceled;
-    } else if (item.status_string === transactionsStatuses.EXPIRED) {
-      iconPath = this.iconExpired;
-    } else if (item.status_string === transactionsStatuses.FAILED && item.income) {
-      iconPath = this.iconReceiveFailed;
-    } else if (item.status_string === transactionsStatuses.FAILED && !item.income) {
-      iconPath = this.iconSendFailed;
-    } else if ((item.status_string === transactionsStatuses.PENDING ||
-        item.status_string === transactionsStatuses.IN_PROGRESS ||
-        item.status_string === transactionsStatuses.RECEIVING ||
-        item.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
-        item.status_string === transactionsStatuses.WAITING_FOR_SENDER) && item.income) {
-      iconPath = this.iconReceiving;
-    } else if ((item.status_string === transactionsStatuses.SENDING ||
-        item.status_string === transactionsStatuses.PENDING ||
-        item.status_string === transactionsStatuses.IN_PROGRESS ||
-        item.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
-        item.status_string === transactionsStatuses.WAITING_FOR_RECEIVER) && !item.income) {
-      iconPath = this.iconSending;
-    } else if (item.status_string === transactionsStatuses.RECEIVED) {
-      iconPath = this.iconReceived;
-    } else if (item.status_string === transactionsStatuses.SENT) {
-      iconPath = this.iconSent;
-    }
-
-    if (item.status_string === transactionsStatuses.SELF_SENDING) {
-      iconPath = this.iconSendingOwn;
-    } else if (item.status_string === transactionsStatuses.COMPLETED) {
-      const address$ = this.store.pipe(select(selectAddress(item.receiver)));
-      address$.subscribe(val => {
-        if (val !== undefined && val.own) {
-          iconPath = this.iconSentOwn;
-        }
-      });
-    }
-
-    return iconPath;
-  }
-
-  getContentClass(item) {
-    let className = '';
-    if (item.status_string === transactionsStatuses.CANCELED ||
-        item.status_string === transactionsStatuses.EXPIRED) {
-      className = 'canceled';
-    } else if (item.status_string === transactionsStatuses.FAILED) {
-      className = 'failed';
-    } else if ((item.status_string === transactionsStatuses.PENDING ||
-        item.status_string === transactionsStatuses.IN_PROGRESS ||
-        item.status_string === transactionsStatuses.COMPLETED ||
-        item.status_string === transactionsStatuses.SENDING ||
-        item.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
-        item.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
-        item.status_string === transactionsStatuses.SENT) && !item.income) {
-      className = 'send';
-    } else if ((item.status_string === transactionsStatuses.PENDING ||
-        item.status_string === transactionsStatuses.IN_PROGRESS ||
-        item.status_string === transactionsStatuses.RECEIVING ||
-        item.status_string === transactionsStatuses.COMPLETED ||
-        item.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
-        item.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
-        item.status_string === transactionsStatuses.RECEIVED) && item.income) {
-      className = 'receive';
-    }
-
-    if (item.status_string === transactionsStatuses.SELF_SENDING) {
-      className = 'own';
-    } else if (item.status_string === transactionsStatuses.COMPLETED) {
-      const address$ = this.store.pipe(select(selectAddress(item.receiver)));
-      address$.subscribe(val => {
-        if (val !== undefined && val.own) {
-          className = 'own';
-        }
-      });
-    }
-    return className;
   }
 
   getValueSign(element) {

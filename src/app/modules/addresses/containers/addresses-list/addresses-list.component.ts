@@ -54,35 +54,6 @@ export class AddressesListComponent implements OnInit, OnDestroy {
     });
   }
 
-  private addressesUpdate() {
-    this.sub = this.wsService.on().subscribe((msg: any) => {
-      if (msg.result) {
-        console.log('[addresses-page] addresses')
-        if (msg.result.length !== undefined) {
-          this.store.dispatch(loadAddresses({addresses: msg.result}));
-        } else {
-          this.store.dispatch(loadAddresses({addresses: [msg.result]}));
-        }
-
-        this.sub.unsubscribe();
-        // setTimeout(() => {
-        //   if (this.pageActive) {
-        //     this.addressesUpdate();
-        //   }
-        // }, 5000);
-      }
-    });
-    this.wsService.send({
-      jsonrpc: '2.0',
-      id: 0,
-      method: 'addr_list',
-      params:
-      {
-        own: true
-      }
-    });
-  }
-
   ngOnInit() {
     this.pageActive = true;
   }

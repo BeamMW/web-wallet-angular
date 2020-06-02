@@ -17,8 +17,9 @@
                 <div class="form-group">
                     <div class="receive__content__amount-header content-header">REQUESTED AN AMOUNT (optional)</div>
                     <input class="receive__content__amount"
-                                (input)="stripText(receiveForm.get('amount'))"
-                                name="amount" formControlName="amount" 
+                                (input)="amountUpdated(receiveForm.get('amount'))"
+                                name="amount" formControlName="amount"
+                                appNumbersOnly
                                 placeholder="Enter amount"/>
                     <span class="receive__content__beam">BEAM</span>
                 </div>
@@ -58,7 +59,8 @@
                     <form class="receive-form-cl" [formGroup]="receiveForm" autocomplete="off" novalidate (ngSubmit)="submit()">
                         <div class="form-group">
                             <div class="form-header content-header">REQUESTED AN AMOUNT (optional)</div>
-                            <input class="amount-input" (input)="stripText(receiveForm.get('amount'))"
+                            <input class="amount-input" (input)="amountUpdated(receiveForm.get('amount'))"
+                                        appNumbersOnly
                                         name="amount" formControlName="amount" 
                                         placeholder="Enter amount"/>
                             <span class="beam-currency">BEAM</span>

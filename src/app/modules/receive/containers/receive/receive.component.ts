@@ -102,10 +102,10 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     });
   }
 
-  stripText(control: FormControl) {
-    // control.setValue(control.value.replace(/[^0-9]/g, ''));
-    const amount = parseInt(control.value, 10) * GlobalConsts.GROTHS_IN_BEAM;
-    this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, this.identity, amount.toString());
+  amountUpdated(control: FormControl) {
+    const amount = control.value.length > 0 ?
+      (parseFloat(control.value) * GlobalConsts.GROTHS_IN_BEAM).toString() : '';
+    this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, this.identity, amount);
     this.updateQr();
   }
 

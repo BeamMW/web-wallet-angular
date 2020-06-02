@@ -7,6 +7,7 @@ import { DataService, WindowService, WebsocketService } from './../../../../serv
 import { Store, select } from '@ngrx/store';
 import { selectWalletStatus } from '../../../../store/selectors/wallet-state.selectors';
 import { saveSendData } from './../../../../store/actions/wallet.actions';
+import { WasmService } from './../../../../wasm.service';
 
 const MIN_FEE_VALUE = 100;
 const GROTHS_IN_BEAM = 100000000;
@@ -50,6 +51,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
   constructor(private dataService: DataService,
               public router: Router,
+              private wasmService: WasmService,
               private store: Store<any>,
               private windowService: WindowService,
               private wsService: WebsocketService) {
@@ -181,6 +183,16 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
   addressInputUpdated(value) {
     this.localParams.addressValidated = value.length > 0;
+    const tokenData = JSON.parse(this.wasmService.convertTokenToJson(value));
+    if (tokenData.params !== undefined) {
+      const amountFromToken = tokenData.params.Amount / 100000000;
+      this.fullSendForm.get('amount').setValue(amountFromToken);
+      this.amountChanged(amountFromToken);
+      this.localParams.addressValidation = true;
+    } else {
+      this.localParams.addressValidation = false;
+    }
+
     this.valuesValidationCheck();
     // TODO: ENABLE WHEN TOKEN VALIDATE WILL BE ADDED
     // if (value === null || value.length === 0) {
@@ -191,28 +203,9 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   valuesValidationCheck() {
-    this.localParams.isSendDataValid = this.localParams.amountValidated && 
+    this.localParams.isSendDataValid = this.localParams.amountValidated &&
+      this.localParams.addressValidation &&
       this.localParams.addressValidated &&
       !this.localParams.isNotEnoughAmount;
   }
-
-  // validateAddress(addressValue: string) {
-  //   this.sub = this.wsService.on().subscribe((msg: any) => {
-  //     if (msg.result !== undefined && msg.id === 1 && msg.result.is_valid !== undefined) {
-  //       this.localParams.addressValidated = msg.result.is_valid;
-  //       this.localParams.addressValidation = msg.result.is_valid;
-  //       this.valuesValidationCheck();
-  //       this.sub.unsubscribe();
-  //     }
-  //   });
-  //   this.wsService.send({
-  //       jsonrpc: '2.0',
-  //       id: 1,
-  //       method: 'validate_address',
-  //       params:
-  //       {
-  //           address : addressValue
-  //       }
-  //   });
-  // }
 }

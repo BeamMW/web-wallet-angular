@@ -6,6 +6,14 @@ import { Store, select } from '@ngrx/store';
 import { loadTr } from './../../../../store/actions/wallet.actions';
 import { selectAllTr, selectInProgressTr, selectReceivedTr, selectSentTr } from '../../../../store/selectors/transaction.selectors';
 import { Subscription, Observable } from 'rxjs';
+import { routes } from '@consts';
+
+export enum selectorTitles {
+  ALL = 'All',
+  IN_PROGRESS = 'In progress',
+  SENT = 'Sent',
+  RECEIVED = 'Received'
+}
 
 @Component({
   selector: 'app-transactions-view',
@@ -18,16 +26,12 @@ export class TransactionsViewComponent implements OnInit, OnDestroy {
   private pageActive = false;
   public modalOpened = false;
   transactions$: Observable<any>;
+  public trSelectorTitles = selectorTitles;
+  public trSelectorActiveTitle = selectorTitles.ALL;
 
-  public menuItems = [{
-    title: 'All', id: 0, selected: true
-  }, {
-    title: 'In progress', id: 1, selected: false
-  }, {
-    title: 'Sent', id: 2, selected: false
-  }, {
-    title: 'Received', id: 3, selected: false
-  }];
+  public iconDrop: string = `${environment.assetsPath}/images/modules/addresses/components/address-type-menu/arrow.svg`;
+  selectedItem = {};
+  isDropdownVisible = false;
 
   constructor(public router: Router,
               public store: Store<any>,
@@ -36,35 +40,8 @@ export class TransactionsViewComponent implements OnInit, OnDestroy {
     this.transactions$ = this.store.pipe(select(selectAllTr));
   }
 
-  private transactionsUpdate() {
-    this.sub = this.wsService.on().subscribe((msg: any) => {
-      if (msg.result) {
-        console.log('[transactions-page] transactions');
-        console.log(msg.result)
-        if (msg.result.length !== undefined) {
-          this.store.dispatch(loadTr({transactions: msg.result}));
-        } else {
-          this.store.dispatch(loadTr({transactions: [msg.result]}));
-        }
-
-        this.sub.unsubscribe();
-        // setTimeout(() => {
-        //   if (this.pageActive) {
-        //     this.transactionsUpdate();
-        //   }
-        // }, 5000);
-      }
-    });
-    this.wsService.send({
-      jsonrpc: '2.0',
-      id: 0,
-      method: 'tx_list'
-    });
-  }
-
   ngOnInit() {
     this.pageActive = true;
-    this.transactionsUpdate();
   }
 
   ngOnDestroy() {
@@ -76,19 +53,39 @@ export class TransactionsViewComponent implements OnInit, OnDestroy {
 
   backClicked(event) {
     event.stopPropagation();
-    this.router.navigate(['/wallet/main']);
+    this.router.navigate([routes.WALLET_MAIN_ROUTE]);
   }
 
-  dropdownSelected(item) {
-    if (item === this.menuItems[0]) {
-      this.transactions$ = this.store.pipe(select(selectAllTr));
-    } else if (item === this.menuItems[1]) {
-      this.transactions$ = this.store.pipe(select(selectInProgressTr));
-    } else if (item === this.menuItems[2]) {
-      this.transactions$ = this.store.pipe(select(selectSentTr));
-    } else if (item === this.menuItems[3]) {
-      this.transactions$ = this.store.pipe(select(selectReceivedTr));
-    }
+  changeDropdownState(event) {
+    event.stopPropagation();
+    this.isDropdownVisible = !this.isDropdownVisible;
   }
 
+  selectAllItem() {
+    this.transactions$ = this.store.pipe(select(selectAllTr));
+    this.trSelectorActiveTitle = selectorTitles.ALL;
+    this.isDropdownVisible = false;
+  }
+
+  selectInProgressItem() {
+    this.transactions$ = this.store.pipe(select(selectInProgressTr));
+    this.trSelectorActiveTitle = selectorTitles.IN_PROGRESS;
+    this.isDropdownVisible = false;
+  }
+
+  selectSentItem() {
+    this.transactions$ = this.store.pipe(select(selectSentTr));
+    this.trSelectorActiveTitle = selectorTitles.SENT;
+    this.isDropdownVisible = false;
+  }
+
+  selectReceivedItem() {
+    this.transactions$ = this.store.pipe(select(selectReceivedTr));
+    this.trSelectorActiveTitle = selectorTitles.RECEIVED;
+    this.isDropdownVisible = false;
+  }
+
+  onClickedOutside() {
+    this.isDropdownVisible = !this.isDropdownVisible;
+  }
 }

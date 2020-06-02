@@ -36,7 +36,7 @@ export class TableActionsComponent implements OnInit {
   public expireIcon = `${environment.assetsPath}/images/shared/components/table-actions/icon-exp-copy-2.svg`;
 
   constructor(
-    private _clipboardService: ClipboardService,
+    private clipboardService: ClipboardService,
     private store: Store<any>,
     private dataService: DataService,
     private windowService: WindowService,
@@ -49,24 +49,11 @@ export class TableActionsComponent implements OnInit {
   }
 
   copyAddressClicked() {
-    this._clipboardService.copyFromContent(this.element.address);
+    this.clipboardService.copyFromContent(this.element.address);
   }
 
   cancelTransactionClicked() {
-    this.sub = this.wsService.on().subscribe((msg: any) => {
-      if (msg.id === 15) {
-        this.sub.unsubscribe();
-      }
-    });
-    this.wsService.send({
-        jsonrpc: '2.0',
-        id: 15,
-        method: 'tx_cancel',
-        params:
-        {
-          txId : this.element.txId,
-        }
-    });
+    this.dataService.cancelTransaction(this.element.txId);
   }
 }
 

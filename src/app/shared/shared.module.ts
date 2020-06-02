@@ -18,7 +18,7 @@ import {
 } from '@angular/material';
 
 import {
-  StatusTitleComponent,
+  WalletStatusTitleComponent,
   TransactionListComponent,
   DropdownComponent,
   MenuFullComponent,
@@ -27,7 +27,8 @@ import {
   TableActionsComponent,
   PasswordComponent,
   AddContactComponent,
-  PaymentProofExportedComponent
+  PaymentProofExportedComponent,
+  StatusIconComponent
  } from './components';
 
 import {
@@ -38,12 +39,13 @@ import {
 import {
   ClickOutsideDirective,
   DetectCapsDirective,
-  NumbersOnlyDirective
+  NumbersOnlyDirective,
+  StatusColorDirective
 } from './directives';
 
 @NgModule({
   declarations: [
-    StatusTitleComponent,
+    WalletStatusTitleComponent,
     MainLayoutComponent,
     HeaderComponent,
     HeaderLogoComponent,
@@ -65,6 +67,8 @@ import {
     HeaderWithoutLogoComponent,
     DetectCapsDirective,
     NumbersOnlyDirective,
+    StatusIconComponent,
+    StatusColorDirective,
   ],
   imports: [
     CommonModule,
@@ -81,7 +85,7 @@ import {
     MatMenuModule
   ],
   exports: [
-    StatusTitleComponent,
+    WalletStatusTitleComponent,
     MainLayoutComponent,
     HeaderComponent,
     ButtonComponent,
@@ -96,7 +100,9 @@ import {
     HeaderWithoutLogoComponent,
     TableActionsComponent,
     DetectCapsDirective,
-    NumbersOnlyDirective
+    NumbersOnlyDirective,
+    StatusIconComponent,
+    StatusColorDirective
   ],
   providers: [
     DecimalPipe

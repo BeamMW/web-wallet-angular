@@ -33,26 +33,6 @@ export class SendConfirmationComponent implements OnInit {
   submit($event) {
     $event.stopPropagation();
     this.confirmation();
-    // this.sub = this.wsService.on().subscribe((msg: any) => {
-    //   if (msg.result) {
-    //     if (msg.result !== undefined) {
-    //       this.router.navigate(['/wallet/main']);
-    //     }
-
-    //     this.sub.unsubscribe();
-    //   }
-    // });
-    // this.wsService.send({jsonrpc:"2.0", 
-    //   id: 123,
-    //   method:"tx_send", 
-    //   params:
-    //   {
-    //     value : this.send.amount * 100000000,
-    //     fee : this.send.fee,
-    //     address : this.send.address,
-    //     comment : this.send.comment
-    //   }
-    // });
   }
 
   ngOnInit() {

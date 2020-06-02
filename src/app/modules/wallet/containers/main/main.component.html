@@ -158,9 +158,10 @@
                     <ng-container *ngIf="transactions.length > 0">
                         <div class="transcaction-container" *ngFor="let transaction of transactions; let i = index">
                             <ng-container *ngIf="i < 5">
-                                <div [className]="'main__transactions__content__common-item ' + getContentClass(transaction)">
+                                <div class="main__transactions__content__common-item"
+                                        appStatusColor [appStatusColorTransaction]="transaction">
                                     <div class="main__transactions__content__common-item__value">
-                                        <img class="tr-receive-icon" [src]="getTrIcon(transaction)"/>
+                                        <app-status-icon [(transaction)]="transaction"></app-status-icon>
                                         <span class="tr-receive-text">{{transaction.income ? 'Receive' : 'Send'}}</span>
                                         <span class="tr-receive-value" *ngIf="!privacyMode">
                                             <ng-container>{{getValueSign(transaction)}}</ng-container>

@@ -1,7 +1,7 @@
 <div class="transaction" (click)="transactionClicked()">
     <div class="transaction__common">
         <div class="transaction__common__top-content">
-            <img class="transaction__common__top-content__icon" [src]="getTrIcon()"/>
+            <app-status-icon [(transaction)]="transaction"></app-status-icon>
             <span class="transaction__common__top-content__text">
                 {{transaction.income ? 'Receive' : 'Send'}}
             </span>
@@ -14,7 +14,7 @@
                                [tableType]="tableTypesConsts.TRANSACTIONS_NOT_SENT" 
                                [element]="transaction"></app-table-actions>
         </div>
-        <div [className]="'transaction__common__mid-content ' + getContentClass()">
+        <div class="transaction__common__mid-content" appStatusColor [appStatusColorTransaction]="transaction">
             <div class="transaction__common__mid-content__status">{{getStatus(transaction)}}</div>
             <div class="transaction__common__mid-content__value" *ngIf="!privacyMode">
                 <ng-container>{{getValueSign()}}</ng-container>

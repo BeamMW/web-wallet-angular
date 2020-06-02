@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { WasmService } from './../../../../wasm.service';
 import { Store, select } from '@ngrx/store';
@@ -19,6 +19,14 @@ import {
 
 import { environment } from '@environment';
 
+
+export enum selectorTitles {
+  AVAILABLE = 'Available',
+  IN_PROGRESS = 'In progress',
+  SPENT = 'Spent',
+  UNAVAILABLE = 'Unavailable'
+}
+
 @Component({
   selector: 'app-utxo-main',
   templateUrl: './utxo-main.component.html',
@@ -34,16 +42,8 @@ export class UtxoMainComponent implements OnInit {
   public tableType = 'utxo';
   public tableColumns = ['utxo_amount', 'utxo_maturity', 'utxo_type', 'utxo_status'];
 
-  public menuItems = [{
-    title: 'Available', selected: true
-  }, {
-    title: 'In progress', selected: false
-  }, {
-    title: 'Spent', selected: false
-  }, {
-    title: 'Unavailable', selected: false
-  }];
-  public activeSelectorItem = this.menuItems[0];
+  public selectorTitlesData = selectorTitles;
+  public utxoSelectorActiveTitle = selectorTitles.AVAILABLE;
 
   walletStatus$: Observable<any>;
   utxos$: Observable<any>;
@@ -92,19 +92,23 @@ export class UtxoMainComponent implements OnInit {
     this.dataService.saveWalletOptions();
   }
 
-  selectorItemClicked(item) {
-    this.activeSelectorItem.selected = false;
-    item.selected = true;
-    this.activeSelectorItem = item;
+  public selectorItemAvailableClicked() {
+    this.utxos$ = this.store.pipe(select(selectAvailableUtxo));
+    this.utxoSelectorActiveTitle = selectorTitles.AVAILABLE;
+  }
 
-    if (item.title === this.menuItems[0].title) {
-      this.utxos$ = this.store.pipe(select(selectAvailableUtxo));
-    } else if (item.title === this.menuItems[1].title) {
-      this.utxos$ = this.store.pipe(select(selectInProgressUtxo));
-    } else if (item.title === this.menuItems[2].title) {
-      this.utxos$ = this.store.pipe(select(selectSpentUtxo));
-    } else if (item.title === this.menuItems[3].title) {
-      this.utxos$ = this.store.pipe(select(selectUnavailableUtxo));
-    }
+  public selectorItemInProgressClicked() {
+    this.utxos$ = this.store.pipe(select(selectInProgressUtxo));
+    this.utxoSelectorActiveTitle = selectorTitles.IN_PROGRESS;
+  }
+
+  public selectorItemSpentClicked() {
+    this.utxos$ = this.store.pipe(select(selectSpentUtxo));
+    this.utxoSelectorActiveTitle = selectorTitles.SPENT;
+  }
+
+  public selectorItemUnavailableClicked() {
+    this.utxos$ = this.store.pipe(select(selectUnavailableUtxo));
+    this.utxoSelectorActiveTitle = selectorTitles.UNAVAILABLE;
   }
 }

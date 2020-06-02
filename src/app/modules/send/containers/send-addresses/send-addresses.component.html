@@ -47,7 +47,7 @@
                                   (input)="addressInputUpdated($event.target.value)"
                                   [class.incorrect]="!localParams.addressValidation"></textarea>
                         <div class="container__address__validator" *ngIf="!localParams.addressValidation">
-                            Invalid wallet address
+                            Invalid token
                         </div>
                     </div>
                     <div class="container__values">
@@ -102,7 +102,8 @@
                                 </div>
                                 <div class="row-item">Remaining:</div>
                             </div>
-                            <div class="container__values__stats__values" [class.incorrect-amount]="localParams.isNotEnoughAmount">
+                            <div class="container__values__stats__values" 
+                                    [class.incorrect-amount]="localParams.isNotEnoughAmount">
                                 <div>{{stats.totalUtxo}} BEAM</div>
                                 <div class="row-item">{{stats.amountToSend}} BEAM</div>
                                 <div class="row-item">{{stats.change}} BEAM</div>

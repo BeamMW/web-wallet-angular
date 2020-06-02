@@ -94,31 +94,6 @@
     font-weight: bold;
 }
 
-.amount-cell.canceled,
-.status-cell.canceled {
-    color: #8da1ad;
-}
-
-.amount-cell.failed,
-.status-cell.failed {
-    color: #ff746b;
-}
-
-.amount-cell.send,
-.status-cell.send {
-    color: #da68f5;
-}
-
-.amount-cell.receive,
-.status-cell.receive {
-    color: #23c1ff;
-}
-
-.amount-cell.own,
-.status-cell.own {
-    color: #ffffff;
-}
-
 .utxo-cell {
     @include normal-text;
     opacity: .5;
@@ -135,14 +110,6 @@
     line-height: 1.43;
     text-align: center;
     color: #ffffff;
-}
-
-.sent {
-    color: #da68f5;
-}
-
-.receive {
-    color: #0bccf7;
 }
 
 .details-title {

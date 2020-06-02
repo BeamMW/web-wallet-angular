@@ -52,6 +52,19 @@
         display: flex;
         flex-direction: column;
 
+        &__circle {
+            width: 45px;
+            height: 45px;
+            background-color: #07345a;
+            border-radius: 30px;
+            position: absolute;
+            top: 135px;
+            left: 165px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         &__value {
             margin: 36px auto 0 auto;
             font-family: 'ProximaNovaSemiBold', sans-serif;
@@ -125,14 +138,6 @@
     color: #ffffff;
     max-width: 335px;
     word-wrap: break-word;
-}
-
-.receive {
-    color: #0bccf7;
-}
-
-.send {
-    color: #da68f5;
 }
 
 .back-control-wrapper {

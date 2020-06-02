@@ -36,3 +36,11 @@ export enum utxoStatuses {
     IN_PROGRESS = 'in progress',
     SPENT = 'spent'
 }
+
+export enum statusesColors {
+    SELF_SENDING = '#ffffff',
+    FAILED = '#ff746b',
+    CANCELED = '#8da1ad',
+    SEND = '#da68f5',
+    RECEIVE = '#23c1ff'
+}

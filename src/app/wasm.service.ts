@@ -83,4 +83,10 @@ export class WasmService {
   public getSendToken(sbbsAddressHex: string, identityStrHex: string, amountBase64: string) {
     return this.keyKeeper.getSendToken(sbbsAddressHex, identityStrHex, amountBase64);
   }
+
+  public convertTokenToJson(token: string) {
+    return this.module.KeyKeeper.ConvertTokenToJson(token);
+  }
+
+  // AzR7uDU8tfDoD89W7eFLdwYNFVeqeX4PNV6LSUBq1y59jYFG7ng8KcTFA7w1Jq6kiAQEccqCvmJvDiRTMmtcEwZM5BXvDhBgDXPiUbzWm18Ru2hCSXJXFJS8dv95XP9USj
 }

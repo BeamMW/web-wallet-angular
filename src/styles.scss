@@ -86,3 +86,43 @@ html {
         text-align: left;
     }
 }
+
+// body::-webkit-scrollbar-track {
+// 	border-radius: 10px;
+// 	background: transparent;
+// }
+
+// body::-webkit-scrollbar {
+//   width: 12px;
+//   background: transparent;
+// }
+
+// body::-webkit-scrollbar-thumb {
+//   border-radius: 1.5px;
+//   background: red;
+// }
+
+
+body {
+  overflow: overlay;
+}
+
+::-webkit-scrollbar {
+    width: 9px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .5);
+    border: 3px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}

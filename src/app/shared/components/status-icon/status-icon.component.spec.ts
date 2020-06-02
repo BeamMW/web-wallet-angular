@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TransactionsMenuComponent } from './transactions-menu.component';
+import { StatusIconComponent } from './status-icon.component';
 
-describe('TransactionsMenuComponent', () => {
-  let component: TransactionsMenuComponent;
-  let fixture: ComponentFixture<TransactionsMenuComponent>;
+describe('StatusIconComponent', () => {
+  let component: StatusIconComponent;
+  let fixture: ComponentFixture<StatusIconComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TransactionsMenuComponent ]
+      declarations: [ StatusIconComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TransactionsMenuComponent);
+    fixture = TestBed.createComponent(StatusIconComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

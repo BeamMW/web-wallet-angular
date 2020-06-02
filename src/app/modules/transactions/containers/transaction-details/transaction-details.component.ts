@@ -32,6 +32,7 @@ export class TransactionDetailsComponent implements OnInit {
     }
 
   ngOnInit() {
+    window.scroll(0, 0);
     const txId = this.route.snapshot.params['id'];
     this.transaction$ = this.store.pipe(select(selectTrById(txId)));
   }

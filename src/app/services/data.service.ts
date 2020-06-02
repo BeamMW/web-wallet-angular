@@ -48,6 +48,7 @@ export class DataService {
   private addressesSub: Subscription;
   private utxoSub: Subscription;
   private trsSub: Subscription;
+  private commonActionSub: Subscription;
   private refreshIntervalId;
   private refreshReconnectIntervalId;
 
@@ -361,6 +362,40 @@ export class DataService {
       jsonrpc: '2.0',
       id: 5,
       method: 'wallet_status'
+    });
+  }
+
+  changePassword(newPass) {
+    this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
+      if (msg.id === 16) {
+        this.commonActionSub.unsubscribe();
+      }
+    });
+    this.websocketService.send({
+        jsonrpc: '2.0',
+        id: 16,
+        method: 'change_password',
+        params:
+        {
+          new_pass: newPass,
+        }
+    });
+  }
+
+  cancelTransaction(txId) {
+    this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
+      if (msg.id === 15) {
+        this.commonActionSub.unsubscribe();
+      }
+    });
+    this.websocketService.send({
+        jsonrpc: '2.0',
+        id: 15,
+        method: 'tx_cancel',
+        params:
+        {
+          txId,
+        }
     });
   }
 }
