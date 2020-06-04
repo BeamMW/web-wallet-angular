@@ -25,6 +25,7 @@ import {
   updateVerificatedSetting,
   updatePasswordCheckSetting,
   needToReconnect,
+  saveSendData,
   saveContact } from '../store/actions/wallet.actions';
 import { Router } from '@angular/router';
 import { WasmService } from './../wasm.service';
@@ -417,6 +418,24 @@ export class DataService {
         params:
         {
           txId,
+        }
+    });
+  }
+
+  calculateTrChange(amountValue) {
+    this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
+      if (msg.id === 17) {
+        this.commonActionSub.unsubscribe();
+        this.store.dispatch(saveSendData({send: {change: msg.result.change}}));
+      }
+    });
+    this.websocketService.send({
+        jsonrpc: '2.0',
+        id: 17,
+        method: 'calc_change',
+        params:
+        {
+          amount: amountValue,
         }
     });
   }

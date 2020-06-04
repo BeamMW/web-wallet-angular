@@ -11,10 +11,12 @@
     </div>
 
     <div class="utilities__container">
-        <div class="utilities__container__get-beams ">
+        <div class="utilities__container__get-beams"
+                (click)="getFromFaucet()">
             <span class="util-item-title">Get beams from the community faucet</span>
         </div>
-        <div class="utilities__container__payment-proof">
+        <div class="utilities__container__payment-proof"
+                (click)="paymentProofClicked($event)">
             <span class="util-item-title">Payment proof</span>
         </div>
     </div>

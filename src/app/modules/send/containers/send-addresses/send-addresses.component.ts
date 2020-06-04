@@ -7,7 +7,8 @@ import { DataService, WindowService, WebsocketService } from './../../../../serv
 import { Store, select } from '@ngrx/store';
 import {
   selectPasswordCheckSetting,
-  selectWalletStatus 
+  selectWalletStatus,
+  selectSendData
 } from '../../../../store/selectors/wallet-state.selectors';
 import { WasmService } from './../../../../wasm.service';
 
@@ -27,6 +28,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   walletStatus$: Observable<any>;
   sendFrom: string;
   passwordCheckSetting$: Observable<any>;
+  sendData$: Observable<any>;
   private isPassCheckEnabled = false;
 
   localParams = {
@@ -173,19 +175,26 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
         this.localParams.isNotEnoughAmount = false;
       }
 
-      if (status.available > 0) {
-        const utxoVal = Math.ceil(amountInputValue);
-        this.stats.totalUtxo = utxoVal === amountInputValue ? utxoVal + 1 : utxoVal;
-        this.stats.amountToSend = amountInputValue.length > 0 ? amountInputValue : 0;
-        if (amountInputValue > available) {
-          this.stats.change = 0;
-          this.stats.remaining = 0;
-        } else {
-          this.stats.change = this.stats.totalUtxo > amountInputValue ?
-            (this.stats.totalUtxo - amountInputValue - feeFullValue) :
-            (this.stats.totalUtxo + 1 - feeFullValue);
-          this.stats.remaining = available - amountInputValue - feeFullValue;
-        }
+      if (amountInputValue > 0 && status.available > 0) {
+        this.dataService.calculateTrChange(amountInputValue * globalConsts.GROTHS_IN_BEAM + this.fullSendForm.value.fee);
+        this.sendData$ = this.store.pipe(select(selectSendData));
+        this.sendData$.subscribe(sendData => {
+          if (sendData.change > 0) {
+            this.stats.change = sendData.change / globalConsts.GROTHS_IN_BEAM;
+            this.stats.amountToSend = amountInputValue > 0 ? amountInputValue : 0;
+            this.stats.totalUtxo = this.stats.amountToSend + (this.stats.change + feeFullValue);
+            if ((amountInputValue + feeFullValue) > available) {
+              this.stats.remaining = 0;
+            } else {
+              this.stats.remaining = available - this.stats.totalUtxo;
+            }
+          }
+        });
+      } else {
+        this.stats.totalUtxo = 0;
+        this.stats.amountToSend = 0;
+        this.stats.change = 0;
+        this.stats.remaining = 0;
       }
     }).unsubscribe();
 

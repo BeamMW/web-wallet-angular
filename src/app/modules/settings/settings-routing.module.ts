@@ -88,6 +88,10 @@ const routes: Routes = [{
         path: '', component: ServerComponent
       }, {
         path: 'payment-proof', component: PaymentProofComponent, outlet: 'popup',
+      }, {
+        path: 'enter-dns-popup', component: EnterDnsPopupComponent, outlet: 'popup',
+      }, {
+        path: 'enter-ip-popup', component: EnterIpPopupComponent, outlet: 'popup',
       }
     ]
   }, {

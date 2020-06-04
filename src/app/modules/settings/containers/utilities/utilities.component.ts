@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
+import { DataService } from './../../../../services';
 
 @Component({
   selector: 'app-utilities',
@@ -9,8 +10,18 @@ import { Router } from '@angular/router';
 })
 export class UtilitiesComponent implements OnInit {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
+  popupOpened = false;
 
-  constructor(public router: Router) { }
+  constructor(
+    private dataService: DataService,
+    public router: Router
+    ) {
+    dataService.changeEmitted$.subscribe(emittedState => {
+      if (emittedState.popupOpened !== undefined) {
+        this.popupOpened = emittedState.popupOpened;
+      }
+    });
+  }
 
   ngOnInit() {
   }
@@ -18,6 +29,15 @@ export class UtilitiesComponent implements OnInit {
   backClicked(event) {
     event.stopPropagation();
     this.router.navigate(['/settings/all']);
+  }
+
+  getFromFaucet() {
+    window.open('https://faucet.beamprivacy.community', '_blank');
+  }
+
+  paymentProofClicked($event) {
+    $event.stopPropagation();
+    this.router.navigate([this.router.url, { outlets: { popup: 'payment-proof' }}]);
   }
 }
 

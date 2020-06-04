@@ -25,11 +25,7 @@ export interface WalletAppState {
     passwordCheck: boolean;
     verificatedSetting: boolean;
     sendData: {
-        from: string,
-        address: string,
-        fee: number,
-        amount: number,
-        comment: string
+        change: number
     };
     contacts: Contact[];
     proofDataValue: {
@@ -64,11 +60,7 @@ export const initialWalletAppState: WalletAppState = {
     verificatedSetting: false,
     passwordCheck: true,
     sendData: {
-        from: '',
-        address: '',
-        fee: 100,
-        amount: 0,
-        comment: ''
+        change: 0
     },
     contacts: [],
     proofDataValue: {
