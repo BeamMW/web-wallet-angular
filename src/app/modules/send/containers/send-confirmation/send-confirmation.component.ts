@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {DataService, WebsocketService} from './../../../../services';
-import {Router} from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable, from } from 'rxjs';
 import { environment } from '@environment';
+import { routes, globalConsts } from '@consts';
+import { Store, select } from '@ngrx/store';
+import {
+  selectPasswordCheckSetting,
+} from './../../../../store/selectors/wallet-state.selectors';
 
 @Component({
   selector: 'app-send-confirmation',
@@ -14,36 +19,76 @@ export class SendConfirmationComponent implements OnInit {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
   sendForm: FormGroup;
   sub: Subscription;
-  public send = {
+  public sendData = {
     address: '',
     fee: 0,
     comment: '',
-    amount: ''
+    amount: 0
   };
   popupOpened = false;
-  public walletRoute = '/wallet/main';
+  isPassCheckEnabled = false;
+  passwordCheckSetting$: Observable<any>;
+
   constructor(private dataService: DataService,
+              private store: Store<any>,
               public router: Router,
               private wsService: WebsocketService) {
     dataService.changeEmitted$.subscribe(emittedState => {
       this.popupOpened = emittedState;
     });
+
+    this.passwordCheckSetting$ = this.store.pipe(select(selectPasswordCheckSetting));
+    this.passwordCheckSetting$.subscribe(settingValue => {
+      this.isPassCheckEnabled = settingValue;
+    }).unsubscribe();
+
+    try {
+      const navigation = this.router.getCurrentNavigation();
+      const state = navigation.extras.state as {
+        address: string,
+        fee: number,
+        amount: number,
+        comment: string
+      };
+      this.sendData.address = state.address;
+      this.sendData.fee = state.fee === undefined || state.fee === 0 ? 100 : state.fee;
+      this.sendData.amount = state.amount;
+      this.sendData.comment = state.comment;
+    } catch (e) {
+      this.router.navigate([routes.SEND_ADDRESSES_ROUTE]);
+    }
   }
 
   submit($event) {
     $event.stopPropagation();
-    this.confirmation();
+    if (this.isPassCheckEnabled) {
+      const navigationExtras: NavigationExtras = {
+        state: {
+          address: this.sendData.address,
+          fee: this.sendData.fee,
+          comment: this.sendData.comment,
+          amount: this.sendData.amount * globalConsts.GROTHS_IN_BEAM,
+          isPassCheckEnabled: true
+        }
+      };
+      this.router.navigate([this.router.url, { outlets: { popup: 'confirm-popup' }}], navigationExtras);
+    } else {
+      this.dataService.transactionSend({
+        address: this.sendData.address,
+        fee: this.sendData.fee,
+        comment: this.sendData.comment,
+        amount: this.sendData.amount * globalConsts.GROTHS_IN_BEAM
+      });
+    }
   }
 
   ngOnInit() {
-    this.send = this.dataService.sendStore.getState().send;
   }
 
   backAmountClicked() {
-    this.router.navigate(['/send/amount']);
-  }
-
-  confirmation() {
-    this.router.navigate([this.router.url, { outlets: { popup: 'confirm-popup' }}]);
+    const navigationExtras: NavigationExtras = {
+      state: this.sendData
+    };
+    this.router.navigate([routes.SEND_AMOUNT_ROUTE], navigationExtras);
   }
 }

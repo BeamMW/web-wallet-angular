@@ -6,8 +6,9 @@ export enum TableTypes {
     TRANSACTIONS_NOT_SENT = 'wallet_not_sent'
 }
 
-export enum GlobalConsts {
+export enum globalConsts {
     GROTHS_IN_BEAM = 100000000,
+    MIN_FEE_VALUE = 100
 }
 
 export enum transactionsStatuses {

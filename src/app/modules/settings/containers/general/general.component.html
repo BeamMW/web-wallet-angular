@@ -28,7 +28,8 @@
         <span class="general__container__currency-updated">
             (last updated on {{currencyUpdated | date:'d MMM, y'}})
         </span>
-        <div class="general__container__clear general-item-title">
+        <div class="general__container__clear general-item-title"
+                (click)="clearLocalWalletClicked($event)">
             Clear local wallet data
         </div>
     </div>

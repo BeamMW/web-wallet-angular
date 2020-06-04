@@ -120,14 +120,40 @@
                 color: rgba(255, 255, 255, .3);
             }
 
-            &__button {
-                margin: auto auto 20px auto;
-                
-                @include ui-button($btn-send, $btn-md) {
-                }
-    
-                @include ui-button-next-icon()
+            &__input.incorrect {
+                border-bottom: 2px solid #ff625c;
+                color: #ff625c;
             }
+    
+            &__input.incorrect:focus {
+                color: #ff625c;
+            }
+    
+            &__validator {
+                @include normal-text;
+                margin-top: 5px;
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 13px;
+                line-height: 1.23;
+                color: #ff625c;
+            }
+        }
+    }
+}
+
+.controls {
+    margin: auto auto 20px auto;
+    &__button {
+        @include ui-button($btn-send, $btn-md) {
+        }
+
+        @include ui-button-next-icon()
+    }
+
+    &__button.disabled {
+        @include ui-button($btn-send, $btn-md) {
+            opacity: 0.2;
+            cursor: default;
         }
     }
 }
@@ -336,6 +362,15 @@
             &__amount-validator {
                 @include normal-text;
                 margin-top: 10px;
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 13px;
+                line-height: 1.23;
+                color: #ff625c;
+            }
+
+            &__fee-validator {
+                @include normal-text;
+                margin-top: 5px;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 13px;
                 line-height: 1.23;
@@ -566,15 +601,6 @@
     }
 
     .incorrect:focus {
-        color: #ff625c;
-    }
-
-    .incorrect-validator {
-        @include normal-text;
-        margin-top: 5px;
-        font-family: 'ProximaNova', sans-serif;
-        font-size: 13px;
-        line-height: 1.23;
         color: #ff625c;
     }
 }

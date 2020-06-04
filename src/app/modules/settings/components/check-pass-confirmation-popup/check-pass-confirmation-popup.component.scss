@@ -107,18 +107,23 @@
         justify-content: center;
         margin-top: 30px;
 
-        &__remove {
+        &__ok {
             margin-left: 20px;
             
             @include ui-button($btn-ok, $btn-nssm) {
+                width: 141px;
+                height: 44px;
+                font-size: 16px;
             }
 
             @include ui-button-ok-icon()
         }
 
         &__cancel {
-            
             @include ui-button($btn-cancel, $btn-nssm) {
+                width: 141px;
+                height: 44px;
+                font-size: 16px;
             }
 
             @include ui-button-cancel-icon()
@@ -178,10 +183,23 @@ p {
             margin-top: 20px;
     
             &__cancel {
-
                 @include ui-button($btn-cancel, $btn-nssm) {
                     width: 133px;
+                    height: 44px;
+                    font-size: 14px;
                 }
+            }
+
+            &__ok {
+                margin-left: 20px;
+                
+                @include ui-button($btn-ok, $btn-nssm) {
+                    width: 133px;
+                    height: 44px;
+                    font-size: 14px;
+                }
+    
+                @include ui-button-ok-icon()
             }
         }
 

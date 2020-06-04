@@ -10,7 +10,7 @@ import { saveReceiveData } from './../../../../store/actions/wallet.actions';
 
 import { selectAddress } from './../../../../store/selectors/address.selectors';
 import { WasmService } from './../../../../wasm.service';
-import { GlobalConsts } from '@consts';
+import { globalConsts } from '@consts';
 
 @Component({
   selector: 'app-receive',
@@ -104,7 +104,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
 
   amountUpdated(control: FormControl) {
     const amount = control.value.length > 0 ?
-      (parseFloat(control.value) * GlobalConsts.GROTHS_IN_BEAM).toString() : '';
+      (parseFloat(control.value) * globalConsts.GROTHS_IN_BEAM).toString() : '';
     this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, this.identity, amount);
     this.updateQr();
   }

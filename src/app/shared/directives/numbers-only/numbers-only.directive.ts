@@ -1,5 +1,4 @@
 import { Directive, HostListener, ElementRef } from '@angular/core';
-import { GlobalConsts } from '@consts';
 
 @Directive({
   selector: '[appNumbersOnly]'

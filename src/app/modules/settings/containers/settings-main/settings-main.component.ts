@@ -90,7 +90,6 @@ export class SettingsMainComponent implements OnInit {
     this.ipSetting$ = this.store.pipe(select(selectIpSetting));
 
     this.checkPasswordSetting$ = this.store.pipe(select(selectPasswordCheckSetting));
-
     this.checkPasswordSetting$.subscribe((state) => {
       this.isCheckedPassword = state;
     });

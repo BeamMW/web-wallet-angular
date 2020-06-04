@@ -111,6 +111,9 @@
             margin-left: 20px;
             
             @include ui-button($btn-ok, $btn-nssm) {
+                width: 141px;
+                height: 44px;
+                font-size: 16px;
             }
 
             @include ui-button-next-icon()
@@ -119,6 +122,9 @@
         &__cancel {
             
             @include ui-button($btn-cancel, $btn-nssm) {
+                width: 141px;
+                height: 44px;
+                font-size: 16px;
             }
 
             @include ui-button-cancel-icon()
@@ -181,7 +187,21 @@ p {
 
                 @include ui-button($btn-cancel, $btn-nssm) {
                     width: 133px;
+                    height: 44px;
+                    font-size: 14px;
                 }
+            }
+
+            &__remove {
+                margin-left: 20px;
+                
+                @include ui-button($btn-ok, $btn-nssm) {
+                    width: 133px;
+                    height: 44px;
+                    font-size: 14px;
+                }
+    
+                @include ui-button-next-icon()
             }
         }
 

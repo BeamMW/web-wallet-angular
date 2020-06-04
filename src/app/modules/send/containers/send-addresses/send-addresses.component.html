@@ -17,14 +17,23 @@
         <div class="send__container">
             <div class="send__container__title">TRANSACTION TOKEN</div>
             <div class="send__container__content">
-                <form class="send-form-cl" novalidate [formGroup]="sendForm" autocomplete="off" (ngSubmit)="submit()">
+                <form class="send-form-cl" novalidate [formGroup]="sendForm" autocomplete="off">
                     <div class="form-group">
                         <textarea class="send__container__content__input" autosize maxlength="270"
-                             name="address" formControlName="address"
+                            name="address" formControlName="address"
+                            (input)="addressInputUpdated($event.target.value)"
+                            [class.incorrect]="!localParams.addressValidation"
                             placeholder="Please specify transaction token"></textarea>
+                        <div class="send__container__content__validator" *ngIf="!localParams.addressValidation">
+                            Invalid token
+                        </div>
                     </div>
-                    <div class="send__container__content__button">
-                        <app-button [disabled]="sendForm.invalid" class="send-button">next</app-button>
+                    <div class="controls">
+                        <app-button class="controls__button"
+                            [class.disabled]="!localParams.isAddressInputValid"
+                            (click)="submit()">
+                            next
+                        </app-button>
                     </div>
                 </form>
             </div>
@@ -66,12 +75,13 @@
                         </div>
                         <div class="container__values__title-fee">TRANSACTION FEE</div>
                         <div class="form-group">
-                            <input class="container__values__input-fee" (input)="stripFee(fullSendForm.get('fee'))"
-                                type="text" name="fee" formControlName="fee" 
+                            <input class="container__values__input-fee"
+                                type="text" name="fee" formControlName="fee"
+                                (input)="feeChanged(fullSendForm.get('fee'))"
                                 [class.incorrect]="!localParams.feeIsCorrect"
                                 placeholder="Enter fee"/>
                             <span class="container__values__currency">GROTH</span>
-                            <div class="incorrect-validator" *ngIf="!localParams.feeIsCorrect">
+                            <div class="ontainer__values__fee-validator" *ngIf="!localParams.feeIsCorrect">
                                 The minimum fee is 100 GROTH
                             </div>
                         </div>
@@ -115,7 +125,7 @@
                 
                 <div class="controls">
                     <app-button class="controls__back-button" (click)="backConfirmationClicked()">back</app-button>
-                    <app-button [class.disabled]="!localParams.isSendDataValid" 
+                    <app-button [class.disabled]="!localParams.isSendDataValid"
                                 (click)="fullSubmit($event)" 
                                 class="controls__send-button">next</app-button>
                 </div>

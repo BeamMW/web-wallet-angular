@@ -1,16 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {Router} from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 import { environment } from '@environment';
 import { DataService, WindowService, WebsocketService } from './../../../../services';
 import { Store, select } from '@ngrx/store';
-import { selectWalletStatus } from '../../../../store/selectors/wallet-state.selectors';
-import { saveSendData } from './../../../../store/actions/wallet.actions';
+import {
+  selectPasswordCheckSetting,
+  selectWalletStatus 
+} from '../../../../store/selectors/wallet-state.selectors';
 import { WasmService } from './../../../../wasm.service';
 
-const MIN_FEE_VALUE = 100;
-const GROTHS_IN_BEAM = 100000000;
+import { globalConsts, routes } from '@consts';
 
 @Component({
   selector: 'app-send-addresses',
@@ -20,17 +21,17 @@ const GROTHS_IN_BEAM = 100000000;
 export class SendAddressesComponent implements OnInit, OnDestroy {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
   public arrowIcon: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/arrow.svg`;
-  send = {
-    address: ''
-  };
+
   sendForm: FormGroup;
   fullSendForm: FormGroup;
   walletStatus$: Observable<any>;
   sendFrom: string;
+  passwordCheckSetting$: Observable<any>;
+  private isPassCheckEnabled = false;
 
   localParams = {
-    addressValidated: false,
     addressValidation: true,
+    isAddressInputValid: false,
     amountValidated: false,
     feeIsCorrect: true,
     isNotEnoughAmount: false,
@@ -57,11 +58,19 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
               private wsService: WebsocketService) {
     this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
     this.localParams.isFullScreen = windowService.isFullSize();
-    this.send = this.dataService.sendStore.getState().send;
+    this.passwordCheckSetting$ = this.store.pipe(select(selectPasswordCheckSetting));
+    this.passwordCheckSetting$.subscribe(settingValue => {
+      this.isPassCheckEnabled = settingValue;
+    }).unsubscribe();
+
     let address = '';
-    if (this.send !== undefined && this.send.address !== undefined) {
-      address = this.send.address;
-    }
+    try {
+      const navigation = this.router.getCurrentNavigation();
+      const state = navigation.extras.state as {
+        address: string,
+      };
+      address = state.address;
+    } catch (e) {}
 
     this.sendForm = new FormGroup({
       address: new FormControl(address,  [
@@ -73,7 +82,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       address: new FormControl('',  [
         Validators.required
       ]),
-      fee: new FormControl(MIN_FEE_VALUE, [
+      fee: new FormControl(globalConsts.MIN_FEE_VALUE, [
         Validators.required
       ]),
       comment: new FormControl(''),
@@ -88,31 +97,33 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    this.dataService.sendStore.putState({send: {
-      address: this.sendForm.value.address
-    }});
-    this.router.navigate(['/send/amount']);
+    if (this.localParams.isAddressInputValid) {
+      const navigationExtras: NavigationExtras = {state: {address: this.sendForm.value.address}};
+      this.router.navigate([routes.SEND_AMOUNT_ROUTE], navigationExtras);
+    }
   }
 
   fullSubmit($event) {
     $event.stopPropagation();
     if (this.localParams.feeIsCorrect &&
           this.localParams.isSendDataValid) {
-      this.store.dispatch(saveSendData({
-        send: {
+      const navigationExtras: NavigationExtras = {
+        state: {
           address: this.fullSendForm.value.address,
           fee: this.fullSendForm.value.fee,
-          amount: this.fullSendForm.value.amount * GROTHS_IN_BEAM,
           comment: this.fullSendForm.value.comment,
-          from: this.sendFrom
+          amount: this.fullSendForm.value.amount * globalConsts.GROTHS_IN_BEAM,
+          isPassCheckEnabled: this.isPassCheckEnabled
         }
-      }));
-
-      this.router.navigate([this.router.url, { outlets: { popup: 'confirm-popup' }}]);
+      };
+      this.router.navigate([this.router.url, { outlets: { popup: 'confirm-popup' }}], navigationExtras);
     }
   }
 
   ngOnInit() {
+    if (this.sendForm.value.address.length > 0) {
+      this.addressInputUpdated(this.sendForm.value.address);
+    }
   }
 
   ngOnDestroy() {
@@ -122,14 +133,14 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   backConfirmationClicked() {
-    this.router.navigate(['/wallet/main']);
+    this.router.navigate([routes.WALLET_MAIN_ROUTE]);
   }
 
   addAllClicked($event) {
     $event.preventDefault();
     this.walletStatus$.subscribe((status) => {
       if (status.available > 0) {
-        const allAmount = (status.available - this.fullSendForm.value.fee) / GROTHS_IN_BEAM;
+        const allAmount = (status.available - this.fullSendForm.value.fee) / globalConsts.GROTHS_IN_BEAM;
         this.amountChanged(allAmount);
         this.localParams.isFullScreen ?
           this.fullSendForm.get('amount').setValue(allAmount) :
@@ -142,16 +153,17 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     $event.stopPropagation();
   }
 
-  stripFee(control: FormControl) {
+  feeChanged(control: FormControl) {
     const feeValue = control.value.replace(/[^0-9]/g, '');
-    this.localParams.feeIsCorrect = parseInt(feeValue, 10) >= MIN_FEE_VALUE;
+    this.localParams.feeIsCorrect = parseInt(feeValue, 10) >= globalConsts.MIN_FEE_VALUE;
     control.setValue(feeValue);
+    this.valuesValidationCheck();
   }
 
   amountChanged(amountInputValue) {
     this.walletStatus$.subscribe((status) => {
-      const feeFullValue = this.fullSendForm.value.fee / GROTHS_IN_BEAM;
-      const available = status.available / GROTHS_IN_BEAM;
+      const feeFullValue = this.fullSendForm.value.fee / globalConsts.GROTHS_IN_BEAM;
+      const available = status.available / globalConsts.GROTHS_IN_BEAM;
       amountInputValue = parseFloat(amountInputValue);
 
       if ((amountInputValue + feeFullValue) > available) {
@@ -182,30 +194,40 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   addressInputUpdated(value) {
-    this.localParams.addressValidated = value.length > 0;
-    const tokenData = JSON.parse(this.wasmService.convertTokenToJson(value));
-    if (tokenData.params !== undefined) {
-      const amountFromToken = tokenData.params.Amount / 100000000;
-      this.fullSendForm.get('amount').setValue(amountFromToken);
-      this.amountChanged(amountFromToken);
-      this.localParams.addressValidation = true;
-    } else {
+    const tokenJson = this.wasmService.convertTokenToJson(value);
+    if (value.length > 0 && tokenJson.length > 0) {
+      const tokenData = JSON.parse(tokenJson);
+      if (tokenData.params !== undefined &&
+          tokenData.params.PeerWalletIdentity !== undefined &&
+          tokenData.params.PeerID !== undefined) {
+        if (tokenData.params.Amount !== undefined) {
+          const amountFromToken = tokenData.params.Amount / globalConsts.GROTHS_IN_BEAM;
+          this.fullSendForm.get('amount').setValue(amountFromToken);
+          this.amountChanged(amountFromToken);
+        }
+        this.localParams.addressValidation = true;
+      } else {
+        this.localParams.addressValidation = false;
+      }
+    } else if (value.length > 0 && tokenJson.length === 0) {
       this.localParams.addressValidation = false;
+    } else {
+      this.localParams.addressValidation = true;
     }
 
     this.valuesValidationCheck();
-    // TODO: ENABLE WHEN TOKEN VALIDATE WILL BE ADDED
-    // if (value === null || value.length === 0) {
-    //   this.addressValidation = true;
-    // } else {
-    //   this.validateAddress(value);
-    // }
+    this.addressInputCheck();
+  }
+
+  addressInputCheck() {
+    this.localParams.isAddressInputValid = this.sendForm.value.address.length > 0 &&
+      this.localParams.addressValidation;
   }
 
   valuesValidationCheck() {
     this.localParams.isSendDataValid = this.localParams.amountValidated &&
+      this.localParams.feeIsCorrect &&
       this.localParams.addressValidation &&
-      this.localParams.addressValidated &&
       !this.localParams.isNotEnoughAmount;
   }
 }

@@ -11,10 +11,16 @@
     </div>
 
     <div class="privacy__container">
-        <div class="privacy__container__complete-vf">
-            <span class="privacy-item-title">Complete wallet verification</span>
+        <div class="privacy__container__ask-pass">
+            <span class="privacy-item-title">Ask for password on every Send</span>
+            <mat-slide-toggle class="privacy-item-slide" 
+                            (change)="checkPasswordToggle($event)" 
+                            [checked]="isCheckedPassword"></mat-slide-toggle>
         </div>
-        <div class="privacy__container__change-pass">
+        <div class="privacy__container__complete-vf" (click)="completeVerificationClicked($event)">
+            <span class="privacy-item-title">Complete seed verification</span>
+        </div>
+        <div class="privacy__container__change-pass" (click)="changePasswordClicked($event)">
             <span class="privacy-item-title">Change password</span>
         </div>
     </div>

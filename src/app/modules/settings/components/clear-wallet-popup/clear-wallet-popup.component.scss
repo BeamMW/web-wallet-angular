@@ -7,7 +7,7 @@
 
 .clear {
     width: 335px;
-    height: 272px;
+    height: 185px;
     border-radius: 10px;
     background-color: #003f6f;
     position: absolute;
@@ -15,7 +15,7 @@
     left: 50%;
     margin-left: -167px;
     top: 50%;
-    margin-top: -136px;
+    margin-top: -93px;
     display: flex;
     flex-direction: column;
 
@@ -63,7 +63,9 @@
             margin-left: 20px;
             
             @include ui-button($btn-ok, $btn-nssm) {
-                height: 38px;
+                width: 141px;
+                height: 44px;
+                font-size: 16px;
             }
 
             @include ui-button-remove-icon()
@@ -72,7 +74,9 @@
         &__cancel {
             
             @include ui-button($btn-cancel, $btn-nssm) {
-               
+                width: 141px;
+                height: 44px;
+                font-size: 16px;
             }
 
             @include ui-button-cancel-icon()
@@ -110,14 +114,17 @@
             &__cancel {
 
                 @include ui-button($btn-cancel, $btn-nssm) {
+                    width: 127px;
                     height: 38px;
-                    width: 133px;
+                    font-size: 14px;
                 }
             }
 
             &__remove {
                @include ui-button($btn-ok, $btn-nssm) {
+                    width: 127px;
                     height: 38px;
+                    font-size: 14px;
                }
             }
         }

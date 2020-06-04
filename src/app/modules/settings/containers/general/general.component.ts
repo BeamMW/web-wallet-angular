@@ -46,6 +46,7 @@ export class GeneralComponent implements OnInit {
   currencyUpdated = null;
   savelogsSetting$: Observable<any>;
   saveLogsSelectedItem = this.logsMenuItems[0];
+  popupOpened = false;
 
   constructor(
       private dataService: DataService,
@@ -60,6 +61,12 @@ export class GeneralComponent implements OnInit {
     this.savelogsSetting$ = this.store.pipe(select(selectSaveLogsSetting));
     this.savelogsSetting$.subscribe((state) => {
       this.saveLogsSelectedItem = this.logsMenuItems[state];
+    });
+
+    dataService.changeEmitted$.subscribe(emittedState => {
+      if (emittedState.popupOpened !== undefined) {
+        this.popupOpened = emittedState.popupOpened;
+      }
     });
   }
 
@@ -79,5 +86,10 @@ export class GeneralComponent implements OnInit {
   currencyDropdownSelected(item) {
     this.store.dispatch(updateCurrencySetting({settingValue: {value: item.id, updated: new Date().getTime()}}));
     this.dataService.saveWalletOptions();
+  }
+
+  clearLocalWalletClicked($event) {
+    $event.stopPropagation();
+    this.router.navigate([this.router.url, { outlets: { popup: 'clear-wallet-popup' }}]);
   }
 }

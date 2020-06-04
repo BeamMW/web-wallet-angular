@@ -76,6 +76,8 @@ const routes: Routes = [{
         path: '', component: GeneralComponent
       }, {
         path: 'payment-proof', component: PaymentProofComponent, outlet: 'popup',
+      }, {
+        path: 'clear-wallet-popup', component: ClearWalletPopupComponent, outlet: 'popup',
       }
     ]
   }, {
@@ -96,6 +98,12 @@ const routes: Routes = [{
         path: '', component: PrivacyComponent
       }, {
         path: 'payment-proof', component: PaymentProofComponent, outlet: 'popup',
+      }, {
+        path: 'check-pass-confirmation-popup', component: CheckPassConfirmationPopupComponent, outlet: 'popup',
+      }, {
+        path: 'change-pass-popup', component: ChangePasswordPopupComponent, outlet: 'popup',
+      }, {
+        path: 'seed-verification-popup', component: SeedVerificationPopupComponent, outlet: 'popup',
       }
     ]
   }, {

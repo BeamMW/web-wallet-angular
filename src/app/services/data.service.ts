@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as ObservableStore from 'obs-store';
 import { Subject, from, Subscription, Observable, Subscribable } from 'rxjs';
 import * as extensionizer from 'extensionizer';
 import { WalletState } from './../models/wallet-state.model';
@@ -37,7 +36,6 @@ import { routes } from '@consts';
   providedIn: 'root'
 })
 export class DataService {
-  sendStore: any;
   options$: Observable<any>;
   appState$: Observable<any>;
   private needToReconnect$: Observable<any>;
@@ -74,8 +72,6 @@ export class DataService {
     public router: Router,
     private wasmService: WasmService,
     private store: Store<any>) {
-    // TODO: remove!!!
-    this.sendStore = new ObservableStore();
 
     this.needToReconnect$ = this.store.pipe(select(selectIsNeedToReconnect));
     this.needToReconnect$.subscribe((state) => {
@@ -323,7 +319,6 @@ export class DataService {
     });
   }
 
-
   addressesUpdate() {
     this.addressesSub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.result && msg.id === 8) {
@@ -362,6 +357,33 @@ export class DataService {
       jsonrpc: '2.0',
       id: 5,
       method: 'wallet_status'
+    });
+  }
+
+  transactionSend(sendData) {
+    this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
+      if (msg.result && msg.id === 125) {
+        console.log('send result: ', msg);
+        this.router.navigate([routes.WALLET_MAIN_ROUTE]);
+        this.commonActionSub.unsubscribe();
+      }
+    });
+
+    console.log('send init: ', sendData);
+
+    this.websocketService.send({
+      jsonrpc: '2.0',
+      id: 125,
+      method: 'tx_send',
+      params:
+      {
+        value : sendData.amount,
+        fee : sendData.fee,
+        address : sendData.address,
+        comment : sendData.comment &&
+          sendData.comment.length > 0 ?
+          sendData.comment : ''
+      }
     });
   }
 

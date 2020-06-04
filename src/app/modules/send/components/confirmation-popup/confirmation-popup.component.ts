@@ -10,11 +10,9 @@ import * as passworder from 'browser-passworder';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import {
   selectWalletData,
-  selectSendData,
-  selectPasswordCheckSetting,
-  selectContact
+  selectSendData
 } from './../../../../store/selectors/wallet-state.selectors';
-import { GlobalConsts } from '@consts';
+import { globalConsts } from '@consts';
 
 @Component({
   selector: 'app-confirmation-popup',
@@ -22,12 +20,7 @@ import { GlobalConsts } from '@consts';
   styleUrls: ['./confirmation-popup.component.scss']
 })
 export class ConfirmationPopupComponent implements OnInit, OnDestroy {
-  private loadedSendData: any;
-
-  sendData$: Observable<any>;
   wallet$: Observable<any>;
-  contact$: Observable<any>;
-  passwordCheckSetting$: Observable<any>;
   confirmForm: FormGroup;
 
   private sub: Subscription;
@@ -39,7 +32,7 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
   isCorrectPass = true;
   isPassCheckEnabled = false;
 
-  public send = {
+  public sendData = {
     address: '',
     fee: 0,
     comment: '',
@@ -54,26 +47,30 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
               private windowService: WindowService,
               private dataService: DataService) {
     this.isFullScreen = windowService.isFullSize();
-    this.sendData$ = this.store.pipe(select(selectSendData));
     this.confirmForm = new FormGroup({
       password: new FormControl()
     });
     this.wallet$ = this.store.pipe(select(selectWalletData));
-    this.passwordCheckSetting$ = this.store.pipe(select(selectPasswordCheckSetting));
 
-    this.subscriptions.push(this.sendData$.subscribe(sendData => {
-      this.contact$ = this.store.pipe(select(selectContact(sendData.address)));
-      this.loadedSendData = sendData;
-    }));
-
-    this.subscriptions.push(this.passwordCheckSetting$.subscribe(settingValue => {
-      this.isPassCheckEnabled = settingValue;
-    }));
+    try {
+      const navigation = this.router.getCurrentNavigation();
+      const state = navigation.extras.state as {
+        address: string,
+        fee: number,
+        amount: number,
+        comment: string,
+        isPassCheckEnabled: boolean
+      };
+      this.sendData.address = state.address;
+      this.sendData.fee = state.fee === undefined || state.fee === 0 ? 100 : state.fee;
+      this.sendData.amount = state.amount;
+      this.sendData.comment = state.comment;
+      this.isPassCheckEnabled = state.isPassCheckEnabled;
+    } catch (e) {}
   }
 
   ngOnInit() {
     this.dataService.emitChange(true);
-    this.send = this.dataService.sendStore.getState().send;
     this.scrollOffset = window.pageYOffset;
     window.scroll(0, 0);
     document.body.style.overflowY = 'hidden';
@@ -93,55 +90,24 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
     document.body.style.overflowY = 'auto';
   }
 
-  private startSend() {
-    this.sub = this.wsService.on().subscribe((msg: any) => {
-      if (msg.result && msg.id === 125) {
-        console.log('send result: ', msg);
-        if (msg.result !== undefined) {
-          this.router.navigate(['/wallet/main']);
-        }
-
-        this.sub.unsubscribe();
-        this.walletSub.unsubscribe();
-      }
-    });
-
-    console.log('send init: ', this.loadedSendData);
-
-    this.wsService.send({
-      jsonrpc: '2.0',
-      id: 125,
-      method: 'tx_send',
-      params:
-      {
-        value : this.loadedSendData.amount,
-        fee : this.loadedSendData.fee,
-        address : this.loadedSendData.address,
-        comment : this.loadedSendData.comment &&
-          this.loadedSendData.comment.length > 0 ?
-          this.loadedSendData.comment : ''
-      }
-    });
-  }
-
   submit($event) {
     $event.stopPropagation();
     if (this.isPassCheckEnabled) {
       this.walletSub = this.wallet$.subscribe(wallet => {
         passworder.decrypt(this.confirmForm.value.password, wallet).then((result) => {
-          this.startSend();
+          this.dataService.transactionSend(this.sendData);
           this.walletSub.unsubscribe();
         }).catch(error => {
           this.isCorrectPass = false;
         });
       });
     } else {
-      this.startSend();
+      this.dataService.transactionSend(this.sendData);
     }
   }
 
   getTotalUtxo() {
-    return Math.ceil((this.loadedSendData.amount + this.loadedSendData.fee) / GlobalConsts.GROTHS_IN_BEAM);
+    return (this.sendData.amount + this.sendData.fee) / globalConsts.GROTHS_IN_BEAM;
   }
 
   cancelClicked($event) {

@@ -1,88 +1,137 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import {DataService, WebsocketService} from './../../../../services';
-import {Router} from '@angular/router';
-import { FormGroup, FormControl, Validators} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { DataService, WebsocketService } from './../../../../services';
+import { Router, NavigationExtras } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { environment } from '@environment';
 import { Store, select } from '@ngrx/store';
 import { selectWalletStatus } from '../../../../store/selectors/wallet-state.selectors';
 import { Subscription } from 'rxjs';
 
+import { globalConsts, routes } from '@consts';
+
 @Component({
   selector: 'app-send-amount',
   templateUrl: './send-amount.component.html',
   styleUrls: ['./send-amount.component.scss']
 })
-export class SendAmountComponent implements OnInit, OnDestroy {
+export class SendAmountComponent implements OnInit {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
-  send = {
+  sendData = {
     address: '',
-    fee: 0,
+    fee: 100,
     comment: '',
-    amount: 0
+    amount: ''
   };
   walletStatus$: Observable<any>;
   sendForm: FormGroup;
-  walletStatusSub: Subscription;
+
+  localParams = {
+    amountValidated: false,
+    feeIsCorrect: true,
+    isNotEnoughAmount: false,
+    notEnoughtValue: 0,
+    isSendDataValid: false,
+  };
 
   constructor(private dataService: DataService,
               public router: Router,
               private store: Store<any>,
               private wsService: WebsocketService) {
     this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
-    this.send = this.dataService.sendStore.getState().send;
-    let amount = 0;
-    let fee = 100;
-    let comment = '';
 
-    if (this.send !== undefined) {
-      amount = this.send.amount;
-      fee = this.send.fee === undefined || this.send.fee === 0 ? 100 : this.send.fee;
-      comment = this.send.comment;
+    try {
+      const navigation = this.router.getCurrentNavigation();
+      const state = navigation.extras.state as {
+        address: string,
+        fee: number,
+        amount: string,
+        comment: string
+      };
+      this.sendData.address = state.address;
+      this.sendData.fee = state.fee === undefined || state.fee === 0 ? 100 : state.fee;
+      this.sendData.amount = state.amount;
+      this.sendData.comment = state.comment;
+    } catch (e) {
+      this.router.navigate([routes.SEND_ADDRESSES_ROUTE]);
     }
 
     this.sendForm = new FormGroup({
-      fee: new FormControl(fee, [
+      fee: new FormControl(this.sendData.fee, [
         Validators.required
       ]),
-      comment: new FormControl(comment),
-      amount: new FormControl(amount, [
+      comment: new FormControl(this.sendData.comment),
+      amount: new FormControl(this.sendData.amount, [
         Validators.required
       ])
     });
   }
 
   submit() {
-    this.send.fee = parseInt(this.sendForm.value.fee, 10);
-    this.send.comment = this.sendForm.value.comment;
-    this.send.amount = parseFloat(this.sendForm.value.amount);
-    this.dataService.sendStore.putState({send: this.send});
-    this.router.navigate(['/send/confirmation']);
-  }
-
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
-    if (this.walletStatusSub) {
-      this.walletStatusSub.unsubscribe();
+    if (this.localParams.isSendDataValid) {
+      const navigationExtras: NavigationExtras = {
+        state: {
+          address: this.sendData.address,
+          fee: this.sendForm.value.fee,
+          amount: this.sendForm.value.amount,
+          comment: this.sendForm.value.comment
+        }
+      };
+      this.router.navigate([routes.SEND_CONFIRMATION_ROUTE], navigationExtras);
     }
   }
 
-  stripText(control: FormControl) {
-    control.setValue(control.value.replace(/[^0-9]/g, ''));
+  ngOnInit() {
+    if (this.sendForm.value.amount !== null && this.sendForm.value.amount.length > 0) {
+      this.feeChanged(this.sendForm.value.fee.toString());
+      this.amountChanged(this.sendForm.value.amount);
+    }
   }
 
   backAddressesClicked() {
-    this.router.navigate(['/send/addresses']);
+    const navigationExtras: NavigationExtras = {state: {address: this.sendData.address}};
+    this.router.navigate([routes.SEND_ADDRESSES_ROUTE], navigationExtras);
   }
 
-  addAll($event) {
+  addAllClicked($event) {
     $event.preventDefault();
-    this.walletStatusSub = this.walletStatus$.subscribe((status) => {
+    this.walletStatus$.subscribe((status) => {
       if (status.available > 0) {
-        this.sendForm.get('amount').setValue((status.available - this.sendForm.value.fee) / 100000000);
+        const allAmount = (status.available - this.sendForm.value.fee) / globalConsts.GROTHS_IN_BEAM;
+        this.amountChanged(allAmount);
+        this.sendForm.get('amount').setValue(allAmount);
       }
-    });
+    }).unsubscribe();
+  }
+
+  feeChanged(value) {
+    const feeValue = value.replace(/[^0-9]/g, '');
+    this.localParams.feeIsCorrect = parseInt(feeValue, 10) >= globalConsts.MIN_FEE_VALUE;
+    this.sendForm.get('fee').setValue(feeValue)
+    this.valuesValidationCheck();
+  }
+
+  amountChanged(amountInputValue) {
+    this.walletStatus$.subscribe((status) => {
+      const feeFullValue = this.sendForm.value.fee / globalConsts.GROTHS_IN_BEAM;
+      const available = status.available / globalConsts.GROTHS_IN_BEAM;
+      amountInputValue = parseFloat(amountInputValue);
+
+      if ((amountInputValue + feeFullValue) > available) {
+        this.localParams.isNotEnoughAmount = true;
+        this.localParams.notEnoughtValue = amountInputValue + feeFullValue;
+      } else {
+        this.localParams.isNotEnoughAmount = false;
+      }
+    }).unsubscribe();
+
+    this.localParams.amountValidated = amountInputValue > 0;
+    this.valuesValidationCheck();
+  }
+
+  valuesValidationCheck() {
+    this.localParams.isSendDataValid = this.localParams.amountValidated &&
+      this.localParams.feeIsCorrect &&
+      !this.localParams.isNotEnoughAmount;
   }
 }

@@ -31,14 +31,12 @@
         }
 
         &__title {
+            @include normal-text;
             font-family: 'ProximaNovaSemiBold', sans-serif;
             margin: 0 auto;
             color: #ffffff;
             font-size: 20px;
             font-weight: 600;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
             letter-spacing: 3px;
             text-align: center;
         }
@@ -83,27 +81,23 @@
             width:calc(100% - 20px);
 
             &__title-amount {
+                @include normal-text;
                 margin-top: 30px;
                 font-family: 'ProximaNovaBold', sans-serif;
                 opacity: 0.5;
                 font-size: 14px;
                 font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
                 letter-spacing: 1px;
                 color: #ffffff;
             }
 
             &__title-fee {
+                @include normal-text;
                 margin-top: 30px;
                 font-family: 'ProximaNovaBold', sans-serif;
                 opacity: 0.5;
                 font-size: 14px;
                 font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
                 letter-spacing: 1px;
                 color: #ffffff;
             }
@@ -111,6 +105,7 @@
             &__input-groth,
             &__input-comment,
             &__input {
+                @include normal-text;
                 background: rgba(255, 255, 255, 0);
                 border: none;
                 width: 259px;
@@ -118,9 +113,6 @@
                 border-bottom: 1px solid rgba(255, 255, 255, .3);
                 font-size: 18px;
                 font-weight: 600;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
                 letter-spacing: 0.34px;
                 color: #c061e0;
                 resize:none;
@@ -133,92 +125,117 @@
             }
 
             &__input-comment {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #ffffff;
                 width: 335px;
             }
 
             &__input-groth:focus,
             &__input:focus {
+                @include normal-text;
                 font-family: 'ProximaNovaSemibold', sans-serif;
                 outline-width: 0;
                 font-size: 18px;
                 font-weight: 600;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
                 letter-spacing: 0.34px;
                 color: #c061e0;
             }
 
             &__input-comment:focus {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 outline-width: 0;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: #ffffff;
             }
 
             &__input-groth::placeholder,
             &__input-comment::placeholder,
             &__input::placeholder {
+                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 14px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 color: rgba(255, 255, 255, .3);
             }
 
+            &__input.incorrect-amount {
+                border-bottom: 2px solid #ff625c;
+                color: #ff625c;
+            }
+    
+            &__input.incorrect-amount:focus,
+            &__input.incorrect-amount::placeholder {
+                color: #ff625c;
+            }
+
+            &__amount-validator {
+                @include normal-text;
+                margin-top: 10px;
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 13px;
+                line-height: 1.23;
+                color: #ff625c;
+            }
+
+            &__fee-validator {
+                @include normal-text;
+                margin-top: 5px;
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 13px;
+                line-height: 1.23;
+                color: #ff625c;
+            }
+
             &__currency {
+                @include normal-text;
                 margin-left: 23px;
                 font-size: 16px;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
                 letter-spacing: 2.4px;
                 text-align: right;
                 color: #ffffff;
             }
 
             &__info {
+                @include normal-text;
                 width: 335px;
                 margin-top: 30px;
+                margin-bottom: 10px;
                 font-family: 'ProximaNovaIT', sans-serif;
                 font-size: 14px;
                 opacity: .4;
-                font-weight: normal;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: normal;
                 text-align: center;
                 color: #ffffff;
             }
-
-            &__button {
-                margin: auto auto 20px auto;
-                
-                @include ui-button($btn-send, $btn-md) {
-                }
-    
-                @include ui-button-next-icon()
-            }
         }
     }
+}
+
+.controls {
+    margin: auto auto 20px auto;
+    &__button {
+        @include ui-button($btn-send, $btn-md) {
+        }
+
+        @include ui-button-next-icon()
+    }
+
+    &__button.disabled {
+        @include ui-button($btn-send, $btn-md) {
+            opacity: 0.2;
+            cursor: default;
+        }
+    }
+}
+
+.incorrect {
+    border-bottom: 2px solid #ff625c;
+    color: #ff625c;
+}
+
+.incorrect:focus {
+    color: #ff625c;
 }
 
 .total {
@@ -229,26 +246,21 @@
 
     &__container {
         &__header {
+            @include normal-text;
             font-family: 'ProximaNovaBold', sans-serif;
             opacity: 0.5;
             font-size: 14px;
             font-weight: bold;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
             letter-spacing: 1px;
             color: #ffffff;
         }
 
         &__value {
+            @include normal-text;
             margin-top: 10px;
             font-family: 'ProximaNovaBold', sans-serif;
             font-size: 14px;
             font-weight: bold;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
             color: #ffffff;
         }
     }
