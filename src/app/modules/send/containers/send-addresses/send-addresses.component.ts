@@ -11,8 +11,9 @@ import {
   selectSendData
 } from '../../../../store/selectors/wallet-state.selectors';
 import { WasmService } from './../../../../wasm.service';
-
+import { debounceTime } from 'rxjs/operators';
 import { globalConsts, routes } from '@consts';
+import Big from 'big.js';
 
 @Component({
   selector: 'app-send-addresses',
@@ -126,6 +127,11 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     if (this.sendForm.value.address.length > 0) {
       this.addressInputUpdated(this.sendForm.value.address);
     }
+
+    //this.searchCtrlSub =
+    // this.fullSendForm.get('amount').valueChanges.pipe(debounceTime(500)).subscribe(newValue => {
+    //   this.amountChanged(newValue);
+    // });
   }
 
   ngOnDestroy() {
@@ -201,6 +207,44 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     this.localParams.amountValidated = amountInputValue > 0;
     this.valuesValidationCheck();
   }
+
+  // amountChanged(amountInputValue) {
+  //   this.walletStatus$.subscribe((status) => {
+  //     if (amountInputValue > 0 && status.available > 0) {
+  //       const feeFullValue = new Big(this.fullSendForm.value.fee).div(globalConsts.GROTHS_IN_BEAM);
+  //       const available = new Big(status.available).div(globalConsts.GROTHS_IN_BEAM);
+  //       amountInputValue = new Big(amountInputValue);
+
+  //       if (parseFloat(amountInputValue.plus(feeFullValue)) > parseFloat(available)) {
+  //         this.localParams.isNotEnoughAmount = true;
+  //         this.localParams.notEnoughtValue = parseFloat(amountInputValue.plus(feeFullValue));
+  //       } else {
+  //         this.localParams.isNotEnoughAmount = false;
+  //       }
+
+  //       this.dataService.calculateTrChange(parseFloat(amountInputValue.times(globalConsts.GROTHS_IN_BEAM)
+  //         .plus(this.fullSendForm.value.fee)));
+  //       this.sendData$ = this.store.pipe(select(selectSendData));
+  //       const sub = this.sendData$.subscribe(sendData => {
+  //         if (parseFloat(sendData.change) > 0) {
+  //           sub.unsubscribe();
+  //           this.stats.change = parseFloat(new Big(sendData.change).div(globalConsts.GROTHS_IN_BEAM));
+  //           this.stats.amountToSend = parseFloat(new Big(parseFloat(amountInputValue) > 0 ? parseFloat(amountInputValue) : 0));
+  //           this.stats.totalUtxo = parseFloat(new Big(this.stats.amountToSend).plus(this.stats.change).plus(feeFullValue));
+  //           if (parseFloat(amountInputValue.plus(feeFullValue)) > parseFloat(available)) {
+  //             this.stats.remaining = 0;
+  //           } else {
+  //             this.stats.remaining = parseFloat(available.minus(this.stats.totalUtxo));
+  //           }
+  //         }
+  //       });
+  //     } else {
+  //       this.stats.totalUtxo = 0;
+  //       this.stats.amountToSend = 0;
+  //       this.stats.change = 0;
+  //       this.stats.remaining = 0;
+  //     }
+  //   }).unsubscribe();
 
   addressInputUpdated(value) {
     const tokenJson = this.wasmService.convertTokenToJson(value);

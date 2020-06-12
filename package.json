@@ -33,6 +33,7 @@
     "@ngrx/store-devtools": "^8.6.0",
     "@ngx-pwa/local-storage": "^8.2.3",
     "angularx-qrcode": "^2.1.0",
+    "big.js": "^5.2.2",
     "browser-passworder": "^2.0.3",
     "core-js": "^2.6.11",
     "extensionizer": "^1.0.1",

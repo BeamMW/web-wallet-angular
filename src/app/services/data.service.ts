@@ -32,7 +32,6 @@ import { WasmService } from './../wasm.service';
 import { LoginService } from './login.service';
 import { WebsocketService } from './websocket.service';
 import { routes } from '@consts';
-
 @Injectable({
   providedIn: 'root'
 })

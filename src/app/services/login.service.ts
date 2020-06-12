@@ -4,6 +4,7 @@ import { Subject, Observable, Subscription } from 'rxjs';
 import { webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { map } from 'rxjs/operators';
 import { WasmService } from './../wasm.service';
+import { environment } from '@environment';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +42,7 @@ export class LoginService {
     }
 
     connect() {
-        this.subject = new WebSocketSubject('ws://3.222.86.179:20000/ws');
+        this.subject = new WebSocketSubject(environment.ws);
 
         this.subject.subscribe(
           (msg) => {

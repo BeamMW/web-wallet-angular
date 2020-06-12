@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  ws: 'ws://127.0.0.1:8080',
+  ws: 'ws://127.0.0.1:20000/ws',
   assetsPath: '/assets',
 };
 
