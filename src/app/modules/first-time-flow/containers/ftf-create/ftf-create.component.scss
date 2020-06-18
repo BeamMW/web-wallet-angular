@@ -9,7 +9,7 @@
 .background {
     position: absolute;
     overflow: hidden;
-    height: 100%;
+    height: calc(100% - 20px);
     width: 100%;
     position: absolute;
 
@@ -19,7 +19,7 @@
 }
 
 .create {
-    min-height: 550px;
+    min-height: 530px;
     display: flex;
     flex-direction: column;
     
@@ -45,7 +45,6 @@
     &__create-button {
         text-align: center;
         margin-top: auto;
-        margin-bottom: 132px;
         z-index: 10;
         
         @include ui-button($btn-open-wallet, $btn-lg) {
@@ -55,6 +54,19 @@
         }
 
         @include ui-button-create-wallet-icon()
+    }
+
+    &__restore-beta {
+        margin-top: 20px;
+        margin-bottom: 94px;
+        height: 18px;
+        @include normal-text;
+        opacity: 0.5;
+        font-family: 'ProximaNovaIT', sans-serif;
+        font-size: 14px;
+        line-height: 1.29;
+        text-align: center;
+        color: #ffffff;
     }
 }
 
@@ -88,7 +100,6 @@
 
         &__create-button {
             margin-top: auto;
-            margin-bottom: 143px;
             
             @include ui-button($btn-open-wallet, $btn-full-xlg) {
                 width: 198px;
@@ -97,6 +108,19 @@
             }
     
             @include ui-button-create-wallet-icon()
+        }
+
+        &__restore-beta {
+            margin-top: 20px;
+            margin-bottom: 105px;
+            height: 18px;
+            @include normal-text;
+            opacity: 0.5;
+            font-family: 'ProximaNovaIT', sans-serif;
+            font-size: 14px;
+            line-height: 1.29;
+            text-align: center;
+            color: #ffffff;
         }
     }
 }

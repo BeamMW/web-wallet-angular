@@ -11,6 +11,7 @@ import { WindowService } from './../../../services';
 })
 export class HeaderWithoutLogoComponent implements OnInit {
   public iconFull: string = `${environment.assetsPath}/images/shared/containers/header/icon-full-view.svg`;
+  public iconBeta: string = `${environment.assetsPath}/images/shared/containers/header/icon-attention.svg`;
   public isFullScreen = false;
 
   constructor(private windowService: WindowService) {

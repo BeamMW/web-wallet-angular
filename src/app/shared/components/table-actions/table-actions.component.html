@@ -17,23 +17,35 @@
             <img class="actions-icon" [src]="repeatIcon">
             <span class="actions-text">Repeat transaction</span>
         </button>
-        <button mat-menu-item (click)="cancelTransactionClicked()">
-            <img class="actions-icon" [src]="cancelIcon">
-            <span class="actions-text">Cancel transaction</span>
+        <button mat-menu-item 
+            (click)="cancelTransactionClicked()"
+            (mouseover)="componentIcons.cancelActualIcon = componentIcons.cancelIconActive"
+            (mouseout)="componentIcons.cancelActualIcon = componentIcons.cancelIcon">
+                <img class="actions-icon" [src]="componentIcons.cancelActualIcon">
+                <span class="actions-text">Cancel transaction</span>
         </button>
-        <button mat-menu-item>
-            <img class="actions-icon" [src]="deleteIcon">
-            <span class="actions-text">Delete transaction</span>
+        <button mat-menu-item
+            (click)="deleteTransactionClicked()"
+            (mouseover)="componentIcons.deleteActualIcon = componentIcons.deleteIconActive"
+            (mouseout)="componentIcons.deleteActualIcon = componentIcons.deleteIcon">
+                <img class="actions-icon" [src]="componentIcons.deleteActualIcon">
+                <span class="actions-text">Delete transaction</span>
         </button>
     </ng-container>
     <ng-container *ngIf="tableType === tableTypesConsts.TRANSACTIONS_NOT_SENT">
-        <button mat-menu-item (click)="cancelTransactionClicked()">
-            <img class="actions-icon" [src]="cancelIcon">
-            <span class="actions-text">Cancel transaction</span>
+        <button mat-menu-item 
+            (click)="cancelTransactionClicked()"
+            (mouseover)="componentIcons.cancelActualIcon = componentIcons.cancelIconActive"
+            (mouseout)="componentIcons.cancelActualIcon = componentIcons.cancelIcon">
+                <img class="actions-icon" [src]="componentIcons.cancelActualIcon">
+                <span class ="actions-text">Cancel transaction</span>
         </button>
-        <button mat-menu-item>
-            <img class="actions-icon" [src]="deleteIcon">
-            <span class="actions-text">Delete transaction</span>
+        <button mat-menu-item
+            (click)="deleteTransactionClicked()"
+            (mouseover)="componentIcons.deleteActualIcon = componentIcons.deleteIconActive"
+            (mouseout)="componentIcons.deleteActualIcon = componentIcons.deleteIcon">
+                <img class="actions-icon" [src]="componentIcons.deleteActualIcon">
+                <span class="actions-text">Delete transaction</span>
         </button>
     </ng-container>
     <ng-container *ngIf="tableType === tableTypesConsts.ADDRESSES">
@@ -49,7 +61,7 @@
             <img class="actions-icon" [src]="copyIcon">
             <span class="actions-text">Copy address</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="deleteTransactionClicked()">
             <img class="actions-icon" [src]="deleteIcon">
             <span class="actions-text">Delete address</span>
         </button>

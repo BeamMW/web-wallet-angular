@@ -31,7 +31,9 @@ import { Router } from '@angular/router';
 import { WasmService } from './../wasm.service';
 import { LoginService } from './login.service';
 import { WebsocketService } from './websocket.service';
+import * as passworder from 'browser-passworder';
 import { routes } from '@consts';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -387,10 +389,18 @@ export class DataService {
     });
   }
 
-  changePassword(newPass) {
+  changePassword(newPass, seedValue, idValue) {
     this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.id === 16) {
         this.commonActionSub.unsubscribe();
+
+        passworder.encrypt(newPass, {seed: seedValue, id: idValue}).then((result) => {
+          this.saveWallet(result);
+        });
+
+        this.walletParams.pass = newPass;
+        this.walletParams.seed = seedValue;
+        this.walletParams.walletId = idValue;
       }
     });
     this.websocketService.send({
@@ -414,6 +424,23 @@ export class DataService {
         jsonrpc: '2.0',
         id: 15,
         method: 'tx_cancel',
+        params:
+        {
+          txId,
+        }
+    });
+  }
+
+  deleteTransaction(txId) {
+    this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
+      if (msg.id === 18) {
+        this.commonActionSub.unsubscribe();
+      }
+    });
+    this.websocketService.send({
+        jsonrpc: '2.0',
+        id: 18,
+        method: 'tx_delete',
         params:
         {
           txId,

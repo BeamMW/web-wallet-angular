@@ -71,10 +71,7 @@ export class ChangePasswordPopupComponent implements OnInit, OnDestroy {
     $event.stopPropagation();
     if (newPass === newPassConfirm && (newPass !== null && newPass.length > 0)) {
       if (newPass !== oldPass) {
-        this.dataService.changePassword(newPass);
-        passworder.encrypt(newPass, {seed: this.walletData.seed, id: this.walletData.id}).then((result) => {
-            this.dataService.saveWallet(result);
-        });
+        this.dataService.changePassword(newPass, this.walletData.seed, this.walletData.id);
         this.closePopup();
       } else {
         this.isSameOld = true;

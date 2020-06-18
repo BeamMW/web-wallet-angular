@@ -28,15 +28,36 @@ export class HeaderPopupComponent implements OnInit {
 
   @ViewChild('control', {static: true}) control: ElementRef;
 
-  public fullViewIcon = `${environment.assetsPath}/images/shared/components/header-popup/icon-full-view.svg`;
-  public exportIcon = `${environment.assetsPath}/images/shared/components/header-popup/ic-share-white.svg`;
-  public importIcon = `${environment.assetsPath}/images/shared/components/header-popup/ic-receive-blue.svg`;
-  public proofIcon = `${environment.assetsPath}/images/shared/components/header-popup/icon-proof.svg`;
-  public buyBeamIcon = `${environment.assetsPath}/images/shared/components/header-popup/icon-where-to-buy-beam.svg`;
-  public settingsIcon = `${environment.assetsPath}/images/shared/components/header-popup/icon-settings.svg`;
-  public logoutIcon = `${environment.assetsPath}/images/shared/components/menu/icon-logout.svg`;
-  public iconDisabledPrivacy = `${environment.assetsPath}/images/shared/components/header-popup/icn-eye.svg`;
-  public iconEnabledPrivacy = `${environment.assetsPath}/images/shared/components/header-popup/icn-eye-crossed.svg`;
+  private basePath = `${environment.assetsPath}/images/shared/components/header-popup/`;
+  public componentIcons = {
+    fullViewIconActive: this.basePath + `icon-full-view-active.svg`,
+    fullViewIcon: this.basePath + `icon-full-view.svg`,
+    fullViewActualIcon: this.basePath + `icon-full-view.svg`,
+    exportIconActive: this.basePath + `icon-export-active.svg`,
+    exportIcon: this.basePath + `icon-export.svg`,
+    exportActualIcon: this.basePath + `icon-export.svg`,
+    importIconActive: this.basePath + `icon-import-active.svg`,
+    importIcon: this.basePath + `icon-import.svg`,
+    importActualIcon: this.basePath + `icon-import.svg`,
+    proofIcon: this.basePath + `icon-proof.svg`,
+    proofIconActive: this.basePath + `icon-proof-active.svg`,
+    proofActualIcon: this.basePath + `icon-proof.svg`,
+    buyBeamIcon: this.basePath + `icon-buy-beam.svg`,
+    buyBeamIconActive: this.basePath + `icon-buy-beam-active.svg`,
+    buyBeamActualIcon: this.basePath + `icon-buy-beam.svg`,
+    settingsIcon: this.basePath + `icon-settings.svg`,
+    settingsIconActive: this.basePath + `icon-settings-active.svg`,
+    settingsActualIcon: this.basePath + `icon-settings.svg`,
+    logoutIcon: this.basePath + `icon-logout.svg`,
+    logoutIconActive: this.basePath + `icon-logout-active.svg`,
+    logoutActualIcon: this.basePath + `icon-logout.svg`,
+    iconDisabledPrivacyActive: this.basePath + `icon-eye-active.svg`,
+    iconDisabledPrivacy: this.basePath + `icon-eye.svg`,
+    iconDisabledPrivacyActualIcon: this.basePath + `icon-eye.svg`,
+    iconEnabledPrivacyActive: this.basePath + `icon-eye-crossed-active.svg`,
+    iconEnabledPrivacy: this.basePath + `icon-eye-crossed.svg`,
+    iconEnabledPrivacyActualIcon: this.basePath + `icn-eye-crossed.svg`
+  };
 
   constructor(
     private store: Store<any>,
@@ -100,5 +121,15 @@ export class HeaderPopupComponent implements OnInit {
     this.store.dispatch(updatePrivacySetting({settingValue: this.privacyMode}));
     this.dataService.saveWalletOptions();
     this.isDropdownVisible = false;
+  }
+
+  securityModeMouseout() {
+    this.componentIcons.iconDisabledPrivacyActualIcon = this.componentIcons.iconDisabledPrivacy;
+    this.componentIcons.iconEnabledPrivacyActualIcon = this.componentIcons.iconEnabledPrivacy;
+  }
+
+  securityModeMouseover() {
+    this.componentIcons.iconDisabledPrivacyActualIcon = this.componentIcons.iconDisabledPrivacyActive;
+    this.componentIcons.iconEnabledPrivacyActualIcon = this.componentIcons.iconEnabledPrivacyActive;
   }
 }

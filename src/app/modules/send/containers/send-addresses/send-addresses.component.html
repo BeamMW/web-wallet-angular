@@ -63,8 +63,7 @@
                         <div class="container__values__title-amount">AMOUNT</div>
                         <div class="form-group">
                             <input class="container__values__input-amount"
-                                name="amount" formControlName="amount" 
-                                (input)="amountChanged($event.target.value)"
+                                name="amount" formControlName="amount"
                                 appNumbersOnly
                                 [class.incorrect-amount]="localParams.isNotEnoughAmount"
                                 placeholder="Enter amount"/>

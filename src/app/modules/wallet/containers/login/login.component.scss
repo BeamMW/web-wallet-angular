@@ -9,7 +9,7 @@
 .background {
     position: absolute;
     overflow: hidden;
-    height: 100%;
+    height: calc(100% - 20px);
     width: 100%;
     position: absolute;
     z-index: 1;
@@ -20,7 +20,7 @@
 }
 
 .login {
-    min-height: 550px;
+    min-height: 530px;
     display: flex;
     flex-direction: column;
 
@@ -133,12 +133,12 @@
 
 @media (min-width: 400px) {
     .login {
-        height: 100%;
+        height: calc(100% - 20px);
 
         &__logo {
            width: 242px;
            height: 210px;
-           margin: 140px auto 0 auto;
+           margin: 120px auto 0 auto;
         }
 
         &__header-text {
@@ -159,6 +159,10 @@
             }
 
             @include ui-button-open-wallet-icon()
+        }
+
+        &__controls.incorrect {
+            margin-top: 12px;
         }
 
         &__subheader-text {

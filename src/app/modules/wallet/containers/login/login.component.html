@@ -15,7 +15,7 @@
             <div class="login__container__validator" *ngIf="!isCorrectPass">Incorrect password</div>
         </form>
     </div>
-    <div class="login__controls">
+    <div class="login__controls" [class.incorrect]="!isCorrectPass">
         <app-button class="open-button" (click)="submit()">open your wallet</app-button>
     </div>
 

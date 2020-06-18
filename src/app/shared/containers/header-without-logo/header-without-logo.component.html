@@ -1,7 +1,13 @@
-<header class="header" *ngIf="!isFullScreen">
-    <div class="header-status-wrapper"></div>
-    <div class="header-logo-wrapper"></div>
-    <div class="header-full-wrapper">
-        <img class="header__full-sc-control" (click)="openFull()" [src]="iconFull" />
+<header class="header">
+    <div class="header__beta">
+        <img class="header__beta__icon" [src]="iconBeta"/>
+        Beta version. Don’t store large amounts. 
+    </div>
+    <div class="header__container" *ngIf="!isFullScreen">
+        <div class="header-status-wrapper"></div>
+        <div class="header-logo-wrapper"></div>
+        <div class="header-full-wrapper">
+            <img class="header__container__full-sc-control" (click)="openFull()" [src]="iconFull" />
+        </div>
     </div>
 </header>

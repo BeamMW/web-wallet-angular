@@ -1,14 +1,20 @@
 <header class="header">
-    <div class="header-status-wrapper">
-        <div class="header__status">
-            <div class="header__status__icon"></div>
-            online
+    <div class="header__beta">
+        <img class="header__beta__icon" [src]="iconBeta"/>
+        Beta version. Don’t store large amounts. 
+    </div>
+    <div class="header__container">
+        <div class="header-status-wrapper">
+            <div class="header__container__status">
+                <div class="header__container__status__icon"></div>
+                online
+            </div>
         </div>
-    </div>
-    <div class="header-logo-wrapper">
-        <app-header-logo class="header__logo"></app-header-logo>
-    </div>
-    <div class="header-full-wrapper">
-        <app-header-popup></app-header-popup>
+        <div class="header-logo-wrapper">
+            <app-header-logo class="header__container__logo"></app-header-logo>
+        </div>
+        <div class="header-full-wrapper">
+            <app-header-popup></app-header-popup>
+        </div>
     </div>
 </header>

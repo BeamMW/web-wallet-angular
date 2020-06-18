@@ -1,46 +1,70 @@
+@import 'ui-mixins';
+
 :host {
     display: block;
     z-index: 100;
 }
 
 .header {
-    background: #042548;
-    align-items: center;
     display: flex;
-    height: 50px;
+    flex-direction: column;
 
-    width: 100%;
-
-    &__status {
+    &__beta {
+        @include normal-text;
+        height: 20px;
+        width: 100%;
+        background-color: #39fdf2;
+        font-family: 'ProximaNovaSemiBold', sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.5;
+        text-align: center;
+        color: #042548;
         display: flex;
-        margin-left: 20px;
-        font-size: 14px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
-        color: #8da1ad;
-        
+        align-items: center;
+        justify-content: center;
+      
         &__icon {
-            margin-right: 10px;
-            margin-top: 3px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50px;
-            box-shadow: 0 0 5px 0 rgba(0, 246, 210, 0.7);
-            background-color: #00f6d2;
+            width: 14px;
+            height: 14px;
+            margin-right: 5px;
         }
     }
 
-    &__full-sc-control {
-        margin-right: 20px;
-        cursor: pointer;
-    }
+    &__container {
+        height: 50px;
+        width: 100%;
+        background: #042548;
+        align-items: center;
+        display: flex;
+        
+        &__status {
+            @include normal-text;
+            display: flex;
+            margin-left: 20px;
+            font-size: 14px;
+            color: #8da1ad;
+            
+            &__icon {
+                margin-right: 10px;
+                margin-top: 3px;
+                width: 10px;
+                height: 10px;
+                border-radius: 50px;
+                box-shadow: 0 0 5px 0 rgba(0, 246, 210, 0.7);
+                background-color: #00f6d2;
+            }
+        }
 
-    @media (min-width: 601px) {
         &__full-sc-control {
-            display: none;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        @media (min-width: 601px) {
+            &__full-sc-control {
+                display: none;
+            }
         }
     }
 }

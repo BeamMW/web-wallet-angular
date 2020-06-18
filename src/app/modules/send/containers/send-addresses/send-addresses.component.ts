@@ -45,6 +45,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   };
 
   private sub: Subscription;
+  private changeSub: Subscription;
 
   stats = {
     totalUtxo: 0,
@@ -97,6 +98,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     this.sub = dataService.changeEmitted$.subscribe(emittedState => {
       this.localParams.popupOpened = emittedState;
     });
+    this.sendData$ = this.store.pipe(select(selectSendData));
   }
 
   submit() {
@@ -129,9 +131,9 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     }
 
     //this.searchCtrlSub =
-    // this.fullSendForm.get('amount').valueChanges.pipe(debounceTime(500)).subscribe(newValue => {
-    //   this.amountChanged(newValue);
-    // });
+    this.fullSendForm.get('amount').valueChanges.pipe(debounceTime(500)).subscribe(newValue => {
+      this.amountChanged(newValue);
+    });
   }
 
   ngOnDestroy() {
@@ -169,82 +171,55 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   amountChanged(amountInputValue) {
-    this.walletStatus$.subscribe((status) => {
-      const feeFullValue = this.fullSendForm.value.fee / globalConsts.GROTHS_IN_BEAM;
-      const available = status.available / globalConsts.GROTHS_IN_BEAM;
-      amountInputValue = parseFloat(amountInputValue);
+    if (amountInputValue.length > 0) {
+      this.walletStatus$.subscribe((status) => {
+        amountInputValue = new Big(amountInputValue);
+        if (parseFloat(amountInputValue) > 0 && status.available > 0) {
+          const feeFullValue = new Big(this.fullSendForm.value.fee).div(globalConsts.GROTHS_IN_BEAM);
+          const available = new Big(status.available).div(globalConsts.GROTHS_IN_BEAM);
 
-      if ((amountInputValue + feeFullValue) > available) {
-        this.localParams.isNotEnoughAmount = true;
-        this.localParams.notEnoughtValue = amountInputValue + feeFullValue;
-      } else {
-        this.localParams.isNotEnoughAmount = false;
-      }
-
-      if (amountInputValue > 0 && status.available > 0) {
-        this.dataService.calculateTrChange(amountInputValue * globalConsts.GROTHS_IN_BEAM + this.fullSendForm.value.fee);
-        this.sendData$ = this.store.pipe(select(selectSendData));
-        this.sendData$.subscribe(sendData => {
-          if (sendData.change > 0) {
-            this.stats.change = sendData.change / globalConsts.GROTHS_IN_BEAM;
-            this.stats.amountToSend = amountInputValue > 0 ? amountInputValue : 0;
-            this.stats.totalUtxo = this.stats.amountToSend + (this.stats.change + feeFullValue);
-            if ((amountInputValue + feeFullValue) > available) {
-              this.stats.remaining = 0;
-            } else {
-              this.stats.remaining = available - this.stats.totalUtxo;
-            }
+          if (parseFloat(amountInputValue.plus(feeFullValue)) > parseFloat(available)) {
+            this.localParams.isNotEnoughAmount = true;
+            this.localParams.notEnoughtValue = parseFloat(amountInputValue.plus(feeFullValue));
+          } else {
+            this.localParams.isNotEnoughAmount = false;
           }
-        });
-      } else {
-        this.stats.totalUtxo = 0;
-        this.stats.amountToSend = 0;
-        this.stats.change = 0;
-        this.stats.remaining = 0;
-      }
-    }).unsubscribe();
 
-    this.localParams.amountValidated = amountInputValue > 0;
-    this.valuesValidationCheck();
+          this.dataService.calculateTrChange(parseFloat(amountInputValue.times(globalConsts.GROTHS_IN_BEAM)
+            .plus(this.fullSendForm.value.fee)));
+
+          this.sendData$.subscribe(sendData => {
+            const change = parseFloat(sendData.change);
+            if (change > 0) {
+              this.stats.change = parseFloat(new Big(sendData.change).div(globalConsts.GROTHS_IN_BEAM));
+              this.stats.amountToSend = parseFloat(amountInputValue);
+              this.stats.totalUtxo = parseFloat(new Big(this.stats.amountToSend).plus(this.stats.change).plus(feeFullValue));
+              if (parseFloat(amountInputValue.plus(feeFullValue)) > parseFloat(available)) {
+                this.stats.remaining = 0;
+              } else {
+                this.stats.remaining = parseFloat(available.minus(this.stats.totalUtxo));
+              }
+            } else if (change === 0) {
+              this.stats.amountToSend = parseFloat(amountInputValue);
+              this.stats.totalUtxo = parseFloat(new Big(this.stats.amountToSend).plus(feeFullValue));
+            }
+          });
+        } else {
+          this.resetStats();
+        }
+      }).unsubscribe();
+    } else {
+      this.localParams.isNotEnoughAmount = false;
+      this.resetStats();
+    }
   }
 
-  // amountChanged(amountInputValue) {
-  //   this.walletStatus$.subscribe((status) => {
-  //     if (amountInputValue > 0 && status.available > 0) {
-  //       const feeFullValue = new Big(this.fullSendForm.value.fee).div(globalConsts.GROTHS_IN_BEAM);
-  //       const available = new Big(status.available).div(globalConsts.GROTHS_IN_BEAM);
-  //       amountInputValue = new Big(amountInputValue);
-
-  //       if (parseFloat(amountInputValue.plus(feeFullValue)) > parseFloat(available)) {
-  //         this.localParams.isNotEnoughAmount = true;
-  //         this.localParams.notEnoughtValue = parseFloat(amountInputValue.plus(feeFullValue));
-  //       } else {
-  //         this.localParams.isNotEnoughAmount = false;
-  //       }
-
-  //       this.dataService.calculateTrChange(parseFloat(amountInputValue.times(globalConsts.GROTHS_IN_BEAM)
-  //         .plus(this.fullSendForm.value.fee)));
-  //       this.sendData$ = this.store.pipe(select(selectSendData));
-  //       const sub = this.sendData$.subscribe(sendData => {
-  //         if (parseFloat(sendData.change) > 0) {
-  //           sub.unsubscribe();
-  //           this.stats.change = parseFloat(new Big(sendData.change).div(globalConsts.GROTHS_IN_BEAM));
-  //           this.stats.amountToSend = parseFloat(new Big(parseFloat(amountInputValue) > 0 ? parseFloat(amountInputValue) : 0));
-  //           this.stats.totalUtxo = parseFloat(new Big(this.stats.amountToSend).plus(this.stats.change).plus(feeFullValue));
-  //           if (parseFloat(amountInputValue.plus(feeFullValue)) > parseFloat(available)) {
-  //             this.stats.remaining = 0;
-  //           } else {
-  //             this.stats.remaining = parseFloat(available.minus(this.stats.totalUtxo));
-  //           }
-  //         }
-  //       });
-  //     } else {
-  //       this.stats.totalUtxo = 0;
-  //       this.stats.amountToSend = 0;
-  //       this.stats.change = 0;
-  //       this.stats.remaining = 0;
-  //     }
-  //   }).unsubscribe();
+  resetStats() {
+    this.stats.totalUtxo = 0;
+    this.stats.amountToSend = 0;
+    this.stats.change = 0;
+    this.stats.remaining = 0;
+  }
 
   addressInputUpdated(value) {
     const tokenJson = this.wasmService.convertTokenToJson(value);

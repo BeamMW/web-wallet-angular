@@ -148,8 +148,8 @@ export class SettingsMainComponent implements OnInit {
   ngOnInit() {
   }
 
-  sideMenuClicked(event) {
-    event.stopPropagation();
+  sideMenuClicked($event) {
+    this.dataService.clickedElement = $event.currentTarget;
     this.router.navigate([this.router.url, { outlets: { sidemenu: 'menu' }}]);
   }
 
