@@ -1,0 +1,22 @@
+<div class="return" appClickOutside (clickOutside)="closePopup()">
+    <div class="return__title">Return to seed phrase</div>
+    <div class="return__content">
+        <ng-container *ngIf="isFullScreen">
+            <p>If you return to seed phrase, it would be changed</p>
+            <p>and your local password won’t be saved.</p>
+        </ng-container>
+        <ng-container *ngIf="!isFullScreen">
+            <p>If you return to seed phrase, it would be</p>
+            <p>changed and your local password won’t be</p>
+            <p>saved.</p>
+        </ng-container>
+    </div>
+    <div class="return__controls">
+        <div class="return__controls__cancel">
+            <app-button class="copy-button" (click)="cancelClicked($event)">cancel</app-button>
+        </div>
+        <div class="return__controls__done">
+            <app-button class="copy-button" (click)="submit($event)">return</app-button>
+        </div>
+    </div>
+</div>

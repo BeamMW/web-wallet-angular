@@ -18,7 +18,6 @@ import {
   EnterDnsPopupComponent,
   CheckPassConfirmationPopupComponent,
   ChangePasswordPopupComponent,
-  SeedVerificationPopupComponent,
   ReportPopupComponent
 } from './components';
 
@@ -40,7 +39,6 @@ import {
     EnterDnsPopupComponent,
     CheckPassConfirmationPopupComponent,
     ChangePasswordPopupComponent,
-    SeedVerificationPopupComponent,
     ReportPopupComponent
   ],
   imports: [

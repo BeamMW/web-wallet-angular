@@ -9,6 +9,10 @@ import {
   FtfViewSeedComponent
 } from './containers';
 
+import {
+  ReturnToSeedPopupComponent,
+  SaveSeedPopupComponent
+} from './components';
 
 import { MainLayoutComponent } from '@shared/layouts';
 import {
@@ -42,6 +46,8 @@ const routes: Routes = [{
         path: '', component: HeaderWithLinkComponent, outlet: 'header'
       }, {
         path: '', component: FtfConfirmSeedComponent
+      }, {
+        path: 'return-to-seed', component: ReturnToSeedPopupComponent, outlet: 'popup',
       }
     ]
   }, {
@@ -50,6 +56,8 @@ const routes: Routes = [{
         path: '', component: HeaderWithLinkComponent, outlet: 'header'
       }, {
         path: '', component: FtfCreatePasswordComponent
+      }, {
+        path: 'return-to-seed', component: ReturnToSeedPopupComponent, outlet: 'popup',
       }
     ]
   }, {
@@ -58,6 +66,8 @@ const routes: Routes = [{
         path: '', component: HeaderWithLinkComponent, outlet: 'header'
       }, {
         path: '', component: FtfViewSeedComponent
+      }, {
+        path: 'save-seed', component: SaveSeedPopupComponent, outlet: 'popup',
       }
     ]
   }]

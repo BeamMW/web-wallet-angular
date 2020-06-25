@@ -49,8 +49,8 @@ export class RemoveWalletConfirmationPopupComponent implements OnInit, OnDestroy
     $event.stopPropagation();
     this.sub = this.wallet$.subscribe(wallet => {
       passworder.decrypt(this.confirmForm.value.password, wallet).then((result) => {
-        this.websocketService.disconnect();
         this.loginService.disconnect();
+        this.websocketService.disconnect();
         this.dataService.clearWalletData();
         this.router.navigate(['/initialize/create']);
       }).catch(error => {

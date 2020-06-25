@@ -1,0 +1,22 @@
+<div class="save" appClickOutside (clickOutside)="closePopup()">
+    <div class="save__title">Save seed phrase</div>
+    <div class="save__content">
+        <ng-container *ngIf="isFullScreen">
+            <p>Please write the seed phrase down. Storing it in a file makes it</p>
+            <p>prone to cyber attacks and, therefore, less secure.</p>
+        </ng-container>
+        <ng-container *ngIf="!isFullScreen">
+            <p>Please write the seed phrase down. Storing it in</p>
+            <p>a file makes it prone to cyber attacks and,</p>
+            <p>therefore, less secure.</p>
+        </ng-container>
+    </div>
+    <div class="save__controls">
+        <div class="save__controls__cancel">
+            <app-button class="copy-button" (click)="cancelClicked($event)">cancel</app-button>
+        </div>
+        <div class="save__controls__done">
+            <app-button class="copy-button" (click)="submit($event)">done</app-button>
+        </div>
+    </div>
+</div>

@@ -69,6 +69,48 @@
         }
     }
 
+    &__validate {
+        height: 101px;
+        border-radius: 10px;
+        background-color: rgba(0, 240, 255, 0.15);
+        display: flex;
+        flex-direction: column;
+        margin: 15px 20px 0 20px;
+
+        &__text {
+            @include normal-text;
+            font-family: 'ProximaNova', sans-serif;
+            font-size: 14px;
+            text-align: center;
+            margin: 0 20px;
+            color: #ffffff;
+        }
+
+        &__text.enough {
+            margin-top: 22px;
+        }
+        
+        &__link {
+            @include normal-text;
+            font-family: 'ProximaNova', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            color: #00f6d2;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        &__close-icon {
+            margin-top: 10px;
+            margin-right: 10px;
+            width: 14px;
+            height: 14px;
+            align-self: flex-end;
+            cursor: pointer;
+        }
+    }
+
     &__available {
         max-height: 88px;
         border-radius: 10px;
@@ -218,7 +260,7 @@
             &__empty-tr-text {
                 @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
-                margin: 20px auto auto auto;;
+                margin: 20px auto 30px auto;;
                 font-size: 12px;
                 line-height: 1.67;
                 text-align: center;
@@ -304,6 +346,9 @@
                     line-height: 1.29;
                     text-align: center;
                     color: #ffffff;
+                }
+
+                &__text.enough {
                     margin-top: 22px;
                 }
                 
@@ -315,6 +360,15 @@
                     text-align: center;
                     color: #00f6d2;
                     margin-top: 20px;
+                    cursor: pointer;
+                }
+
+                &__close-icon {
+                    margin-top: 10px;
+                    margin-right: 10px;
+                    width: 14px;
+                    height: 14px;
+                    align-self: flex-end;
                     cursor: pointer;
                 }
             }

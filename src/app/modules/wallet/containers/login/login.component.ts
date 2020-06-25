@@ -41,8 +41,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.dataService.activateWallet();
-    this.dataService.loadWalletSettings();
-    this.dataService.loadWalletContacts();
   }
 
   ngOnDestroy() {

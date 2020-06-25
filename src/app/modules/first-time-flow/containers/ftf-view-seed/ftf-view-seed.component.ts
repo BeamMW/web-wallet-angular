@@ -6,7 +6,7 @@ import { Store, select } from '@ngrx/store';
 import { selectWasmState } from '../../../../store/selectors/wallet-state.selectors';
 import { Observable, Subscription, from } from 'rxjs';
 import { addSeedPhrase } from './../../../../store/actions/wallet.actions';
-import { WindowService } from '../../../../services';
+import { WindowService, DataService } from '../../../../services';
 import { routes } from '@consts';
 
 @Component({
@@ -22,13 +22,21 @@ export class FtfViewSeedComponent implements OnInit, OnDestroy {
   private sub: Subscription;
   public isFullScreen = false;
   seedState = [];
+  popupOpened = false;
 
   constructor(
       private store: Store<any>,
       private wasm: WasmService,
       private windowService: WindowService,
+      private dataService: DataService,
       public router: Router) {
     this.isFullScreen = this.windowService.isFullSize();
+
+    dataService.changeEmitted$.subscribe(emittedState => {
+      if (emittedState.popupOpened !== undefined) {
+        this.popupOpened = emittedState.popupOpened;
+      }
+    });
   }
 
   ngOnInit() {
@@ -51,23 +59,34 @@ export class FtfViewSeedComponent implements OnInit, OnDestroy {
     }
   }
 
-  completeVerificationClicked() {
-    const navigationExtras: NavigationExtras = {state: {seed: this.seed}};
-    this.router.navigate([routes.FTF_PASSWORD_COMPLETE_ROUTE], navigationExtras);
+  completeVerificationClicked($event) {
+    $event.stopPropagation();
+    const navigationExtras: NavigationExtras = {
+      state: {
+        seed: this.seed,
+        backLink: routes.FTF_VIEW_SEED_ROUTE,
+        nextLink: routes.FTF_PASSWORD_CREATE_ROUTE,
+        isFromFTF: true,
+        directionLink: routes.FTF_CONFIRM_SEED_ROUTE
+      }
+    };
+    this.router.navigate([this.router.url, { outlets: { popup: 'save-seed' }}], navigationExtras);
+  }
+
+  laterClicked($event) {
+    $event.stopPropagation();
+    const navigationExtras: NavigationExtras = {
+      state: {
+        seedConfirmed: false,
+        seed: this.seed,
+        directionLink: routes.FTF_PASSWORD_CREATE_ROUTE
+      }
+    };
+    this.router.navigate([this.router.url, { outlets: { popup: 'save-seed' }}], navigationExtras);
   }
 
   backClicked(event) {
     event.stopPropagation();
     this.router.navigate([routes.FTF_GENERATE_SEED_ROUTE]);
-  }
-
-  laterClicked() {
-    const navigationExtras: NavigationExtras = {
-      state: {
-        seedConfirmed: false,
-        seed: this.seed
-      }
-    };
-    this.router.navigate([routes.FTF_PASSWORD_CREATE_ROUTE], navigationExtras);
   }
 }

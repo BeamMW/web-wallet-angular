@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {Router} from '@angular/router';
-import { ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import { DataService, WindowService } from './../../../../services';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl} from '@angular/forms';
 import * as passworder from 'browser-passworder';
 import { Store, select } from '@ngrx/store';
 import { selectWalletData } from './../../../../store/selectors/wallet-state.selectors';
+import { routes } from '@consts';
 
 @Component({
   selector: 'app-seed-verification-popup',
@@ -47,8 +47,16 @@ export class SeedVerificationPopupComponent implements OnInit, OnDestroy {
     $event.stopPropagation();
     this.wallet$.subscribe(wallet => {
       passworder.decrypt(this.confirmForm.value.password, wallet).then((result) => {
-        // redirect to seed verification
+        const navigationExtras: NavigationExtras = {
+          state: {
+            seed: result.seed,
+            backLink: routes.WALLET_MAIN_ROUTE,
+            nextLink: routes.WALLET_MAIN_ROUTE,
+            isFromFTF: false
+          }
+        };
         this.closePopup(true);
+        this.router.navigate([routes.FTF_CONFIRM_SEED_ROUTE], navigationExtras);
       }).catch(error => {
         this.isCorrectPass = false;
       });

@@ -33,9 +33,9 @@
             <div class="receive__content__info">For the transaction to complete, you should get online 
                 during the 12 hours after Beams are sent.</div>
             <div class="receive__content__controls">
-                <div class="receive__content__button-qr">
+                <!-- <div class="receive__content__button-qr">
                     <app-button class="qr-button" (click)="qrShowClicked($event)">show QR</app-button>
-                </div>
+                </div> -->
                 <div class="receive__content__button-copy">
                     <app-button class="copy-button" ngxClipboard [cbContent]="generatedToken" (click)="backClicked($event)">
                         copy transaction token
@@ -73,11 +73,11 @@
                         </div>
                     </form>
                 </div>
-                <div class="receive__container__content__qr">
+                <!-- <div class="receive__container__content__qr">
                     <qrcode class="receive__container__content__qr__value" 
                             [qrdata]="qrCode" 
                             [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
-                </div>
+                </div> -->
             </div>
             <div class="receive__container__bottom">
                 <div class="receive__container__bottom__info">For the transaction to complete, you should get online 

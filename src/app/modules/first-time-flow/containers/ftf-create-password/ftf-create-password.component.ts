@@ -31,7 +31,8 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
     isFullScreen: false,
     isNewPassValidated: true,
     emptyPass: false,
-    emptyConfirmPass: false
+    emptyConfirmPass: false,
+    popupOpened: false
   };
 
   private wasmState$: Observable<any>;
@@ -61,6 +62,12 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
     } catch (e) {
         this.router.navigate([routes.FTF_VIEW_SEED_ROUTE]);
     }
+
+    dataService.changeEmitted$.subscribe(emittedState => {
+      if (emittedState.popupOpened !== undefined) {
+        this.localParams.popupOpened = emittedState.popupOpened;
+      }
+    });
   }
 
   ngOnInit() {
@@ -121,7 +128,7 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
 
   backClicked(event) {
     event.stopPropagation();
-    this.router.navigate([routes.FTF_VIEW_SEED_ROUTE]);
+    this.router.navigate([this.router.url, { outlets: { popup: 'return-to-seed' }}]);
   }
 
   ngOnDestroy() {

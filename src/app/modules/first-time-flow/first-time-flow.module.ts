@@ -11,6 +11,11 @@ import {
   FtfViewSeedComponent
 } from './containers';
 
+import {
+  SaveSeedPopupComponent,
+  ReturnToSeedPopupComponent
+} from './components';
+
 import { FirstTimeFlowRoutingModule } from './first-time-flow-routing.module';
 
 @NgModule({
@@ -19,7 +24,9 @@ import { FirstTimeFlowRoutingModule } from './first-time-flow-routing.module';
     FtfGenerateSeedComponent,
     FtfViewSeedComponent,
     FtfConfirmSeedComponent,
-    FtfCreatePasswordComponent
+    FtfCreatePasswordComponent,
+    SaveSeedPopupComponent,
+    ReturnToSeedPopupComponent
   ],
   imports: [
     FormsModule,

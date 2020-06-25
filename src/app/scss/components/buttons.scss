@@ -597,3 +597,23 @@
     }
   }
 }
+
+@mixin ui-button-return-icon {
+  ::ng-deep {
+    .ui-button__inner-wrapper {
+      @include common-button-wrapper;
+
+      .ui-button__icon {
+        background: url('/assets/images/modules/first-time-flow/components/return-to-seed-popup/icon-return-popup.svg');
+        @include common-button-icon;
+
+        @content;
+      }
+
+      .ui-button__text {
+        @include common-button-text;
+        margin-left: 10px;
+      }
+    }
+  }
+}

@@ -8,6 +8,7 @@
                     <app-button class="main__content__header__receive-button" [routerLink]="receiveRoute">receive</app-button>
                 </div>
                 <div class="main__content__state"
+                    *ngIf="walletStatus.available !== undefined"
                     [class.reduced]="walletStatus.receiving === 0 && walletStatus.sending === 0">
                     <div class="available">
                         <img class="available__logo" [src]="iconBeamFull">
@@ -20,7 +21,7 @@
                                 *ngIf="privacyMode">
                         </div>
                     </div>
-                    <ng-container *ngIf="(walletStatus.receiving > 0 || walletStatus.sending > 0)">
+                    <ng-container *ngIf="walletStatus.receiving > 0 || walletStatus.sending > 0">
                         <div class="main__content__state__separator"></div>
                         <div class="in-progress">
                             <div class="in-progress__sent">
@@ -43,14 +44,21 @@
                         </div>
                     </ng-container>
                 </div>
-            </ng-container>
-            <ng-container *ngIf="verificatedSetting !== null && !verificatedSetting">
-                <div class="main__content__validate">
-                    <div class="main__content__validate__text">
-                        Write down and validate your seed phrase so you can always recover your funds.
+                <ng-container *ngIf="!verificatedSetting && componentSettings.isValidationVisible">
+                    <div class="main__content__validate">
+                        <img class="main__content__validate__close-icon"
+                            [src]="iconClose"
+                            *ngIf="!componentSettings.isAvailableEnough"
+                            (click)="closeVerificationMessage()"/>
+                        <div class="main__content__validate__text" [class.enough]="componentSettings.isAvailableEnough">
+                            Write down and validate your seed phrase so you can always recover your funds.
+                        </div>
+                        <div class="main__content__validate__link" 
+                            (click)="seedVerificationClicked($event)">
+                                Secure your phrase
+                        </div>
                     </div>
-                    <div class="main__content__validate__link">Secure your phrase</div>
-                </div>
+                </ng-container>
             </ng-container>
             <ng-container *ngIf="transactions$ | async as transactions">
                 <ng-container>
@@ -116,6 +124,21 @@
                 <app-button class="main__controls__send-button" [routerLink]="sendRoute">send</app-button>
                 <app-button class="main__controls__receive-button" [routerLink]="receiveRoute">receive</app-button>
             </div>
+            <ng-container *ngIf="!verificatedSetting && componentSettings.isValidationVisible">
+                <div class="main__validate">
+                    <img class="main__validate__close-icon"
+                        [src]="iconClose"
+                        *ngIf="!componentSettings.isAvailableEnough"
+                        (click)="closeVerificationMessage()"/>
+                    <div class="main__validate__text" [class.enough]="componentSettings.isAvailableEnough">
+                        Write down and validate your seed phrase so you can always recover your funds.
+                    </div>
+                    <div class="main__validate__link" 
+                        (click)="seedVerificationClicked($event)">
+                            Complete verifications
+                    </div>
+                </div>
+            </ng-container>
             <div class="main__available">
                 <div class="main__available__title">AVAILABLE</div>
                 <div class="main__available__container" *ngIf="!privacyMode">

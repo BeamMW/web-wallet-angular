@@ -1,5 +1,5 @@
-<div class="confirm">
-    <ng-container *ngIf="!isFullScreen">
+<div class="confirm" [class.blur-filter]="!componentSettings.isFullScreen && componentSettings.popupOpened">
+    <ng-container *ngIf="!componentSettings.isFullScreen">
         <div class="confirm__header">
             <div class="menu-control-wrapper">
                 <img class="confirm__header__menu" (click)="backClicked($event)" [src]="iconBack"/>
@@ -33,7 +33,7 @@
         </div>
         <div class="confirm__top-gradient"></div>
     </ng-container>
-    <ng-container *ngIf="isFullScreen">
+    <ng-container *ngIf="componentSettings.isFullScreen">
         <div class="confirm__top-content">
             <div class="confirm__top-content__header">Confirm seed phrase</div>
             <div class="confirm__top-content__text">
@@ -60,3 +60,5 @@
         </div>
     </ng-container>
 </div>
+
+<div *ngIf="componentSettings.isFullScreen && componentSettings.popupOpened" class="full-popup-opened"></div>

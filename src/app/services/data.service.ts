@@ -175,6 +175,10 @@ export class DataService {
     });
   }
 
+  updateVerificatedSetting() {
+    this.store.dispatch(updateVerificatedSetting({settingValue: true}));
+  }
+
   public activateWallet() {
     this.loadWalletData().then(walletData => {
       if (walletData !== undefined && walletData.length > 0) {
@@ -219,12 +223,14 @@ export class DataService {
     this.walletParams.seed = seed;
     this.walletParams.walletId = loginToWallet ? walletId : this.loginService.loginParams.WalletID;
 
+    // remove init from reconnect
     this.wasmService.keykeeperInit(seed).subscribe(value => {
       if (!this.loginService.connected) {
         this.loginProcessSub = this.loginService.on().subscribe((msg: any) => {
           if (msg.result && msg.id === 123) {
             console.log('login_ws: OK, endpoint is ', msg.result.endpoint);
-            const endpoint = ['ws://',  msg.result.endpoint].join('');
+            let asd = msg.result.endpoint.split(':');
+            const endpoint = ['ws://3.222.86.179:',  asd[1]].join('');
             this.websocketService.url = endpoint;
             this.websocketService.connect();
             if (loginToWallet) {
@@ -268,6 +274,7 @@ export class DataService {
         this.refreshIntervalId = setInterval(() => {
           this.walletDataUpdate();
         }, 5000);
+        this.loadWalletSettings();
 
         clearInterval(this.refreshReconnectIntervalId);
         this.store.dispatch(needToReconnect({isNeedValue: false}));

@@ -80,6 +80,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
         const addrSub = address$.subscribe(val => {
           if (val !== undefined) {
             this.generatedAddress = val.address;
+            this.identity = val.identity;
             this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, val.identity, '');
             this.updateQr();
             addrSub.unsubscribe();
@@ -134,11 +135,11 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     });
   }
 
-  qrShowClicked(event) {
-    event.stopPropagation();
-    this.router.navigate([this.router.url, { outlets: { popup: 'qr-popup' }}]);
-    this.submit();
-  }
+  // qrShowClicked(event) {
+  //   event.stopPropagation();
+  //   this.router.navigate([this.router.url, { outlets: { popup: 'qr-popup' }}]);
+  //   this.submit();
+  // }
 
   updateQr() {
     this.qrCode = 'beam:' + this.generatedToken + (this.receiveForm.value.amount ?

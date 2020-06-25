@@ -120,7 +120,6 @@
         }
 
         &__cancel {
-            
             @include ui-button($btn-cancel, $btn-nssm) {
                 width: 141px;
                 height: 44px;

@@ -4,7 +4,7 @@ import { Router, NavigationExtras } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { selectWasmState } from '../../../../store/selectors/wallet-state.selectors';
 import { Observable, Subscription, from } from 'rxjs';
-import { WindowService } from '../../../../services';
+import { WindowService, DataService } from '../../../../services';
 import { routes } from '@consts';
 
 @Component({
@@ -18,22 +18,34 @@ export class FtfConfirmSeedComponent implements OnInit {
   public routesConsts = routes;
 
   private sub: Subscription;
-  public isFullScreen = false;
   private seedState = [];
   public seedStateToConfirm = [];
   private seedConfirmed = false;
 
   private WORDS_TO_CONFIRM_COUNT = 6;
 
+  componentSettings = {
+    isFullScreen: false,
+    backLink: '',
+    nextLink: '',
+    isFromFTF: true,
+    popupOpened: false
+  };
+
   constructor(
       private store: Store<any>,
       private windowService: WindowService,
+      private dataService: DataService,
       public router: Router) {
-    this.isFullScreen = this.windowService.isFullSize();
+    this.componentSettings.isFullScreen = this.windowService.isFullSize();
     try {
       const navigation = this.router.getCurrentNavigation();
-      const state = navigation.extras.state as {seed: string};
+      const state = navigation.extras.state as {seed: string, backLink: string, nextLink: string, isFromFTF: boolean};
       this.seedState = state.seed.split(' ');
+      console.log(this.seedState);
+      this.componentSettings.backLink = state.backLink;
+      this.componentSettings.nextLink = state.nextLink;
+      this.componentSettings.isFromFTF = state.isFromFTF;
 
       const idsUsedToConfirm = [];
       while (idsUsedToConfirm.length !== this.WORDS_TO_CONFIRM_COUNT) {
@@ -53,6 +65,12 @@ export class FtfConfirmSeedComponent implements OnInit {
     } catch (e) {
       this.router.navigate([routes.FTF_VIEW_SEED_ROUTE]);
     }
+
+    dataService.changeEmitted$.subscribe(emittedState => {
+      if (emittedState.popupOpened !== undefined) {
+        this.componentSettings.popupOpened = emittedState.popupOpened;
+      }
+    });
   }
   ngOnInit() {
   }
@@ -85,18 +103,28 @@ export class FtfConfirmSeedComponent implements OnInit {
 
   backClicked(event) {
     event.stopPropagation();
-    this.router.navigate([routes.FTF_VIEW_SEED_ROUTE]);
+    if (this.componentSettings.backLink === routes.FTF_VIEW_SEED_ROUTE) {
+      this.router.navigate([this.router.url, { outlets: { popup: 'return-to-seed' }}]);
+    } else {
+      this.router.navigate([this.componentSettings.backLink]);
+    }
   }
 
   nextClicked() {
     if (this.seedConfirmed) {
-      const navigationExtras: NavigationExtras = {
-        state: {
-          seedConfirmed: false,
-          seed: this.seedState.join(' ')
-        }
-      };
-      this.router.navigate([routes.FTF_PASSWORD_CREATE_ROUTE], navigationExtras);
+      if (this.componentSettings.isFromFTF) {
+        const navigationExtras: NavigationExtras = {
+          state: {
+            seedConfirmed: true,
+            seed: this.seedState.join(' ')
+          }
+        };
+        this.router.navigate([this.componentSettings.nextLink], navigationExtras);
+      } else {
+        this.dataService.updateVerificatedSetting();
+        this.dataService.saveWalletOptions();
+        this.router.navigate([this.componentSettings.nextLink]);
+      }
     }
   }
 }

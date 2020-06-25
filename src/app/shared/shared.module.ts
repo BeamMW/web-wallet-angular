@@ -28,7 +28,8 @@ import {
   PasswordComponent,
   AddContactComponent,
   PaymentProofExportedComponent,
-  StatusIconComponent
+  StatusIconComponent,
+  SeedVerificationPopupComponent
  } from './components';
 
 import {
@@ -69,6 +70,7 @@ import {
     NumbersOnlyDirective,
     StatusIconComponent,
     StatusColorDirective,
+    SeedVerificationPopupComponent,
   ],
   imports: [
     CommonModule,

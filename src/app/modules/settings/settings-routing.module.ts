@@ -16,7 +16,8 @@ import { LoginGuard } from '../wallet/guards/login.guard';
 import {
   MenuComponent,
   MenuFullComponent,
-  PaymentProofComponent
+  PaymentProofComponent,
+  SeedVerificationPopupComponent
 } from '@shared/components';
 
 import {
@@ -27,7 +28,6 @@ import {
   EnterIpPopupComponent,
   CheckPassConfirmationPopupComponent,
   ChangePasswordPopupComponent,
-  SeedVerificationPopupComponent,
   ReportPopupComponent
  } from './components';
 

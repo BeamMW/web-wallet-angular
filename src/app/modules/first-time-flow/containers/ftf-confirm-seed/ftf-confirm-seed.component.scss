@@ -6,7 +6,6 @@
     background-color: #042548;
 }
 
-
 .content-text {
     margin-left: 20px;
     max-width: 275px;
@@ -362,4 +361,22 @@
     flex-shrink: 1;
     display: flex;
     flex-direction: row-reverse;
+}
+
+.confirm.blur-filter {
+    -webkit-filter: blur(4px);
+    -moz-filter: blur(4px);
+    -o-filter: blur(4px);
+    -ms-filter: blur(4px);
+    filter: blur(4px);
+}
+
+.full-popup-opened {
+    background-color: rgba(4, 37, 72, .5);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1000;
+    left: 0;
+    top: 0;
 }

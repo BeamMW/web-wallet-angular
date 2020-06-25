@@ -21,7 +21,7 @@ import {
 } from '../../../../store/selectors/wallet-state.selectors';
 import { selectAddress } from '../../../../store/selectors/address.selectors';
 import { DataService, WindowService, WebsocketService, LoginService } from './../../../../services';
-import { routes, transactionsStatuses } from '@consts';
+import { routes, transactionsStatuses, globalConsts } from '@consts';
 
 import { environment } from '@environment';
 
@@ -48,7 +48,7 @@ export class MainComponent implements OnInit, OnDestroy {
   public iconEnabledPrivacyGrayed: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed-gray.svg`;
 
   private iconComment = `${environment.assetsPath}/images/modules/addresses/components/address-element/icon-comment.svg`;
-
+  public iconClose = `${environment.assetsPath}/images/modules/receive/components/qr-popup/ic-cancel.svg`;
 
   public sendRoute = '/send/addresses';
   public receiveRoute = '/receive/page';
@@ -74,6 +74,11 @@ export class MainComponent implements OnInit, OnDestroy {
   activeSidenavItem = '';
   popupOpened = false;
   modalOpened = false;
+
+  componentSettings = {
+    isAvailableEnough: false,
+    isValidationVisible: true,
+  };
 
   constructor(private store: Store<any>,
               private wasm: WasmService,
@@ -106,6 +111,10 @@ export class MainComponent implements OnInit, OnDestroy {
     });
 
     this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
+    this.walletStatus$.subscribe((state) => {
+      this.componentSettings.isAvailableEnough = state.available !== undefined &&
+        parseFloat(state.available) >= 10 * globalConsts.GROTHS_IN_BEAM;
+    });
   }
 
   ngOnInit() {}
@@ -149,6 +158,15 @@ export class MainComponent implements OnInit, OnDestroy {
 
   getValueSign(transaction) {
     return transaction.income ? '+' : '-';
+  }
+
+  seedVerificationClicked($event) {
+    $event.stopPropagation();
+    this.router.navigate([this.router.url, { outlets: { popup: 'seed-verification-popup' }}]);
+  }
+
+  closeVerificationMessage() {
+    this.componentSettings.isValidationVisible = false;
   }
 }
 

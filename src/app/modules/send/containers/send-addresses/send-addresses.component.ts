@@ -199,18 +199,24 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
               } else {
                 this.stats.remaining = parseFloat(available.minus(this.stats.totalUtxo));
               }
+              this.localParams.amountValidated = true;
+              this.valuesValidationCheck();
             } else if (change === 0) {
               this.stats.amountToSend = parseFloat(amountInputValue);
               this.stats.totalUtxo = parseFloat(new Big(this.stats.amountToSend).plus(feeFullValue));
+              this.localParams.amountValidated = false;
+              this.valuesValidationCheck();
             }
           });
         } else {
           this.resetStats();
+          this.valuesValidationCheck();
         }
       }).unsubscribe();
     } else {
       this.localParams.isNotEnoughAmount = false;
       this.resetStats();
+      this.valuesValidationCheck();
     }
   }
 

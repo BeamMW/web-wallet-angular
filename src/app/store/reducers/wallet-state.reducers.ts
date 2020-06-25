@@ -19,7 +19,7 @@ export interface WalletAppState {
     currencySetting: {
         value: number,
         updated: number
-    }
+    };
     dnsSetting: string;
     ipSetting: string;
     passwordCheck: boolean;

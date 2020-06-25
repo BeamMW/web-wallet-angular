@@ -10,7 +10,8 @@ import { InitializeGuard } from './guards/initialize.guard';
 import {
   PaymentProofComponent,
   AddContactComponent,
-  PaymentProofExportedComponent
+  PaymentProofExportedComponent,
+  SeedVerificationPopupComponent
 } from '@shared/components';
 
 const routes: Routes = [{
@@ -33,6 +34,8 @@ const routes: Routes = [{
         path: 'payment-proof-exported', component: PaymentProofExportedComponent, outlet: 'popup',
       }, {
         path: 'add-contact/:address', component: AddContactComponent, outlet: 'popup',
+      }, {
+        path: 'seed-verification-popup', component: SeedVerificationPopupComponent, outlet: 'popup',
       }
     ]
   }]

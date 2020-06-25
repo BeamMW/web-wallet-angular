@@ -1,4 +1,4 @@
-<div class="generate">
+<div class="generate" [class.blur-filter]="!isFullScreen && popupOpened">
     <ng-container *ngIf="!isFullScreen">
         <div class="generate__header">
             <div class="menu-control-wrapper">
@@ -25,11 +25,11 @@
             </div>
             <div class="generate__content__controls">
                 <app-button class="generate__content__controls__verification-button"
-                            (click)="completeVerificationClicked()">
+                            (click)="completeVerificationClicked($event)">
                     complete verification
                 </app-button>
                 <app-button class="generate__content__controls__later-button" 
-                            (click)="laterClicked()">
+                            (click)="laterClicked($event)">
                     I will do it later
                 </app-button>
             </div>
@@ -55,13 +55,15 @@
         <div class="generate__bottom-content">
             <app-button class="generate__bottom-content__back-button" (click)="backClicked($event)">back</app-button>
             <app-button class="generate__bottom-content__later-button" 
-                        (click)="laterClicked()">
+                        (click)="laterClicked($event)">
                 I will do it later
             </app-button>
             <app-button class="generate__bottom-content__verification-button"
-                        (click)="completeVerificationClicked()">
+                        (click)="completeVerificationClicked($event)">
                 complete verification
             </app-button>
         </div>
     </ng-container>
 </div>
+
+<div *ngIf="isFullScreen && popupOpened" class="full-popup-opened"></div>

@@ -13,3 +13,4 @@ export * from './table-actions/table-actions.component';
 export * from './dropdown/dropdown.component';
 export * from './popups/payment-proof-exported/payment-proof-exported.component';
 export * from './status-icon/status-icon.component';
+export * from './popups/seed-verification-popup/seed-verification-popup.component';
