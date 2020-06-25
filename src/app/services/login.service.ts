@@ -42,7 +42,7 @@ export class LoginService {
     }
 
     connect() {
-        this.subject = new WebSocketSubject('ws://web-wallet-masternet.beam.mw:20000/ws');
+        this.subject = new WebSocketSubject(environment.ws);
 
         this.subject.subscribe(
           (msg) => {

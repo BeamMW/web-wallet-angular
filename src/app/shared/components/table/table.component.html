@@ -121,7 +121,10 @@
           Maturity 
           <img class="sort-icon" [src]="activeSortItem === sortParams.maturity ? iconSortActive : iconSort">
         </mat-header-cell>
-        <mat-cell class="utxo-cell" *matCellDef="let element"> {{element.maturity}} </mat-cell>
+        <mat-cell class="utxo-cell" *matCellDef="let element">
+          {{element.status_string === utxoStatusesConsts.INCOMING || 
+            element.status_string === utxoStatusesConsts.INCOMING ? '-' : element.maturity}}
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="utxo_amount">

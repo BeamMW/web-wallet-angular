@@ -113,10 +113,10 @@
                             </div>
                             <div class="container__values__stats__values" 
                                     [class.incorrect-amount]="localParams.isNotEnoughAmount">
-                                <div>{{stats.totalUtxo}} BEAM</div>
-                                <div class="row-item">{{stats.amountToSend}} BEAM</div>
-                                <div class="row-item">{{stats.change}} BEAM</div>
-                                <div class="row-item-last">{{stats.remaining}} BEAM</div>
+                                <div>{{stats.totalUtxo.toFixed()}} BEAM</div>
+                                <div class="row-item">{{stats.amountToSend.toFixed()}} BEAM</div>
+                                <div class="row-item">{{stats.change.toFixed()}} BEAM</div>
+                                <div class="row-item-last">{{stats.remaining.toFixed()}} BEAM</div>
                             </div>
                         </div>
                     </div>

@@ -48,10 +48,10 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   private changeSub: Subscription;
 
   stats = {
-    totalUtxo: 0,
-    amountToSend: 0,
-    change: 0,
-    remaining: 0
+    totalUtxo: new Big(0),
+    amountToSend: new Big(0),
+    change: new Big(0),
+    remaining: new Big(0)
   };
 
   constructor(private dataService: DataService,
@@ -130,7 +130,6 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       this.addressInputUpdated(this.sendForm.value.address);
     }
 
-    //this.searchCtrlSub =
     this.fullSendForm.get('amount').valueChanges.pipe(debounceTime(500)).subscribe(newValue => {
       this.amountChanged(newValue);
     });
@@ -153,7 +152,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
         const allAmount = (status.available - this.fullSendForm.value.fee) / globalConsts.GROTHS_IN_BEAM;
         this.amountChanged(allAmount);
         this.localParams.isFullScreen ?
-          this.fullSendForm.get('amount').setValue(allAmount) :
+        this.fullSendForm.get('amount').setValue(allAmount) :
           this.sendForm.get('amount').setValue(allAmount);
       }
     }).unsubscribe();
@@ -171,7 +170,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   amountChanged(amountInputValue) {
-    if (amountInputValue.length > 0) {
+    if (amountInputValue.length > 0 || amountInputValue > 0) {
       this.walletStatus$.subscribe((status) => {
         amountInputValue = new Big(amountInputValue);
         if (parseFloat(amountInputValue) > 0 && status.available > 0) {
@@ -190,34 +189,33 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
           this.sendData$.subscribe(sendData => {
             const change = parseFloat(sendData.change);
+            this.stats.amountToSend = new Big(parseFloat(amountInputValue));
+            this.stats.totalUtxo = new Big(this.stats.amountToSend.plus(feeFullValue));
             if (change > 0) {
-              this.stats.change = parseFloat(new Big(sendData.change).div(globalConsts.GROTHS_IN_BEAM));
-              this.stats.amountToSend = parseFloat(amountInputValue);
-              this.stats.totalUtxo = parseFloat(new Big(this.stats.amountToSend).plus(this.stats.change).plus(feeFullValue));
+              this.stats.change = new Big(sendData.change).div(globalConsts.GROTHS_IN_BEAM);
+              this.stats.totalUtxo = this.stats.totalUtxo.plus(this.stats.change);
               if (parseFloat(amountInputValue.plus(feeFullValue)) > parseFloat(available)) {
-                this.stats.remaining = 0;
+                this.stats.remaining = new Big(0);
+                this.stats.change = new Big(0);
+                this.localParams.amountValidated = false;
               } else {
-                this.stats.remaining = parseFloat(available.minus(this.stats.totalUtxo));
+                this.stats.remaining = available.minus(feeFullValue).minus(this.stats.amountToSend);
+                this.localParams.amountValidated = true;
               }
-              this.localParams.amountValidated = true;
-              this.valuesValidationCheck();
-            } else if (change === 0) {
-              this.stats.amountToSend = parseFloat(amountInputValue);
-              this.stats.totalUtxo = parseFloat(new Big(this.stats.amountToSend).plus(feeFullValue));
-              this.localParams.amountValidated = false;
-              this.valuesValidationCheck();
             }
+            this.valuesValidationCheck();
           });
         } else {
           this.resetStats();
-          this.valuesValidationCheck();
+          this.localParams.amountValidated = false;
         }
       }).unsubscribe();
     } else {
       this.localParams.isNotEnoughAmount = false;
+      this.localParams.amountValidated = false;
       this.resetStats();
-      this.valuesValidationCheck();
     }
+    this.valuesValidationCheck();
   }
 
   resetStats() {
@@ -249,18 +247,20 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       this.localParams.addressValidation = true;
     }
 
-    this.valuesValidationCheck();
     this.addressInputCheck();
+    this.valuesValidationCheck();
   }
 
   addressInputCheck() {
-    this.localParams.isAddressInputValid = this.sendForm.value.address.length > 0 &&
+    this.localParams.isAddressInputValid = (this.sendForm.value.address.length > 0 ||
+      this.fullSendForm.value.address.length > 0) &&
       this.localParams.addressValidation;
   }
 
   valuesValidationCheck() {
     this.localParams.isSendDataValid = this.localParams.amountValidated &&
       this.localParams.feeIsCorrect &&
+      this.localParams.isAddressInputValid &&
       this.localParams.addressValidation &&
       !this.localParams.isNotEnoughAmount;
   }

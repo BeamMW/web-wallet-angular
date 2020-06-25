@@ -22,6 +22,7 @@ export class NumbersOnlyDirective {
     const next: string = current.concat(event.key);
     const afterDot = next.indexOf('.') > 0 ? next.substring(next.indexOf('.') + 1) : '0';
     if ((next && !String(next).match(this.regex)) ||
+        (String(next).length > 1 && String(next)[0] === '0' && next.indexOf('.') < 0) ||
         (parseInt(afterDot, 10) === 0 && afterDot.length > 7) ||
         (afterDot.length > 8) ||
         (parseFloat(next) === 0 && next.length > 1 && next[1] !== '.') ||

@@ -229,8 +229,7 @@ export class DataService {
         this.loginProcessSub = this.loginService.on().subscribe((msg: any) => {
           if (msg.result && msg.id === 123) {
             console.log('login_ws: OK, endpoint is ', msg.result.endpoint);
-            let asd = msg.result.endpoint.split(':');
-            const endpoint = ['ws://3.222.86.179:',  asd[1]].join('');
+            const endpoint = ['wss://', msg.result.endpoint].join('');
             this.websocketService.url = endpoint;
             this.websocketService.connect();
             if (loginToWallet) {

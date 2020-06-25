@@ -118,7 +118,7 @@
 
     &__controls {
         text-align: center;
-        margin: auto auto 132px auto;
+        margin: auto auto 0 auto;
         z-index: 10;
         
         @include ui-button($btn-open-wallet, $btn-lg) {
@@ -128,6 +128,20 @@
         }
 
         @include ui-button-open-wallet-icon()
+    }
+
+    &__restore-beta {
+        margin-top: 20px;
+        margin-bottom: auto;
+        height: 18px;
+        @include normal-text;
+        opacity: 0.5;
+        font-family: 'ProximaNovaIT', sans-serif;
+        font-size: 14px;
+        line-height: 1.29;
+        text-align: center;
+        color: #ffffff;
+        z-index: 10;
     }
 }
 
@@ -150,7 +164,7 @@
         }
 
         &__controls {
-            margin: 33px auto 143px auto;
+            margin: 33px auto 0 auto;
 
             @include ui-button($btn-open-wallet, $btn-lg) {
                 width: 192px;

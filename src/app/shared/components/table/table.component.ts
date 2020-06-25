@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef, 
 import { DataSource } from '@angular/cdk/collections';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatTable } from '@angular/material';
-import { routes, transactionsStatuses, TableTypes } from '@consts';
+import { routes, transactionsStatuses, TableTypes, utxoStatuses } from '@consts';
 
 import { Observable, BehaviorSubject, of } from 'rxjs';
 
@@ -44,7 +44,7 @@ export class TableComponent implements OnInit, OnChanges {
   contact$: Observable<any>;
   utxoList$: Observable<any>;
   tableTypesConsts = TableTypes;
-
+  public utxoStatusesConsts = utxoStatuses;
   public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed-gray.svg`;
 
   isUtxoListVisible = true;
