@@ -6,3 +6,4 @@ export * from './enter-ip-popup/enter-ip-popup.component';
 export * from './check-pass-confirmation-popup/check-pass-confirmation-popup.component';
 export * from './change-password-popup/change-password-popup.component';
 export * from './report-popup/report-popup.component';
+export * from './show-owner-key-popup/show-owner-key-popup.component';

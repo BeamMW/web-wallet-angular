@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router} from '@angular/router';
 import { ActivatedRoute} from '@angular/router';
-import { DataService, WindowService } from './../../../../services';
+import { DataService, WindowService, LogService } from './../../../../services';
 import { Subscription, Observable } from 'rxjs';
 import { environment } from '@environment';
 import { FormGroup, FormControl} from '@angular/forms';
@@ -22,6 +22,7 @@ export class ReportPopupComponent implements OnInit, OnDestroy {
   constructor(private windowSerivce: WindowService,
               private store: Store<any>,
               public router: Router,
+              private logService: LogService,
               private activatedRoute: ActivatedRoute,
               private dataService: DataService) {
     this.isFullScreen = windowSerivce.isFullSize();
@@ -41,10 +42,9 @@ export class ReportPopupComponent implements OnInit, OnDestroy {
     }
   }
 
-  submit($event) {
+  saveLogsClicked($event) {
     $event.stopPropagation();
-    this.store.dispatch(updateIpSetting({settingValue: this.popupForm.value.ip}));
-    this.dataService.saveWalletOptions();
+    this.logService.saveLogsToFile();
     this.dataService.emitChange({popupOpened: false});
     this.router.navigate([{ outlets: { popup: null }}], {relativeTo: this.activatedRoute.parent});
   }
@@ -56,5 +56,14 @@ export class ReportPopupComponent implements OnInit, OnDestroy {
 
   closePopup() {
     this.router.navigate([{ outlets: { popup: null }}], {relativeTo: this.activatedRoute.parent});
+  }
+
+  githubLinkClicked() {
+    window.open('https://github.com/BeamMW', '_blank');
+  }
+
+  mailToClicked() {
+    const mailText = 'mailto:support@beam.mw';
+    window.location.href = mailText;
   }
 }

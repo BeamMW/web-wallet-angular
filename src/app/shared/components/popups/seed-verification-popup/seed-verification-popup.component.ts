@@ -56,7 +56,7 @@ export class SeedVerificationPopupComponent implements OnInit, OnDestroy {
           }
         };
         this.closePopup(true);
-        this.router.navigate([routes.FTF_CONFIRM_SEED_ROUTE], navigationExtras);
+        this.router.navigate([routes.FTF_VIEW_SEED_ROUTE], navigationExtras);
       }).catch(error => {
         this.isCorrectPass = false;
       });

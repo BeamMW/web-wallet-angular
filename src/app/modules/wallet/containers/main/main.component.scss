@@ -69,6 +69,63 @@
         }
     }
 
+    &__get-coins {
+        height: 120px;
+        border-radius: 10px;
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        background-color: rgba(0, 240, 255, 0.15);
+        margin: 15px 20px 0 20px;
+
+        &__text {
+            @include normal-text;
+            font-family: 'ProximaNova', sans-serif;
+            font-size: 14px;
+            line-height: 1.29;
+            text-align: start;
+            margin: 0 auto;
+            width: 285px;
+            color: #ffffff;
+        }
+
+        &__link {
+            @include normal-text;
+            width: 149px;
+            height: 38px;
+            border-radius: 50px;
+            border: solid 2px #0bccf7;
+            background-color: rgba(255, 255, 255, 0);
+            font-family: ProximaNova;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            color: #0bccf7;
+            cursor: pointer;
+            margin: 10px auto 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &__text {
+                margin-left: 10px;
+            }
+        }
+
+        &__link:hover {
+            background-color: rgba(11, 204, 247, 0.3);
+        }
+
+        &__close-icon {
+            margin-top: 10px;
+            margin-right: 10px;
+            width: 14px;
+            height: 14px;
+            align-self: flex-end;
+            cursor: pointer;
+        }
+    }
+
     &__validate {
         height: 101px;
         border-radius: 10px;
@@ -81,7 +138,7 @@
             @include normal-text;
             font-family: 'ProximaNova', sans-serif;
             font-size: 14px;
-            text-align: center;
+            text-align: left;
             margin: 0 20px;
             color: #ffffff;
         }
@@ -330,9 +387,79 @@
                 max-width: 447px;
             }
 
+            &__get-coins {
+                width: 100%;
+                height: 125px;
+                border-radius: 10px;
+                margin-top: 20px;
+                display: flex;
+                flex-direction: column;
+                background-color: rgba(0, 240, 255, 0.15);
+
+                &__text {
+                    @include normal-text;
+                    font-family: 'ProximaNova', sans-serif;
+                    font-size: 14px;
+                    line-height: 1.29;
+                    margin-left: 20px;
+                    color: #ffffff;
+                }
+
+                &__text.validation-not-visible {
+                    text-align: center;
+                }
+
+                &__link {
+                    @include normal-text;
+                    width: 149px;
+                    height: 38px;
+                    border-radius: 50px;
+                    border: solid 2px #0bccf7;
+                    background-color: rgba(255, 255, 255, 0);
+                    font-family: ProximaNova;
+                    font-size: 14px;
+                    font-weight: bold;
+                    text-align: center;
+                    color: #0bccf7;
+                    cursor: pointer;
+                    margin: 20px 20px 0 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    &__text {
+                        margin-left: 10px;
+                    }
+                }
+
+                &__link.validation-not-visible {
+                    margin: 20px auto 0 auto;
+                }
+
+                &__link:hover {
+                    background-color: rgba(11, 204, 247, 0.3);
+                }
+
+                &__close-icon {
+                    margin-top: 10px;
+                    margin-right: 10px;
+                    width: 14px;
+                    height: 14px;
+                    align-self: flex-end;
+                    cursor: pointer;
+                }
+            }
+
+            &__get-coins.validation-visible {
+                width: calc((100% - 20px) / 2);
+                height: 138px;
+                background-color: rgba(0, 240, 255, 0.1);
+                float: left;
+            }
+
             &__validate {
                 width: 100%;
-                height: 98px;
+                height: 125px;
                 border-radius: 10px;
                 background-color: rgba(0, 240, 255, 0.15);
                 margin-top: 20px;
@@ -344,8 +471,8 @@
                     font-family: 'ProximaNova', sans-serif;
                     font-size: 14px;
                     line-height: 1.29;
-                    text-align: center;
                     color: #ffffff;
+                    margin-left: 20px;
                 }
 
                 &__text.enough {
@@ -354,13 +481,18 @@
                 
                 &__link {
                     @include normal-text;
-                    font-family: ProximaNova;
+                    font-family: 'ProximaNova', sans-serif;
                     font-size: 14px;
                     font-weight: bold;
-                    text-align: center;
                     color: #00f6d2;
-                    margin-top: 20px;
+                    margin-top: 30px;
+                    margin-left: 20px;
                     cursor: pointer;
+                }
+
+                &__text.getcoins-not-visible,
+                &__link.getcoins-not-visible {
+                    text-align: center;
                 }
 
                 &__close-icon {
@@ -371,6 +503,14 @@
                     align-self: flex-end;
                     cursor: pointer;
                 }
+            }
+
+            &__validate.get-coins-visible {
+                margin-left: 20px;
+                height: 138px;
+                width: calc((100% - 20px) / 2);
+                background-color: rgba(0, 240, 255, 0.1);
+                float: left;
             }
 
             &__subtitle {
@@ -564,4 +704,9 @@
 
 .grayed {
     color: #92abba;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
 }

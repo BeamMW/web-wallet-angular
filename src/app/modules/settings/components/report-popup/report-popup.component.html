@@ -23,7 +23,7 @@
             <app-button class="copy-button" (click)="cancelClicked($event)">cancel</app-button>
         </div>
         <div class="report__controls__save">
-            <app-button class="copy-button" (click)="submit($event)">
+            <app-button class="copy-button" (click)="saveLogsClicked($event)">
                 <ng-container *ngIf="isFullScreen">save wallet logs</ng-container>
                 <ng-container *ngIf="!isFullScreen">save logs</ng-container>
             </app-button>

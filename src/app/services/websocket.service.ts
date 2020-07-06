@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import * as ObservableStore from 'obs-store';
 import { Subject, Observable, Subscription } from 'rxjs';
 import { webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { map } from 'rxjs/operators';
 import { WasmService } from './../wasm.service';
 import { Store } from '@ngrx/store';
 import { needToReconnect } from '../store/actions/wallet.actions';
+import { LogService } from './log.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,7 @@ export class WebsocketService {
 
 
     constructor(
+        private logService: LogService,
         private store: Store<any>,
         private wasmService: WasmService
     ) {
@@ -50,11 +51,13 @@ export class WebsocketService {
           },
           (err) => {
               if (err.code === 1006) {
-                console.log('[reconnect triggered]')
+                this.logService.saveDataToLogs('[Socket: reconnect]', err);
+                console.log('[reconnect triggered]');
                 this.store.dispatch(needToReconnect({isNeedValue: true}));
               }
               this.setConnected(false);
-              console.log('error from socket:', err)
+              this.logService.saveDataToLogs('[Socket: error]', err);
+              console.log('error from socket:', err);
           },
           () => console.log('service connected')
         );
@@ -99,9 +102,11 @@ export class WebsocketService {
     }
 
     public onkeykeeper(data) {
+        this.logService.saveDataToLogs('[Keykeeper: request]', data);
         console.log(`<<< keykeeper request: ${data}`);
         const res = this.wasmService.keyKeeper.invokeServiceMethod(data);
         const result = JSON.parse(res);
+        this.logService.saveDataToLogs('[Keykeeper: response]', res);
         console.log(`>>> keykeeper response: ${res}`);
         this.send(result);
     }

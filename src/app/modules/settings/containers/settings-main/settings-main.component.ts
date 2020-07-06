@@ -17,6 +17,9 @@ import {
   updatePasswordCheckSetting,
 } from './../../../../store/actions/wallet.actions';
 import { MatSlideToggleChange } from '@angular/material';
+import {
+  selectVerificatedSetting
+} from '../../../../store/selectors/wallet-state.selectors';
 
 @Component({
   selector: 'app-settings-main',
@@ -59,13 +62,23 @@ export class SettingsMainComponent implements OnInit {
   currencyUpdated = null;
   dnsSetting$: Observable<any>;
   ipSetting$: Observable<any>;
+  verificatedSetting$: Observable<any>;
   checkPasswordSetting$: Observable<any>;
   isCheckedPassword = true;
+
+  verificatedSettingState = false;
+  verificatedSettingLoaded = false;
 
   constructor(public router: Router,
               private store: Store<any>,
               private windowService: WindowService,
               private dataService: DataService) {
+    this.verificatedSetting$ = this.store.pipe(select(selectVerificatedSetting));
+    this.verificatedSetting$.subscribe((verState) => {
+      this.verificatedSettingLoaded = true;
+      this.verificatedSettingState = verState.state;
+    });
+
     this.isFullScreen = this.windowService.isFullSize();
     dataService.changeEmitted$.subscribe(emittedState => {
       if (emittedState.popupOpened !== undefined) {
@@ -103,14 +116,14 @@ export class SettingsMainComponent implements OnInit {
       class: '',
       expandable: true
     }, {
-      path: '/settings/server',
-      title: 'Server',
-      src: '',
-      srcOut: `${environment.assetsPath}/images/modules/settings/containers/settings-main/icon-server.svg`,
-      srcOn: `${environment.assetsPath}/images/modules/settings/containers/settings-main/icon-server-active.svg`,
-      class: '',
-      expandable: true
-    }, {
+    //   path: '/settings/server',
+    //   title: 'Server',
+    //   src: '',
+    //   srcOut: `${environment.assetsPath}/images/modules/settings/containers/settings-main/icon-server.svg`,
+    //   srcOn: `${environment.assetsPath}/images/modules/settings/containers/settings-main/icon-server-active.svg`,
+    //   class: '',
+    //   expandable: true
+    // }, {
       path: '/settings/privacy',
       title: 'Privacy',
       src: '',
@@ -222,5 +235,10 @@ export class SettingsMainComponent implements OnInit {
   paymentProofClicked($event) {
     $event.stopPropagation();
     this.router.navigate([this.router.url, { outlets: { popup: 'payment-proof' }}]);
+  }
+
+  showOwnerKeyClicked($event) {
+    $event.stopPropagation();
+    this.router.navigate([this.router.url, { outlets: { popup: 'show-owner-key' }}]);
   }
 }

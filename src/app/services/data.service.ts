@@ -31,8 +31,10 @@ import { Router } from '@angular/router';
 import { WasmService } from './../wasm.service';
 import { LoginService } from './login.service';
 import { WebsocketService } from './websocket.service';
+import { LogService } from './log.service';
 import * as passworder from 'browser-passworder';
 import { routes } from '@consts';
+import * as ObservableStore from 'obs-store';
 
 @Injectable({
   providedIn: 'root'
@@ -58,6 +60,7 @@ export class DataService {
     walletId: ''
   };
 
+  public getCoinsState = new ObservableStore(false);
   public clickedElement: HTMLElement;
   // Observable string sources
   private emitChangeSource = new Subject<any>();
@@ -69,6 +72,7 @@ export class DataService {
   }
 
   constructor(
+    private logService: LogService,
     private loginService: LoginService,
     private websocketService: WebsocketService,
     public router: Router,
@@ -99,7 +103,10 @@ export class DataService {
         },
         dnsSetting: 'wallet-service.beam.mw',
         ipSetting: '3.222.86.179:20000',
-        verificatedSetting: seedConfirmed,
+        verificatedSetting: {
+          state: seedConfirmed,
+          isMessageClosed: false
+        },
         passwordCheck: true
     }});
   }
@@ -163,7 +170,10 @@ export class DataService {
   loadWalletSettings() {
     this.loadSettingsFromStore().then(settingsData => {
       this.store.dispatch(updatePrivacySetting({settingValue: settingsData.privacySetting}));
-      this.store.dispatch(updateVerificatedSetting({settingValue: settingsData.verificatedSetting}));
+      this.store.dispatch(updateVerificatedSetting({settingValue: {
+        state: settingsData.verificatedSetting.state,
+        isMessageClosed: settingsData.verificatedSetting.isMessageClosed
+      }}));
       this.store.dispatch(updateSaveLogsSetting({settingValue: settingsData.saveLogsSetting}));
       this.store.dispatch(updateDnsSetting({settingValue: settingsData.dnsSetting}));
       this.store.dispatch(updateIpSetting({settingValue: settingsData.ipSetting}));
@@ -175,14 +185,18 @@ export class DataService {
     });
   }
 
-  updateVerificatedSetting() {
-    this.store.dispatch(updateVerificatedSetting({settingValue: true}));
+  updateVerificatedSettingOnInit() {
+    this.store.dispatch(updateVerificatedSetting({settingValue: {
+      state: true,
+      isMessageClosed: false
+    }}));
   }
 
   public activateWallet() {
     this.loadWalletData().then(walletData => {
       if (walletData !== undefined && walletData.length > 0) {
           console.log('Wallet: ', walletData);
+          this.logService.saveDataToLogs('[Wallet: Activated]', walletData);
           this.store.dispatch(saveWallet({wallet: walletData}));
           this.store.dispatch(ChangeWalletState({walletState: true}));
       }
@@ -229,15 +243,17 @@ export class DataService {
         this.loginProcessSub = this.loginService.on().subscribe((msg: any) => {
           if (msg.result && msg.id === 123) {
             console.log('login_ws: OK, endpoint is ', msg.result.endpoint);
-            const endpoint = ['wss://', msg.result.endpoint].join('');
+            this.logService.saveDataToLogs('[Wallet: logged in with endpoint]', msg);
+            const endpoint = ['wss://',  msg.result.endpoint].join('');
             this.websocketService.url = endpoint;
             this.websocketService.connect();
             if (loginToWallet) {
               this.loginToWallet(walletId, pass);
             }
           } else {
-            console.log('login_ws: failed');
+            this.logService.saveDataToLogs('[Wallet: Login failed]', '');
             if (msg.error) {
+              this.logService.saveDataToLogs('[Wallet: Login error]', msg.error);
               console.log(`login_ws: error code:${msg.error.code} text:${msg.error.data}`)
             }
           }
@@ -265,6 +281,7 @@ export class DataService {
     this.openWalletSub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.result && msg.id === 124 && msg.result.length) {
         console.log(`[login] wallet session: ${msg.result}`);
+        this.logService.saveDataToLogs('[Wallet: Opened]', msg);
         if (this.openWalletSub) {
           this.openWalletSub.unsubscribe();
         }
@@ -298,6 +315,8 @@ export class DataService {
       if (msg.result && msg.id === 6) {
         console.log('[data-service] transactions: ');
         console.dir(msg.result);
+        this.logService.saveDataToLogs('[Service: transaction list]', msg);
+
         this.store.dispatch(loadTr({transactions: msg.result.length > 0 ? msg.result : []}));
         this.trsSub.unsubscribe();
         console.log('----------update finished----------');
@@ -315,6 +334,8 @@ export class DataService {
       if (msg.result && msg.id === 7) {
         console.log('[data-service] utxo: ');
         console.dir(msg.result);
+        this.logService.saveDataToLogs('[Service: UTXO list]', msg);
+
         this.store.dispatch(loadUtxo({utxos: msg.result.length > 0 ? msg.result : []}));
         this.utxoSub.unsubscribe();
         this.transactionsUpdate();
@@ -332,6 +353,7 @@ export class DataService {
       if (msg.result && msg.id === 8) {
         console.log('[data-service] addresses: ');
         console.dir(msg.result);
+        this.logService.saveDataToLogs('[Service: addresses list]', msg);
         this.store.dispatch(loadAddresses({addresses: msg.result.length > 0 ? msg.result : []}));
 
         this.addressesSub.unsubscribe();
@@ -354,6 +376,7 @@ export class DataService {
       if (msg.result && msg.id === 5) {
         console.log('[data-service] status: ');
         console.dir(msg);
+        this.logService.saveDataToLogs('[Service: status]', msg);
         this.store.dispatch(saveWalletStatus({status: msg.result}));
         this.statusSub.unsubscribe();
         this.addressesUpdate();
@@ -372,12 +395,14 @@ export class DataService {
     this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.result && msg.id === 125) {
         console.log('send result: ', msg);
+        this.logService.saveDataToLogs('[Wallet: send finished]', msg);
         this.router.navigate([routes.WALLET_MAIN_ROUTE]);
         this.commonActionSub.unsubscribe();
       }
     });
 
     console.log('send init: ', sendData);
+    this.logService.saveDataToLogs('[Wallet: send started]', sendData);
 
     this.websocketService.send({
       jsonrpc: '2.0',
@@ -399,7 +424,7 @@ export class DataService {
     this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.id === 16) {
         this.commonActionSub.unsubscribe();
-
+        this.logService.saveDataToLogs('[Wallet: password changed]', msg);
         passworder.encrypt(newPass, {seed: seedValue, id: idValue}).then((result) => {
           this.saveWallet(result);
         });
@@ -424,6 +449,7 @@ export class DataService {
     this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.id === 15) {
         this.commonActionSub.unsubscribe();
+        this.logService.saveDataToLogs('[Wallet: transaction cancelled]', txId);
       }
     });
     this.websocketService.send({
@@ -441,6 +467,7 @@ export class DataService {
     this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.id === 18) {
         this.commonActionSub.unsubscribe();
+        this.logService.saveDataToLogs('[Wallet: transaction deleted]', txId);
       }
     });
     this.websocketService.send({
@@ -459,6 +486,7 @@ export class DataService {
       if (msg.id === 17) {
         this.commonActionSub.unsubscribe();
         this.store.dispatch(saveSendData({send: {change: msg.result.change}}));
+        this.logService.saveDataToLogs('[Wallet: change calculation]', msg.result);
       }
     });
     this.websocketService.send({

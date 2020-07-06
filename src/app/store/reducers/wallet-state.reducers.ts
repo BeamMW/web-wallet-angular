@@ -23,7 +23,10 @@ export interface WalletAppState {
     dnsSetting: string;
     ipSetting: string;
     passwordCheck: boolean;
-    verificatedSetting: boolean;
+    verificatedSetting: {
+        state: boolean,
+        isMessageClosed: boolean
+    };
     sendData: {
         change: number
     };
@@ -57,7 +60,10 @@ export const initialWalletAppState: WalletAppState = {
     },
     dnsSetting: 'wallet-service.beam.mw',
     ipSetting: '3.222.86.179:20000',
-    verificatedSetting: false,
+    verificatedSetting: {
+        state: false,
+        isMessageClosed: false
+    },
     passwordCheck: true,
     sendData: {
         change: 0

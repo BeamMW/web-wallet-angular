@@ -4,7 +4,8 @@ import { WasmService } from './../../../../wasm.service';
 import { Subscription, Observable, from } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import {
-  updatePrivacySetting
+  updatePrivacySetting,
+  updateVerificatedSetting
 } from './../../../../store/actions/wallet.actions';
 import { selectAllAddresses } from '../../../../store/selectors/address.selectors';
 import { selectAllUtxo } from '../../../../store/selectors/utxo.selectors';
@@ -37,18 +38,21 @@ export enum selectorTitles {
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit, OnDestroy {
-  public iconBeam: string = `${environment.assetsPath}/images/modules/wallet/containers/main/ic-beam.svg`;
-  public iconBeamFull: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-beam-full.svg`;
-  public iconReceived: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-received.svg`;
-  public iconSent: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-sent.svg`;
-  public iconMenu: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-menu.svg`;
-  public iconEmpty: string = `${environment.assetsPath}/images/modules/wallet/containers/main/atomic-empty-state.svg`;
-  public iconDisabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye.svg`;
-  public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
-  public iconEnabledPrivacyGrayed: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed-gray.svg`;
+  private basePath = `${environment.assetsPath}`;
+  public iconBeam: string = this.basePath + `/images/modules/wallet/containers/main/ic-beam.svg`;
+  public iconBeamFull: string = this.basePath + `/images/modules/wallet/containers/main/icon-beam-full.svg`;
+  public iconReceived: string = this.basePath + `/images/modules/wallet/containers/main/icon-received.svg`;
+  public iconSent: string = this.basePath + `/images/modules/wallet/containers/main/icon-sent.svg`;
+  public iconMenu: string = this.basePath + `/images/modules/wallet/containers/main/icon-menu.svg`;
+  public iconEmpty: string = this.basePath + `/images/modules/wallet/containers/main/atomic-empty-state.svg`;
+  public iconDisabledPrivacy: string = this.basePath + `/images/modules/wallet/containers/main/icn-eye.svg`;
+  public iconEnabledPrivacy: string = this.basePath + `/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
+  public iconEnabledPrivacyGrayed: string = this.basePath + `/images/modules/wallet/containers/main/icn-eye-crossed-gray.svg`;
+  public iconEmptyTransactions: string = this.basePath + `/images/modules/wallet/containers/main/icon-wallet.svg`;
+  public iconGetCoinsButton: string = this.basePath + `/images/modules/wallet/containers/main/icon-receive-blue.svg`;
 
-  private iconComment = `${environment.assetsPath}/images/modules/addresses/components/address-element/icon-comment.svg`;
-  public iconClose = `${environment.assetsPath}/images/modules/receive/components/qr-popup/ic-cancel.svg`;
+  private iconComment = this.basePath + `/images/modules/addresses/components/address-element/icon-comment.svg`;
+  public iconClose = this.basePath + `/images/modules/receive/components/qr-popup/ic-cancel.svg`;
 
   public sendRoute = '/send/addresses';
   public receiveRoute = '/receive/page';
@@ -78,6 +82,9 @@ export class MainComponent implements OnInit, OnDestroy {
   componentSettings = {
     isAvailableEnough: false,
     isValidationVisible: true,
+    isGetCoinsVisible: true,
+    validationState: true,
+    validationStateLoaded: false
   };
 
   constructor(private store: Store<any>,
@@ -92,10 +99,24 @@ export class MainComponent implements OnInit, OnDestroy {
     this.utxos$ = this.store.pipe(select(selectAllUtxo));
     this.transactions$ = this.store.pipe(select(selectAllTr));
     this.privacySetting$ = this.store.pipe(select(selectPrivacySetting));
-    this.verificatedSetting$ = this.store.pipe(select(selectVerificatedSetting));
+    this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
 
-    this.verificatedSetting$.subscribe((state) => {
-      this.verificatedSetting = state;
+    this.verificatedSetting$ = this.store.pipe(select(selectVerificatedSetting));
+    this.verificatedSetting$.subscribe((verState) => {
+      this.verificatedSetting = verState;
+
+      this.walletStatus$.subscribe((walletState) => {
+        this.componentSettings.isAvailableEnough = walletState.available !== undefined &&
+          parseFloat(walletState.available) >= 100 * globalConsts.GROTHS_IN_BEAM;
+
+        this.componentSettings.validationState = !this.verificatedSetting.state &&
+          (!this.verificatedSetting.isMessageClosed ||
+          (this.verificatedSetting.isMessageClosed && this.componentSettings.isAvailableEnough));
+
+        this.componentSettings.validationStateLoaded = true;
+        this.componentSettings.isValidationVisible = this.componentSettings.validationState;
+        this.componentSettings.isGetCoinsVisible = walletState.available === 0 && !this.dataService.getCoinsState.getState();
+      });
     });
 
     this.privacySetting$.subscribe((state) => {
@@ -108,12 +129,6 @@ export class MainComponent implements OnInit, OnDestroy {
       } else {
         this.modalOpened = emittedState;
       }
-    });
-
-    this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
-    this.walletStatus$.subscribe((state) => {
-      this.componentSettings.isAvailableEnough = state.available !== undefined &&
-        parseFloat(state.available) >= 10 * globalConsts.GROTHS_IN_BEAM;
     });
   }
 
@@ -166,7 +181,21 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   closeVerificationMessage() {
+    this.store.dispatch(updateVerificatedSetting({settingValue: {
+      state: this.verificatedSetting.state,
+      isMessageClosed: true
+    }}));
+    this.dataService.saveWalletOptions();
     this.componentSettings.isValidationVisible = false;
+  }
+
+  closeGetCoinsMessage() {
+    this.componentSettings.isGetCoinsVisible = false;
+    this.dataService.getCoinsState.putState(true);
+  }
+
+  getCoinsClicked() {
+    window.open('https://faucet.beamprivacy.community', '_blank');
   }
 }
 

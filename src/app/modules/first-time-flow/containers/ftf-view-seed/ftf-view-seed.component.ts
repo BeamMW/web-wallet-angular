@@ -24,12 +24,34 @@ export class FtfViewSeedComponent implements OnInit, OnDestroy {
   seedState = [];
   popupOpened = false;
 
+  componentSettings = {
+    backLink: '',
+    nextLink: '',
+    isFromFTF: true,
+  };
+
   constructor(
       private store: Store<any>,
       private wasm: WasmService,
       private windowService: WindowService,
       private dataService: DataService,
       public router: Router) {
+    try {
+      const navigation = this.router.getCurrentNavigation();
+      const state = navigation.extras.state as {seed: string, backLink: string, nextLink: string, isFromFTF: boolean};
+      this.seedState = state.seed.split(' ');
+      this.seed = state.seed;
+      this.componentSettings.backLink = state.backLink;
+      this.componentSettings.nextLink = state.nextLink;
+      this.componentSettings.isFromFTF = state.isFromFTF;
+    } catch (e) {
+      this.dataService.loadWalletData().then(walletData => {
+        if (walletData !== undefined) {
+            this.router.navigate([routes.WALLET_MAIN_ROUTE]);
+        }
+      });
+    }
+
     this.isFullScreen = this.windowService.isFullSize();
 
     dataService.changeEmitted$.subscribe(emittedState => {
@@ -40,17 +62,19 @@ export class FtfViewSeedComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.wasmState$ = this.store.pipe(select(selectWasmState));
-    this.sub = this.wasmState$.subscribe((state) => {
-        if (state) {
-          this.seed = this.wasm.generatePhrase();
-          this.seedState = this.seed.split(' ');
-          this.store.dispatch(addSeedPhrase({seedPhraseValue: this.seed}));
-          if (this.sub) {
-            this.sub.unsubscribe();
+    if (this.componentSettings.isFromFTF) {
+      this.wasmState$ = this.store.pipe(select(selectWasmState));
+      this.sub = this.wasmState$.subscribe((state) => {
+          if (state) {
+            this.seed = this.wasm.generatePhrase();
+            this.seedState = this.seed.split(' ');
+            this.store.dispatch(addSeedPhrase({seedPhraseValue: this.seed}));
+            if (this.sub) {
+              this.sub.unsubscribe();
+            }
           }
-        }
-    });
+      });
+    }
   }
 
   ngOnDestroy() {
@@ -66,7 +90,7 @@ export class FtfViewSeedComponent implements OnInit, OnDestroy {
         seed: this.seed,
         backLink: routes.FTF_VIEW_SEED_ROUTE,
         nextLink: routes.FTF_PASSWORD_CREATE_ROUTE,
-        isFromFTF: true,
+        isFromFTF: this.componentSettings.isFromFTF,
         directionLink: routes.FTF_CONFIRM_SEED_ROUTE
       }
     };
@@ -78,11 +102,10 @@ export class FtfViewSeedComponent implements OnInit, OnDestroy {
     const navigationExtras: NavigationExtras = {
       state: {
         seedConfirmed: false,
-        seed: this.seed,
-        directionLink: routes.FTF_PASSWORD_CREATE_ROUTE
+        seed: this.seed
       }
     };
-    this.router.navigate([this.router.url, { outlets: { popup: 'save-seed' }}], navigationExtras);
+    this.router.navigate([routes.FTF_PASSWORD_CREATE_ROUTE], navigationExtras);
   }
 
   backClicked(event) {

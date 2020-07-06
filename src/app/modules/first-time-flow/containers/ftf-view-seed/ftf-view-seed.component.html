@@ -28,7 +28,8 @@
                             (click)="completeVerificationClicked($event)">
                     complete verification
                 </app-button>
-                <app-button class="generate__content__controls__later-button" 
+                <app-button class="generate__content__controls__later-button"
+                            *ngIf="componentSettings.isFromFTF"
                             (click)="laterClicked($event)">
                     I will do it later
                 </app-button>
@@ -54,7 +55,8 @@
         </div>
         <div class="generate__bottom-content">
             <app-button class="generate__bottom-content__back-button" (click)="backClicked($event)">back</app-button>
-            <app-button class="generate__bottom-content__later-button" 
+            <app-button class="generate__bottom-content__later-button"
+                        *ngIf="componentSettings.isFromFTF"
                         (click)="laterClicked($event)">
                 I will do it later
             </app-button>

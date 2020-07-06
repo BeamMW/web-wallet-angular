@@ -22,6 +22,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { WalletEffects } from './store/effects/wallet.effects';
 import * as walletReducer from './store/index';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   entryComponents: [],
@@ -52,7 +53,7 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
     StoreRouterConnectingModule.forRoot(),
     RouterModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

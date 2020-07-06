@@ -14,7 +14,8 @@ import {
   MatToolbarModule,
   MatSortModule,
   MatTableModule,
-  MatMenuModule
+  MatMenuModule,
+  MatProgressBarModule
 } from '@angular/material';
 
 import {
@@ -29,7 +30,8 @@ import {
   AddContactComponent,
   PaymentProofExportedComponent,
   StatusIconComponent,
-  SeedVerificationPopupComponent
+  SeedVerificationPopupComponent,
+  LoaderComponent
  } from './components';
 
 import {
@@ -71,6 +73,7 @@ import {
     StatusIconComponent,
     StatusColorDirective,
     SeedVerificationPopupComponent,
+    LoaderComponent,
   ],
   imports: [
     CommonModule,
@@ -84,7 +87,8 @@ import {
     MatToolbarModule,
     MatSortModule,
     MatTableModule,
-    MatMenuModule
+    MatMenuModule,
+    MatProgressBarModule
   ],
   exports: [
     WalletStatusTitleComponent,
@@ -104,7 +108,8 @@ import {
     DetectCapsDirective,
     NumbersOnlyDirective,
     StatusIconComponent,
-    StatusColorDirective
+    StatusColorDirective,
+    LoaderComponent
   ],
   providers: [
     DecimalPipe

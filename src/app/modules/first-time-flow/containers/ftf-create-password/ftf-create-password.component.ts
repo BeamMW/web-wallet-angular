@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environment';
-import { Router  } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { WasmService } from '../../../../wasm.service';
 import { Store, select } from '@ngrx/store';
 import { selectWasmState } from '../../../../store/selectors/wallet-state.selectors';
@@ -79,38 +79,14 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
     const confirmPass = this.createForm.value.passwordConfirm;
 
     if (confirmPass === pass && (pass !== null && pass.length > 0)) {
-      console.log(`[create-wallet] Creating new wallet with seed phrase: ${this.seed}`);
-      this.keeperSub = this.wasmService.keykeeperInit(this.seed).subscribe(value => {
-        const ownerKey = this.wasmService.keyKeeper.getOwnerKey(pass);
-        console.log('[create-wallet] ownerKey is: data:application/octet-stream;base64,' + ownerKey);
-
-        this.sub = this.websocketService.on().subscribe((msg: any) => {
-          console.log('[create-wallet] got response: ');
-          console.dir(msg);
-          if (msg.result && msg.result.length) {
-            console.log(`[create-wallet] wallet session: ${msg.result}`);
-
-            passworder.encrypt(pass, {seed: this.seed, id: msg.result})
-              .then((result) => {
-                this.dataService.saveWallet(result);
-                this.dataService.settingsInit(this.seedConfirmed);
-                this.sub.unsubscribe();
-                this.keeperSub.unsubscribe();
-                this.dataService.loginToWallet(msg.result, pass);
-              });
-          }
-        });
-
-        this.websocketService.send({
-          jsonrpc: '2.0',
-          id: 0,
-          method: 'create_wallet',
-          params: {
-            pass: pass,
-            ownerkey: ownerKey
-          }
-        });
-      });
+      const navigationExtras: NavigationExtras = {
+        state: {
+          seed: this.seed,
+          pass,
+          seedConfirmed: this.seedConfirmed
+        }
+      };
+      this.router.navigate([routes.FTF_CREATE_LOADER], navigationExtras);
     } else if (pass === null || confirmPass === null ||
         pass.length === 0 || confirmPass.length === 0) {
       this.localParams.emptyPass = pass.length === 0 || pass === null;

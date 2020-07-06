@@ -18,7 +18,8 @@ import {
   EnterDnsPopupComponent,
   CheckPassConfirmationPopupComponent,
   ChangePasswordPopupComponent,
-  ReportPopupComponent
+  ReportPopupComponent,
+  ShowOwnerKeyPopupComponent
 } from './components';
 
 import {
@@ -39,7 +40,8 @@ import {
     EnterDnsPopupComponent,
     CheckPassConfirmationPopupComponent,
     ChangePasswordPopupComponent,
-    ReportPopupComponent
+    ReportPopupComponent,
+    ShowOwnerKeyPopupComponent
   ],
   imports: [
     CommonModule,

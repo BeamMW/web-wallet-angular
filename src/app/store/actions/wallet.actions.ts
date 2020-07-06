@@ -23,7 +23,7 @@ export const updateSaveLogsSetting = createAction('[Wallet state] Update save lo
 export const updateCurrencySetting = createAction('[Wallet state] Update currency setting', props<{ settingValue: any }>());
 export const updateDnsSetting = createAction('[Wallet state] Update dns setting', props<{ settingValue: string }>());
 export const updateIpSetting = createAction('[Wallet state] Update ip setting', props<{ settingValue: string }>());
-export const updateVerificatedSetting = createAction('[Wallet state] Update verificated setting', props<{ settingValue: boolean }>());
+export const updateVerificatedSetting = createAction('[Wallet state] Update verificated setting', props<{ settingValue: any }>());
 export const updatePasswordCheckSetting = createAction('[Wallet state] Update password check setting', props<{ settingValue: boolean }>());
 
 /* Contact list */

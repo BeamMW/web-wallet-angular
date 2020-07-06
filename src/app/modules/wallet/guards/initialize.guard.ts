@@ -20,7 +20,7 @@ export class InitializeGuard implements CanActivate {
                 this.router.navigate([routes.FTF_CREATE_WALLET_ROUTE]);
                 return false;
             }
-          });
+        });
 
         return true;
     }

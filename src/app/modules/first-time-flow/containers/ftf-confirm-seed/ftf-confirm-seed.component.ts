@@ -63,7 +63,11 @@ export class FtfConfirmSeedComponent implements OnInit {
         }
       }
     } catch (e) {
-      this.router.navigate([routes.FTF_VIEW_SEED_ROUTE]);
+      this.dataService.loadWalletData().then(walletData => {
+        if (walletData !== undefined) {
+            this.router.navigate([routes.WALLET_MAIN_ROUTE]);
+        }
+      });
     }
 
     dataService.changeEmitted$.subscribe(emittedState => {
@@ -103,10 +107,18 @@ export class FtfConfirmSeedComponent implements OnInit {
 
   backClicked(event) {
     event.stopPropagation();
-    if (this.componentSettings.backLink === routes.FTF_VIEW_SEED_ROUTE) {
+    if (this.componentSettings.isFromFTF) {
       this.router.navigate([this.router.url, { outlets: { popup: 'return-to-seed' }}]);
     } else {
-      this.router.navigate([this.componentSettings.backLink]);
+      const navigationExtras: NavigationExtras = {
+        state: {
+          seed: this.seedState.join(' '),
+          backLink: routes.WALLET_MAIN_ROUTE,
+          nextLink: routes.WALLET_MAIN_ROUTE,
+          isFromFTF: false
+        }
+      };
+      this.router.navigate([routes.FTF_VIEW_SEED_ROUTE], navigationExtras);
     }
   }
 
@@ -121,7 +133,7 @@ export class FtfConfirmSeedComponent implements OnInit {
         };
         this.router.navigate([this.componentSettings.nextLink], navigationExtras);
       } else {
-        this.dataService.updateVerificatedSetting();
+        this.dataService.updateVerificatedSettingOnInit();
         this.dataService.saveWalletOptions();
         this.router.navigate([this.componentSettings.nextLink]);
       }

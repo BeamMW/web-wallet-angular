@@ -1,0 +1,29 @@
+<div class="owner" [class.validated]="isPassValidated" appClickOutside (clickOutside)="closePopup()">
+    <div class="owner__title">Show onwer key</div>
+    <form class="owner__form" [formGroup]="confirmForm" autocomplete="off" novalidate>
+        <ng-container *ngIf="isPassValidated">
+           <div class="owner__form__key-data">{{ownerKey}}</div>
+        </ng-container>
+        <ng-container *ngIf="!isPassValidated">
+            <input class="owner__form__input" type="password" #passInput
+                name="password" formControlName="password" [class.incorrect]="!isCorrectPass"
+                (input)="passUpdated($event)"
+                placeholder="Enter your current password"/>
+                {{ passInput.focus() }}
+            <div class="owner__form__validator" *ngIf="!isCorrectPass">Incorrect password</div>
+        </ng-container>
+    </form>
+    <div class="owner__controls" [class.incorrect]="!isCorrectPass">
+        <div class="owner__controls__cancel">
+            <app-button class="copy-button" (click)="cancelClicked($event)" >cancel</app-button>
+        </div>
+        <div class="owner__controls__next" *ngIf="!isPassValidated">
+            <app-button class="copy-button" (click)="submit($event)" >ok</app-button>
+        </div>
+        <ng-container *ngIf="isPassValidated">
+            <div class="owner__controls__confirm">
+                <app-button class="copy-button" (click)="validatedSubmit($event)">ok</app-button>
+            </div>
+        </ng-container>
+    </div>
+</div>

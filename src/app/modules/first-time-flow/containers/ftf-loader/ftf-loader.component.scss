@@ -1,0 +1,169 @@
+@import 'ui-mixins';
+@import './styles';
+
+:host {
+    flex: 1 0 auto;
+    background-color: #042548;
+}
+
+.background {
+    position: absolute;
+    overflow: hidden;
+    height: calc(100% - 20px);
+    width: 100%;
+    position: absolute;
+
+    &__bg {
+        width: 100%;
+    }
+}
+
+.create {
+    min-height: 530px;
+    display: flex;
+    flex-direction: column;
+    
+    &__logo {
+        margin: 70px auto 0 auto;
+        width: 160px;
+        height: 140px;
+        z-index: 10;
+    }
+
+    &__header-text {
+        @include normal-text;
+        margin-top: 34px;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        letter-spacing: .6px;
+        text-align: center;
+        color: #25c1ff;
+        z-index: 10;
+    }
+
+    &__create-button {
+        text-align: center;
+        margin-top: auto;
+        z-index: 10;
+        
+        @include ui-button($btn-open-wallet, $btn-lg) {
+            width: 253px;
+            height: 44;
+            font-size: 14px;
+        }
+
+        @include ui-button-create-wallet-icon()
+    }
+
+    &__restore-beta {
+        margin-top: 20px;
+        margin-bottom: 94px;
+        height: 18px;
+        @include normal-text;
+        opacity: 0.5;
+        font-family: 'ProximaNovaIT', sans-serif;
+        font-size: 14px;
+        line-height: 1.29;
+        text-align: center;
+        color: #ffffff;
+        z-index: 10;
+    }
+
+    &__creating {
+        @include normal-text;
+        font-family: 'ProximaNova', sans-serif;
+        text-align: center;
+        margin-top: 50px;
+        font-size: 14px;
+        line-height: 1.29;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    &__loader {
+        width: 255px;
+        margin: 20px auto 0 auto;
+    }    
+}
+
+::ng-deep .mat-progress-bar-fill::after {
+    box-shadow: 0 0 5px 0 rgba(0, 246, 210, 0.7);
+    background-color: #00f6d2;
+    border-radius: 10px;
+}
+
+::ng-deep .mat-progress-bar-buffer {
+    background: rgba(255, 255, 255, 0);
+}
+
+::ng-deep .mat-progress-bar {
+    border-radius: 10px;
+    border: solid 1px #1c435b;
+}
+
+::ng-deep .mat-progress-bar-background {
+    animation: none;
+    background-color: rgba(255, 255, 255, 0);
+    fill: rgba(255, 255, 255, 0);
+  }
+
+.blur-filter {
+    -webkit-filter: blur(4px);
+    -moz-filter: blur(4px);
+    -o-filter: blur(4px);
+    -ms-filter: blur(4px);
+    filter: blur(4px);
+}
+
+@media (min-width: 400px) {
+    .create {
+        height: 100%;
+        
+        &__logo {
+            margin: 140px auto 0 auto;
+            width: 240px;
+            height: 210px;
+        }
+
+        &__header-text {
+            @include normal-text;
+            margin-top: 37px;
+            font-family: 'ProximaNovaBold', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            color: #25c1ff;
+        }
+
+        &__create-button {
+            margin-top: auto;
+            
+            @include ui-button($btn-open-wallet, $btn-full-xlg) {
+                width: 198px;
+                height: 38px;
+                font-size: 14px;
+            }
+    
+            @include ui-button-create-wallet-icon()
+        }
+
+        &__restore-beta {
+            margin-top: 20px;
+            margin-bottom: 105px;
+            height: 18px;
+            @include normal-text;
+            opacity: 0.5;
+            font-family: 'ProximaNovaIT', sans-serif;
+            font-size: 14px;
+            line-height: 1.29;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        &__loader {
+            width: 400px;
+            margin: 20px auto 0 auto;
+        }    
+    }
+}

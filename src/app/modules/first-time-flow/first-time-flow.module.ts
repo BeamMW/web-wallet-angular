@@ -2,13 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
+import { MatProgressBarModule } from '@angular/material';
 
 import {
   FtfCreateComponent,
   FtfGenerateSeedComponent,
   FtfConfirmSeedComponent,
   FtfCreatePasswordComponent,
-  FtfViewSeedComponent
+  FtfViewSeedComponent,
+  FtfLoaderComponent
 } from './containers';
 
 import {
@@ -26,14 +28,16 @@ import { FirstTimeFlowRoutingModule } from './first-time-flow-routing.module';
     FtfConfirmSeedComponent,
     FtfCreatePasswordComponent,
     SaveSeedPopupComponent,
-    ReturnToSeedPopupComponent
+    ReturnToSeedPopupComponent,
+    FtfLoaderComponent
   ],
   imports: [
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
     FirstTimeFlowRoutingModule,
-    SharedModule
+    SharedModule,
+    MatProgressBarModule
   ]
 })
 export class FirstTimeFlowModule { }

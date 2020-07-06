@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router} from '@angular/router';
 import { ActivatedRoute} from '@angular/router';
-import { DataService, WindowService } from './../../../../services';
+import { DataService, WindowService, LogService } from './../../../../services';
 import { Subscription, Observable } from 'rxjs';
 import { environment } from '@environment';
 
@@ -15,9 +15,8 @@ export class ClearWalletPopupComponent implements OnInit, OnDestroy {
   sub: Subscription;
   isFullScreen = false;
 
-  deleteContactsChecked = false;
   deleteTransactionsChecked = false;
-  deleteAddressesChecked = false;
+  deleteLogsChecked = false;
 
   public iconCheckbox: string = `${environment.assetsPath}/images/modules/settings/components/clear-wallet-popup/check-box.svg`;
   public iconFilledCheckbox: string = `${environment.assetsPath}/images/modules/settings/components/clear-wallet-popup/check-box-fill.svg`;
@@ -25,6 +24,7 @@ export class ClearWalletPopupComponent implements OnInit, OnDestroy {
   constructor(private windowSerivce: WindowService,
               public router: Router,
               private activatedRoute: ActivatedRoute,
+              private logService: LogService,
               private dataService: DataService) {
     this.isFullScreen = windowSerivce.isFullSize();
   }
@@ -42,6 +42,15 @@ export class ClearWalletPopupComponent implements OnInit, OnDestroy {
 
   submit($event) {
     $event.stopPropagation();
+
+    if (this.deleteLogsChecked) {
+      this.logService.emptyLogs();
+    }
+
+    if (this.deleteTransactionsChecked) {
+
+    }
+
     this.dataService.emitChange({popupOpened: false});
     this.router.navigate([{ outlets: { popup: null }}], {relativeTo: this.activatedRoute.parent});
   }
@@ -57,5 +66,9 @@ export class ClearWalletPopupComponent implements OnInit, OnDestroy {
 
   clearTransactionsClicked() {
     this.deleteTransactionsChecked = !this.deleteTransactionsChecked;
+  }
+
+  clearLogsClicked() {
+    this.deleteLogsChecked = !this.deleteLogsChecked;
   }
 }

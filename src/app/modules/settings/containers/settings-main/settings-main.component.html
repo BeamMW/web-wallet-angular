@@ -48,7 +48,7 @@
                             *ngIf="item.title === activeItem.title && item.expandable">
                             <!-- General -->
                             <ng-container *ngIf="item === menuItems[0]">
-                                <div class="general__logs">
+                                <!-- <div class="general__logs">
                                     <span class="general-item-title">Save wallet logs</span>
                                     <app-dropdown class="general__logs__menu" 
                                         (menuChanged)="logsDropdownSelected($event)" 
@@ -66,14 +66,14 @@
                                 </div>
                                 <span class="general__currency-updated">
                                     (last updated on {{currencyUpdated | date:'d MMM, y'}})
-                                </span>
+                                </span> -->
                                 <div class="general__clear general-item-title" 
                                         (click)="clearLocalWalletClicked($event)">
                                     Clear local wallet data
                                 </div>
                             </ng-container>
                             <!-- Server -->
-                            <ng-container *ngIf="item === menuItems[1]">
+                            <!-- <ng-container *ngIf="item === menuItems[1]">
                                 <div class="server">
                                     <div class="server__dns" (click)="enterDnsClicked($event)">
                                         <span class="server-item-title">dns/ip</span>
@@ -90,9 +90,9 @@
                                         </span>
                                     </div>
                                 </div>
-                            </ng-container>
+                            </ng-container> -->
                             <!-- Privacy -->
-                            <ng-container *ngIf="item === menuItems[2]">
+                            <ng-container *ngIf="item === menuItems[1]">
                                 <div class="privacy">
                                     <div class="privacy__ask-pass">
                                         <span class="privacy-item-title">Ask for password on every Send</span>
@@ -100,16 +100,21 @@
                                                         (change)="checkPasswordToggle($event)" 
                                                         [checked]="isCheckedPassword"></mat-slide-toggle>
                                     </div>
-                                    <div class="privacy__complete-vf" (click)="completeVerificationClicked($event)">
+                                    <div class="privacy__complete-vf" 
+                                            *ngIf="verificatedSettingLoaded && !verificatedSettingState"
+                                            (click)="completeVerificationClicked($event)">
                                         <span class="privacy-item-title">Complete seed verification</span>
                                     </div>
                                     <div class="privacy__change-pass" (click)="changePasswordClicked($event)">
                                         <span class="privacy-item-title">Change password</span>
                                     </div>
+                                    <!-- <div class="privacy__show-owner-key" (click)="showOwnerKeyClicked($event)">
+                                        <span class="privacy-item-title">Show owner key</span>
+                                    </div> -->
                                 </div>
                             </ng-container>
                             <!-- Utilities -->
-                            <ng-container *ngIf="item === menuItems[3]">
+                            <ng-container *ngIf="item === menuItems[2]">
                                 <div class="utilities__get-beams" 
                                         (click)="getFromFaucet()">
                                     <span class="util-item-title">Get beams from the community faucet</span>

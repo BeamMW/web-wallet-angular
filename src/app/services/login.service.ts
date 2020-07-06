@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as ObservableStore from 'obs-store';
 import { Subject, Observable, Subscription } from 'rxjs';
 import { webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { map } from 'rxjs/operators';
@@ -42,7 +41,7 @@ export class LoginService {
     }
 
     connect() {
-        this.subject = new WebSocketSubject(environment.ws);
+        this.subject = new WebSocketSubject('wss://web-wallet-masternet.beam.mw/ws');
 
         this.subject.subscribe(
           (msg) => {

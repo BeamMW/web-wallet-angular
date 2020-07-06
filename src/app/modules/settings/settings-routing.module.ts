@@ -28,7 +28,8 @@ import {
   EnterIpPopupComponent,
   CheckPassConfirmationPopupComponent,
   ChangePasswordPopupComponent,
-  ReportPopupComponent
+  ReportPopupComponent,
+  ShowOwnerKeyPopupComponent
  } from './components';
 
 const routes: Routes = [{
@@ -52,11 +53,13 @@ const routes: Routes = [{
         path: 'remove-wallet-confirmation-popup', component: RemoveWalletConfirmationPopupComponent, outlet: 'popup',
       }, {
         path: 'clear-wallet-popup', component: ClearWalletPopupComponent, outlet: 'popup',
-      }, {
-        path: 'enter-dns-popup', component: EnterDnsPopupComponent, outlet: 'popup',
-      }, {
-        path: 'enter-ip-popup', component: EnterIpPopupComponent, outlet: 'popup',
-      }, {
+      },
+      // {
+      //   path: 'enter-dns-popup', component: EnterDnsPopupComponent, outlet: 'popup',
+      // }, {
+      //   path: 'enter-ip-popup', component: EnterIpPopupComponent, outlet: 'popup',
+      // },
+      {
         path: 'check-pass-confirmation-popup', component: CheckPassConfirmationPopupComponent, outlet: 'popup',
       }, {
         path: 'change-pass-popup', component: ChangePasswordPopupComponent, outlet: 'popup',
@@ -66,6 +69,8 @@ const routes: Routes = [{
         path: 'report-popup', component: ReportPopupComponent, outlet: 'popup',
       }, {
         path: 'payment-proof', component: PaymentProofComponent, outlet: 'popup',
+      }, {
+        path: 'show-owner-key', component: ShowOwnerKeyPopupComponent, outlet: 'popup',
       }
     ]
   }, {
@@ -88,11 +93,12 @@ const routes: Routes = [{
         path: '', component: ServerComponent
       }, {
         path: 'payment-proof', component: PaymentProofComponent, outlet: 'popup',
-      }, {
-        path: 'enter-dns-popup', component: EnterDnsPopupComponent, outlet: 'popup',
-      }, {
-        path: 'enter-ip-popup', component: EnterIpPopupComponent, outlet: 'popup',
       }
+      // , {
+      //   path: 'enter-dns-popup', component: EnterDnsPopupComponent, outlet: 'popup',
+      // }, {
+      //   path: 'enter-ip-popup', component: EnterIpPopupComponent, outlet: 'popup',
+      // }
     ]
   }, {
     path: 'privacy',
@@ -108,6 +114,8 @@ const routes: Routes = [{
         path: 'change-pass-popup', component: ChangePasswordPopupComponent, outlet: 'popup',
       }, {
         path: 'seed-verification-popup', component: SeedVerificationPopupComponent, outlet: 'popup',
+      }, {
+        path: 'show-owner-key', component: ShowOwnerKeyPopupComponent, outlet: 'popup',
       }
     ]
   }, {

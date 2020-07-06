@@ -1,0 +1,10 @@
+<div class="background" [class.blur-filter]="!isFullScreen && popupOpened">
+    <img [src]="bgUrl" class="background__bg">
+</div>
+<div class="create" [class.blur-filter]="!isFullScreen && popupOpened">
+    <img [src]="logoUrl" class="create__logo">
+    <div class="create__header-text">Scalable confidential cryptocurrency</div>
+    <div class="create__creating">Creating wallet...</div>
+    <mat-progress-bar class="create__loader" mode="indeterminate"></mat-progress-bar>
+
+</div>

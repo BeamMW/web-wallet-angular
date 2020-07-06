@@ -6,7 +6,8 @@ import {
   FtfGenerateSeedComponent,
   FtfConfirmSeedComponent,
   FtfCreatePasswordComponent,
-  FtfViewSeedComponent
+  FtfViewSeedComponent,
+  FtfLoaderComponent
 } from './containers';
 
 import {
@@ -30,6 +31,14 @@ const routes: Routes = [{
         path: '', component: HeaderWithoutLogoComponent, outlet: 'header'
       }, {
         path: '', component: FtfCreateComponent
+      }
+    ]
+  }, {
+    path: 'loader',
+    children: [{
+        path: '', component: HeaderWithoutLogoComponent, outlet: 'header'
+      }, {
+        path: '', component: FtfLoaderComponent
       }
     ]
   }, {

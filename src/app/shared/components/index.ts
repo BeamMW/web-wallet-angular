@@ -1,3 +1,5 @@
+import { from } from 'rxjs';
+
 export * from './wallet-status-title/wallet-status-title.component';
 export * from './header/header-logo/header-logo.component';
 export * from './header/header-popup/header-popup.component';
@@ -14,3 +16,4 @@ export * from './dropdown/dropdown.component';
 export * from './popups/payment-proof-exported/payment-proof-exported.component';
 export * from './status-icon/status-icon.component';
 export * from './popups/seed-verification-popup/seed-verification-popup.component';
+export * from './loader/loader.component';

@@ -44,21 +44,46 @@
                         </div>
                     </ng-container>
                 </div>
-                <ng-container *ngIf="!verificatedSetting && componentSettings.isValidationVisible">
-                    <div class="main__content__validate">
-                        <img class="main__content__validate__close-icon"
-                            [src]="iconClose"
-                            *ngIf="!componentSettings.isAvailableEnough"
-                            (click)="closeVerificationMessage()"/>
-                        <div class="main__content__validate__text" [class.enough]="componentSettings.isAvailableEnough">
-                            Write down and validate your seed phrase so you can always recover your funds.
+                <div class="flex-row">
+                    <ng-container *ngIf="componentSettings.isGetCoinsVisible && !dataService.getCoinsState.getState()">
+                        <div class="main__content__get-coins"
+                                [class.validation-visible]="componentSettings.isValidationVisible">
+                            <img class="main__content__get-coins__close-icon"
+                                [src]="iconClose"
+                                (click)="closeGetCoinsMessage()"/>
+                            <div class="main__content__get-coins__text"
+                                    [class.validation-not-visible]="!componentSettings.isValidationVisible">
+                                See the wallet in action. Get a very small amount of Beams from the community faucet.
+                            </div>
+                            <div class="main__content__get-coins__link" 
+                                [class.validation-not-visible]="!componentSettings.isValidationVisible"
+                                (click)="getCoinsClicked($event)">
+                                <img class="main__content__get-coins__link__logo" [src]="iconGetCoinsButton">
+                                <span class="main__content__get-coins__link__text">get coins</span>
+                            </div>
                         </div>
-                        <div class="main__content__validate__link" 
-                            (click)="seedVerificationClicked($event)">
-                                Secure your phrase
+                    </ng-container>
+                    
+                    <ng-container *ngIf="componentSettings.validationStateLoaded && componentSettings.validationState">
+                        <div class="main__content__validate" 
+                                [class.get-coins-visible]="componentSettings.isGetCoinsVisible">
+                            <img class="main__content__validate__close-icon"
+                                [src]="iconClose"
+                                *ngIf="!componentSettings.isAvailableEnough"
+                                (click)="closeVerificationMessage()"/>
+                            <div class="main__content__validate__text" 
+                                    [class.getcoins-not-visible]="!componentSettings.isGetCoinsVisible"
+                                    [class.enough]="componentSettings.isAvailableEnough">
+                                Write down and validate your seed phrase so you can always recover your funds.
+                            </div>
+                            <div class="main__content__validate__link"
+                                [class.getcoins-not-visible]="!componentSettings.isGetCoinsVisible"
+                                (click)="seedVerificationClicked($event)">
+                                    Secure your phrase
+                            </div>
                         </div>
-                    </div>
-                </ng-container>
+                    </ng-container>
+                </div>
             </ng-container>
             <ng-container *ngIf="transactions$ | async as transactions">
                 <ng-container>
@@ -124,18 +149,35 @@
                 <app-button class="main__controls__send-button" [routerLink]="sendRoute">send</app-button>
                 <app-button class="main__controls__receive-button" [routerLink]="receiveRoute">receive</app-button>
             </div>
-            <ng-container *ngIf="!verificatedSetting && componentSettings.isValidationVisible">
+            <ng-container *ngIf="componentSettings.isGetCoinsVisible && !dataService.getCoinsState.getState()">
+                <div class="main__get-coins">
+                    <img class="main__get-coins__close-icon"
+                        [src]="iconClose"
+                        (click)="closeGetCoinsMessage()"/>
+                    <div class="main__get-coins__text">
+                        See the wallet in action. Get a very small amount of Beams from the community faucet.
+                    </div>
+                    <div class="main__get-coins__link"
+                        (click)="getCoinsClicked($event)">
+                        <img class="main__get-coins__link__logo" [src]="iconGetCoinsButton">
+                        <span class="main__get-coins__link__text">get coins</span>
+                    </div>
+                </div>
+            </ng-container>
+            
+            <ng-container *ngIf="componentSettings.validationStateLoaded && componentSettings.validationState">
                 <div class="main__validate">
                     <img class="main__validate__close-icon"
                         [src]="iconClose"
                         *ngIf="!componentSettings.isAvailableEnough"
                         (click)="closeVerificationMessage()"/>
-                    <div class="main__validate__text" [class.enough]="componentSettings.isAvailableEnough">
+                    <div class="main__validate__text"
+                            [class.enough]="componentSettings.isAvailableEnough">
                         Write down and validate your seed phrase so you can always recover your funds.
                     </div>
-                    <div class="main__validate__link" 
+                    <div class="main__validate__link"
                         (click)="seedVerificationClicked($event)">
-                            Complete verifications
+                            Secure your phrase
                     </div>
                 </div>
             </ng-container>

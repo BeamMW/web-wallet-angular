@@ -13,16 +13,21 @@
     <div class="privacy__container">
         <div class="privacy__container__ask-pass">
             <span class="privacy-item-title">Ask for password on every Send</span>
-            <mat-slide-toggle class="privacy-item-slide" 
+            <mat-slide-toggle class="privacy-item-slide"
                             (change)="checkPasswordToggle($event)" 
                             [checked]="isCheckedPassword"></mat-slide-toggle>
         </div>
-        <div class="privacy__container__complete-vf" (click)="completeVerificationClicked($event)">
+        <div class="privacy__container__complete-vf" 
+                *ngIf="verificatedSettingLoaded && !verificatedSettingState"
+                (click)="completeVerificationClicked($event)">
             <span class="privacy-item-title">Complete seed verification</span>
         </div>
         <div class="privacy__container__change-pass" (click)="changePasswordClicked($event)">
             <span class="privacy-item-title">Change password</span>
         </div>
+        <!-- <div class="privacy__container__show-owner-key" (click)="showOwnerKeyClicked($event)">
+            <span class="privacy-item-title">Show owner key</span>
+        </div> -->
     </div>
     
     <div class="privacy__top-gradient"></div>

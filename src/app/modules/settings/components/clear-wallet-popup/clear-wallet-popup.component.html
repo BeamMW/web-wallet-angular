@@ -5,6 +5,10 @@
             <div>Delete all transactions</div>
             <img class="clear-data-checkbox" [src]="deleteTransactionsChecked ? iconFilledCheckbox : iconCheckbox">
         </div>
+        <div class="clear__content__logs" (click)="clearLogsClicked()">
+            <div>Delete logs</div>
+            <img class="clear-data-checkbox" [src]="deleteLogsChecked ? iconFilledCheckbox : iconCheckbox">
+        </div>
     </div>
     <div class="clear__controls">
         <div class="clear__controls__cancel">
