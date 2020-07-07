@@ -1,10 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { TransactionDetailsComponent, TransactionsViewComponent } from './containers';
+import {
+  TransactionDetailsComponent,
+  TransactionsViewComponent
+} from './containers';
 import { MainLayoutComponent } from '@shared/layouts';
 import { HeaderComponent } from '@shared/containers';
-import {PaymentProofComponent} from '@shared/components';
+import {
+  PaymentProofExportedComponent,
+  PaymentProofComponent
+} from '@shared/components';
 import { LoginGuard } from './../wallet/guards/login.guard';
 
 const routes: Routes = [{
@@ -36,6 +42,8 @@ const routes: Routes = [{
         path: '', component: TransactionDetailsComponent
       }, {
         path: 'payment-proof', component: PaymentProofComponent, outlet: 'popup',
+      }, {
+        path: 'payment-proof-exported', component: PaymentProofExportedComponent, outlet: 'popup',
       }
     ]
   }]

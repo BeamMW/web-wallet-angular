@@ -5,6 +5,7 @@ import { TransactionDetailsComponent } from './containers/transaction-details/tr
 import { SharedModule } from '../../shared/shared.module';
 import { TransactionsRoutingModule } from './transactions-routing.module';
 import { TransactionElementComponent } from './components/transaction-element/transaction-element.component';
+import { ClipboardModule } from 'ngx-clipboard';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { TransactionElementComponent } from './components/transaction-element/tr
     TransactionElementComponent
   ],
   imports: [
+    ClipboardModule,
     CommonModule,
     SharedModule,
     TransactionsRoutingModule

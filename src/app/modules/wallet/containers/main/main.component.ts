@@ -106,8 +106,9 @@ export class MainComponent implements OnInit, OnDestroy {
       this.verificatedSetting = verState;
 
       this.walletStatus$.subscribe((walletState) => {
-        this.componentSettings.isAvailableEnough = walletState.available !== undefined &&
-          parseFloat(walletState.available) >= 100 * globalConsts.GROTHS_IN_BEAM;
+        this.componentSettings.isAvailableEnough = verState.balanceWasPositiveMoreEn ||
+          (!verState.balanceWasPositiveMoreEn && (parseFloat(walletState.receiving) >= 100 * globalConsts.GROTHS_IN_BEAM ||
+          parseFloat(walletState.available) >= 100 * globalConsts.GROTHS_IN_BEAM));
 
         this.componentSettings.validationState = !this.verificatedSetting.state &&
           (!this.verificatedSetting.isMessageClosed ||
@@ -115,7 +116,8 @@ export class MainComponent implements OnInit, OnDestroy {
 
         this.componentSettings.validationStateLoaded = true;
         this.componentSettings.isValidationVisible = this.componentSettings.validationState;
-        this.componentSettings.isGetCoinsVisible = walletState.available === 0 && !this.dataService.getCoinsState.getState();
+        this.componentSettings.isGetCoinsVisible = !verState.balanceWasPositive &&
+          walletState.available === 0 && !this.dataService.getCoinsState.getState();
       });
     });
 
@@ -183,7 +185,9 @@ export class MainComponent implements OnInit, OnDestroy {
   closeVerificationMessage() {
     this.store.dispatch(updateVerificatedSetting({settingValue: {
       state: this.verificatedSetting.state,
-      isMessageClosed: true
+      isMessageClosed: true,
+      balanceWasPositive: this.verificatedSetting.balanceWasPositive,
+      balanceWasPositiveMoreEn: this.verificatedSetting.balanceWasPositiveMoreEn
     }}));
     this.dataService.saveWalletOptions();
     this.componentSettings.isValidationVisible = false;

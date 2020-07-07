@@ -16,9 +16,7 @@ import { DataService, WindowService, WebsocketService } from './../../../../serv
 import {
   updatePrivacySetting
 } from './../../../../store/actions/wallet.actions';
-
 import { environment } from '@environment';
-
 
 export enum selectorTitles {
   AVAILABLE = 'Available',
@@ -36,8 +34,9 @@ export class UtxoMainComponent implements OnInit {
   public iconMenu: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icon-menu.svg`;
   public iconEmpty: string = `${environment.assetsPath}/images/modules/utxo/containers/utxo-main/icon-utxo-empty-state.svg`;
   public iconSecure: string = `${environment.assetsPath}/images/modules/utxo/containers/utxo-main/icn-eye-crossed.svg`;
-  public iconDisabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye.svg`; 
+  public iconDisabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye.svg`;
   public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed.svg`;
+  public iconDrop: string = `${environment.assetsPath}/images/modules/addresses/components/address-type-menu/arrow.svg`;
 
   public tableType = 'utxo';
   public tableColumns = ['utxo_amount', 'utxo_maturity', 'utxo_type', 'utxo_status'];
@@ -52,6 +51,7 @@ export class UtxoMainComponent implements OnInit {
   privacyMode = false;
   popupOpened = false;
   modalOpened = false;
+  isDropdownVisible = false;
 
   constructor(private store: Store<any>,
               private wasm: WasmService,
@@ -95,20 +95,33 @@ export class UtxoMainComponent implements OnInit {
   public selectorItemAvailableClicked() {
     this.utxos$ = this.store.pipe(select(selectAvailableUtxo));
     this.utxoSelectorActiveTitle = selectorTitles.AVAILABLE;
+    this.isDropdownVisible = false;
   }
 
   public selectorItemInProgressClicked() {
     this.utxos$ = this.store.pipe(select(selectInProgressUtxo));
     this.utxoSelectorActiveTitle = selectorTitles.IN_PROGRESS;
+    this.isDropdownVisible = false;
   }
 
   public selectorItemSpentClicked() {
     this.utxos$ = this.store.pipe(select(selectSpentUtxo));
     this.utxoSelectorActiveTitle = selectorTitles.SPENT;
+    this.isDropdownVisible = false;
   }
 
   public selectorItemUnavailableClicked() {
     this.utxos$ = this.store.pipe(select(selectUnavailableUtxo));
     this.utxoSelectorActiveTitle = selectorTitles.UNAVAILABLE;
+    this.isDropdownVisible = false;
+  }
+
+  onClickedOutside() {
+    this.isDropdownVisible = !this.isDropdownVisible;
+  }
+
+  changeDropdownState(event) {
+    event.stopPropagation();
+    this.isDropdownVisible = !this.isDropdownVisible;
   }
 }

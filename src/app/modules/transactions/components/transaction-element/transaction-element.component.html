@@ -20,7 +20,7 @@
                 <ng-container>{{getValueSign()}}</ng-container>
                  {{ transaction.value | beam:'1.0-9'}} BEAM</div>
         </div>
-        <div class="transaction__common__created">{{transaction.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
+        <div class="transaction__common__created">{{transaction.create_time * 1000 | date:'d MMM y | HH:mm'}}</div>
         <div class="tr-comment" *ngIf="!isCommentDefault(transaction.comment) && transaction.comment.length > 0">
             <img class="tr-comment__icon" [src]="iconComment"/>
             <span class="tr-comment__text">"{{transaction.comment}}"</span>

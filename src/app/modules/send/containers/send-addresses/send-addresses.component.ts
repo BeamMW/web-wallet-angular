@@ -14,6 +14,7 @@ import { WasmService } from './../../../../wasm.service';
 import { debounceTime } from 'rxjs/operators';
 import { globalConsts, routes } from '@consts';
 import Big from 'big.js';
+import { selectAvailableUtxo } from '../../../../store/selectors/utxo.selectors';
 
 @Component({
   selector: 'app-send-addresses',
@@ -29,6 +30,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   walletStatus$: Observable<any>;
   sendFrom: string;
   passwordCheckSetting$: Observable<any>;
+  utxos$: Observable<any>;
   sendData$: Observable<any>;
   private isPassCheckEnabled = false;
 
@@ -60,6 +62,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
               private store: Store<any>,
               private windowService: WindowService,
               private wsService: WebsocketService) {
+    this.utxos$ = this.store.pipe(select(selectAvailableUtxo));
     this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
     this.localParams.isFullScreen = windowService.isFullSize();
     this.passwordCheckSetting$ = this.store.pipe(select(selectPasswordCheckSetting));
@@ -133,6 +136,37 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     this.fullSendForm.get('amount').valueChanges.pipe(debounceTime(500)).subscribe(newValue => {
       this.amountChanged(newValue);
     });
+    this.getSmallestUtxo();
+  }
+
+  getSmallestUtxo() {
+    this.resetStats();
+    this.walletStatus$.subscribe((status) => {
+      const available = new Big(status.available);
+      this.utxos$.subscribe(utxos => {
+        if (utxos.length > 0) {
+          const sortedUtxo = utxos.sort((a, b) => {
+            return a.amount - b.amount;
+          });
+
+          const smallestUtxoAmount = sortedUtxo[0].amount;
+          this.stats.totalUtxo = new Big(smallestUtxoAmount).plus(100);
+          this.dataService.calculateTrChange(parseFloat(this.stats.totalUtxo
+              .plus(this.fullSendForm.value.fee)));
+
+          this.changeSub = this.sendData$.subscribe(sendData => {
+            if (this.changeSub !== undefined) {
+              this.changeSub.unsubscribe();
+            }
+            this.stats.totalUtxo = new Big(smallestUtxoAmount).div(globalConsts.GROTHS_IN_BEAM);
+            this.stats.amountToSend = new Big(0);
+            this.stats.change = new Big(sendData.change).div(globalConsts.GROTHS_IN_BEAM);
+            this.stats.remaining = available.minus(100)
+              .minus(smallestUtxoAmount).div(globalConsts.GROTHS_IN_BEAM);
+          });
+        }
+      }).unsubscribe();
+    }).unsubscribe();
   }
 
   ngOnDestroy() {
@@ -151,6 +185,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       if (status.available > 0) {
         const allAmount = (status.available - this.fullSendForm.value.fee) / globalConsts.GROTHS_IN_BEAM;
         this.amountChanged(allAmount);
+        this.addressInputCheck();
         this.localParams.isFullScreen ?
         this.fullSendForm.get('amount').setValue(allAmount) :
           this.sendForm.get('amount').setValue(allAmount);
@@ -166,10 +201,12 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     const feeValue = control.value.replace(/[^0-9]/g, '');
     this.localParams.feeIsCorrect = parseInt(feeValue, 10) >= globalConsts.MIN_FEE_VALUE;
     control.setValue(feeValue);
+    this.amountChanged(this.fullSendForm.get('amount'));
     this.valuesValidationCheck();
   }
 
   amountChanged(amountInputValue) {
+    this.resetStats();
     if (amountInputValue.length > 0 || amountInputValue > 0) {
       this.walletStatus$.subscribe((status) => {
         amountInputValue = new Big(amountInputValue);
@@ -213,16 +250,16 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     } else {
       this.localParams.isNotEnoughAmount = false;
       this.localParams.amountValidated = false;
-      this.resetStats();
+      this.getSmallestUtxo();
     }
     this.valuesValidationCheck();
   }
 
   resetStats() {
-    this.stats.totalUtxo = 0;
-    this.stats.amountToSend = 0;
-    this.stats.change = 0;
-    this.stats.remaining = 0;
+    this.stats.totalUtxo = new Big(0);
+    this.stats.amountToSend = new Big(0);
+    this.stats.change = new Big(0);
+    this.stats.remaining = new Big(0);
   }
 
   addressInputUpdated(value) {

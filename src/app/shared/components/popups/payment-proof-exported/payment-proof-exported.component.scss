@@ -2,14 +2,13 @@
 @import './styles';
 
 :host {
-    height: 0;
+    height: 100%;
 }
 
 .proof {
     position: absolute;
-	max-height: 700px;
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 	margin: auto;
     top: 0; 
     left: 0; 
@@ -30,9 +29,9 @@
         border-radius: 10px;
         background-color: #003f6f;
         position: absolute;
-        width: 460px;
+        width: 335px;
         min-height: 125px;
-        top: 50%;
+        top: 38%;
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 1500;
@@ -128,11 +127,12 @@
     &__controls {
         display: flex;
         justify-content: center;
+        flex-direction: column;
         margin-top: 20px;
         margin-bottom: 30px;
 
         &__copy {
-            margin-left: 20px;
+            margin: 10px auto 0 auto;
             @include ui-button($btn-ok, $btn-nssm) {
                 width: 165px;
             }
@@ -141,6 +141,7 @@
         }
 
         &__copy-code {
+            margin: 0 auto;
             @include ui-button($btn-cancel, $btn-nssm) {
                 width: 165px;
             }
@@ -217,8 +218,15 @@
 
 @media (min-width: 400px) {
     .proof {    
-        
-        //margin-top: -63px;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        top: 0; 
+        left: 0; 
+        bottom: 0; 
+        right: 0;
+        z-index: 1100;
 
         &__title {
             font-size: 18px;
@@ -231,14 +239,19 @@
             color: #ffffff;
         }
 
-    
+        &__container {
+            top: 50%;
+            width: 460px;
+        }
 
         &__controls {
             display: flex;
             justify-content: center;
             margin-top: 20px;
-    
+            flex-direction: row;
+
             &__copy {
+                margin: 20px 0 0 20px;
                 @include ui-button($btn-ok, $btn-nssm) {
                     width: 170px;
                 }
@@ -247,6 +260,7 @@
             }
     
             &__copy-code {
+                margin: 20px 0 0 0;
                 @include ui-button($btn-cancel, $btn-nssm) {
                     width: 170px;
                 }

@@ -7,7 +7,7 @@
           <span>Created on</span>
           <img class="sort-icon" [src]="activeSortItem === sortParams.created ? iconSortActive : iconSort">
         </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{ element.create_time * 1000 | date:'d MMM y | HH:MM'}} </mat-cell>
+        <mat-cell *matCellDef="let element"> {{ element.create_time * 1000 | date:'d MMM y | HH:mm'}} </mat-cell>
       </ng-container>
   
       <ng-container matColumnDef="from">
@@ -77,7 +77,7 @@
           Expiration date
           <img class="sort-icon" [src]="activeSortItem === sortParams.exp_date ? iconSortActive : iconSort">
         </mat-header-cell>
-        <mat-cell *matCellDef="let element">  {{ element.create_time * 1000 | date:'d MMM y | HH:MM'}}  </mat-cell>
+        <mat-cell *matCellDef="let element">  {{ element.create_time * 1000 | date:'d MMM y | HH:mm'}}  </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="status">
@@ -172,7 +172,7 @@
                 <div class="tr-details__info">
                   <div class="tr-details__info__header">DETAILS</div>
                   <div class="details-title">DATE</div>
-                  <div class="details-value">{{detail.element.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
+                  <div class="details-value">{{detail.element.create_time * 1000 | date:'d MMM y | HH:mm'}}</div>
                   <ng-container *ngIf="detail.element.token !== undefined && detail.element.token.length > 0">
                     <div class="details-title">TOKEN</div>
                     <div class="details-value">{{detail.element.token}}</div>

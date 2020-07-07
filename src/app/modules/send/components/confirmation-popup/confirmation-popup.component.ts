@@ -13,6 +13,7 @@ import {
   selectSendData
 } from './../../../../store/selectors/wallet-state.selectors';
 import { globalConsts } from '@consts';
+import Big from 'big.js';
 
 @Component({
   selector: 'app-confirmation-popup',
@@ -34,9 +35,9 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
 
   public sendData = {
     address: '',
-    fee: 0,
+    fee: new Big(0),
     comment: '',
-    amount: 0
+    amount: new Big(0)
   };
   public contactIcon: string = `${environment.assetsPath}/images/shared/components/table/icon-contact.svg`;
 
@@ -62,8 +63,8 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
         isPassCheckEnabled: boolean
       };
       this.sendData.address = state.address;
-      this.sendData.fee = state.fee === undefined || state.fee === 0 ? 100 : state.fee;
-      this.sendData.amount = state.amount;
+      this.sendData.fee = new Big(state.fee === undefined || state.fee === 0 ? 100 : state.fee);
+      this.sendData.amount = new Big(state.amount);
       this.sendData.comment = state.comment;
       this.isPassCheckEnabled = state.isPassCheckEnabled;
     } catch (e) {}
@@ -107,7 +108,7 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
   }
 
   getTotalUtxo() {
-    return (this.sendData.amount + this.sendData.fee) / globalConsts.GROTHS_IN_BEAM;
+    return parseFloat((this.sendData.amount.plus(this.sendData.fee)).div(globalConsts.GROTHS_IN_BEAM));
   }
 
   cancelClicked($event) {

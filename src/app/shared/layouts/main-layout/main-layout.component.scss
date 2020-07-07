@@ -1,5 +1,10 @@
 :host {
   display: flex;
   flex-direction: column;
-  height: 100%;
+}
+
+@media (min-width: 400px) {
+  :host {
+    height: 100%;
+  }
 }

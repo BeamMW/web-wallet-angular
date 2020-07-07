@@ -1,7 +1,7 @@
 <div class="transactions" *ngIf="transactions$ | async as transactions">
     <ng-container *ngIf="transactions.length > 0">
         <div class="transactions__item" *ngFor="let item of transactions">
-            <div class="transactions__item__created">{{ item.create_time * 1000 | date:'d MMM y | HH:MM' }}</div>
+            <div class="transactions__item__created">{{ item.create_time * 1000 | date:'d MMM y | HH:mm' }}</div>
             <div class="transactions__item__to">To: {{ (item.receiver | slice:0:6)+'...'+(item.receiver | slice:-6) }}</div>
             <div class="transactions__item__amount"
                 [class.sent]="item.status_string === 'sending' || item.status_string === 'sent'"

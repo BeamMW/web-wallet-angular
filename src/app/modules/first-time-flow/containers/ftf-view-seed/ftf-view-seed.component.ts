@@ -110,6 +110,6 @@ export class FtfViewSeedComponent implements OnInit, OnDestroy {
 
   backClicked(event) {
     event.stopPropagation();
-    this.router.navigate([routes.FTF_GENERATE_SEED_ROUTE]);
+    this.router.navigate([!this.componentSettings.isFromFTF ? this.componentSettings.backLink : routes.FTF_GENERATE_SEED_ROUTE]);
   }
 }

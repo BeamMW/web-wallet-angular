@@ -17,7 +17,6 @@ export class PaymentProofExportedComponent implements OnInit, OnDestroy {
   isFullScreen = false;
   proofLoaded = false;
   proofData: any;
-  popupOpened = false;
   scrollOffset = 0;
   proofData$: Observable<any>;
 
@@ -30,13 +29,6 @@ export class PaymentProofExportedComponent implements OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute,
               private dataService: DataService) {
     this.isFullScreen = windowSerivce.isFullSize();
-
-    dataService.changeEmitted$.subscribe(emittedState => {
-      if (emittedState.popupOpened !== undefined) {
-        this.popupOpened = emittedState.popupOpened;
-      }
-    });
-
     this.proofData$ = this.store.pipe(select(selectProofData));
 
     this.proofData$.subscribe((state) => {
@@ -46,19 +38,23 @@ export class PaymentProofExportedComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.dataService.emitChange({popupOpened: true});
     this.scrollOffset = window.pageYOffset;
     window.scroll(0, 0);
-    document.body.style.overflowY = 'hidden';
+    if (this.isFullScreen) {
+      document.body.style.overflowY = 'hidden';
+    }
+    this.dataService.emitChange({popupOpened: true});
   }
 
   ngOnDestroy() {
-    this.dataService.emitChange({popupOpened: false});
     if (this.sub !== undefined) {
       this.sub.unsubscribe();
     }
     window.scroll(0, this.scrollOffset);
-    document.body.style.overflowY = 'auto';
+    if (this.isFullScreen) {
+      document.body.style.overflowY = 'auto';
+    }
+    this.dataService.emitChange({popupOpened: false});
   }
 
   closePopup(event) {

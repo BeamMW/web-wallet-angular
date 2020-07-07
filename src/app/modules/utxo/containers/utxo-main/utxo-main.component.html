@@ -25,14 +25,44 @@
         </div>
 
         <div class="utxo__container">
-            <ng-container *ngIf="!privacyMode && utxos$ | async as utxos">
-                <div class="utxo__container__header" *ngIf="utxos.length > 0">
-                    <div class="utxo__container__header__title">
-                        <span class="utxo__container__header__title__text">UTXO</span>
-                    </div>
-                    <div class="utxo__container__header__show-all">
+            <div class="utxo__container__header">
+                <div class="utxo__container__header__title">
+                    <span class="utxo__container__header__title__text">UTXO</span>
+                </div>
+                <div class="utxo__container__header__selector">
+                    <span class="dropdown-header" (click)="changeDropdownState($event)">
+                        <span>{{utxoSelectorActiveTitle}}</span>
+                        <img src="" class="dropdown-header__icon" [src]="iconDrop">
+                    </span>
+                    <div class="dropdown" *ngIf="isDropdownVisible" appClickOutside (clickOutside)="onClickedOutside()">
+                        <div class="dropdown__content">
+                            <ul class="dropdown__column">
+                                <li class="dropdown__item"
+                                        [class.active]="selectorTitlesData.AVAILABLE === utxoSelectorActiveTitle" 
+                                        (click)="selectorItemAvailableClicked()"> 
+                                    {{selectorTitlesData.AVAILABLE}} 
+                                </li>
+                                <li class="dropdown__item"
+                                        [class.active]="selectorTitlesData.IN_PROGRESS === utxoSelectorActiveTitle" 
+                                        (click)="selectorItemInProgressClicked()"> 
+                                    {{selectorTitlesData.IN_PROGRESS}} 
+                                </li>
+                                <li class="dropdown__item"
+                                        [class.active]="selectorTitlesData.SPENT === utxoSelectorActiveTitle" 
+                                        (click)="selectorItemSpentClicked()"> 
+                                    {{selectorTitlesData.SPENT}} 
+                                </li>
+                                <li class="dropdown__item"
+                                        [class.active]="selectorTitlesData.UNAVAILABLE === utxoSelectorActiveTitle" 
+                                        (click)="selectorItemUnavailableClicked()"> 
+                                    {{selectorTitlesData.UNAVAILABLE}} 
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <ng-container *ngIf="!privacyMode && utxos$ | async as utxos">
                 <div class="utxo__container__content">
                     <ng-container *ngIf="utxos.length > 0">
                         <div class="utxos-container" *ngFor="let utxo of utxos; let i = index">

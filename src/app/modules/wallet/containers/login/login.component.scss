@@ -9,7 +9,7 @@
 .background {
     position: absolute;
     overflow: hidden;
-    height: calc(100% - 20px);
+    height: calc(100% - 70px);
     width: 100%;
     position: absolute;
     z-index: 1;
@@ -146,6 +146,10 @@
 }
 
 @media (min-width: 400px) {
+    .background {
+        height: calc(100% - 20px);
+    }
+    
     .login {
         height: calc(100% - 20px);
 
@@ -164,7 +168,7 @@
         }
 
         &__controls {
-            margin: 33px auto 0 auto;
+            margin: auto auto 0 auto;
 
             @include ui-button($btn-open-wallet, $btn-lg) {
                 width: 192px;
@@ -177,6 +181,10 @@
 
         &__controls.incorrect {
             margin-top: 12px;
+        }
+
+        &__restore-beta {
+            margin-bottom: 105px;
         }
 
         &__subheader-text {

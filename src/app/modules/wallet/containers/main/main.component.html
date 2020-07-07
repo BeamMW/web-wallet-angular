@@ -149,7 +149,7 @@
                 <app-button class="main__controls__send-button" [routerLink]="sendRoute">send</app-button>
                 <app-button class="main__controls__receive-button" [routerLink]="receiveRoute">receive</app-button>
             </div>
-            <ng-container *ngIf="componentSettings.isGetCoinsVisible && !dataService.getCoinsState.getState()">
+            <ng-container *ngIf="componentSettings.isGetCoinsVisible">
                 <div class="main__get-coins">
                     <img class="main__get-coins__close-icon"
                         [src]="iconClose"

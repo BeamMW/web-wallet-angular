@@ -25,7 +25,9 @@ export interface WalletAppState {
     passwordCheck: boolean;
     verificatedSetting: {
         state: boolean,
-        isMessageClosed: boolean
+        isMessageClosed: boolean,
+        balanceWasPositive: boolean,
+        balanceWasPositiveMoreEn: boolean
     };
     sendData: {
         change: number
@@ -62,7 +64,9 @@ export const initialWalletAppState: WalletAppState = {
     ipSetting: '3.222.86.179:20000',
     verificatedSetting: {
         state: false,
-        isMessageClosed: false
+        isMessageClosed: false,
+        balanceWasPositive: false,
+        balanceWasPositiveMoreEn: false
     },
     passwordCheck: true,
     sendData: {

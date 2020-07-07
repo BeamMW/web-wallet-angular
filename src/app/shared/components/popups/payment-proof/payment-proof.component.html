@@ -1,43 +1,98 @@
-<div class="proof" (click)="closePopup($event)">
-    <div class="proof__container" [class.loaded]="proofLoaded" #proofContainer (click)="$event.stopPropagation()">
-        <img class="proof__cancel-icon" [src]="popupCloseIcon" (click)="closePopup($event)">
-        <div class="proof__title">Payment proof verification</div>
-        <div class="proof__content">
-            <form class="proof__content__form" [formGroup]="proofForm" autocomplete="off" novalidate (ngSubmit)="submit()">
-                <textarea class="proof__content__form__input" autosize maxlength="500"
-                    #proofInput (input)="proofInputUpdated(proofForm.get('proof'))"
-                    [class.incorrect]="parseError"
-                    name="proof" formControlName="proof" placeholder="Paste your payment proof code"></textarea>
-                <div class="proof__content__form__error" *ngIf="parseError">Cannot decode a proof, illegal sequence</div>
-            </form>
-            <ng-container *ngIf="proofLoaded">
-                <div class="details" *ngIf="proofLoaded">
-                    <div class="details__header">
-                        <div class="details__header__title">DETAILS</div>
-                        <div class="details__header__controller"></div>
+<ng-container *ngIf="isFullScreen">
+    <div class="proof" (click)="closePopup($event)">
+        <div class="proof__container" [class.loaded]="proofLoaded" #proofContainer (click)="$event.stopPropagation()">
+            <img class="proof__cancel-icon" [src]="popupCloseIcon" (click)="closePopup($event)">
+            <div class="proof__title">Payment proof verification</div>
+            <div class="proof__content">
+                <form class="proof__content__form" [formGroup]="proofForm" autocomplete="off" novalidate (ngSubmit)="submit()">
+                    <textarea class="proof__content__form__input" autosize maxlength="500"
+                        #proofInput (input)="proofInputUpdated(proofForm.get('proof'))"
+                        [class.incorrect]="parseError"
+                        name="proof" formControlName="proof" placeholder="Paste your payment proof code"></textarea>
+                    <div class="proof__content__form__error" *ngIf="parseError">Cannot decode a proof, illegal sequence</div>
+                </form>
+                <ng-container *ngIf="proofLoaded">
+                    <div class="details" *ngIf="proofLoaded">
+                        <div class="details__header">
+                            <div class="details__header__title">DETAILS</div>
+                            <div class="details__header__controller"></div>
+                        </div>
+                        <div class="details__item-title">SENDER</div>
+                        <div class="details__item-value">{{proofData.sender}}</div>
+                        <div class="details__item-title">RECEIVER</div>
+                        <div class="details__item-value">{{proofData.receiver}}</div>
+                        <div class="details__item-title">AMOUNT</div>
+                        <div class="details__item-value">{{proofData.amount | beam:'1.0-9'}} BEAM</div>
+                        <div class="details__item-title">KERNEL ID</div>
+                        <div class="details__item-value">{{proofData.kernel}}</div>
+                        <div class="details__explorer-link" (click)="openInExplorerClicked($event)">
+                            Open in Blockchain Explorer
+                        </div>
                     </div>
-                    <div class="details__item-title">SENDER</div>
-                    <div class="details__item-value">{{proofData.sender}}</div>
-                    <div class="details__item-title">RECEIVER</div>
-                    <div class="details__item-value">{{proofData.receiver}}</div>
-                    <div class="details__item-title">AMOUNT</div>
-                    <div class="details__item-value">{{proofData.amount | beam:'1.0-9'}} BEAM</div>
-                    <div class="details__item-title">KERNEL ID</div>
-                    <div class="details__item-value">{{proofData.kernel}}</div>
-                    <div class="details__explorer-link" (click)="openInExplorerClicked($event)">
-                        Open in Blockchain Explorer
-                    </div>
-                </div>
-            </ng-container>
-        <div class="proof__controls" *ngIf="proofLoaded">
-            <div class="proof__controls__cancel">
-                <app-button class="copy-button" (click)="closePopup($event)" >close</app-button>
+                </ng-container>
             </div>
-            <div class="proof__controls__copy">
-                <app-button class="copy-button" ngxClipboard [cbContent]="proofDataToCp()">copy details</app-button>
+            <div class="proof__controls" *ngIf="proofLoaded">
+                <div class="proof__controls__cancel">
+                    <app-button class="copy-button" (click)="closePopup($event)" >close</app-button>
+                </div>
+                <div class="proof__controls__copy">
+                    <app-button class="copy-button" ngxClipboard [cbContent]="proofDataToCp()">copy details</app-button>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+    </div>    
+</ng-container>
+<ng-container *ngIf="!isFullScreen">
+    <div class="full-background-container">
+        <div class="proof" (click)="closePopup($event)">
+            <div class="proof__container" [class.loaded]="proofLoaded" 
+                    #proofContainer (click)="$event.stopPropagation()">
+                <img class="proof__cancel-icon" [src]="popupCloseIcon" (click)="closePopup($event)">
+                <div class="proof__title">Payment proof verification</div>
+                <div class="proof__content">
+                    <form class="proof__content__form" [formGroup]="proofForm" 
+                            autocomplete="off" novalidate (ngSubmit)="submit()">
+                        <textarea class="proof__content__form__input" autosize maxlength="500"
+                            #proofInput (input)="proofInputUpdated(proofForm.get('proof'))"
+                            [class.incorrect]="parseError"
+                            name="proof" formControlName="proof" 
+                            placeholder="Paste your payment proof code"></textarea>
+                        <div class="proof__content__form__error" *ngIf="parseError">
+                            Cannot decode a proof, illegal sequence
+                        </div>
+                    </form>
+                    <ng-container *ngIf="proofLoaded">
+                        <div class="details" *ngIf="proofLoaded">
+                            <div class="details__header">
+                                <div class="details__header__title">DETAILS</div>
+                                <div class="details__header__controller"></div>
+                            </div>
+                            <div class="details__item-title">SENDER</div>
+                            <div class="details__item-value">{{proofData.sender}}</div>
+                            <div class="details__item-title">RECEIVER</div>
+                            <div class="details__item-value">{{proofData.receiver}}</div>
+                            <div class="details__item-title">AMOUNT</div>
+                            <div class="details__item-value">{{proofData.amount | beam:'1.0-9'}} BEAM</div>
+                            <div class="details__item-title">KERNEL ID</div>
+                            <div class="details__item-value">{{proofData.kernel}}</div>
+                            <div class="details__explorer-link" (click)="openInExplorerClicked($event)">
+                                Open in Blockchain Explorer
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="proof__controls" *ngIf="proofLoaded">
+                    <div class="proof__controls__cancel">
+                        <app-button class="copy-button" (click)="closePopup($event)" >close</app-button>
+                    </div>
+                    <div class="proof__controls__copy">
+                        <app-button class="copy-button" ngxClipboard [cbContent]="proofDataToCp()">copy details</app-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</ng-container>
+
 
 <div *ngIf="isFullScreen && popupOpened" class="full-popup-opened"></div>

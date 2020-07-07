@@ -1,4 +1,4 @@
-<div class="details">
+<div class="details" [class.blur-filter]="popupOpened">
     <div class="details__header">
         <div class="back-control-wrapper">
             <img class="details__header__back" (click)="backClicked()" [src]="iconBack"/>
@@ -21,7 +21,7 @@
         <div class="details__container">
             <div class="details__container__header">DETAILS</div>
             <div class="details-title">DATE</div>
-            <div class="details-value">{{transaction.create_time * 1000 | date:'d MMM y | HH:MM'}}</div>
+            <div class="details-value">{{transaction.create_time * 1000 | date:'d MMM y | HH:mm'}}</div>
             <ng-container *ngIf="transaction.token !== undefined && transaction.token.length > 0">
                 <div class="details-title">TOKEN</div>
                 <div class="details-value">{{transaction.token}}</div>
@@ -36,6 +36,38 @@
             <div class="details-value">{{transaction.txId}}</div>
             <div class="details-title">KERNEL ID</div>
             <div class="details-value">{{transaction.kernel}} GROTH</div>
+        </div>
+        <div class="tr-details__specs" *ngIf="transaction.status_string === 'sent'">
+            <div class="tr-details__specs__proof">
+                <div class="tr-details__specs__proof__header">Payment proof</div>
+                <div class="tr-details__specs__proof__controls">
+                    <div class="tr-details__specs__proof__controls__details">
+                    <app-button (click)="proofDetailsClicked($event)">details</app-button>
+                    </div>
+                    <div class="tr-details__specs__proof__controls__copy">
+                        <app-button ngxClipboard [cbContent]="proofDataToCp()">copy</app-button>
+                    </div>
+                </div>
+            </div>
+            <div class="tr-details__specs__utxo">
+              <div class="tr-details__specs__utxo__header" (click)='utxoListHeaderClicked($event)'>
+                <span>TRANSACTION UTXO LIST</span>
+                <img class="tr-details__specs__utxo__header__icon" 
+                  [class.list-visible]="!isUtxoListVisible" [src]="arrowIcon">
+              </div>
+              <ng-container *ngIf="isUtxoListVisible">
+                <div class="tr-details__specs__utxo__list" *ngIf="utxoList$ | async as utxoList">
+                  <div *ngFor="let item of utxoList">
+                    <div class="tr-details__specs__utxo__list__item">
+                      <img [src]="item.status_string === 'spent' ? sentIcon : receivedIcon">
+                      <span class="tr-details__specs__utxo__list__item__value"> 
+                        {{ item.amount | beam:'1.0-9'}} BEAM
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
         </div>
     </ng-container>
     

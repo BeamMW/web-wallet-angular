@@ -5,18 +5,18 @@
 </a>
 <mat-menu class="actions-container" #menu="matMenu">
     <ng-container *ngIf="tableType === tableTypesConsts.TRANSACTIONS">
-        <button mat-menu-item>
+        <!-- <button mat-menu-item>
             <img class="actions-icon" [src]="shareIcon">
             <span class="actions-text">Share details</span>
         </button>
         <button mat-menu-item>
             <img class="actions-icon" [src]="copyIcon">
             <span class="actions-text">Copy details</span>
-        </button>
-        <button mat-menu-item>
+        </button> -->
+        <!-- <button mat-menu-item>
             <img class="actions-icon" [src]="repeatIcon">
             <span class="actions-text">Repeat transaction</span>
-        </button>
+        </button> -->
         <button mat-menu-item 
             (click)="cancelTransactionClicked()"
             (mouseover)="componentIcons.cancelActualIcon = componentIcons.cancelIconActive"

@@ -15,7 +15,7 @@
             <div class="details__container__address">{{data.address}}</div>
             <div class="details-title"> {{data.expired ? 'EXPIRED' : 'EXPIRATION DATE'}}</div>
             <div class="details__container__expiring">
-                {{data.duration === 0 ? 'never' : (data.create_time + data.duration) * 1000 | date:'d MMM y | HH:MM' }}
+                {{data.duration === 0 ? 'never' : (data.create_time + data.duration) * 1000 | date:'d MMM y | HH:mm' }}
             </div>
         </div>
         <div class="details__transactions" *ngIf="transactions$ | async as transactions">

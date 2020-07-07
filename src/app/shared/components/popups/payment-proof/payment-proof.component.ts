@@ -77,7 +77,6 @@ export class PaymentProofComponent implements OnInit, OnDestroy {
       if (msg.id === 4) {
         if (msg.result && msg.result.is_valid && proofValue.length > 0) {
           this.proofData = msg.result;
-
           this.proofLoaded = true;
           this.parseError = false;
         } else if (msg.error && proofValue.length === 0) {

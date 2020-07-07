@@ -7,7 +7,8 @@ import {
   selectAppState,
   selectWalletSetting,
   selectContacts,
-  selectIsNeedToReconnect
+  selectIsNeedToReconnect,
+  selectVerificatedSetting
 } from '../store/selectors/wallet-state.selectors';
 import {
   loadWalletState,
@@ -33,7 +34,7 @@ import { LoginService } from './login.service';
 import { WebsocketService } from './websocket.service';
 import { LogService } from './log.service';
 import * as passworder from 'browser-passworder';
-import { routes } from '@consts';
+import { routes, globalConsts } from '@consts';
 import * as ObservableStore from 'obs-store';
 
 @Injectable({
@@ -105,7 +106,9 @@ export class DataService {
         ipSetting: '3.222.86.179:20000',
         verificatedSetting: {
           state: seedConfirmed,
-          isMessageClosed: false
+          isMessageClosed: false,
+          balanceWasPositive: false,
+          balanceWasPositiveMoreEn: false
         },
         passwordCheck: true
     }});
@@ -172,7 +175,9 @@ export class DataService {
       this.store.dispatch(updatePrivacySetting({settingValue: settingsData.privacySetting}));
       this.store.dispatch(updateVerificatedSetting({settingValue: {
         state: settingsData.verificatedSetting.state,
-        isMessageClosed: settingsData.verificatedSetting.isMessageClosed
+        isMessageClosed: settingsData.verificatedSetting.isMessageClosed,
+        balanceWasPositive: settingsData.verificatedSetting.balanceWasPositive,
+        balanceWasPositiveMoreEn: settingsData.verificatedSetting.balanceWasPositiveMoreEn
       }}));
       this.store.dispatch(updateSaveLogsSetting({settingValue: settingsData.saveLogsSetting}));
       this.store.dispatch(updateDnsSetting({settingValue: settingsData.dnsSetting}));
@@ -188,7 +193,9 @@ export class DataService {
   updateVerificatedSettingOnInit() {
     this.store.dispatch(updateVerificatedSetting({settingValue: {
       state: true,
-      isMessageClosed: false
+      isMessageClosed: false,
+      balanceWasPositive: false,
+      balanceWasPositiveMoreEn: false
     }}));
   }
 
@@ -211,10 +218,11 @@ export class DataService {
   }
 
   public deactivateWallet() {
+    clearInterval(this.refreshIntervalId);
     this.disconnectWallet();
+    this.getCoinsState.putState(false);
     this.store.dispatch(saveWallet({wallet: {}}));
     this.store.dispatch(ChangeWalletState({walletState: false}));
-    clearInterval(this.refreshIntervalId);
   }
 
   loadWalletContacts() {
@@ -228,8 +236,8 @@ export class DataService {
   }
 
   clearWalletData() {
-    extensionizer.storage.local.remove(['settings', 'wallet', 'contacts', 'state']);
     clearInterval(this.refreshIntervalId);
+    extensionizer.storage.local.remove(['settings', 'wallet', 'contacts', 'state']);
   }
 
   loginToService(seed: string, loginToWallet: boolean = true, walletId?: string, pass?: string) {
@@ -305,7 +313,8 @@ export class DataService {
       method: 'open_wallet',
       params: {
         pass: password,
-        id: walletId
+        id: walletId,
+        fresh_keeper: true
       }
     });
   }
@@ -380,6 +389,32 @@ export class DataService {
         this.store.dispatch(saveWalletStatus({status: msg.result}));
         this.statusSub.unsubscribe();
         this.addressesUpdate();
+
+        if (msg.result.receiving > 0 || msg.result.available > 0) {
+          const verificatedSetting$ = this.store.pipe(select(selectVerificatedSetting));
+          verificatedSetting$.subscribe((verState) => {
+            if (!verState.balanceWasPositive && (msg.result.receiving > 0 || msg.result.available > 0)) {
+              this.store.dispatch(updateVerificatedSetting({settingValue: {
+                state: verState.state,
+                isMessageClosed: verState.isMessageClosed,
+                balanceWasPositive: true,
+                balanceWasPositiveMoreEn: verState.balanceWasPositiveMoreEn
+              }}));
+              this.saveWalletOptions();
+            }
+
+            if (!verState.balanceWasPositiveMoreEn && (msg.result.receiving >= 100 * globalConsts.GROTHS_IN_BEAM ||
+                msg.result.available >= 100 * globalConsts.GROTHS_IN_BEAM)) {
+              this.store.dispatch(updateVerificatedSetting({settingValue: {
+                state: verState.state,
+                isMessageClosed: verState.isMessageClosed,
+                balanceWasPositive: verState.balanceWasPositive,
+                balanceWasPositiveMoreEn: true
+              }}));
+              this.saveWalletOptions();
+            }
+          }).unsubscribe();
+        }
       }
     });
 
@@ -410,8 +445,8 @@ export class DataService {
       method: 'tx_send',
       params:
       {
-        value : sendData.amount,
-        fee : sendData.fee,
+        value : parseFloat(sendData.amount),
+        fee : parseFloat(sendData.fee),
         address : sendData.address,
         comment : sendData.comment &&
           sendData.comment.length > 0 ?

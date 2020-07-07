@@ -68,8 +68,16 @@ html {
 
     &,
     body {
-        height: 100%;
         width: 100%;
+        position: relative;
+    }
+
+    
+    @media (min-width: 400px) {
+      &,
+      body {
+        height: 100%;
+      }
     }
 
     body {
@@ -86,22 +94,6 @@ html {
         text-align: left;
     }
 }
-
-// body::-webkit-scrollbar-track {
-// 	border-radius: 10px;
-// 	background: transparent;
-// }
-
-// body::-webkit-scrollbar {
-//   width: 12px;
-//   background: transparent;
-// }
-
-// body::-webkit-scrollbar-thumb {
-//   border-radius: 1.5px;
-//   background: red;
-// }
-
 
 body {
   overflow-y: overlay;

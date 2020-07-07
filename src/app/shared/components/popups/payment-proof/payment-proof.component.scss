@@ -5,11 +5,15 @@
     height: 0;
 }
 
+.full-background-container {
+    position: relative;
+    background-color: #042548;
+    height: 840px;
+}
+
 .proof {
     position: absolute;
-	max-height: 700px;
 	width: 100%;
-	margin: auto;
     top: 0; 
     left: 0; 
     bottom: 0; 
@@ -32,15 +36,14 @@
         position: absolute;
         width: 335px;
         min-height: 125px;
-        top: 50%;
+        top: 255px;
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 1500;
     }
     
     &__container.loaded {
-        margin-top: 125px;
-        margin-bottom: 20px;
+        top: 450px;
     }
 
     &__title {
@@ -195,6 +198,7 @@
     .proof {
         height: 100%;
         overflow: none;
+        margin: auto;
         
         //margin-top: -63px;
 

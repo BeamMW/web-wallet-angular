@@ -52,6 +52,7 @@ export class RemoveWalletConfirmationPopupComponent implements OnInit, OnDestroy
         this.loginService.disconnect();
         this.websocketService.disconnect();
         this.dataService.clearWalletData();
+        this.dataService.getCoinsState.putState(false);
         this.router.navigate(['/initialize/create']);
       }).catch(error => {
         this.isCorrectPass = false;

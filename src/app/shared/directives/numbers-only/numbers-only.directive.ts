@@ -9,7 +9,10 @@ export class NumbersOnlyDirective {
   private MAX_AMOUNT = 254000000;
 
   private regex: RegExp = new RegExp(/^-?\d+(\.\d*)?$/g);
-  private specialKeys: Array<string> = ['Backspace', 'Tab'];
+  private specialKeys: Array<string> = [
+    'Backspace', 'Tab', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp',
+    'Control'
+  ];
 
   constructor(private el: ElementRef) {
   }
