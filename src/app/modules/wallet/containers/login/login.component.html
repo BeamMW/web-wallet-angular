@@ -13,6 +13,9 @@
                 placeholder="Password"/>
                 {{ passInput.focus() }}
             <div class="login__container__validator" *ngIf="!isCorrectPass">Incorrect password</div>
+            <ng-container *ngIf="errorState$ | async as errorState">
+                <div class="login__container__validator" *ngIf="errorState.gotAnError">{{errorState.errorMessage}}</div>
+            </ng-container>
         </form>
     </div>
     <div class="login__controls" [class.incorrect]="!isCorrectPass">

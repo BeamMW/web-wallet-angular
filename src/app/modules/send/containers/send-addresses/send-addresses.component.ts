@@ -151,8 +151,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
           const smallestUtxoAmount = sortedUtxo[0].amount;
           this.stats.totalUtxo = new Big(smallestUtxoAmount).plus(100);
-          this.dataService.calculateTrChange(parseFloat(this.stats.totalUtxo
-              .plus(this.fullSendForm.value.fee)));
+          this.dataService.calculateTrChange(parseFloat(this.fullSendForm.value.fee));
 
           this.changeSub = this.sendData$.subscribe(sendData => {
             if (this.changeSub !== undefined) {
@@ -161,8 +160,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
             this.stats.totalUtxo = new Big(smallestUtxoAmount).div(globalConsts.GROTHS_IN_BEAM);
             this.stats.amountToSend = new Big(0);
             this.stats.change = new Big(sendData.change).div(globalConsts.GROTHS_IN_BEAM);
-            this.stats.remaining = available.minus(100)
-              .minus(smallestUtxoAmount).div(globalConsts.GROTHS_IN_BEAM);
+            this.stats.remaining = 0;
           });
         }
       }).unsubscribe();
@@ -236,7 +234,8 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
                 this.stats.change = new Big(0);
                 this.localParams.amountValidated = false;
               } else {
-                this.stats.remaining = available.minus(feeFullValue).minus(this.stats.amountToSend);
+                this.stats.remaining = available.minus(feeFullValue)
+                  .minus(this.stats.change).minus(this.stats.amountToSend);
                 this.localParams.amountValidated = true;
               }
             }

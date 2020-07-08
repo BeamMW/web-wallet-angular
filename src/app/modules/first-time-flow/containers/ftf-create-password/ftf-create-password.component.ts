@@ -71,7 +71,7 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.dataService.loginToService(this.seed, false);
+    this.dataService.loginToService(this.seed, false, '', '');
   }
 
   public submit(): void {

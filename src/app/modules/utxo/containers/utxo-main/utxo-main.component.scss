@@ -314,6 +314,7 @@
         &__status {
             margin: 0;
             height: 93px;
+            min-width: 700px;
             padding: 0;
             
             &__hash {
@@ -352,7 +353,7 @@
         &__left-wrapper {
             display: flex;
             flex-direction: column;
-            width: 50%;
+            width: 48%;
             flex-shrink: 1;
             height: 93px;
 
@@ -375,7 +376,7 @@
         }
 
         &__right-wrapper {
-            width: 50%;
+            width: 52%;
             flex-shrink: 1;
         }
     }

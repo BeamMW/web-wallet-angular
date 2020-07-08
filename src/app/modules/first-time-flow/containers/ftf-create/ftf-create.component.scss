@@ -23,6 +23,17 @@
     display: flex;
     flex-direction: column;
     
+    &__validator {
+        @include normal-text;
+        margin-top: 5px;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 13px;
+        height: 16px;
+        line-height: 1.23;
+        color: #ff625c;
+        text-align: center;
+    }
+
     &__logo {
         margin: 70px auto 0 auto;
         width: 160px;

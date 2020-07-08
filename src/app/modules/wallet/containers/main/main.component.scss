@@ -338,6 +338,22 @@
             z-index: 10;
             padding: 30px 20px 36px 90px;
 
+            &__empty-tr-icon {
+                display: flex;
+                margin: 80px auto 0 auto;
+            }
+
+            &__empty-tr-text {
+                @include normal-text;
+                font-family: 'ProximaNova', sans-serif;
+                margin: 10px auto 30px auto;;
+                opacity: 0.5;
+                font-size: 14px;
+                line-height: 1.43;
+                text-align: center;
+                color: #ffffff;
+            }
+
             &__header {
                 display: flex;
                 &__title {

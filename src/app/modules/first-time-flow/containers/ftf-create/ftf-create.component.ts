@@ -1,11 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { environment } from '@environment';
 import { WindowService, DataService } from '../../../../services';
 import { routes } from '@consts';
 import { popupRoutes } from '@consts';
-
+import { Store, select } from '@ngrx/store';
+import {
+  selectError
+} from './../../../../store/selectors/wallet-state.selectors';
+import { saveError } from '../../../../store/actions/wallet.actions';
 @Component({
   selector: 'app-ftf-create',
   templateUrl: './ftf-create.component.html',
@@ -16,10 +20,11 @@ export class FtfCreateComponent implements OnInit, OnDestroy {
   public logoUrl: string = `${environment.assetsPath}/images/modules/wallet/containers/login/logo.svg`;
   public isFullScreen = false;
   public popupOpened = false;
-
+  errorState$: Observable<any>;
   private popupSub: Subscription;
 
   constructor(public router: Router,
+              private store: Store<any>,
               private dataService: DataService,
               private windowService: WindowService) {
     this.isFullScreen = windowService.isFullSize();
@@ -34,6 +39,7 @@ export class FtfCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.errorState$ = this.store.pipe(select(selectError));
   }
 
   ngOnDestroy() {
@@ -41,6 +47,12 @@ export class FtfCreateComponent implements OnInit, OnDestroy {
   }
 
   newWalletClicked() {
+    this.store.dispatch(saveError({errorValue:
+      {
+        gotAnError: false,
+        errorMessage: ''
+      }
+    }));
     this.router.navigate([routes.FTF_GENERATE_SEED_ROUTE]);
   }
 }

@@ -11,7 +11,7 @@ export class NumbersOnlyDirective {
   private regex: RegExp = new RegExp(/^-?\d+(\.\d*)?$/g);
   private specialKeys: Array<string> = [
     'Backspace', 'Tab', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp',
-    'Control'
+    'Control', 'Delete', 'F5'
   ];
 
   constructor(private el: ElementRef) {

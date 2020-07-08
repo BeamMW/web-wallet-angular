@@ -41,6 +41,10 @@ export interface WalletAppState {
         code: string
     };
     isNeedToReconnect: boolean;
+    error: {
+        gotAnError: boolean,
+        errorMessage: string
+    }
 }
 
 export const initialWalletAppState: WalletAppState = {
@@ -81,6 +85,10 @@ export const initialWalletAppState: WalletAppState = {
         code: ''
     },
     isNeedToReconnect: false,
+    error: {
+        gotAnError: false,
+        errorMessage: ''
+    }
 };
 
 const reducerWalletApp = createReducer(
@@ -94,6 +102,8 @@ const reducerWalletApp = createReducer(
     on(walletActions.saveReceiveData, (state, { receive }) => ({ ...state, receiveData: receive })),
     on(walletActions.saveSendData, (state, { send }) => ({ ...state, sendData: send })),
     on(walletActions.needToReconnect, (state, { isNeedValue }) => ({ ...state, isNeedToReconnect: isNeedValue })),
+
+    on(walletActions.saveError, (state, { errorValue }) => ({ ...state, error: errorValue })),
 
     /* Settings */
     on(walletActions.updatePrivacySetting, (state, { settingValue }) => ({ ...state, privacySetting: settingValue })),

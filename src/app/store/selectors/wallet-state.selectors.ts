@@ -46,6 +46,11 @@ export const selectSendData = createSelector(
   state => state.sendData
 );
 
+export const selectError = createSelector(
+  selectAppState,
+  state => state.error
+);
+
 /* Settings */
 export const selectPrivacySetting = createSelector(
   selectAppState,

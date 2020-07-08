@@ -4,7 +4,10 @@ import { webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { map } from 'rxjs/operators';
 import { WasmService } from './../wasm.service';
 import { environment } from '@environment';
-
+import { Store, select } from '@ngrx/store';
+import {
+    saveError
+} from '../store/actions/wallet.actions';
 @Injectable({
   providedIn: 'root'
 })
@@ -31,6 +34,7 @@ export class LoginService {
 
 
     constructor(
+        private store: Store<any>,
         private wasm: WasmService
     ) {
         this.wsMessages$ = new Subject();
@@ -41,13 +45,25 @@ export class LoginService {
     }
 
     connect() {
-        this.subject = new WebSocketSubject('wss://web-wallet-masternet.beam.mw/ws');
+        this.subject = new WebSocketSubject(environment.ws);
 
         this.subject.subscribe(
           (msg) => {
+            this.store.dispatch(saveError({errorValue:
+                {
+                  gotAnError: false,
+                  errorMessage: ''
+                }
+            }));
             return this.wsMessages$.next(msg);
           },
           (err) => {
+            this.store.dispatch(saveError({errorValue:
+                {
+                  gotAnError: true,
+                  errorMessage: 'Connectivity problem'
+                }
+            }));
             this.setConnected(false);
             console.log(err);
           },
@@ -77,15 +93,29 @@ export class LoginService {
     public send(data: any = {}): void {
         if (this.connected) {
             this.subject.next(data);
+            this.store.dispatch(saveError({errorValue:
+                {
+                  gotAnError: false,
+                  errorMessage: ''
+                }
+            }));
         } else {
             console.error('Send error!');
+            this.store.dispatch(saveError({errorValue:
+                {
+                  gotAnError: true,
+                  errorMessage: 'Connectivity problem'
+                }
+            }));
         }
     }
 
     disconnect(err?) {
         if (err) { console.error(err); }
         this.setConnected(false);
-        this.subject.complete();
+        if (this.subject) {
+            this.subject.complete();
+        }
         console.log('Disconnected');
     }
 

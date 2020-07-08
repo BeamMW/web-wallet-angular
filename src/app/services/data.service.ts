@@ -27,6 +27,7 @@ import {
   updatePasswordCheckSetting,
   needToReconnect,
   saveSendData,
+  saveError,
   saveContact } from '../store/actions/wallet.actions';
 import { Router } from '@angular/router';
 import { WasmService } from './../wasm.service';
@@ -241,10 +242,13 @@ export class DataService {
   }
 
   loginToService(seed: string, loginToWallet: boolean = true, walletId?: string, pass?: string) {
-    this.walletParams.pass = pass;
-    this.walletParams.seed = seed;
-    this.walletParams.walletId = loginToWallet ? walletId : this.loginService.loginParams.WalletID;
-
+    if (pass !== undefined && this.walletParams.pass.length === 0 &&
+        this.walletParams.seed.length === 0 &&
+        walletId !== undefined && this.walletParams.walletId.length === 0) {
+      this.walletParams.pass = pass;
+      this.walletParams.seed = seed;
+      this.walletParams.walletId = loginToWallet ? walletId : this.loginService.loginParams.WalletID;
+    }
     // remove init from reconnect
     this.wasmService.keykeeperInit(seed).subscribe(value => {
       if (!this.loginService.connected) {
@@ -304,6 +308,49 @@ export class DataService {
         this.store.dispatch(needToReconnect({isNeedValue: false}));
 
         this.router.navigate([routes.WALLET_MAIN_ROUTE]);
+
+        this.store.dispatch(saveError({errorValue:
+          {
+            gotAnError: false,
+            errorMessage: ''
+          }
+        }));
+      }
+
+      if (msg.error !== undefined && msg.id === 124) {
+        if (this.openWalletSub) {
+          this.openWalletSub.unsubscribe();
+        }
+
+        if (msg.error.code === -32013) {
+          this.store.dispatch(saveError({errorValue:
+            {
+              gotAnError: true,
+              errorMessage: 'Database not found'
+            }
+          }));
+        } else if (msg.error.code === -32012) {
+          this.store.dispatch(saveError({errorValue:
+            {
+              gotAnError: true,
+              errorMessage: 'Database error'
+            }
+          }));
+        } else if (msg.error.code === -32600) {
+          this.store.dispatch(saveError({errorValue:
+            {
+              gotAnError: true,
+              errorMessage: 'Parse error'
+            }
+          }));
+        } else if (msg.error.code === -32603) {
+          this.store.dispatch(saveError({errorValue:
+            {
+              gotAnError: true,
+              errorMessage: 'Generic internal error'
+            }
+          }));
+        }
       }
     });
 

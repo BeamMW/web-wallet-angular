@@ -123,6 +123,11 @@
                         [tableType]="tableType"
                         [tableColumns]="tableColumns" 
                         [tableData]="transactions"></app-table>
+                        
+                    <ng-container *ngIf="transactions.length === 0">
+                        <img class="main__content__empty-tr-icon" [src]="iconEmpty">
+                        <div class="main__content__empty-tr-text">Your transaction list is empty</div>
+                    </ng-container>
                 </ng-container>
             </ng-container>
         </div>

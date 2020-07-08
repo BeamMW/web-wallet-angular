@@ -19,14 +19,18 @@
         </button> -->
         <button mat-menu-item 
             (click)="cancelTransactionClicked()"
-            (mouseover)="componentIcons.cancelActualIcon = componentIcons.cancelIconActive"
+            [class.disabled]="!this.isAbleToCancel(element.status_string)"
+            (mouseover)="componentIcons.cancelActualIcon = this.isAbleToCancel(element.status_string) ? 
+                componentIcons.cancelIconActive : componentIcons.cancelIcon"
             (mouseout)="componentIcons.cancelActualIcon = componentIcons.cancelIcon">
                 <img class="actions-icon" [src]="componentIcons.cancelActualIcon">
                 <span class="actions-text">Cancel transaction</span>
         </button>
         <button mat-menu-item
             (click)="deleteTransactionClicked()"
-            (mouseover)="componentIcons.deleteActualIcon = componentIcons.deleteIconActive"
+            [class.disabled]="!this.isAbleToDelete(element.status_string)"
+            (mouseover)="componentIcons.deleteActualIcon = this.isAbleToDelete(element.status_string) ? 
+                componentIcons.deleteIconActive : componentIcons.deleteIcon"
             (mouseout)="componentIcons.deleteActualIcon = componentIcons.deleteIcon">
                 <img class="actions-icon" [src]="componentIcons.deleteActualIcon">
                 <span class="actions-text">Delete transaction</span>
@@ -35,14 +39,18 @@
     <ng-container *ngIf="tableType === tableTypesConsts.TRANSACTIONS_NOT_SENT">
         <button mat-menu-item 
             (click)="cancelTransactionClicked()"
-            (mouseover)="componentIcons.cancelActualIcon = componentIcons.cancelIconActive"
+            [class.disabled]="!this.isAbleToCancel(element.status_string)"
+            (mouseover)="componentIcons.cancelActualIcon = this.isAbleToCancel(element.status_string) ? 
+                componentIcons.cancelIconActive : componentIcons.cancelIcon"
             (mouseout)="componentIcons.cancelActualIcon = componentIcons.cancelIcon">
                 <img class="actions-icon" [src]="componentIcons.cancelActualIcon">
                 <span class ="actions-text">Cancel transaction</span>
         </button>
         <button mat-menu-item
             (click)="deleteTransactionClicked()"
-            (mouseover)="componentIcons.deleteActualIcon = componentIcons.deleteIconActive"
+            [class.disabled]="!this.isAbleToDelete(element.status_string)"
+            (mouseover)="componentIcons.deleteActualIcon = this.isAbleToDelete(element.status_string) ? 
+                componentIcons.deleteIconActive : componentIcons.deleteIcon"
             (mouseout)="componentIcons.deleteActualIcon = componentIcons.deleteIcon">
                 <img class="actions-icon" [src]="componentIcons.deleteActualIcon">
                 <span class="actions-text">Delete transaction</span>

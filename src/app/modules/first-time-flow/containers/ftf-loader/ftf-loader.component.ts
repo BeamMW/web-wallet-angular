@@ -1,25 +1,31 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { environment } from '@environment';
 import { WindowService, DataService, LoginService, WebsocketService } from '../../../../services';
 import { routes } from '@consts';
 import { popupRoutes } from '@consts';
 import { WasmService } from '../../../../wasm.service';
 import * as passworder from 'browser-passworder';
-
+import { Store, select } from '@ngrx/store';
+import { saveError } from '../../../../store/actions/wallet.actions';
+import {
+  selectError
+} from './../../../../store/selectors/wallet-state.selectors';
 @Component({
   selector: 'app-ftf-loader',
   templateUrl: './ftf-loader.component.html',
   styleUrls: ['./ftf-loader.component.scss']
 })
-export class FtfLoaderComponent implements OnInit {
+export class FtfLoaderComponent implements OnInit, OnDestroy {
   public bgUrl: string;
   public logoUrl: string = `${environment.assetsPath}/images/modules/wallet/containers/login/logo.svg`;
   public isFullScreen = false;
   public popupOpened = false;
   private keeperSub: Subscription;
   private sub: Subscription;
+  private errorSub: Subscription;
+  errorState$: Observable<any>;
 
   private componentSettings = {
     pass: '',
@@ -28,6 +34,7 @@ export class FtfLoaderComponent implements OnInit {
   };
 
   constructor(public router: Router,
+              private store: Store<any>,
               private wasmService: WasmService,
               private dataService: DataService,
               private websocketService: WebsocketService,
@@ -46,6 +53,20 @@ export class FtfLoaderComponent implements OnInit {
 
     } catch (e) {
     }
+
+    this.errorState$ = this.store.pipe(select(selectError));
+    this.errorSub = this.errorState$.subscribe(value => {
+      if (value.gotAnError) {
+        if (this.sub !== undefined) {
+          this.sub.unsubscribe();
+        }
+
+        if (this.keeperSub !== undefined) {
+          this.keeperSub.unsubscribe();
+        }
+        this.router.navigate([routes.FTF_CREATE_WALLET_ROUTE]);
+      }
+    });
   }
 
   ngOnInit() {
@@ -72,6 +93,44 @@ export class FtfLoaderComponent implements OnInit {
               this.dataService.loginToWallet(msg.result, this.componentSettings.pass);
             });
         }
+
+        if (msg.error !== undefined) {
+          if (this.sub) {
+            this.sub.unsubscribe();
+          }
+
+          if (msg.error.code === -32013) {
+            this.store.dispatch(saveError({errorValue:
+              {
+                gotAnError: true,
+                errorMessage: 'Database not found'
+              }
+            }));
+          } else if (msg.error.code === -32012) {
+            this.store.dispatch(saveError({errorValue:
+              {
+                gotAnError: true,
+                errorMessage: 'Database error'
+              }
+            }));
+          } else if (msg.error.code === -32600) {
+            this.store.dispatch(saveError({errorValue:
+              {
+                gotAnError: true,
+                errorMessage: 'Parse error'
+              }
+            }));
+          } else if (msg.error.code === -32603) {
+            this.store.dispatch(saveError({errorValue:
+              {
+                gotAnError: true,
+                errorMessage: 'Generic internal error'
+              }
+            }));
+          }
+
+          this.router.navigate([routes.FTF_CREATE_WALLET_ROUTE]);
+        }
       });
 
       this.websocketService.send({
@@ -87,5 +146,8 @@ export class FtfLoaderComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    if (this.errorSub !== undefined) {
+      this.errorSub.unsubscribe();
+    }
   }
 }

@@ -7,7 +7,10 @@ import { DataService, WindowService } from './../../../../services';
 import { environment } from '@environment';
 import { Store, select } from '@ngrx/store';
 import { ChangeWalletState } from './../../../../store/actions/wallet.actions';
-import { selectWalletData } from './../../../../store/selectors/wallet-state.selectors';
+import {
+  selectError,
+  selectWalletData
+} from './../../../../store/selectors/wallet-state.selectors';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +27,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   wallet$: Observable<any>;
   wasmState$: Observable<any>;
-
+  errorState$: Observable<any>;
   isCorrectPass = true;
 
   constructor(private store: Store<any>,
@@ -41,6 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.dataService.activateWallet();
+    this.errorState$ = this.store.pipe(select(selectError));
   }
 
   ngOnDestroy() {
@@ -52,7 +56,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public submit(): void {
     const pass = this.loginForm.value.password;
     this.wallet$ = this.store.pipe(select(selectWalletData));
-    this.sub = this.wallet$.subscribe(wallet => {
+    this.wallet$.subscribe(wallet => {
       passworder.decrypt(pass, wallet).then((result) => {
         this.dataService.loginToService(result.seed, true, result.id, pass);
       }).catch(error => {
@@ -61,7 +65,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       if (this.sub !== undefined) {
         this.sub.unsubscribe();
       }
-    });
+    }).unsubscribe();
   }
 
   passUpdated($event) {

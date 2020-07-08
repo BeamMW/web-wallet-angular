@@ -4,7 +4,10 @@ import { webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { map } from 'rxjs/operators';
 import { WasmService } from './../wasm.service';
 import { Store } from '@ngrx/store';
-import { needToReconnect } from '../store/actions/wallet.actions';
+import {
+    saveError,
+    needToReconnect
+} from '../store/actions/wallet.actions';
 import { LogService } from './log.service';
 
 @Injectable({
@@ -48,12 +51,25 @@ export class WebsocketService {
             } else if (msg.method !== undefined) {
                 this.onkeykeeper(JSON.stringify(msg));
             }
+            this.store.dispatch(saveError({errorValue:
+                {
+                  gotAnError: false,
+                  errorMessage: ''
+                }
+            }));
           },
           (err) => {
               if (err.code === 1006) {
                 this.logService.saveDataToLogs('[Socket: reconnect]', err);
                 console.log('[reconnect triggered]');
                 this.store.dispatch(needToReconnect({isNeedValue: true}));
+              } else {
+                this.store.dispatch(saveError({errorValue:
+                    {
+                      gotAnError: true,
+                      errorMessage: 'Connectivity problem'
+                    }
+                }));
               }
               this.setConnected(false);
               this.logService.saveDataToLogs('[Socket: error]', err);
@@ -84,16 +100,30 @@ export class WebsocketService {
     * */
     public send(data: any = {}): void {
         if (this.connected) {
+            this.store.dispatch(saveError({errorValue:
+                {
+                  gotAnError: false,
+                  errorMessage: ''
+                }
+            }));
             this.subject.next(data);
         } else {
             console.error('Send error!');
+            this.store.dispatch(saveError({errorValue:
+                {
+                  gotAnError: true,
+                  errorMessage: 'Connectivity problem'
+                }
+            }));
         }
     }
 
     disconnect(err?) {
         if (err) { console.error(err); }
         this.setConnected(false);
-        this.subject.complete();
+        if (this.subject) {
+            this.subject.complete();
+        }
         console.log('Disconnected');
     }
 

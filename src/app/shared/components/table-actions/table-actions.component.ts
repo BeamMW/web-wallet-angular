@@ -7,6 +7,7 @@ import {Observable, from, Subscription} from 'rxjs';
 import { ClipboardService } from 'ngx-clipboard';
 import { TableTypes } from '@consts';
 import { DataService, WindowService, WebsocketService } from './../../../services';
+import { transactionsStatuses } from '@consts';
 
 @Component({
   selector: 'app-table-actions',
@@ -60,11 +61,40 @@ export class TableActionsComponent implements OnInit {
   }
 
   cancelTransactionClicked() {
-    this.dataService.cancelTransaction(this.element.txId);
+    if (this.isAbleToCancel(this.element.status_string)) {
+      this.dataService.cancelTransaction(this.element.txId);
+    }
   }
 
   deleteTransactionClicked() {
-    this.dataService.deleteTransaction(this.element.txId);
+    if (this.isAbleToDelete(this.element.status_string)) {
+      this.dataService.deleteTransaction(this.element.txId);
+    }
+  }
+
+  isAbleToDelete(status: string) {
+    let result = false;
+    if (status === transactionsStatuses.CANCELED ||
+      status === transactionsStatuses.COMPLETED ||
+      status === transactionsStatuses.EXPIRED ||
+      status === transactionsStatuses.FAILED ||
+      status === transactionsStatuses.RECEIVED ||
+      status === transactionsStatuses.SENT ||
+      status === transactionsStatuses.SENT_TO_OWN_ADDRESS) {
+        result = !result;
+    }
+
+    return result;
+  }
+
+  isAbleToCancel(status: string) {
+    let result = false;
+    if (status === transactionsStatuses.WAITING_FOR_SENDER ||
+      status === transactionsStatuses.WAITING_FOR_RECEIVER) {
+        result = !result;
+    }
+
+    return result;
   }
 }
 
