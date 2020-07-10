@@ -33,7 +33,6 @@ export class RemoveWalletPopupComponent implements OnInit, OnDestroy {
   }
 
   submit($event) {
-    $event.stopPropagation();
     this.dataService.emitChange({popupOpened: false});
     this.router.navigate(['/settings/all', { outlets: { popup: 'remove-wallet-confirmation-popup' }}]);
   }

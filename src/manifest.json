@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
-    "name": "BEAM Web wallet",
-    "short_name": "BEAM Web wallet",
-    "description": "BEAM Wallet extension",
-    "version": "1.0.1",
+    "name": "Beam Web wallet",
+    "short_name": "Beam Web wallet",
+    "description": "Beam Web wallet extension",
+    "version": "1.0.0",
     "browser_action": {
         "default_popup": "index.html"
     },

@@ -120,7 +120,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
           address: this.fullSendForm.value.address,
           fee: this.fullSendForm.value.fee,
           comment: this.fullSendForm.value.comment,
-          amount: this.fullSendForm.value.amount * globalConsts.GROTHS_IN_BEAM,
+          amount: parseInt((new Big(this.fullSendForm.value.amount).times(globalConsts.GROTHS_IN_BEAM)).toFixed(), 10),
           isPassCheckEnabled: this.isPassCheckEnabled
         }
       };
@@ -142,7 +142,6 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   getSmallestUtxo() {
     this.resetStats();
     this.walletStatus$.subscribe((status) => {
-      const available = new Big(status.available);
       this.utxos$.subscribe(utxos => {
         if (utxos.length > 0) {
           const sortedUtxo = utxos.sort((a, b) => {
@@ -151,16 +150,18 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
           const smallestUtxoAmount = sortedUtxo[0].amount;
           this.stats.totalUtxo = new Big(smallestUtxoAmount).plus(100);
-          this.dataService.calculateTrChange(parseFloat(this.fullSendForm.value.fee));
+          const calculateSub = this.dataService.calculateTrChange(parseFloat(this.fullSendForm.value.fee));
 
-          this.changeSub = this.sendData$.subscribe(sendData => {
-            if (this.changeSub !== undefined) {
-              this.changeSub.unsubscribe();
+          const subt = calculateSub.subscribe((msg: any) => {
+            if (msg.id === 17) {
+              subt.unsubscribe();
+
+              const change = parseFloat(msg.result.change);
+              this.stats.totalUtxo = new Big(smallestUtxoAmount).div(globalConsts.GROTHS_IN_BEAM);
+              this.stats.amountToSend = new Big(0);
+              this.stats.change = new Big(change).div(globalConsts.GROTHS_IN_BEAM);
+              this.stats.remaining = 0;
             }
-            this.stats.totalUtxo = new Big(smallestUtxoAmount).div(globalConsts.GROTHS_IN_BEAM);
-            this.stats.amountToSend = new Big(0);
-            this.stats.change = new Big(sendData.change).div(globalConsts.GROTHS_IN_BEAM);
-            this.stats.remaining = 0;
           });
         }
       }).unsubscribe();
@@ -178,7 +179,6 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   addAllClicked($event) {
-    $event.preventDefault();
     this.walletStatus$.subscribe((status) => {
       if (status.available > 0) {
         const allAmount = (status.available - this.fullSendForm.value.fee) / globalConsts.GROTHS_IN_BEAM;
@@ -199,7 +199,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     const feeValue = control.value.replace(/[^0-9]/g, '');
     this.localParams.feeIsCorrect = parseInt(feeValue, 10) >= globalConsts.MIN_FEE_VALUE;
     control.setValue(feeValue);
-    this.amountChanged(this.fullSendForm.get('amount'));
+    this.amountChanged(this.fullSendForm.value.amount);
     this.valuesValidationCheck();
   }
 
@@ -208,8 +208,8 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     if (amountInputValue.length > 0 || amountInputValue > 0) {
       this.walletStatus$.subscribe((status) => {
         amountInputValue = new Big(amountInputValue);
+        const feeFullValue = new Big(this.fullSendForm.value.fee).div(globalConsts.GROTHS_IN_BEAM);
         if (parseFloat(amountInputValue) > 0 && status.available > 0) {
-          const feeFullValue = new Big(this.fullSendForm.value.fee).div(globalConsts.GROTHS_IN_BEAM);
           const available = new Big(status.available).div(globalConsts.GROTHS_IN_BEAM);
 
           if (parseFloat(amountInputValue.plus(feeFullValue)) > parseFloat(available)) {
@@ -219,30 +219,38 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
             this.localParams.isNotEnoughAmount = false;
           }
 
-          this.dataService.calculateTrChange(parseFloat(amountInputValue.times(globalConsts.GROTHS_IN_BEAM)
+          const calculateSub = this.dataService.calculateTrChange(parseFloat(amountInputValue.times(globalConsts.GROTHS_IN_BEAM)
             .plus(this.fullSendForm.value.fee)));
 
-          this.sendData$.subscribe(sendData => {
-            const change = parseFloat(sendData.change);
-            this.stats.amountToSend = new Big(parseFloat(amountInputValue));
-            this.stats.totalUtxo = new Big(this.stats.amountToSend.plus(feeFullValue));
-            if (change > 0) {
-              this.stats.change = new Big(sendData.change).div(globalConsts.GROTHS_IN_BEAM);
-              this.stats.totalUtxo = this.stats.totalUtxo.plus(this.stats.change);
-              if (parseFloat(amountInputValue.plus(feeFullValue)) > parseFloat(available)) {
-                this.stats.remaining = new Big(0);
-                this.stats.change = new Big(0);
-                this.localParams.amountValidated = false;
+          const subt = calculateSub.subscribe((msg: any) => {
+            if (msg.id === 17) {
+              subt.unsubscribe();
+
+              const change = parseFloat(msg.result.change);
+              this.stats.amountToSend = new Big(parseFloat(amountInputValue));
+              if (change > 0) {
+                this.stats.change = new Big(change).div(globalConsts.GROTHS_IN_BEAM);
+                this.stats.totalUtxo = this.stats.amountToSend.plus(feeFullValue).plus(this.stats.change);
+                if (parseFloat(amountInputValue.plus(feeFullValue)) > parseFloat(available)) {
+                  this.stats.remaining = new Big(0);
+                  this.stats.change = new Big(0);
+                  this.localParams.amountValidated = false;
+                } else {
+                  this.stats.remaining = available.minus(this.stats.amountToSend).minus(this.stats.change);
+                  this.localParams.amountValidated = true;
+                }
               } else {
-                this.stats.remaining = available.minus(feeFullValue)
-                  .minus(this.stats.change).minus(this.stats.amountToSend);
-                this.localParams.amountValidated = true;
+                this.stats.totalUtxo = this.stats.amountToSend.plus(feeFullValue);
               }
+              this.valuesValidationCheck();
             }
-            this.valuesValidationCheck();
           });
         } else {
           this.resetStats();
+          this.localParams.isNotEnoughAmount = true;
+          this.stats.amountToSend = new Big(parseFloat(amountInputValue));
+          this.stats.totalUtxo = new Big(this.stats.amountToSend.plus(feeFullValue));
+          this.localParams.notEnoughtValue = parseFloat(amountInputValue.plus(feeFullValue));
           this.localParams.amountValidated = false;
         }
       }).unsubscribe();
@@ -269,9 +277,9 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
           tokenData.params.PeerWalletIdentity !== undefined &&
           tokenData.params.PeerID !== undefined) {
         if (tokenData.params.Amount !== undefined) {
-          const amountFromToken = tokenData.params.Amount / globalConsts.GROTHS_IN_BEAM;
-          this.fullSendForm.get('amount').setValue(amountFromToken);
-          this.amountChanged(amountFromToken);
+          const amountFromToken = new Big(tokenData.params.Amount).div(globalConsts.GROTHS_IN_BEAM);
+          this.fullSendForm.get('amount').setValue(amountFromToken.toFixed());
+          this.amountChanged(amountFromToken.toFixed());
         }
         this.localParams.addressValidation = true;
       } else {

@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-            <div class="tr-details__specs__utxo">
+            <div class="tr-details__specs__utxo" *ngIf="!privacyMode">
               <div class="tr-details__specs__utxo__header" (click)='utxoListHeaderClicked($event)'>
                 <span>TRANSACTION UTXO LIST</span>
                 <img class="tr-details__specs__utxo__header__icon" 

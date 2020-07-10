@@ -4,6 +4,9 @@ import { ActivatedRoute} from '@angular/router';
 import { DataService, WindowService, LogService } from './../../../../services';
 import { Subscription, Observable } from 'rxjs';
 import { environment } from '@environment';
+import { transactionsStatuses } from '@consts';
+import { Store, select } from '@ngrx/store';
+import { selectAllTr } from '../../../../store/selectors/transaction.selectors';
 
 @Component({
   selector: 'app-clear-wallet-popup',
@@ -23,6 +26,7 @@ export class ClearWalletPopupComponent implements OnInit, OnDestroy {
 
   constructor(private windowSerivce: WindowService,
               public router: Router,
+              public store: Store<any>,
               private activatedRoute: ActivatedRoute,
               private logService: LogService,
               private dataService: DataService) {
@@ -40,15 +44,35 @@ export class ClearWalletPopupComponent implements OnInit, OnDestroy {
     }
   }
 
-  submit($event) {
-    $event.stopPropagation();
+  isAbleToDelete(status: string) {
+    let result = false;
+    if (status === transactionsStatuses.CANCELED ||
+      status === transactionsStatuses.COMPLETED ||
+      status === transactionsStatuses.EXPIRED ||
+      status === transactionsStatuses.FAILED ||
+      status === transactionsStatuses.RECEIVED ||
+      status === transactionsStatuses.SENT ||
+      status === transactionsStatuses.SENT_TO_OWN_ADDRESS) {
+        result = !result;
+    }
 
+    return result;
+  }
+
+  submit($event) {
     if (this.deleteLogsChecked) {
       this.logService.emptyLogs();
     }
 
     if (this.deleteTransactionsChecked) {
-
+      const transactions = this.store.pipe(select(selectAllTr));
+      transactions.subscribe(item => {
+        item.forEach(transaction => {
+          if (this.isAbleToDelete(transaction.status_string)) {
+            this.dataService.deleteTransaction(transaction.txId);
+          }
+        });
+      }).unsubscribe();
     }
 
     this.dataService.emitChange({popupOpened: false});

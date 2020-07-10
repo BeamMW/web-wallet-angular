@@ -29,7 +29,7 @@
                         AMOUNT
                     </div>
                     <div class="confirm__container__line__amount__value">
-                        {{sendData.amount | beam:'1.0-9'}} BEAM
+                        {{sendData.amount.toFixed() | beam:'1.0-9'}} BEAM
                     </div>
                 </div>
                 <div class="confirm__container__line__fee">
@@ -37,7 +37,7 @@
                         TRANSACTION FEE
                     </div>
                     <div class="confirm__container__line__fee__value">
-                        {{sendData.fee}} GROTH
+                        {{sendData.fee.toFixed()}} GROTH
                     </div>
                 </div>
             </div>

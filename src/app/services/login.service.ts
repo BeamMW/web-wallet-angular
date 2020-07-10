@@ -45,7 +45,7 @@ export class LoginService {
     }
 
     connect() {
-        this.subject = new WebSocketSubject(environment.ws);
+        this.subject = new WebSocketSubject('wss://web-wallet-testnet.beam.mw/ws');
 
         this.subject.subscribe(
           (msg) => {
@@ -100,7 +100,7 @@ export class LoginService {
                 }
             }));
         } else {
-            console.error('Send error!');
+            console.log('Send error!');
             this.store.dispatch(saveError({errorValue:
                 {
                   gotAnError: true,

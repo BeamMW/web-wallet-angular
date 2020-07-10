@@ -108,6 +108,6 @@ export class PaymentProofComponent implements OnInit, OnDestroy {
   }
 
   openInExplorerClicked() {
-    window.open('https://master-net.explorer.beam.mw/block?kernel_id=' + this.proofData.kernel, '_blank');
+    window.open('https://testnet.explorer.beam.mw/block?kernel_id=' + this.proofData.kernel, '_blank');
   }
 }

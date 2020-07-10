@@ -74,8 +74,8 @@ export class SendConfirmationComponent implements OnInit {
       this.router.navigate([this.router.url, { outlets: { popup: 'confirm-popup' }}], navigationExtras);
     } else {
       this.dataService.transactionSend({
-        address: this.sendData.address,
         fee: this.sendData.fee,
+        address: this.sendData.address,
         comment: this.sendData.comment,
         amount: this.sendData.amount * globalConsts.GROTHS_IN_BEAM
       });

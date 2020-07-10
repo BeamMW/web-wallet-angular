@@ -89,6 +89,7 @@ export class DataService {
           clearInterval(this.refreshIntervalId);
           this.loginToService(this.walletParams.seed, true, this.walletParams.walletId, this.walletParams.pass);
           console.log('[reconnecting...]');
+          this.logService.saveDataToLogs('[Wallet testnet: reconnecting triggered]', '');
         }, 10000);
       }
     });
@@ -204,7 +205,7 @@ export class DataService {
     this.loadWalletData().then(walletData => {
       if (walletData !== undefined && walletData.length > 0) {
           console.log('Wallet: ', walletData);
-          this.logService.saveDataToLogs('[Wallet: Activated]', walletData);
+          this.logService.saveDataToLogs('[Wallet testnet: Activated]', walletData);
           this.store.dispatch(saveWallet({wallet: walletData}));
           this.store.dispatch(ChangeWalletState({walletState: true}));
       }
@@ -249,13 +250,16 @@ export class DataService {
       this.walletParams.seed = seed;
       this.walletParams.walletId = loginToWallet ? walletId : this.loginService.loginParams.WalletID;
     }
+
+    clearInterval(this.refreshReconnectIntervalId);
+    this.store.dispatch(needToReconnect({isNeedValue: false}));
     // remove init from reconnect
     this.wasmService.keykeeperInit(seed).subscribe(value => {
       if (!this.loginService.connected) {
         this.loginProcessSub = this.loginService.on().subscribe((msg: any) => {
           if (msg.result && msg.id === 123) {
             console.log('login_ws: OK, endpoint is ', msg.result.endpoint);
-            this.logService.saveDataToLogs('[Wallet: logged in with endpoint]', msg);
+            this.logService.saveDataToLogs('[Wallet testnet: logged in with endpoint]', msg);
             const endpoint = ['wss://',  msg.result.endpoint].join('');
             this.websocketService.url = endpoint;
             this.websocketService.connect();
@@ -263,9 +267,9 @@ export class DataService {
               this.loginToWallet(walletId, pass);
             }
           } else {
-            this.logService.saveDataToLogs('[Wallet: Login failed]', '');
+            this.logService.saveDataToLogs('[Wallet testnet: Login failed]', '');
             if (msg.error) {
-              this.logService.saveDataToLogs('[Wallet: Login error]', msg.error);
+              this.logService.saveDataToLogs('[Wallet testnet: Login error]', msg.error);
               console.log(`login_ws: error code:${msg.error.code} text:${msg.error.data}`)
             }
           }
@@ -293,7 +297,7 @@ export class DataService {
     this.openWalletSub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.result && msg.id === 124 && msg.result.length) {
         console.log(`[login] wallet session: ${msg.result}`);
-        this.logService.saveDataToLogs('[Wallet: Opened]', msg);
+        this.logService.saveDataToLogs('[Wallet testnet: Opened]', msg);
         if (this.openWalletSub) {
           this.openWalletSub.unsubscribe();
         }
@@ -303,9 +307,6 @@ export class DataService {
           this.walletDataUpdate();
         }, 5000);
         this.loadWalletSettings();
-
-        clearInterval(this.refreshReconnectIntervalId);
-        this.store.dispatch(needToReconnect({isNeedValue: false}));
 
         this.router.navigate([routes.WALLET_MAIN_ROUTE]);
 
@@ -371,7 +372,7 @@ export class DataService {
       if (msg.result && msg.id === 6) {
         console.log('[data-service] transactions: ');
         console.dir(msg.result);
-        this.logService.saveDataToLogs('[Service: transaction list]', msg);
+        this.logService.saveDataToLogs('[Service testnet: transaction list]', msg);
 
         this.store.dispatch(loadTr({transactions: msg.result.length > 0 ? msg.result : []}));
         this.trsSub.unsubscribe();
@@ -390,7 +391,7 @@ export class DataService {
       if (msg.result && msg.id === 7) {
         console.log('[data-service] utxo: ');
         console.dir(msg.result);
-        this.logService.saveDataToLogs('[Service: UTXO list]', msg);
+        this.logService.saveDataToLogs('[Service testnet: UTXO list]', msg);
 
         this.store.dispatch(loadUtxo({utxos: msg.result.length > 0 ? msg.result : []}));
         this.utxoSub.unsubscribe();
@@ -409,7 +410,7 @@ export class DataService {
       if (msg.result && msg.id === 8) {
         console.log('[data-service] addresses: ');
         console.dir(msg.result);
-        this.logService.saveDataToLogs('[Service: addresses list]', msg);
+        this.logService.saveDataToLogs('[Service testnet: addresses list]', msg);
         this.store.dispatch(loadAddresses({addresses: msg.result.length > 0 ? msg.result : []}));
 
         this.addressesSub.unsubscribe();
@@ -432,7 +433,7 @@ export class DataService {
       if (msg.result && msg.id === 5) {
         console.log('[data-service] status: ');
         console.dir(msg);
-        this.logService.saveDataToLogs('[Service: status]', msg);
+        this.logService.saveDataToLogs('[Service testnet: status]', msg);
         this.store.dispatch(saveWalletStatus({status: msg.result}));
         this.statusSub.unsubscribe();
         this.addressesUpdate();
@@ -477,14 +478,14 @@ export class DataService {
     this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.result && msg.id === 125) {
         console.log('send result: ', msg);
-        this.logService.saveDataToLogs('[Wallet: send finished]', msg);
+        this.logService.saveDataToLogs('[Wallet testnet: send finished]', msg);
         this.router.navigate([routes.WALLET_MAIN_ROUTE]);
         this.commonActionSub.unsubscribe();
       }
     });
 
     console.log('send init: ', sendData);
-    this.logService.saveDataToLogs('[Wallet: send started]', sendData);
+    this.logService.saveDataToLogs('[Wallet testnet: send started]', sendData);
 
     this.websocketService.send({
       jsonrpc: '2.0',
@@ -492,8 +493,8 @@ export class DataService {
       method: 'tx_send',
       params:
       {
-        value : parseFloat(sendData.amount),
-        fee : parseFloat(sendData.fee),
+        value : parseInt(sendData.amount.toFixed(), 10),
+        fee : parseInt(sendData.fee.toFixed(), 10),
         address : sendData.address,
         comment : sendData.comment &&
           sendData.comment.length > 0 ?
@@ -506,7 +507,7 @@ export class DataService {
     this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.id === 16) {
         this.commonActionSub.unsubscribe();
-        this.logService.saveDataToLogs('[Wallet: password changed]', msg);
+        this.logService.saveDataToLogs('[Wallet testnet: password changed]', msg);
         passworder.encrypt(newPass, {seed: seedValue, id: idValue}).then((result) => {
           this.saveWallet(result);
         });
@@ -531,7 +532,7 @@ export class DataService {
     this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.id === 15) {
         this.commonActionSub.unsubscribe();
-        this.logService.saveDataToLogs('[Wallet: transaction cancelled]', txId);
+        this.logService.saveDataToLogs('[Wallet testnet: transaction cancelled]', txId);
       }
     });
     this.websocketService.send({
@@ -549,7 +550,7 @@ export class DataService {
     this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.id === 18) {
         this.commonActionSub.unsubscribe();
-        this.logService.saveDataToLogs('[Wallet: transaction deleted]', txId);
+        this.logService.saveDataToLogs('[Wallet testnet: transaction deleted]', txId);
       }
     });
     this.websocketService.send({
@@ -564,13 +565,6 @@ export class DataService {
   }
 
   calculateTrChange(amountValue) {
-    this.commonActionSub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.id === 17) {
-        this.commonActionSub.unsubscribe();
-        this.store.dispatch(saveSendData({send: {change: msg.result.change}}));
-        this.logService.saveDataToLogs('[Wallet: change calculation]', msg.result);
-      }
-    });
     this.websocketService.send({
         jsonrpc: '2.0',
         id: 17,
@@ -580,5 +574,7 @@ export class DataService {
           amount: amountValue,
         }
     });
+
+    return this.websocketService.on();
   }
 }

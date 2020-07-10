@@ -53,7 +53,6 @@ export class ChangePasswordPopupComponent implements OnInit, OnDestroy {
   }
 
   submit($event) {
-    $event.stopPropagation();
     this.wallet$.subscribe(wallet => {
       passworder.decrypt(this.confirmForm.value.password, wallet).then((result) => {
         this.isPassValidated = true;

@@ -60,7 +60,7 @@ export class WebsocketService {
           },
           (err) => {
               if (err.code === 1006) {
-                this.logService.saveDataToLogs('[Socket: reconnect]', err);
+                this.logService.saveDataToLogs('[Socket testnet: reconnect]', err);
                 console.log('[reconnect triggered]');
                 this.store.dispatch(needToReconnect({isNeedValue: true}));
               } else {
@@ -72,7 +72,7 @@ export class WebsocketService {
                 }));
               }
               this.setConnected(false);
-              this.logService.saveDataToLogs('[Socket: error]', err);
+              this.logService.saveDataToLogs('[Socket testnet: error]', err);
               console.log('error from socket:', err);
           },
           () => console.log('service connected')
@@ -108,7 +108,7 @@ export class WebsocketService {
             }));
             this.subject.next(data);
         } else {
-            console.error('Send error!');
+            console.log('Send error!');
             this.store.dispatch(saveError({errorValue:
                 {
                   gotAnError: true,
@@ -132,11 +132,11 @@ export class WebsocketService {
     }
 
     public onkeykeeper(data) {
-        this.logService.saveDataToLogs('[Keykeeper: request]', data);
+        this.logService.saveDataToLogs('[Keykeeper testnet: request]', data);
         console.log(`<<< keykeeper request: ${data}`);
         const res = this.wasmService.keyKeeper.invokeServiceMethod(data);
         const result = JSON.parse(res);
-        this.logService.saveDataToLogs('[Keykeeper: response]', res);
+        this.logService.saveDataToLogs('[Keykeeper testnet: response]', res);
         console.log(`>>> keykeeper response: ${res}`);
         this.send(result);
     }

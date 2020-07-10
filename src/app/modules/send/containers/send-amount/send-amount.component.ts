@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService, WebsocketService } from './../../../../services';
 import { Router, NavigationExtras } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { environment } from '@environment';
 import { Store, select } from '@ngrx/store';
 import { selectWalletStatus } from '../../../../store/selectors/wallet-state.selectors';
-import { Subscription } from 'rxjs';
-
+import Big from 'big.js';
 import { globalConsts, routes } from '@consts';
 
 @Component({
@@ -34,24 +32,16 @@ export class SendAmountComponent implements OnInit {
     isSendDataValid: false,
   };
 
-  constructor(private dataService: DataService,
-              public router: Router,
-              private store: Store<any>,
-              private wsService: WebsocketService) {
+  constructor(public router: Router,
+              private store: Store<any>) {
     this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
 
     try {
       const navigation = this.router.getCurrentNavigation();
       const state = navigation.extras.state as {
         address: string,
-        fee: number,
-        amount: string,
-        comment: string
       };
       this.sendData.address = state.address;
-      this.sendData.fee = state.fee === undefined || state.fee === 0 ? 100 : state.fee;
-      this.sendData.amount = state.amount;
-      this.sendData.comment = state.comment;
     } catch (e) {
       this.router.navigate([routes.SEND_ADDRESSES_ROUTE]);
     }
@@ -107,7 +97,7 @@ export class SendAmountComponent implements OnInit {
   feeChanged(value) {
     const feeValue = value.replace(/[^0-9]/g, '');
     this.localParams.feeIsCorrect = parseInt(feeValue, 10) >= globalConsts.MIN_FEE_VALUE;
-    this.sendForm.get('fee').setValue(feeValue)
+    this.sendForm.get('fee').setValue(feeValue);
     this.valuesValidationCheck();
   }
 

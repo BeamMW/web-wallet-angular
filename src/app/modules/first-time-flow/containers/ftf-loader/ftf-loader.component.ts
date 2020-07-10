@@ -70,17 +70,10 @@ export class FtfLoaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log(`[create-wallet] Creating new wallet with seed phrase: ${this.componentSettings.seed}`);
     this.keeperSub = this.wasmService.keykeeperInit(this.componentSettings.seed).subscribe(value => {
       const ownerKey = this.wasmService.keyKeeper.getOwnerKey(this.componentSettings.pass);
-      console.log('[create-wallet] ownerKey is: data:application/octet-stream;base64,' + ownerKey);
-
       this.sub = this.websocketService.on().subscribe((msg: any) => {
-        console.log('[create-wallet] got response: ');
-        console.dir(msg);
         if (msg.result && msg.result.length) {
-          console.log(`[create-wallet] wallet session: ${msg.result}`);
-
           passworder.encrypt(this.componentSettings.pass, {
               seed: this.componentSettings.seed,
               id: msg.result

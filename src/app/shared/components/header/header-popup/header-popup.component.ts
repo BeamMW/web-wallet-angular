@@ -56,7 +56,7 @@ export class HeaderPopupComponent implements OnInit {
     iconDisabledPrivacyActualIcon: this.basePath + `icon-eye.svg`,
     iconEnabledPrivacyActive: this.basePath + `icon-eye-crossed-active.svg`,
     iconEnabledPrivacy: this.basePath + `icon-eye-crossed.svg`,
-    iconEnabledPrivacyActualIcon: this.basePath + `icn-eye-crossed.svg`
+    iconEnabledPrivacyActualIcon: this.basePath + `icon-eye-crossed.svg`
   };
 
   constructor(

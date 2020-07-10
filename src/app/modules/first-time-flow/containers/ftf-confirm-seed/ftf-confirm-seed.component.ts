@@ -42,7 +42,6 @@ export class FtfConfirmSeedComponent implements OnInit {
       const navigation = this.router.getCurrentNavigation();
       const state = navigation.extras.state as {seed: string, backLink: string, nextLink: string, isFromFTF: boolean};
       this.seedState = state.seed.split(' ');
-      console.log(this.seedState);
       this.componentSettings.backLink = state.backLink;
       this.componentSettings.nextLink = state.nextLink;
       this.componentSettings.isFromFTF = state.isFromFTF;

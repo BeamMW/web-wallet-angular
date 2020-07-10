@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { RouterModule } from '@angular/router';
 
@@ -47,7 +46,6 @@ import { DatePipe } from '@angular/common';
         strictActionImmutability: true
       }
     }),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([WalletEffects]),
     StorageModule.forRoot({ IDBNoWrap: true }),
     StoreRouterConnectingModule.forRoot(),

@@ -92,7 +92,6 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
   }
 
   submit($event) {
-    $event.stopPropagation();
     if (this.isPassCheckEnabled) {
       this.walletSub = this.wallet$.subscribe(wallet => {
         passworder.decrypt(this.confirmForm.value.password, wallet).then((result) => {
@@ -106,9 +105,10 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
       this.dataService.transactionSend(this.sendData);
     }
   }
+  //1.0203424
 
   getTotalUtxo() {
-    return parseFloat((this.sendData.amount.plus(this.sendData.fee)).div(globalConsts.GROTHS_IN_BEAM));
+    return ((this.sendData.amount.plus(this.sendData.fee)).div(globalConsts.GROTHS_IN_BEAM)).toFixed();
   }
 
   cancelClicked($event) {

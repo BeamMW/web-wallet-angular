@@ -86,8 +86,6 @@ export class ReceiveComponent implements OnInit, OnDestroy {
             addrSub.unsubscribe();
           }
         });
-        console.log('[create_address:]');
-        console.dir(msg);
         this.serviceSub.unsubscribe();
       }
     });
@@ -115,25 +113,25 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     this.updateQr();
   }
 
-  editAddress() {
-    this.sub = this.wsService.on().subscribe((msg: any) => {
-      if (msg.result) {
-        console.log(msg.result);
-        this.sub.unsubscribe();
-      }
-    });
-    this.wsService.send({
-        jsonrpc: '2.0',
-        id: 123,
-        method: 'edit_address',
-        params:
-        {
-            address : '19ecec1a5793060fd9e49ee67560da4a4cf7ad8a42577019a9fa0f95fe6e550e81e',
-            comment : '',
-            expiration: 'never'
-        }
-    });
-  }
+  // editAddress() {
+  //   this.sub = this.wsService.on().subscribe((msg: any) => {
+  //     if (msg.result) {
+  //       console.log(msg.result);
+  //       this.sub.unsubscribe();
+  //     }
+  //   });
+  //   this.wsService.send({
+  //       jsonrpc: '2.0',
+  //       id: 123,
+  //       method: 'edit_address',
+  //       params:
+  //       {
+  //           address : '19ecec1a5793060fd9e49ee67560da4a4cf7ad8a42577019a9fa0f95fe6e550e81e',
+  //           comment : '',
+  //           expiration: 'never'
+  //       }
+  //   });
+  // }
 
   // qrShowClicked(event) {
   //   event.stopPropagation();
