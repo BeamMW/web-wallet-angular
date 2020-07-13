@@ -8,7 +8,8 @@ export enum TableTypes {
 
 export enum globalConsts {
     GROTHS_IN_BEAM = 100000000,
-    MIN_FEE_VALUE = 100
+    MIN_FEE_VALUE = 100,
+    MAX_FEE_VALUE = 1000000000,
 }
 
 export enum transactionsStatuses {

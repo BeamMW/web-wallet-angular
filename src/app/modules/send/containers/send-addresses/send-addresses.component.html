@@ -70,19 +70,19 @@
                             <span class="container__values__currency">BEAM</span>
                         </div>
                         <div class="container__values__amount-validator" *ngIf="localParams.isNotEnoughAmount">
-                            Insufficient funds: you would need {{localParams.notEnoughtValue}} BEAM to complete the transaction
+                            Insufficient funds: you would need {{localParams.notEnoughtValue.toFixed()}} BEAM to complete the transaction
                         </div>
                         <div class="container__values__title-fee">TRANSACTION FEE</div>
                         <div class="form-group">
                             <input class="container__values__input-fee"
                                 type="text" name="fee" formControlName="fee"
-                                (input)="feeChanged(fullSendForm.get('fee'))"
+                                appFeeOnly
                                 [class.incorrect]="!localParams.feeIsCorrect"
                                 placeholder="Enter fee"/>
                             <span class="container__values__currency">GROTH</span>
-                            <div class="container__values__fee-validator" *ngIf="!localParams.feeIsCorrect">
-                                The minimum fee is 100 GROTH
-                            </div>
+                        </div>
+                        <div class="container__values__fee-validator" *ngIf="localParams.minFeeIsNotCorrect">
+                            The minimum fee is 100 GROTH
                         </div>
                         <ng-container *ngIf="walletStatus$ | async as walletStatus">
                             <div class="total">

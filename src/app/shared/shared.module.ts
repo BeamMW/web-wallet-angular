@@ -43,7 +43,8 @@ import {
   ClickOutsideDirective,
   DetectCapsDirective,
   NumbersOnlyDirective,
-  StatusColorDirective
+  StatusColorDirective,
+  FeeOnlyDirective
 } from './directives';
 
 @NgModule({
@@ -74,6 +75,7 @@ import {
     StatusColorDirective,
     SeedVerificationPopupComponent,
     LoaderComponent,
+    FeeOnlyDirective,
   ],
   imports: [
     CommonModule,
@@ -109,7 +111,8 @@ import {
     NumbersOnlyDirective,
     StatusIconComponent,
     StatusColorDirective,
-    LoaderComponent
+    LoaderComponent,
+    FeeOnlyDirective
   ],
   providers: [
     DecimalPipe

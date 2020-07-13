@@ -15,7 +15,7 @@
     </div>
     <div class="send__container">
         <div class="send__container__content">
-            <form class="send-form-cl" [formGroup]="sendForm" autocomplete="off" novalidate (ngSubmit)="submit()">
+            <form class="send-form-cl" [formGroup]="sendForm" autocomplete="off" novalidate>
                 <div class="send__container__content__title-amount">AMOUNT</div>
                 <div class="form-group">
                     <input class="send__container__content__input"
@@ -27,17 +27,17 @@
                     <span class="send__container__content__currency">BEAM</span>
                 </div>
                 <div class="send__container__content__amount-validator" *ngIf="localParams.isNotEnoughAmount">
-                    Insufficient funds: you would need {{localParams.notEnoughtValue}} BEAM to complete the transaction
+                    Insufficient funds: you would need {{localParams.notEnoughtValue.toFixed()}} BEAM to complete the transaction
                 </div>
                 <div class="send__container__content__title-fee">TRANSACTION FEE</div>
                 <div class="form-group">
                     <input class="send__container__content__input-groth"
-                        name="fee" formControlName="fee"
+                        name="fee" formControlName="fee" type="text"
                         (input)="feeChanged($event.target.value)"
                         [class.incorrect]="!localParams.feeIsCorrect"
                         placeholder="Enter fee"/>
                     <span class="send__container__content__currency">GROTH</span>
-                    <div class="send__container__content__fee-validator" *ngIf="!localParams.feeIsCorrect">
+                    <div class="send__container__content__fee-validator" *ngIf="localParams.minFeeIsNotCorrect">
                         The minimum fee is 100 GROTH
                     </div>
                 </div>

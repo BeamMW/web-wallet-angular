@@ -81,17 +81,11 @@ export class FtfLoaderComponent implements OnInit, OnDestroy {
             .then((result) => {
               this.dataService.saveWallet(result);
               this.dataService.settingsInit(this.componentSettings.seedConfirmed);
-              this.sub.unsubscribe();
-              this.keeperSub.unsubscribe();
               this.dataService.loginToWallet(msg.result, this.componentSettings.pass);
             });
         }
 
         if (msg.error !== undefined) {
-          if (this.sub) {
-            this.sub.unsubscribe();
-          }
-
           if (msg.error.code === -32013) {
             this.store.dispatch(saveError({errorValue:
               {
@@ -124,6 +118,9 @@ export class FtfLoaderComponent implements OnInit, OnDestroy {
 
           this.router.navigate([routes.FTF_CREATE_WALLET_ROUTE]);
         }
+
+        this.sub.unsubscribe();
+        this.keeperSub.unsubscribe();
       });
 
       this.websocketService.send({

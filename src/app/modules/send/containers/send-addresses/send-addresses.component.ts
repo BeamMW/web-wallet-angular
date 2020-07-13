@@ -15,6 +15,8 @@ import { debounceTime } from 'rxjs/operators';
 import { globalConsts, routes } from '@consts';
 import Big from 'big.js';
 import { selectAvailableUtxo } from '../../../../store/selectors/utxo.selectors';
+import { SUPER_EXPR } from '@angular/compiler/src/output/output_ast';
+import { parse } from 'querystring';
 
 @Component({
   selector: 'app-send-addresses',
@@ -35,9 +37,11 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   private isPassCheckEnabled = false;
 
   localParams = {
+    prevFee: 0,
     addressValidation: true,
     isAddressInputValid: false,
     amountValidated: false,
+    minFeeIsNotCorrect: false,
     feeIsCorrect: true,
     isNotEnoughAmount: false,
     notEnoughtValue: 0,
@@ -46,8 +50,11 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     isFullScreen: false,
   };
 
-  private sub: Subscription;
-  private changeSub: Subscription;
+  private subManager = {
+    sub: new Subscription(),
+    changeSub: new Subscription(),
+    defChangeSub: new Subscription(),
+  };
 
   stats = {
     totalUtxo: new Big(0),
@@ -61,7 +68,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
               private wasmService: WasmService,
               private store: Store<any>,
               private windowService: WindowService,
-              private wsService: WebsocketService) {
+              private websocketService: WebsocketService) {
     this.utxos$ = this.store.pipe(select(selectAvailableUtxo));
     this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
     this.localParams.isFullScreen = windowService.isFullSize();
@@ -98,7 +105,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       ])
     });
 
-    this.sub = dataService.changeEmitted$.subscribe(emittedState => {
+    this.subManager.sub = dataService.changeEmitted$.subscribe(emittedState => {
       this.localParams.popupOpened = emittedState;
     });
     this.sendData$ = this.store.pipe(select(selectSendData));
@@ -133,45 +140,54 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       this.addressInputUpdated(this.sendForm.value.address);
     }
 
-    this.fullSendForm.get('amount').valueChanges.pipe(debounceTime(500)).subscribe(newValue => {
+    this.fullSendForm.get('amount').valueChanges.pipe(debounceTime(300)).subscribe(newValue => {
       this.amountChanged(newValue);
+    });
+
+    this.fullSendForm.get('fee').valueChanges.pipe(debounceTime(300)).subscribe(newValue => {
+      this.feeChanged(newValue);
     });
     this.getSmallestUtxo();
   }
 
   getSmallestUtxo() {
     this.resetStats();
-    this.walletStatus$.subscribe((status) => {
-      this.utxos$.subscribe(utxos => {
-        if (utxos.length > 0) {
-          const sortedUtxo = utxos.sort((a, b) => {
-            return a.amount - b.amount;
-          });
+    this.utxos$.subscribe(utxos => {
+      if (utxos.length > 0) {
+        const sortedUtxo = utxos.sort((a, b) => {
+          return a.amount - b.amount;
+        });
 
-          const smallestUtxoAmount = sortedUtxo[0].amount;
-          this.stats.totalUtxo = new Big(smallestUtxoAmount).plus(100);
-          const calculateSub = this.dataService.calculateTrChange(parseFloat(this.fullSendForm.value.fee));
+        const smallestUtxoAmount = sortedUtxo[0].amount;
+        this.stats.totalUtxo = new Big(smallestUtxoAmount).plus(100);
 
-          const subt = calculateSub.subscribe((msg: any) => {
-            if (msg.id === 17) {
-              subt.unsubscribe();
+        this.subManager.defChangeSub = this.websocketService.on().subscribe((msg: any) => {
+          if (msg.result && msg.id === 17) {
+            this.subManager.defChangeSub.unsubscribe();
 
-              const change = parseFloat(msg.result.change);
-              this.stats.totalUtxo = new Big(smallestUtxoAmount).div(globalConsts.GROTHS_IN_BEAM);
-              this.stats.amountToSend = new Big(0);
-              this.stats.change = new Big(change).div(globalConsts.GROTHS_IN_BEAM);
-              this.stats.remaining = 0;
-            }
-          });
-        }
-      }).unsubscribe();
+            const change = parseFloat(msg.result.change);
+            this.stats.totalUtxo = new Big(smallestUtxoAmount).div(globalConsts.GROTHS_IN_BEAM);
+            this.stats.amountToSend = new Big(0);
+            this.stats.change = new Big(change).div(globalConsts.GROTHS_IN_BEAM);
+            this.stats.remaining = 0;
+          }
+        });
+
+        this.websocketService.send({
+          jsonrpc: '2.0',
+          id: 17,
+          method: 'calc_change',
+          params:
+          {
+            amount: parseFloat(this.fullSendForm.value.fee),
+          }
+        });
+      }
     }).unsubscribe();
   }
 
   ngOnDestroy() {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
+    this.subManager.sub.unsubscribe();
   }
 
   backConfirmationClicked() {
@@ -180,13 +196,13 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
   addAllClicked($event) {
     this.walletStatus$.subscribe((status) => {
-      if (status.available > 0) {
-        const allAmount = (status.available - this.fullSendForm.value.fee) / globalConsts.GROTHS_IN_BEAM;
-        this.amountChanged(allAmount);
+      if (status.available > 0 && status.available > this.fullSendForm.value.fee) {
+        const allAmount = (new Big(status.available).minus(this.fullSendForm.value.fee)).div(globalConsts.GROTHS_IN_BEAM);
+        this.amountChanged(allAmount.toFixed());
         this.addressInputCheck();
         this.localParams.isFullScreen ?
-        this.fullSendForm.get('amount').setValue(allAmount) :
-          this.sendForm.get('amount').setValue(allAmount);
+        this.fullSendForm.get('amount').setValue(allAmount.toFixed()) :
+          this.sendForm.get('amount').setValue(allAmount.toFixed());
       }
     }).unsubscribe();
   }
@@ -195,70 +211,91 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     $event.stopPropagation();
   }
 
-  feeChanged(control: FormControl) {
-    const feeValue = control.value.replace(/[^0-9]/g, '');
-    this.localParams.feeIsCorrect = parseInt(feeValue, 10) >= globalConsts.MIN_FEE_VALUE;
-    control.setValue(feeValue);
+  feeValidationCheck() {
+    this.localParams.feeIsCorrect = !this.localParams.minFeeIsNotCorrect;
+  }
+
+  feeChanged(fee) {
+    this.localParams.minFeeIsNotCorrect = fee.length === 0 || parseInt(fee, 10) < globalConsts.MIN_FEE_VALUE;
     this.amountChanged(this.fullSendForm.value.amount);
+    this.feeValidationCheck();
     this.valuesValidationCheck();
   }
 
   amountChanged(amountInputValue) {
     this.resetStats();
-    if (amountInputValue.length > 0 || amountInputValue > 0) {
-      this.walletStatus$.subscribe((status) => {
-        amountInputValue = new Big(amountInputValue);
-        const feeFullValue = new Big(this.fullSendForm.value.fee).div(globalConsts.GROTHS_IN_BEAM);
-        if (parseFloat(amountInputValue) > 0 && status.available > 0) {
-          const available = new Big(status.available).div(globalConsts.GROTHS_IN_BEAM);
-
-          if (parseFloat(amountInputValue.plus(feeFullValue)) > parseFloat(available)) {
+    this.walletStatus$.subscribe((status) => {
+      const feeFullValue = new Big(this.fullSendForm.value.fee).div(globalConsts.GROTHS_IN_BEAM);
+      const available = new Big(status.available).div(globalConsts.GROTHS_IN_BEAM);
+      const amount = parseFloat(amountInputValue.length > 0 ? amountInputValue : 0);
+      const bigAmount = new Big(amount);
+      this.stats.amountToSend = new Big(amount);
+      if (amount > 0) {
+        if (status.available > 0) {
+          if (parseFloat(bigAmount.plus(feeFullValue)) > parseFloat(available)) {
             this.localParams.isNotEnoughAmount = true;
-            this.localParams.notEnoughtValue = parseFloat(amountInputValue.plus(feeFullValue));
+            this.localParams.notEnoughtValue = bigAmount.plus(feeFullValue);
+            this.stats.remaining = new Big(0);
+            this.stats.change = new Big(0);
+            this.stats.totalUtxo = this.stats.amountToSend.plus(feeFullValue);
+            this.localParams.amountValidated = false;
           } else {
             this.localParams.isNotEnoughAmount = false;
           }
 
-          const calculateSub = this.dataService.calculateTrChange(parseFloat(amountInputValue.times(globalConsts.GROTHS_IN_BEAM)
-            .plus(this.fullSendForm.value.fee)));
+          if (!this.localParams.isNotEnoughAmount) {
+            this.subManager.changeSub = this.websocketService.on().subscribe((msg: any) => {
+              if (msg.result && msg.id === 17) {
+                this.subManager.changeSub.unsubscribe();
 
-          const subt = calculateSub.subscribe((msg: any) => {
-            if (msg.id === 17) {
-              subt.unsubscribe();
-
-              const change = parseFloat(msg.result.change);
-              this.stats.amountToSend = new Big(parseFloat(amountInputValue));
-              if (change > 0) {
-                this.stats.change = new Big(change).div(globalConsts.GROTHS_IN_BEAM);
-                this.stats.totalUtxo = this.stats.amountToSend.plus(feeFullValue).plus(this.stats.change);
-                if (parseFloat(amountInputValue.plus(feeFullValue)) > parseFloat(available)) {
-                  this.stats.remaining = new Big(0);
-                  this.stats.change = new Big(0);
-                  this.localParams.amountValidated = false;
-                } else {
+                const change = parseFloat(msg.result.change);
+                if (change > 0) {
+                  this.stats.change = new Big(change).div(globalConsts.GROTHS_IN_BEAM);
+                  this.stats.totalUtxo = this.stats.amountToSend.plus(feeFullValue).plus(this.stats.change);
                   this.stats.remaining = available.minus(this.stats.amountToSend).minus(this.stats.change);
                   this.localParams.amountValidated = true;
+                } else {
+                  this.stats.totalUtxo = this.stats.amountToSend.plus(feeFullValue);
                 }
-              } else {
-                this.stats.totalUtxo = this.stats.amountToSend.plus(feeFullValue);
+                this.valuesValidationCheck();
               }
-              this.valuesValidationCheck();
-            }
-          });
+            });
+
+            this.websocketService.send({
+              jsonrpc: '2.0',
+              id: 17,
+              method: 'calc_change',
+              params:
+              {
+                amount: parseFloat(bigAmount
+                  .times(globalConsts.GROTHS_IN_BEAM)
+                  .plus(this.fullSendForm.value.fee)),
+              }
+            });
+          }
         } else {
           this.resetStats();
           this.localParams.isNotEnoughAmount = true;
-          this.stats.amountToSend = new Big(parseFloat(amountInputValue));
           this.stats.totalUtxo = new Big(this.stats.amountToSend.plus(feeFullValue));
-          this.localParams.notEnoughtValue = parseFloat(amountInputValue.plus(feeFullValue));
+          this.localParams.notEnoughtValue = bigAmount.plus(feeFullValue);
           this.localParams.amountValidated = false;
         }
-      }).unsubscribe();
-    } else {
-      this.localParams.isNotEnoughAmount = false;
-      this.localParams.amountValidated = false;
-      this.getSmallestUtxo();
-    }
+      } else {
+        if (this.fullSendForm.value.fee === 0 ||
+            parseInt(this.fullSendForm.value.fee, 10) > status.available) {
+          this.resetStats();
+          this.localParams.isNotEnoughAmount = true;
+          this.stats.amountToSend = new Big(0);
+          this.stats.totalUtxo = feeFullValue;
+          this.localParams.notEnoughtValue = feeFullValue.minus(available);
+          this.localParams.amountValidated = false;
+        } else {
+          this.localParams.isNotEnoughAmount = false;
+          this.localParams.amountValidated = false;
+          this.getSmallestUtxo();
+        }
+      }
+    }).unsubscribe();
     this.valuesValidationCheck();
   }
 

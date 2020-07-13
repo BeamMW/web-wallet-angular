@@ -497,12 +497,14 @@
                 
                 &__link {
                     @include normal-text;
+                    width: 140px;
                     font-family: 'ProximaNova', sans-serif;
                     font-size: 14px;
                     font-weight: bold;
                     color: #00f6d2;
                     margin-top: 30px;
-                    margin-left: 20px;
+                    margin-left: auto;
+                    margin-right: auto;
                     cursor: pointer;
                 }
 
