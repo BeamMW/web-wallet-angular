@@ -26,6 +26,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   private sub: Subscription;
   private serviceSub: Subscription;
   private popupSub: Subscription;
+  private addrSub: Subscription;
 
   receiveForm: FormGroup;
   popupOpened = false;
@@ -65,6 +66,10 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     if (this.serviceSub !== undefined) {
       this.serviceSub.unsubscribe();
     }
+
+    if (this.addrSub !== undefined) {
+      this.addrSub.unsubscribe();
+    }
   }
 
   backClicked(event) {
@@ -75,20 +80,23 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   createAddress() {
     this.serviceSub = this.wsService.on().subscribe((msg: any) => {
       if (msg.result !== undefined && msg.id === 10) {
+        this.serviceSub.unsubscribe();
         this.dataService.addressesUpdate();
+        this.dataService.startInterval();
         const address$ = this.store.pipe(select(selectAddress(msg.result)));
-        const addrSub = address$.subscribe(val => {
+        this.addrSub = address$.subscribe(val => {
           if (val !== undefined) {
             this.generatedAddress = val.address;
             this.identity = val.identity;
             this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, val.identity, '');
             this.updateQr();
-            addrSub.unsubscribe();
+            this.addrSub.unsubscribe();
           }
         });
-        this.serviceSub.unsubscribe();
       }
     });
+
+    this.dataService.stopInterval();
     this.wsService.send({
         jsonrpc: '2.0',
         id: 10,

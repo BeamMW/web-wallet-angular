@@ -251,7 +251,6 @@
                 <div class="details__header">DETAILS</div>
                 <div class="details__subheader">ID</div>
                 <div class="details__value">{{expandedElement.id}}</div>
-                <div class="details__header">TRANSACTION LIST</div>
                 <div class="details__list">
                   <app-transaction-list 
                     [txId]="expandedElement.createTxId !== undefined && expandedElement.createTxId.length > 0 ? expandedElement.createTxId : expandedElement.spentTxId">

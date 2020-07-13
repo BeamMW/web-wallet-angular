@@ -65,7 +65,7 @@ export class SendAmountComponent implements OnInit {
         state: {
           address: this.sendData.address,
           fee: this.sendForm.value.fee,
-          amount: this.sendForm.value.amount.toFixed(),
+          amount: typeof this.sendForm.value.amount === 'string' ? this.sendForm.value.amount : this.sendForm.value.amount.toFixed(),
           comment: this.sendForm.value.comment
         }
       };

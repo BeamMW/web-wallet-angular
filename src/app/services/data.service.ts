@@ -59,6 +59,7 @@ export class DataService {
     txCancelSub: new Subscription()
   };
 
+  refreshIntervalStatus = false;
   private refreshIntervalId;
   private refreshReconnectIntervalId;
 
@@ -296,6 +297,18 @@ export class DataService {
     }).unsubscribe();
   }
 
+  startInterval() {
+    this.refreshIntervalStatus = true;
+    this.refreshIntervalId = setInterval(() => {
+      this.walletDataUpdate();
+    }, 5000);
+  }
+
+  stopInterval() {
+    this.refreshIntervalStatus = false;
+    clearInterval(this.refreshIntervalId);
+  }
+
   loginToWallet(walletId: string, password: string) {
     this.subManager.openWalletSub = this.websocketService.on().subscribe((msg: any) => {
       if (msg.result && msg.id === 124 && msg.result.length) {
@@ -305,9 +318,7 @@ export class DataService {
         this.logService.saveDataToLogs('[Wallet testnet: Opened]', msg);
         this.store.dispatch(ChangeWalletState({walletState: true}));
         this.walletDataUpdate();
-        this.refreshIntervalId = setInterval(() => {
-          this.walletDataUpdate();
-        }, 5000);
+        this.startInterval();
         this.loadWalletSettings();
 
         this.router.navigate([routes.WALLET_MAIN_ROUTE]);

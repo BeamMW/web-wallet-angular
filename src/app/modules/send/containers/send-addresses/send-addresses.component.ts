@@ -140,14 +140,16 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       this.addressInputUpdated(this.sendForm.value.address);
     }
 
-    this.fullSendForm.get('amount').valueChanges.pipe(debounceTime(300)).subscribe(newValue => {
-      this.amountChanged(newValue);
-    });
+    if (this.localParams.isFullScreen) {
+      this.fullSendForm.get('amount').valueChanges.pipe(debounceTime(300)).subscribe(newValue => {
+        this.amountChanged(newValue);
+      });
 
-    this.fullSendForm.get('fee').valueChanges.pipe(debounceTime(300)).subscribe(newValue => {
-      this.feeChanged(newValue);
-    });
-    this.getSmallestUtxo();
+      this.fullSendForm.get('fee').valueChanges.pipe(debounceTime(300)).subscribe(newValue => {
+        this.feeChanged(newValue);
+      });
+      this.getSmallestUtxo();
+    }
   }
 
   getSmallestUtxo() {
@@ -241,6 +243,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
             this.localParams.amountValidated = false;
           } else {
             this.localParams.isNotEnoughAmount = false;
+            this.localParams.amountValidated = true;
           }
 
           if (!this.localParams.isNotEnoughAmount) {
