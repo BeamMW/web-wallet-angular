@@ -258,13 +258,13 @@ export class DataService {
       this.walletParams.walletId = loginToWallet ? walletId : this.loginService.loginParams.WalletID;
     }
 
-    clearInterval(this.refreshReconnectIntervalId);
-    this.store.dispatch(needToReconnect({isNeedValue: false}));
     // remove init from reconnect
     this.wasmService.keykeeperInit(seed).subscribe(value => {
       if (!this.loginService.connected) {
         this.subManager.loginProcessSub = this.loginService.on().subscribe((msg: any) => {
           if (msg.result && msg.id === 123) {
+            clearInterval(this.refreshReconnectIntervalId);
+            this.store.dispatch(needToReconnect({isNeedValue: false}));
             this.subManager.loginProcessSub.unsubscribe();
             console.log('login_ws: OK, endpoint is ', msg.result.endpoint);
             this.logService.saveDataToLogs('[Wallet testnet: logged in with endpoint]', msg);
