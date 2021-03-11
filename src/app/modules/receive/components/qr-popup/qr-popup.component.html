@@ -3,7 +3,7 @@
     <ng-container *ngIf="receiveData$ | async as receiveData">
         <qrcode class="qr-popup__code" [qrdata]="dataToQr(receiveData)" [width]="140" [errorCorrectionLevel]="'M'"></qrcode>
 
-        <div class="qr-popup__address-header">TRANSACTION TOKEN</div>
+        <div class="qr-popup__address-header">TRANSACTION ADDRESS</div>
         <div class="qr-popup__address">{{receiveData.address}}</div>
         <ng-container *ngIf="receiveData.amount">
             <div class="qr-popup__amount-header">REQUESTED AMOUNT</div>
@@ -11,7 +11,7 @@
         </ng-container>
         <div class="qr-popup__copy">
             <app-button class="copy-button" (click)="copyTokenClicked()" 
-                ngxClipboard [cbContent]="receiveData.address">copy transation token</app-button>
+                ngxClipboard [cbContent]="receiveData.address">copy transation address</app-button>
         </div>
     </ng-container>
 </div>

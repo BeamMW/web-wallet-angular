@@ -11,7 +11,7 @@
         </div>
 
         <div class="receive__content" *ngIf="generatedAddress.length > 0">
-            <div class="content-header token-header">MY TOKEN (auto-generated)</div>
+            <div class="content-header token-header">MY ADDRESS (auto-generated)</div>
             <div class="address-value">{{generatedToken}}</div>
             <form class="receive-form-cl" [formGroup]="receiveForm" autocomplete="off" novalidate (ngSubmit)="submit()">
                 <div class="form-group">
@@ -38,7 +38,7 @@
                 </div> -->
                 <div class="receive__content__button-copy">
                     <app-button class="copy-button" ngxClipboard [cbContent]="generatedToken" (click)="backClicked($event)">
-                        copy transaction token
+                        copy transaction address
                     </app-button>
                 </div>
             </div>
@@ -54,7 +54,7 @@
             </div>
             <div class="receive__container__content" *ngIf="generatedAddress.length > 0">
                 <div class="receive__container__content__address">
-                    <div class="content-header token-header">MY TOKEN (auto-generated)</div>
+                    <div class="content-header token-header">MY ADDRESS (auto-generated)</div>
                     <div class="address-value">{{generatedToken}}</div>
                     <form class="receive-form-cl" [formGroup]="receiveForm" autocomplete="off" novalidate (ngSubmit)="submit()">
                         <div class="form-group">
@@ -88,7 +88,7 @@
                     </div>
                     <div class="receive__container__bottom__controls__button-copy">
                         <app-button class="copy-button" ngxClipboard [cbContent]="generatedToken" (click)="backClicked($event)">
-                            copy transaction token
+                            copy transaction address
                         </app-button>
                     </div>
                 </div>  

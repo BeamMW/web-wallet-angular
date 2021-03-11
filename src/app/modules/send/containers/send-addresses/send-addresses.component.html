@@ -15,17 +15,17 @@
             <span class="send__progress__empty"></span>
         </div>
         <div class="send__container">
-            <div class="send__container__title">TRANSACTION TOKEN</div>
+            <div class="send__container__title">TRANSACTION ADDRESS</div>
             <div class="send__container__content">
                 <form class="send-form-cl" novalidate [formGroup]="sendForm" autocomplete="off">
                     <div class="form-group">
-                        <textarea class="send__container__content__input" autosize maxlength="270"
+                        <textarea class="send__container__content__input" autosize maxlength="500"
                             name="address" formControlName="address"
                             (input)="addressInputUpdated($event.target.value)"
                             [class.incorrect]="!localParams.addressValidation"
-                            placeholder="Please specify transaction token"></textarea>
+                            placeholder="Please specify transaction address"></textarea>
                         <div class="send__container__content__validator" *ngIf="!localParams.addressValidation">
-                            Invalid token
+                            Invalid address
                         </div>
                     </div>
                     <div class="controls">
@@ -49,14 +49,14 @@
             <form class="form" novalidate [formGroup]="fullSendForm" autocomplete="off">
                 <div class="container">
                     <div class="container__address">
-                        <div class="container__address__title">TRANSACTION TOKEN</div>
-                        <textarea class="container__address__input" autosize maxlength="300"
+                        <div class="container__address__title">TRANSACTION ADDRESS</div>
+                        <textarea class="container__address__input" autosize maxlength="500"
                                   name="address" formControlName="address"
-                                  placeholder="Please specify transaction token"
+                                  placeholder="Please specify transaction address"
                                   (input)="addressInputUpdated($event.target.value)"
                                   [class.incorrect]="!localParams.addressValidation"></textarea>
                         <div class="container__address__validator" *ngIf="!localParams.addressValidation">
-                            Invalid token
+                            Invalid address
                         </div>
                     </div>
                     <div class="container__values">
@@ -82,7 +82,7 @@
                             <span class="container__values__currency">GROTH</span>
                         </div>
                         <div class="container__values__fee-validator" *ngIf="localParams.minFeeIsNotCorrect">
-                            The minimum fee is 100 GROTH
+                            The minimum fee is 100000 GROTH
                         </div>
                         <ng-container *ngIf="walletStatus$ | async as walletStatus">
                             <div class="total">

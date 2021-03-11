@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef, 
 import { DataSource } from '@angular/cdk/collections';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatTable } from '@angular/material';
-import { routes, transactionsStatuses, TableTypes, utxoStatuses } from '@consts';
+import { routes, transactionsStatuses, TableTypes, utxoStatuses, rpcMethodIdsConsts } from '@consts';
 
 import { Observable, BehaviorSubject, of } from 'rxjs';
 
@@ -16,7 +16,7 @@ import { selectAddress } from '../../../store/selectors/address.selectors';
 
 import { WebsocketService } from './../../../services';
 import { Subscription } from 'rxjs';
-import { WasmService } from './../../../wasm.service';
+import { WasmService } from '../../../services/wasm.service';
 
 import {
   saveProofData
@@ -193,30 +193,32 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   private loadPaymentProof(transaction) {
-    this.sub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.id === 24) {
-        if (msg.result && msg.result.payment_proof) {
-          this.proofValue = msg.result.payment_proof;
+    this.sub = this.wasmService.wallet.subscribe((r)=> {
+      const respone = JSON.parse(r);
+
+      if (respone.id === rpcMethodIdsConsts.EXPORT_PAYMENT_PROOF_ID) {
+        if (respone.result && respone.result.payment_proof) {
+          this.proofValue = respone.result.payment_proof;
           this.store.dispatch(saveProofData({proofData: {
             sender: transaction.sender,
             receiver: transaction.receiver,
             amount: transaction.value,
             kernelId: transaction.kernel,
-            code: msg.result.payment_proof
+            code: respone.result.payment_proof
           }}));
         }
-        this.sub.unsubscribe();
+        //this.sub.unsubscribe();
       }
     });
 
-    this.websocketService.send({
+    this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
-      id: 24,
+      id: rpcMethodIdsConsts.EXPORT_PAYMENT_PROOF_ID,
       method: 'export_payment_proof',
       params: {
         txId: transaction.txId
       }
-    });
+    }));
   }
 
   proofDataToCp() {

@@ -8,7 +8,7 @@ export enum TableTypes {
 
 export enum globalConsts {
     GROTHS_IN_BEAM = 100000000,
-    MIN_FEE_VALUE = 100,
+    MIN_FEE_VALUE = 100000,
     MAX_FEE_VALUE = 1000000000,
 }
 
@@ -45,4 +45,19 @@ export enum statusesColors {
     CANCELED = '#8da1ad',
     SEND = '#da68f5',
     RECEIVE = '#23c1ff'
+}
+
+export enum rpcMethodIdsConsts {
+    TX_LIST_ID = 6,
+    GET_UTXO_ID = 7,
+    ADDR_LIST_ID = 8,
+    CREATE_ADDRESS_ID = 9,
+    WALLET_STATUS_ID = 10,
+    TX_SEND_ID = 11,
+    TX_CANCEL_ID = 15,
+    CHANGE_PASSWORD_ID = 16,
+    CALC_CHANGE_ID = 17,
+    TX_DELETE_ID = 18,
+    EXPORT_PAYMENT_PROOF_ID = 25,
+    VERIFY_PAYMENT_PROOF_ID = 26
 }

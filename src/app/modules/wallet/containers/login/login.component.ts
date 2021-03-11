@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.wallet$ = this.store.pipe(select(selectWalletData));
     this.wallet$.subscribe(wallet => {
       passworder.decrypt(pass, wallet).then((result) => {
-        this.dataService.loginToService(result.seed, true, result.id, pass);
+        this.dataService.loginToService(result.seed, true, '', pass);
       }).catch(error => {
         this.isCorrectPass = false;
       });

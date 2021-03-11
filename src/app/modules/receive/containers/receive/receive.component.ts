@@ -9,8 +9,8 @@ import { saveReceiveData } from './../../../../store/actions/wallet.actions';
 
 
 import { selectAddress } from './../../../../store/selectors/address.selectors';
-import { WasmService } from './../../../../wasm.service';
-import { globalConsts } from '@consts';
+import { WasmService } from '../../../../services/wasm.service';
+import { globalConsts, rpcMethodIdsConsts } from '@consts';
 
 @Component({
   selector: 'app-receive',
@@ -78,18 +78,19 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   }
 
   createAddress() {
-    this.serviceSub = this.wsService.on().subscribe((msg: any) => {
-      if (msg.result !== undefined && msg.id === 10) {
-        this.serviceSub.unsubscribe();
+    var i = this.wasmService.wallet.subscribe((r)=> {
+      const respone = JSON.parse(r);
+      if (respone.id === rpcMethodIdsConsts.CREATE_ADDRESS_ID) {
+        //this.serviceSub.unsubscribe();
         this.dataService.addressesUpdate();
         this.dataService.startInterval();
-        const address$ = this.store.pipe(select(selectAddress(msg.result)));
+        const address$ = this.store.pipe(select(selectAddress(respone.result)));
         this.addrSub = address$.subscribe(val => {
           if (val !== undefined) {
             this.generatedAddress = val.address;
-            this.identity = val.identity;
-            this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, val.identity, '');
-            this.updateQr();
+            //this.identity = val.identity;
+            this.generatedToken = val.address;//this.wasmService.getSendToken(this.generatedAddress, val.identity, '');
+            //this.updateQr();
             this.addrSub.unsubscribe();
           }
         });
@@ -97,16 +98,16 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     });
 
     this.dataService.stopInterval();
-    this.wsService.send({
-        jsonrpc: '2.0',
-        id: 10,
-        method: 'create_address',
-        params:
-        {
-            expiration : '24h',
-            comment : ''
-        }
-    });
+    this.wasmService.wallet.sendRequest(JSON.stringify({
+      jsonrpc: '2.0',
+      id: rpcMethodIdsConsts.CREATE_ADDRESS_ID,
+      method: 'create_address',
+      params:
+      {
+          expiration : '24h',
+          comment : ''
+      }
+    }));
   }
 
   amountUpdated(control: FormControl) {

@@ -174,16 +174,16 @@
                   <div class="details-title">DATE</div>
                   <div class="details-value">{{detail.element.create_time * 1000 | date:'d MMM y | HH:mm'}}</div>
                   <ng-container *ngIf="detail.element.token !== undefined && detail.element.token.length > 0">
-                    <div class="details-title">TOKEN</div>
+                    <div class="details-title">ADDRESS</div>
                     <div class="details-value">{{detail.element.token}}</div>
                   </ng-container>
                   <div class="details-title">SENDING ADDRESS</div>
-                  <ng-container *ngIf="contact$ | async as contact">
+                  <!-- <ng-container *ngIf="contact$ | async as contact">
                     <div class="details-contact" *ngIf="detail.element.income">
                       <img [src]="contactIcon" class="details-contact__icon">
                       <div class="details-contact__name">{{contact.name}}</div>
                     </div>
-                  </ng-container>
+                  </ng-container> -->
                   <div class="details-value">{{detail.element.sender}}</div>
                   <div class="details-title">RECEIVING ADDRESS</div>
                   <ng-container *ngIf="contact$ | async as contact">

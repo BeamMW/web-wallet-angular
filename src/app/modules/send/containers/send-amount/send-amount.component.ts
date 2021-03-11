@@ -17,7 +17,7 @@ export class SendAmountComponent implements OnInit {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
   sendData = {
     address: '',
-    fee: 100,
+    fee: 100000,
     comment: '',
     amount: ''
   };

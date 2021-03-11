@@ -30,13 +30,16 @@ import {
   saveError,
   saveContact } from '../store/actions/wallet.actions';
 import { Router } from '@angular/router';
-import { WasmService } from './../wasm.service';
+import { WasmService } from './wasm.service';
 import { LoginService } from './login.service';
 import { WebsocketService } from './websocket.service';
 import { LogService } from './log.service';
 import * as passworder from 'browser-passworder';
-import { routes, globalConsts } from '@consts';
+import { routes, globalConsts, rpcMethodIdsConsts } from '@consts';
 import * as ObservableStore from 'obs-store';
+
+
+import { selectWasmState } from '../store/selectors/wallet-state.selectors';
 
 @Injectable({
   providedIn: 'root'
@@ -58,6 +61,8 @@ export class DataService {
     txDeleteSub: new Subscription(),
     txCancelSub: new Subscription()
   };
+
+  wasmState$: Observable<any>;
 
   refreshIntervalStatus = false;
   private refreshIntervalId;
@@ -250,51 +255,13 @@ export class DataService {
   }
 
   loginToService(seed: string, loginToWallet: boolean = true, walletId?: string, pass?: string) {
-    if (pass !== undefined && this.walletParams.pass.length === 0 &&
-        this.walletParams.seed.length === 0 &&
-        walletId !== undefined && this.walletParams.walletId.length === 0) {
-      this.walletParams.pass = pass;
-      this.walletParams.seed = seed;
-      this.walletParams.walletId = loginToWallet ? walletId : this.loginService.loginParams.WalletID;
-    }
-
-    // remove init from reconnect
-    this.wasmService.keykeeperInit(seed).subscribe(value => {
-      if (!this.loginService.connected) {
-        this.subManager.loginProcessSub = this.loginService.on().subscribe((msg: any) => {
-          if (msg.result && msg.id === 123) {
-            clearInterval(this.refreshReconnectIntervalId);
-            this.store.dispatch(needToReconnect({isNeedValue: false}));
-            this.subManager.loginProcessSub.unsubscribe();
-            console.log('login_ws: OK, endpoint is ', msg.result.endpoint);
-            this.logService.saveDataToLogs('[Wallet testnet: logged in with endpoint]', msg);
-            const endpoint = ['wss://',  msg.result.endpoint].join('');
-            this.websocketService.url = endpoint;
-            this.websocketService.connect();
-            if (loginToWallet) {
-              this.loginToWallet(walletId, pass);
-            }
-          } else {
-            this.logService.saveDataToLogs('[Wallet testnet: Login failed]', '');
-            if (msg.error) {
-              this.logService.saveDataToLogs('[Wallet testnet: Login error]', msg.error);
-              console.log(`login_ws: error code:${msg.error.code} text:${msg.error.data}`)
-            }
-          }
-        });
-
-        this.loginService.init();
-        this.loginService.connect();
-        this.loginService.send({
-            jsonrpc: '2.0',
-            id: 123,
-            method: 'login',
-            params: this.loginService.loginParams
-        });
-      } else if (loginToWallet) {
-        this.loginToWallet(walletId, pass);
-      }
-    }).unsubscribe();
+    this.wasmState$ = this.store.pipe(select(selectWasmState));
+    this.wasmState$.subscribe((state) => {
+        if (state) {
+          this.wasmService.openWallet(pass);
+        }
+      });
+      this.loginToWallet(pass);
   }
 
   startInterval() {
@@ -309,199 +276,63 @@ export class DataService {
     clearInterval(this.refreshIntervalId);
   }
 
-  loginToWallet(walletId: string, password: string) {
-    this.subManager.openWalletSub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.result && msg.id === 124 && msg.result.length) {
-        this.subManager.openWalletSub.unsubscribe();
+  loginToWallet(password: string) {
+    this.store.dispatch(ChangeWalletState({walletState: true}));
+    this.startInterval();
+    this.loadWalletSettings();
+    this.router.navigate([routes.WALLET_MAIN_ROUTE]);
 
-        console.log(`[login] wallet session: ${msg.result}`);
-        this.logService.saveDataToLogs('[Wallet testnet: Opened]', msg);
-        this.store.dispatch(ChangeWalletState({walletState: true}));
-        this.walletDataUpdate();
-        this.startInterval();
-        this.loadWalletSettings();
-
-        this.router.navigate([routes.WALLET_MAIN_ROUTE]);
-
-        this.store.dispatch(saveError({errorValue:
-          {
-            gotAnError: false,
-            errorMessage: ''
-          }
-        }));
+    this.store.dispatch(saveError({errorValue:
+      {
+        gotAnError: false,
+        errorMessage: ''
       }
-
-      if (msg.error !== undefined && msg.id === 124) {
-        this.subManager.openWalletSub.unsubscribe();
-
-        if (msg.error.code === -32013) {
-          this.store.dispatch(saveError({errorValue:
-            {
-              gotAnError: true,
-              errorMessage: 'Database not found'
-            }
-          }));
-        } else if (msg.error.code === -32012) {
-          this.store.dispatch(saveError({errorValue:
-            {
-              gotAnError: true,
-              errorMessage: 'Database error'
-            }
-          }));
-        } else if (msg.error.code === -32600) {
-          this.store.dispatch(saveError({errorValue:
-            {
-              gotAnError: true,
-              errorMessage: 'Parse error'
-            }
-          }));
-        } else if (msg.error.code === -32603) {
-          this.store.dispatch(saveError({errorValue:
-            {
-              gotAnError: true,
-              errorMessage: 'Generic internal error'
-            }
-          }));
-        }
-      }
-    });
-
-    this.websocketService.send({
-      jsonrpc: '2.0',
-      id: 124,
-      method: 'open_wallet',
-      params: {
-        pass: password,
-        id: walletId,
-        fresh_keeper: true
-      }
-    });
+    }));
   }
 
   private transactionsUpdate() {
-    this.subManager.trsSub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.result && msg.id === 6) {
-        this.subManager.trsSub.unsubscribe();
-        console.log('[data-service] transactions: ');
-        console.dir(msg.result);
-        this.logService.saveDataToLogs('[Service testnet: transaction list]', msg);
-
-        this.store.dispatch(loadTr({transactions: msg.result.length > 0 ? msg.result : []}));
-        console.log('----------update finished----------');
-      }
-    });
-    this.websocketService.send({
+    this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
-      id: 6,
+      id: rpcMethodIdsConsts.TX_LIST_ID,
       method: 'tx_list'
-    });
+    }));
   }
 
   private utxoUpdate() {
-    this.subManager.utxoSub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.result && msg.id === 7) {
-        this.subManager.utxoSub.unsubscribe();
-        console.log('[data-service] utxo: ');
-        console.dir(msg.result);
-        this.logService.saveDataToLogs('[Service testnet: UTXO list]', msg);
-
-        this.store.dispatch(loadUtxo({utxos: msg.result.length > 0 ? msg.result : []}));
-        this.transactionsUpdate();
-      }
-    });
-    this.websocketService.send({
+    this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
-      id: 7,
-      method: 'get_utxo'
-    });
+      id: rpcMethodIdsConsts.GET_UTXO_ID,
+      method: 'get_utxo',
+    }));
+    this.transactionsUpdate();
   }
 
   addressesUpdate() {
-    this.subManager.addressesSub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.result && msg.id === 8) {
-        this.subManager.addressesSub.unsubscribe();
-        console.log('[data-service] addresses: ');
-        console.dir(msg.result);
-        this.logService.saveDataToLogs('[Service testnet: addresses list]', msg);
-        this.store.dispatch(loadAddresses({addresses: msg.result.length > 0 ? msg.result : []}));
-
-        this.utxoUpdate();
-      }
-    });
-    this.websocketService.send({
+    this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
-      id: 8,
+      id: rpcMethodIdsConsts.ADDR_LIST_ID,
       method: 'addr_list',
       params:
       {
         own: true
       }
-    });
+    }));
+    this.utxoUpdate();
   }
 
   walletDataUpdate() {
-    this.subManager.statusSub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.result && msg.id === 5) {
-        this.subManager.statusSub.unsubscribe();
-
-        console.log('[data-service] status: ');
-        console.dir(msg);
-        this.logService.saveDataToLogs('[Service testnet: status]', msg);
-        this.store.dispatch(saveWalletStatus({status: msg.result}));
-        this.addressesUpdate();
-
-        if (msg.result.receiving > 0 || msg.result.available > 0) {
-          const verificatedSetting$ = this.store.pipe(select(selectVerificatedSetting));
-          verificatedSetting$.subscribe((verState) => {
-            if (!verState.balanceWasPositive && (msg.result.receiving > 0 || msg.result.available > 0)) {
-              this.store.dispatch(updateVerificatedSetting({settingValue: {
-                state: verState.state,
-                isMessageClosed: verState.isMessageClosed,
-                balanceWasPositive: true,
-                balanceWasPositiveMoreEn: verState.balanceWasPositiveMoreEn
-              }}));
-              this.saveWalletOptions();
-            }
-
-            if (!verState.balanceWasPositiveMoreEn && (msg.result.receiving >= 100 * globalConsts.GROTHS_IN_BEAM ||
-                msg.result.available >= 100 * globalConsts.GROTHS_IN_BEAM)) {
-              this.store.dispatch(updateVerificatedSetting({settingValue: {
-                state: verState.state,
-                isMessageClosed: verState.isMessageClosed,
-                balanceWasPositive: verState.balanceWasPositive,
-                balanceWasPositiveMoreEn: true
-              }}));
-              this.saveWalletOptions();
-            }
-          }).unsubscribe();
-        }
-      }
-    });
-
-    console.log('----------update started----------');
-    this.websocketService.send({
+    this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
-      id: 5,
+      id: rpcMethodIdsConsts.WALLET_STATUS_ID,
       method: 'wallet_status'
-    });
+    }));
+    this.addressesUpdate();
   }
 
   transactionSend(sendData) {
-    this.subManager.sendTrSub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.result && msg.id === 125) {
-        this.subManager.sendTrSub.unsubscribe();
-        console.log('send result: ', msg);
-        this.logService.saveDataToLogs('[Wallet testnet: send finished]', msg);
-        this.router.navigate([routes.WALLET_MAIN_ROUTE]);
-      }
-    });
-
-    console.log('send init: ', sendData);
-    this.logService.saveDataToLogs('[Wallet testnet: send started]', sendData);
-
-    this.websocketService.send({
+    this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
-      id: 125,
+      id: rpcMethodIdsConsts.TX_SEND_ID,
       method: 'tx_send',
       params:
       {
@@ -512,14 +343,15 @@ export class DataService {
           sendData.comment.length > 0 ?
           sendData.comment : ''
       }
-    });
+    }));
   }
 
   changePassword(newPass, seedValue, idValue) {
-    this.subManager.changePassSub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.id === 16) {
-        this.subManager.changePassSub.unsubscribe();
-        this.logService.saveDataToLogs('[Wallet testnet: password changed]', msg);
+    this.subManager.changePassSub = this.wasmService.wallet.subscribe((r)=> {
+      const respone = JSON.parse(r);
+
+      if (respone.id === rpcMethodIdsConsts.CHANGE_PASSWORD_ID) {
+        this.logService.saveDataToLogs('[Wallet testnet: password changed]', respone);
         passworder.encrypt(newPass, {seed: seedValue, id: idValue}).then((result) => {
           this.saveWallet(result);
         });
@@ -529,50 +361,39 @@ export class DataService {
         this.walletParams.walletId = idValue;
       }
     });
-    this.websocketService.send({
-        jsonrpc: '2.0',
-        id: 16,
-        method: 'change_password',
-        params:
-        {
-          new_pass: newPass,
-        }
-    });
+
+    this.wasmService.wallet.sendRequest(JSON.stringify({
+      jsonrpc: '2.0',
+      id: rpcMethodIdsConsts.CHANGE_PASSWORD_ID,
+      method: 'change_password',
+      params:
+      {
+        new_pass: newPass,
+      }
+    }));
   }
 
   cancelTransaction(txId) {
-    this.subManager.txCancelSub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.id === 15) {
-        this.subManager.txCancelSub.unsubscribe();
-        this.logService.saveDataToLogs('[Wallet testnet: transaction cancelled]', txId);
+    this.wasmService.wallet.sendRequest(JSON.stringify({
+      jsonrpc: '2.0',
+      id: rpcMethodIdsConsts.TX_CANCEL_ID,
+      method: 'tx_cancel',
+      params:
+      {
+        txId,
       }
-    });
-    this.websocketService.send({
-        jsonrpc: '2.0',
-        id: 15,
-        method: 'tx_cancel',
-        params:
-        {
-          txId,
-        }
-    });
+    }));
   }
 
   deleteTransaction(txId) {
-    this.subManager.txDeleteSub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.id === 18) {
-        this.subManager.txDeleteSub.unsubscribe();
-        this.logService.saveDataToLogs('[Wallet testnet: transaction deleted]', txId);
+    this.wasmService.wallet.sendRequest(JSON.stringify({
+      jsonrpc: '2.0',
+      id: rpcMethodIdsConsts.TX_DELETE_ID,
+      method: 'tx_delete',
+      params:
+      {
+        txId,
       }
-    });
-    this.websocketService.send({
-        jsonrpc: '2.0',
-        id: 18,
-        method: 'tx_delete',
-        params:
-        {
-          txId,
-        }
-    });
+    }));
   }
 }

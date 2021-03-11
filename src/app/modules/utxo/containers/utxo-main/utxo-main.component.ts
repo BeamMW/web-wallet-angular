@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { WasmService } from './../../../../wasm.service';
+import { WasmService } from '../../../../services/wasm.service';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import {

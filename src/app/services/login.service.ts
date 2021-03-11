@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject, Observable, Subscription } from 'rxjs';
 import { webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import { map } from 'rxjs/operators';
-import { WasmService } from './../wasm.service';
+import { WasmService } from './wasm.service';
 import { environment } from '@environment';
 import { Store, select } from '@ngrx/store';
 import {

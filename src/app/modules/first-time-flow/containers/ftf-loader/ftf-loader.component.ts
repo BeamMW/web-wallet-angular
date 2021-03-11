@@ -5,13 +5,14 @@ import { environment } from '@environment';
 import { WindowService, DataService, LoginService, WebsocketService } from '../../../../services';
 import { routes } from '@consts';
 import { popupRoutes } from '@consts';
-import { WasmService } from '../../../../wasm.service';
+import { WasmService } from '../../../../services/wasm.service';
 import * as passworder from 'browser-passworder';
 import { Store, select } from '@ngrx/store';
 import { saveError } from '../../../../store/actions/wallet.actions';
 import {
   selectError
 } from './../../../../store/selectors/wallet-state.selectors';
+import { selectWasmState } from '../../../../store/selectors/wallet-state.selectors';
 @Component({
   selector: 'app-ftf-loader',
   templateUrl: './ftf-loader.component.html',
@@ -26,7 +27,7 @@ export class FtfLoaderComponent implements OnInit, OnDestroy {
   private sub: Subscription;
   private errorSub: Subscription;
   errorState$: Observable<any>;
-
+  wasmState$: Observable<any>;
   private componentSettings = {
     pass: '',
     seed: '',
@@ -70,69 +71,50 @@ export class FtfLoaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.keeperSub = this.wasmService.keykeeperInit(this.componentSettings.seed).subscribe(value => {
-      const ownerKey = this.wasmService.keyKeeper.getOwnerKey(this.componentSettings.pass);
-      this.sub = this.websocketService.on().subscribe((msg: any) => {
-        if (msg.result && msg.result.length) {
+    this.wasmState$ = this.store.pipe(select(selectWasmState));
+    this.wasmState$.subscribe((state) => {
+        if (state) {
           passworder.encrypt(this.componentSettings.pass, {
-              seed: this.componentSettings.seed,
-              id: msg.result
-            })
-            .then((result) => {
-              this.dataService.saveWallet(result);
-              this.dataService.settingsInit(this.componentSettings.seedConfirmed);
-              this.dataService.loginToWallet(msg.result, this.componentSettings.pass);
-            });
-        }
-
-        if (msg.error !== undefined) {
-          if (msg.error.code === -32013) {
-            this.store.dispatch(saveError({errorValue:
-              {
-                gotAnError: true,
-                errorMessage: 'Database not found'
-              }
-            }));
-          } else if (msg.error.code === -32012) {
-            this.store.dispatch(saveError({errorValue:
-              {
-                gotAnError: true,
-                errorMessage: 'Database error'
-              }
-            }));
-          } else if (msg.error.code === -32600) {
-            this.store.dispatch(saveError({errorValue:
-              {
-                gotAnError: true,
-                errorMessage: 'Parse error'
-              }
-            }));
-          } else if (msg.error.code === -32603) {
-            this.store.dispatch(saveError({errorValue:
-              {
-                gotAnError: true,
-                errorMessage: 'Generic internal error'
-              }
-            }));
-          }
-
-          this.router.navigate([routes.FTF_CREATE_WALLET_ROUTE]);
-        }
-
-        this.sub.unsubscribe();
-        this.keeperSub.unsubscribe();
-      });
-
-      this.websocketService.send({
-        jsonrpc: '2.0',
-        id: 0,
-        method: 'create_wallet',
-        params: {
-          pass: this.componentSettings.pass,
-          ownerkey: ownerKey
+            seed: this.componentSettings.seed
+          })
+          .then((result) => {
+            this.dataService.saveWallet(result);
+            this.dataService.settingsInit(this.componentSettings.seedConfirmed);
+            this.wasmService.createWallet(this.componentSettings.seed, this.componentSettings.pass);
+            this.dataService.loginToWallet(this.componentSettings.pass);
+          });
         }
       });
-    });
+   
+    // this.keeperSub = this.wasmService.keykeeperInit(this.componentSettings.seed).subscribe(value => {
+    //   const ownerKey = this.wasmService.keyKeeper.getOwnerKey(this.componentSettings.pass);
+    //   this.sub = this.websocketService.on().subscribe((msg: any) => {
+    //     if (msg.result && msg.result.length) {
+    //       passworder.encrypt(this.componentSettings.pass, {
+    //           seed: this.componentSettings.seed,
+    //           id: msg.result
+    //         })
+    //         .then((result) => {
+    //           this.dataService.saveWallet(result);
+    //           this.dataService.settingsInit(this.componentSettings.seedConfirmed);
+    //           this.dataService.loginToWallet(msg.result, this.componentSettings.pass);
+    //         });
+    //     }
+
+    //     this.sub.unsubscribe();
+    //     this.keeperSub.unsubscribe();
+    //   });
+
+    //   this.websocketService.send({
+    //     jsonrpc: '2.0',
+    //     id: 0,
+    //     method: 'create_wallet',
+    //     params: {
+    //       pass: this.componentSettings.pass,
+    //       ownerkey: ownerKey
+    //     }
+    //   });
+    // });
   }
 
   ngOnDestroy() {

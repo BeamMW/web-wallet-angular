@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { WasmService } from './wasm.service';
+import { timeout } from 'rxjs/operators';
+import { WasmService } from './services/wasm.service';
 
 @Component({
   selector: 'app-root',
@@ -12,5 +13,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.wasmService.init();
+
+    // setTimeout(()=> {
+    //   this.wasmService.hello();
+    // }, 10000)
   }
 }

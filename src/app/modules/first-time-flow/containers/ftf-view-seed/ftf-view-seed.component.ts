@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environment';
 import { Router, NavigationExtras } from '@angular/router';
-import { WasmService } from '../../../../wasm.service';
+import { WasmService } from '../../../../services/wasm.service';
 import { Store, select } from '@ngrx/store';
 import { selectWasmState } from '../../../../store/selectors/wallet-state.selectors';
 import { Observable, Subscription, from } from 'rxjs';
@@ -66,7 +66,7 @@ export class FtfViewSeedComponent implements OnInit, OnDestroy {
       this.wasmState$ = this.store.pipe(select(selectWasmState));
       this.sub = this.wasmState$.subscribe((state) => {
           if (state) {
-            this.seed = this.wasm.generatePhrase();
+            this.seed = this.wasm.getSeedPhrase();
             this.seedState = this.seed.split(' ');
             this.store.dispatch(addSeedPhrase({seedPhraseValue: this.seed}));
             if (this.sub) {

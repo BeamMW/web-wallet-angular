@@ -51,7 +51,7 @@ export class SendConfirmationComponent implements OnInit {
         comment: string
       };
       this.sendData.address = state.address;
-      this.sendData.fee = state.fee === undefined || state.fee === 0 ? 100 : state.fee;
+      this.sendData.fee = state.fee === undefined || state.fee === 0 ? 100000 : state.fee;
       this.sendData.amount = state.amount;
       this.sendData.comment = state.comment;
     } catch (e) {

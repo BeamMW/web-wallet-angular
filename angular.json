@@ -30,7 +30,10 @@
               "src/favicon.ico",
               "src/assets",
               "src/manifest.json",
-              "src/background.js"
+              "src/background.js",
+              "src/wasm/wasm-client.wasm",
+              "src/wasm/wasm-client.js",
+              "src/wasm/wasm-client.worker.js"
             ],
             "styles": [
               "src/styles.scss"
@@ -84,7 +87,13 @@
                   "with": "src/environments/environment.testnet.ts"
                 }
               ],
-              "optimization": true
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false
             }
           }
         },

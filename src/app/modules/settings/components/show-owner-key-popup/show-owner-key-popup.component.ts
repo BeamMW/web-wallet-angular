@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router} from '@angular/router';
 import { ActivatedRoute} from '@angular/router';
 import { DataService, WindowService } from './../../../../services';
-import { WasmService } from './../../../../wasm.service';
+import { WasmService } from '../../../../services/wasm.service';
 import { Subscription, Observable, from } from 'rxjs';
 import { FormGroup, FormControl} from '@angular/forms';
 import * as passworder from 'browser-passworder';

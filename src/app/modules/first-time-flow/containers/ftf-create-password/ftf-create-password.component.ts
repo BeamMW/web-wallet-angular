@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environment';
 import { Router, NavigationExtras } from '@angular/router';
-import { WasmService } from '../../../../wasm.service';
+import { WasmService } from '../../../../services/wasm.service';
 import { Store, select } from '@ngrx/store';
 import { selectWasmState } from '../../../../store/selectors/wallet-state.selectors';
 import { Observable, Subscription } from 'rxjs';
@@ -71,7 +71,7 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.dataService.loginToService(this.seed, false, '', '');
+    //this.dataService.loginToService(this.seed, false, '', '');
   }
 
   public submit(): void {

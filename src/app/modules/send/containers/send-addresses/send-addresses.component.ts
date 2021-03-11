@@ -10,9 +10,9 @@ import {
   selectWalletStatus,
   selectSendData
 } from '../../../../store/selectors/wallet-state.selectors';
-import { WasmService } from './../../../../wasm.service';
+import { WasmService } from '../../../../services/wasm.service';
 import { debounceTime } from 'rxjs/operators';
-import { globalConsts, routes } from '@consts';
+import { globalConsts, rpcMethodIdsConsts, routes } from '@consts';
 import Big from 'big.js';
 import { selectAvailableUtxo } from '../../../../store/selectors/utxo.selectors';
 import { SUPER_EXPR } from '@angular/compiler/src/output/output_ast';
@@ -161,13 +161,17 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
         });
 
         const smallestUtxoAmount = sortedUtxo[0].amount;
-        this.stats.totalUtxo = new Big(smallestUtxoAmount).plus(100);
+        this.stats.totalUtxo = new Big(smallestUtxoAmount).plus(100000);
 
-        this.subManager.defChangeSub = this.websocketService.on().subscribe((msg: any) => {
-          if (msg.result && msg.id === 17) {
-            this.subManager.defChangeSub.unsubscribe();
+        this.subManager.defChangeSub = this.wasmService.wallet.subscribe((r)=> {
+          const respone = JSON.parse(r);
 
-            const change = parseFloat(msg.result.change);
+          if (respone.result && respone.id === rpcMethodIdsConsts.CHANGE_PASSWORD_ID) {
+            // if (this.subManager.defChangeSub !== undefined) {
+            //   this.subManager.defChangeSub.unsubscribe();
+            // }
+
+            const change = parseFloat(respone.result.change);
             this.stats.totalUtxo = new Big(smallestUtxoAmount).div(globalConsts.GROTHS_IN_BEAM);
             this.stats.amountToSend = new Big(0);
             this.stats.change = new Big(change).div(globalConsts.GROTHS_IN_BEAM);
@@ -175,15 +179,15 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
           }
         });
 
-        this.websocketService.send({
+        this.wasmService.wallet.sendRequest(JSON.stringify({
           jsonrpc: '2.0',
-          id: 17,
+          id: rpcMethodIdsConsts.CALC_CHANGE_ID,
           method: 'calc_change',
           params:
           {
             amount: parseFloat(this.fullSendForm.value.fee),
           }
-        });
+        }));
       }
     }).unsubscribe();
   }
@@ -247,11 +251,14 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
           }
 
           if (!this.localParams.isNotEnoughAmount) {
-            this.subManager.changeSub = this.websocketService.on().subscribe((msg: any) => {
-              if (msg.result && msg.id === 17) {
+
+            this.subManager.defChangeSub = this.wasmService.wallet.subscribe((r)=> {
+              const respone = JSON.parse(r);
+            
+              if (respone.result && respone.id === rpcMethodIdsConsts.CALC_CHANGE_ID) {
                 this.subManager.changeSub.unsubscribe();
 
-                const change = parseFloat(msg.result.change);
+                const change = parseFloat(respone.result.change);
                 if (change > 0) {
                   this.stats.change = new Big(change).div(globalConsts.GROTHS_IN_BEAM);
                   this.stats.totalUtxo = this.stats.amountToSend.plus(feeFullValue).plus(this.stats.change);
@@ -264,9 +271,9 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
               }
             });
 
-            this.websocketService.send({
+            this.wasmService.wallet.sendRequest(JSON.stringify({
               jsonrpc: '2.0',
-              id: 17,
+              id: rpcMethodIdsConsts.CHANGE_PASSWORD_ID,
               method: 'calc_change',
               params:
               {
@@ -274,7 +281,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
                   .times(globalConsts.GROTHS_IN_BEAM)
                   .plus(this.fullSendForm.value.fee)),
               }
-            });
+            }));
           }
         } else {
           this.resetStats();
@@ -310,25 +317,27 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   addressInputUpdated(value) {
-    const tokenJson = this.wasmService.convertTokenToJson(value);
-    if (value.length > 0 && tokenJson.length > 0) {
-      const tokenData = JSON.parse(tokenJson);
-      if (tokenData.params !== undefined &&
-          tokenData.params.PeerWalletIdentity !== undefined &&
-          tokenData.params.PeerID !== undefined) {
-        if (tokenData.params.Amount !== undefined) {
-          const amountFromToken = new Big(tokenData.params.Amount).div(globalConsts.GROTHS_IN_BEAM);
-          this.fullSendForm.get('amount').setValue(amountFromToken.toFixed());
-          this.amountChanged(amountFromToken.toFixed());
-        }
-        this.localParams.addressValidation = true;
-      } else {
-        this.localParams.addressValidation = false;
-      }
-    } else if (value.length > 0 && tokenJson.length === 0) {
-      this.localParams.addressValidation = false;
-    } else {
+    //const tokenJson = this.wasmService.convertTokenToJson(value);
+    // if (value.length > 0 && tokenJson.length > 0) {
+    //   const tokenData = JSON.parse(tokenJson);
+    //   if (tokenData.params !== undefined &&
+    //       tokenData.params.PeerWalletIdentity !== undefined &&
+    //       tokenData.params.PeerID !== undefined) {
+    //     if (tokenData.params.Amount !== undefined) {
+    //       const amountFromToken = new Big(tokenData.params.Amount).div(globalConsts.GROTHS_IN_BEAM);
+    //       this.fullSendForm.get('amount').setValue(amountFromToken.toFixed());
+    //       this.amountChanged(amountFromToken.toFixed());
+    //     }
+    //     this.localParams.addressValidation = true;
+    //   } else {
+    //     this.localParams.addressValidation = false;
+    //   }
+    // } else 
+    
+    if (value.length > 0) { //&& tokenJson.length === 0
       this.localParams.addressValidation = true;
+    } else {
+      this.localParams.addressValidation = false;
     }
 
     this.addressInputCheck();

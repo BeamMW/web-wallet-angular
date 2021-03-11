@@ -5,6 +5,8 @@ import { DataService, WindowService, WebsocketService } from './../../../../serv
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl} from '@angular/forms';
 import { environment } from '@environment';
+import { WasmService } from '../../../../services/wasm.service';
+import { rpcMethodIdsConsts } from '@consts';
 
 @Component({
   selector: 'app-payment-proof',
@@ -25,6 +27,7 @@ export class PaymentProofComponent implements OnInit, OnDestroy {
 
   constructor(private websocketService: WebsocketService,
               private windowSerivce: WindowService,
+              private wasmService: WasmService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private dataService: DataService) {
@@ -73,31 +76,33 @@ export class PaymentProofComponent implements OnInit, OnDestroy {
   }
 
   private verifyPaymentProof(proofValue) {
-    this.sub = this.websocketService.on().subscribe((msg: any) => {
-      if (msg.id === 4) {
-        if (msg.result && msg.result.is_valid && proofValue.length > 0) {
-          this.proofData = msg.result;
+    this.sub = this.wasmService.wallet.subscribe((r)=> {
+      const respone = JSON.parse(r);
+
+      if (respone.id === rpcMethodIdsConsts.VERIFY_PAYMENT_PROOF_ID) {
+        if (respone.result && respone.result.is_valid && proofValue.length > 0) {
+          this.proofData = respone.result;
           this.proofLoaded = true;
           this.parseError = false;
-        } else if (msg.error && proofValue.length === 0) {
+        } else if (respone.error && proofValue.length === 0) {
           this.proofLoaded = false;
           this.parseError = false;
         } else {
           this.proofLoaded = false;
-          this.parseError = true;
+          this.parseError = true; 
         }
-        this.sub.unsubscribe();
+        //this.sub.unsubscribe();
       }
     });
 
-    this.websocketService.send({
+    this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
-      id: 4,
+      id: rpcMethodIdsConsts.VERIFY_PAYMENT_PROOF_ID,
       method: 'verify_payment_proof',
       params: {
         payment_proof: proofValue
       }
-    });
+    }));
   }
 
   proofDataToCp() {

@@ -23,7 +23,7 @@
             <div class="details-title">DATE</div>
             <div class="details-value">{{transaction.create_time * 1000 | date:'d MMM y | HH:mm'}}</div>
             <ng-container *ngIf="transaction.token !== undefined && transaction.token.length > 0">
-                <div class="details-title">TOKEN</div>
+                <div class="details-title">ADDRESS</div>
                 <div class="details-value">{{transaction.token}}</div>
             </ng-container>
             <div class="details-title">SENDER</div>
