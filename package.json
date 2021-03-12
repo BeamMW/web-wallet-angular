@@ -5,13 +5,16 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "clean": "rimraf dist",
     "developing": "npm run clean && ng build --watch",
     "production": "npm run clean && ng build",
-    "preinstall": "npx npm-force-resolutions"
+    "preinstall": "npx npm-force-resolutions",
+    "clean": "rimraf ./dist",
+    "build:prod": "ng build --prod",
+    "test": "ng test --watch=false --browsers=ChromeHeadlessCustom",
+    "test:watch": "ng test",
+    "build:ci": "npm run clean && npm run test && npm run build:prod"
   },
   "private": true,
   "dependencies": {
