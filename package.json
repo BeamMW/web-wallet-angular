@@ -11,7 +11,7 @@
     "production": "npm run clean && ng build",
     "preinstall": "npx npm-force-resolutions",
     "clean": "rimraf ./dist",
-    "build:prod": "ng build --prod",
+    "build:prod": "ng build",
     "test": "ng test --watch=false --browsers=ChromeHeadlessCustom",
     "test:watch": "ng test",
     "build:ci": "npm run clean && npm run build:prod"
