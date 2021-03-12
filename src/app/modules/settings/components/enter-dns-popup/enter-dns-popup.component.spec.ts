@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { EnterDnsPopupComponent } from './enter-dns-popup.component';
 
@@ -6,7 +6,7 @@ describe('EnterDnsPopupComponent', () => {
   let component: EnterDnsPopupComponent;
   let fixture: ComponentFixture<EnterDnsPopupComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ EnterDnsPopupComponent ]
     })

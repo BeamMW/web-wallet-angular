@@ -10,13 +10,11 @@ import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TooltipModule } from 'ng2-tooltip-directive';
 
-import {
-  MatToolbarModule,
-  MatSortModule,
-  MatTableModule,
-  MatMenuModule,
-  MatProgressBarModule
-} from '@angular/material';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import {
   WalletStatusTitleComponent,

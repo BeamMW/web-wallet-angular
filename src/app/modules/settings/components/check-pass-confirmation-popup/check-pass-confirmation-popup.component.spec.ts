@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CheckPassConfirmationPopupComponent } from './check-pass-confirmation-popup.component';
 
@@ -6,7 +6,7 @@ describe('CheckPassConfirmationPopupComponent', () => {
   let component: CheckPassConfirmationPopupComponent;
   let fixture: ComponentFixture<CheckPassConfirmationPopupComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ CheckPassConfirmationPopupComponent ]
     })

@@ -36,22 +36,26 @@ export class MenuFullComponent implements OnInit {
   itemClicked(item) {}
 
   getItemSrc(item) {
-    if (item.path === '/wallet/main' &&
-        (this.router.url === '/send/addresses' ||
-        this.router.url === '/send/confirmation' ||
-        this.router.url === '/send/amount' ||
-        this.router.url === '/receive/page')) {
-      return item.srcOn;
+    if (item !== undefined) {
+      if (item.path === '/wallet/main' &&
+          (this.router.url === '/send/addresses' ||
+          this.router.url === '/send/confirmation' ||
+          this.router.url === '/send/amount' ||
+          this.router.url === '/receive/page')) {
+        return item.srcOn;
+      }
+      return item.path === this.router.url ? item.srcOn : (item.src || item.srcOut);
     }
-    return item.path === this.router.url ? item.srcOn : (item.src || item.srcOut);
   }
 
   isSideActive(item) {
-    return item.hovered || item.path === this.router.url || (item.path === '/wallet/main' &&
-      (this.router.url === '/send/addresses' ||
-      this.router.url === '/send/confirmation' ||
-      this.router.url === '/send/amount' ||
-      this.router.url === '/receive/page'));
+    if (item !== undefined) {
+      return item.hovered || item.path === this.router.url || (item.path === '/wallet/main' &&
+        (this.router.url === '/send/addresses' ||
+        this.router.url === '/send/confirmation' ||
+        this.router.url === '/send/amount' ||
+        this.router.url === '/receive/page'));
+    }
   }
 
   ngOnInit() {

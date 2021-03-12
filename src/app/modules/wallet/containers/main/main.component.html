@@ -226,20 +226,20 @@
                 </div>
                 <div class="main__transactions__content">
                     <ng-container *ngIf="transactions.length > 0">
-                        <div class="transcaction-container" *ngFor="let transaction of transactions; let i = index">
+                        <div class="transcaction-container" *ngFor="let item of transactions">
                             <ng-container *ngIf="i < 5">
                                 <div class="main__transactions__content__common-item"
-                                        appStatusColor [appStatusColorTransaction]="transaction">
+                                        appStatusColor [appStatusColorTransaction]="item">
                                     <div class="main__transactions__content__common-item__value">
-                                        <app-status-icon [(transaction)]="transaction"></app-status-icon>
-                                        <span class="tr-receive-text">{{transaction.income ? 'Receive' : 'Send'}}</span>
+                                        <app-status-icon [transaction]="item"></app-status-icon>
+                                        <span class="tr-receive-text">{{item.income ? 'Receive' : 'Send'}}</span>
                                         <span class="tr-receive-value" *ngIf="!privacyMode">
-                                            <ng-container>{{getValueSign(transaction)}}</ng-container>
-                                             {{ transaction.value | beam:'1.0-9'}} BEAM
+                                            <ng-container>{{getValueSign(item)}}</ng-container>
+                                             {{ item.value | beam:'1.0-9'}} BEAM
                                         </span>        
                                     </div>
                                     <div class="main__transactions__content__common-item__status">
-                                        {{ transaction.status_string }}
+                                        {{ item.status_string }}
                                     </div>
                                 </div>
                             </ng-container>

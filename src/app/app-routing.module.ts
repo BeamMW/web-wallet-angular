@@ -29,11 +29,12 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, {
-      onSameUrlNavigation: 'reload',
-      initialNavigation: 'enabled',
-      paramsInheritanceStrategy: 'always',
-      useHash: true
-    })],
+    onSameUrlNavigation: 'reload',
+    initialNavigation: 'enabled',
+    paramsInheritanceStrategy: 'always',
+    useHash: true,
+    relativeLinkResolution: 'legacy'
+})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

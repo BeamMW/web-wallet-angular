@@ -16,7 +16,7 @@ import {
   updateCurrencySetting,
   updatePasswordCheckSetting,
 } from './../../../../store/actions/wallet.actions';
-import { MatSlideToggleChange } from '@angular/material';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import {
   selectVerificatedSetting
 } from '../../../../store/selectors/wallet-state.selectors';

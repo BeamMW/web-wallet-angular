@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ReturnToSeedPopupComponent } from './return-to-seed-popup.component';
 
@@ -6,7 +6,7 @@ describe('ReturnToSeedPopupComponent', () => {
   let component: ReturnToSeedPopupComponent;
   let fixture: ComponentFixture<ReturnToSeedPopupComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ReturnToSeedPopupComponent ]
     })

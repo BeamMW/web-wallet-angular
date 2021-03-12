@@ -24,7 +24,7 @@ import {
 
 import {
   MatSlideToggleModule
-} from '@angular/material';
+} from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [

@@ -65,7 +65,7 @@
             <ng-container *ngIf="!privacyMode && utxos$ | async as utxos">
                 <div class="utxo__container__content">
                     <ng-container *ngIf="utxos.length > 0">
-                        <div class="utxos-container" *ngFor="let utxo of utxos; let i = index">
+                        <div class="utxos-container" *ngFor="let utxo of utxos">
                             <div class="utxos-container__item">
                                 <span class="utxos-container__item__amount">{{utxo.amount | beam:'1.0-9'}} BEAM</span>
                                 <span class="utxos-container__item__status">{{utxo.status_string}}</span>

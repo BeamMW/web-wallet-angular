@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RemoveWalletPopupComponent } from './remove-wallet-popup.component';
 
@@ -6,7 +6,7 @@ describe('RemoveWalletPopupComponent', () => {
   let component: RemoveWalletPopupComponent;
   let fixture: ComponentFixture<RemoveWalletPopupComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ RemoveWalletPopupComponent ]
     })

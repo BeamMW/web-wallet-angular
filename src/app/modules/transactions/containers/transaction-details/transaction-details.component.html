@@ -11,7 +11,7 @@
     <ng-container *ngIf="transaction$ | async as transaction">
         <div class="details__amount"  appStatusColor [appStatusColorTransaction]="transaction">
             <div class="details__amount__circle"  appStatusColor [appCircleColorTransaction]="transaction">
-                <app-status-icon [(transaction)]="transaction"></app-status-icon>
+                <app-status-icon [transaction]="transaction"></app-status-icon>
             </div>
             <div class="details__amount__value" *ngIf="!privacyMode">{{ transaction.value | beam:'1.0-9'}} BEAM</div>
             <div class="details__amount__status" [class.privacy-enabled]="privacyMode">

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { HeaderWithoutLogoComponent } from './header-without-logo.component';
 
@@ -6,7 +6,7 @@ describe('HeaderWithoutLogoComponent', () => {
   let component: HeaderWithoutLogoComponent;
   let fixture: ComponentFixture<HeaderWithoutLogoComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ HeaderWithoutLogoComponent ]
     })

@@ -87,7 +87,7 @@
           <img class="sort-icon" [src]="activeSortItem === sortParams.status ? iconSortActive : iconSort">
         </mat-header-cell>
         <mat-cell class="status-cell" appStatusColor [appStatusColorTransaction]="element" *matCellDef="let element">
-          <app-status-icon [(transaction)]="element"></app-status-icon>
+          <app-status-icon [transaction]="element"></app-status-icon>
           <span class="status-cell__value">{{ getStatus(element) }}</span>
         </mat-cell>
       </ng-container>

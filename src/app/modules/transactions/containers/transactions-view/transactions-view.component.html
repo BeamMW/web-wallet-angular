@@ -47,7 +47,7 @@
         </div>
         <div class="transactions__list__items transactions-container" *ngIf="transactions$ | async as transactions">
             <div class="transaction-item" *ngFor="let item of transactions">
-                <app-transaction-element [(transaction)]="item"></app-transaction-element>
+                <app-transaction-element [transaction]="item"></app-transaction-element>
             </div>
         </div>
     </div>

@@ -19,7 +19,7 @@
             </div>
             <div class="addresses__list__items addresses-container" *ngIf="addresses$ | async as addresses">
                 <div class="address-item" *ngFor="let item of addresses">
-                    <app-address-element [(item)]="item"></app-address-element>
+                    <app-address-element [item]="item"></app-address-element>
                 </div>
             </div>
         </div>
@@ -29,8 +29,8 @@
         <div class="addresses__content">
             <div class="addresses__content__header"> Addresses </div>
             <div class="addresses__content__selector">
-                <div class="selector" *ngFor="let item of menuItems" (click)="selectorItemClicked(item)">
-                    <div class="selector__title" [class.active]="item.selected">{{item.full}}</div>
+                <div class="selector" *ngFor="let item of menuItems" (click)="selectorItemClicked(item[i])">
+                    <div class="selector__title" [class.active]="item.selected">{{item[i].full}}</div>
                     <div class="selector__bottom-line" *ngIf="item.selected"></div>
                 </div>
             </div>

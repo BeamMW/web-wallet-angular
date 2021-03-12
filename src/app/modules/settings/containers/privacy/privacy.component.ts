@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
-import { MatSlideToggleChange } from '@angular/material';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Store, select } from '@ngrx/store';
 import {
   updatePasswordCheckSetting,

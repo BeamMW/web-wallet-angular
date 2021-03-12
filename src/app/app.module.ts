@@ -42,8 +42,8 @@ import { DatePipe } from '@angular/common';
     TransactionsModule,
     StoreModule.forRoot(walletReducer.reducers, {
       runtimeChecks: {
-        strictStateImmutability: true,
-        strictActionImmutability: true
+        strictStateImmutability: false, 
+        strictActionImmutability: false,
       }
     }),
     EffectsModule.forRoot([WalletEffects]),

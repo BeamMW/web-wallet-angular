@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { QrPopupComponent } from './qr-popup.component';
 
@@ -6,7 +6,7 @@ describe('QrPopupComponent', () => {
   let component: QrPopupComponent;
   let fixture: ComponentFixture<QrPopupComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ QrPopupComponent ]
     })

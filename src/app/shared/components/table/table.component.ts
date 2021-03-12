@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { MatTable } from '@angular/material';
 import { routes, transactionsStatuses, TableTypes, utxoStatuses, rpcMethodIdsConsts } from '@consts';
 
 import { Observable, BehaviorSubject, of } from 'rxjs';
@@ -51,9 +50,6 @@ export class TableComponent implements OnInit, OnChanges {
   tableTypes = TableTypes;
   sub: Subscription;
   proofValue = '';
-
-  //exampleDatabase = new ExampleDatabase();
-  //@ViewChild(MatTable, {static: true}) table: MatTable<any>;
 
   sortParams = {
     created: 'create_time',
