@@ -31,3 +31,10 @@ jobs:
         run: |
           npm ci
           npm run build:ci
+
+      - name: Archive build
+        if: success()
+        uses: actions/upload-artifact@v1
+        with:
+          name: deploy_dist
+          path: dist
