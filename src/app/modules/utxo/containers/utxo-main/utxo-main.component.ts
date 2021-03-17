@@ -1,21 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { WasmService } from '../../../../services/wasm.service';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import {
-  selectAllUtxo,
   selectAvailableUtxo,
   selectInProgressUtxo,
   selectSpentUtxo,
-  selectUnavailableUtxo } from '../../../../store/selectors/utxo.selectors';
+  selectUnavailableUtxo } from '@app/store/selectors/utxo.selectors';
 import {
   selectWalletStatus,
-  selectPrivacySetting } from '../../../../store/selectors/wallet-state.selectors';
-import { DataService, WindowService, WebsocketService } from './../../../../services';
+  selectPrivacySetting } from '@app/store/selectors/wallet-state.selectors';
+import { 
+  DataService, 
+  WindowService } from '@app/services';
 import {
-  updatePrivacySetting
-} from './../../../../store/actions/wallet.actions';
+  updatePrivacySetting } from '@app/store/actions/wallet.actions';
 import { environment } from '@environment';
 
 export enum selectorTitles {
@@ -54,9 +53,7 @@ export class UtxoMainComponent implements OnInit {
   isDropdownVisible = false;
 
   constructor(private store: Store<any>,
-              private wasm: WasmService,
               public router: Router,
-              private wsService: WebsocketService,
               private windowService: WindowService,
               private dataService: DataService) {
     this.isFullSize = this.windowService.isFullSize();

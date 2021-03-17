@@ -1,15 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environment';
 import { Router, NavigationExtras } from '@angular/router';
-import { WasmService } from '../../../../services/wasm.service';
-import { Store, select } from '@ngrx/store';
-import { selectWasmState } from '../../../../store/selectors/wallet-state.selectors';
 import { Observable, Subscription } from 'rxjs';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
-import * as passworder from 'browser-passworder';
-import { DataService, WindowService, LoginService, WebsocketService } from './../../../../services';
-import { ChangeWalletState } from './../../../../store/actions/wallet.actions';
-
+import { DataService, WindowService } from './../../../../services';
 import { routes } from '@consts';
 
 @Component({
@@ -22,6 +16,7 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
 
   private seedConfirmed: boolean;
   private seed: string;
+  private fromRoute: string;
 
   private sub: Subscription;
   private keeperSub: Subscription;
@@ -38,12 +33,8 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
   private wasmState$: Observable<any>;
 
   constructor(
-      private store: Store<any>,
-      private wasmService: WasmService,
       public router: Router,
-      private websocketService: WebsocketService,
       private windowService: WindowService,
-      private loginService: LoginService,
       private dataService: DataService) {
     this.localParams.isFullScreen = this.windowService.isFullSize();
     this.createForm = new FormGroup({
@@ -55,12 +46,14 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
       const navigation = this.router.getCurrentNavigation();
       const state = navigation.extras.state as {
         seedConfirmed: boolean,
-        seed: string
+        seed: string,
+        from: string
       };
       this.seedConfirmed = state.seedConfirmed;
       this.seed = state.seed;
+      this.fromRoute = state.from;
     } catch (e) {
-        this.router.navigate([routes.FTF_VIEW_SEED_ROUTE]);
+      this.backClicked();
     }
 
     dataService.changeEmitted$.subscribe(emittedState => {
@@ -71,7 +64,6 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    //this.dataService.loginToService(this.seed, false, '', '');
   }
 
   public submit(): void {
@@ -102,9 +94,12 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
     this.localParams.isNewPassValidated = true;
   }
 
-  backClicked(event) {
-    event.stopPropagation();
-    this.router.navigate([this.router.url, { outlets: { popup: 'return-to-seed' }}]);
+  backClicked() {
+    if (this.fromRoute === routes.FTF_VIEW_SEED_ROUTE) {
+      this.router.navigate([this.router.url, { outlets: { popup: 'return-to-seed' }}]); 
+    } else if (this.fromRoute === routes.FTF_WALLET_RESTORE_ROUTE) {
+      this.router.navigate([routes.FTF_WALLET_RESTORE_ROUTE]);
+    }
   }
 
   ngOnDestroy() {

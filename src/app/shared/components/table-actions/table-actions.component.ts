@@ -2,11 +2,10 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { selectContact } from '../../../store/selectors/wallet-state.selectors';
 import {Observable, from, Subscription} from 'rxjs';
 import { ClipboardService } from 'ngx-clipboard';
 import { TableTypes } from '@consts';
-import { DataService, WindowService, WebsocketService } from './../../../services';
+import { DataService, WindowService} from '@app/services';
 import { transactionsStatuses } from '@consts';
 
 @Component({
@@ -48,7 +47,6 @@ export class TableActionsComponent implements OnInit {
     private store: Store<any>,
     private dataService: DataService,
     private windowService: WindowService,
-    private wsService: WebsocketService,
     public router: Router) {
   }
 

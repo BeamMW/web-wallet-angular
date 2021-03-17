@@ -2,17 +2,15 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
 import { environment } from '@environment';
-import { WindowService, DataService, LoginService, WebsocketService } from '../../../../services';
+import { WindowService, DataService, WasmService } from '@app/services';
 import { routes } from '@consts';
-import { popupRoutes } from '@consts';
-import { WasmService } from '../../../../services/wasm.service';
 import * as passworder from 'browser-passworder';
 import { Store, select } from '@ngrx/store';
-import { saveError } from '../../../../store/actions/wallet.actions';
 import {
+  selectWasmState,
   selectError
-} from './../../../../store/selectors/wallet-state.selectors';
-import { selectWasmState } from '../../../../store/selectors/wallet-state.selectors';
+} from '@app/store/selectors/wallet-state.selectors';
+
 @Component({
   selector: 'app-ftf-loader',
   templateUrl: './ftf-loader.component.html',
@@ -38,7 +36,6 @@ export class FtfLoaderComponent implements OnInit, OnDestroy {
               private store: Store<any>,
               private wasmService: WasmService,
               private dataService: DataService,
-              private websocketService: WebsocketService,
               private windowService: WindowService) {
     this.isFullScreen = windowService.isFullSize();
     this.bgUrl = `${environment.assetsPath}/images/modules/wallet/containers/login/` +
@@ -85,36 +82,6 @@ export class FtfLoaderComponent implements OnInit, OnDestroy {
           });
         }
       });
-   
-    // this.keeperSub = this.wasmService.keykeeperInit(this.componentSettings.seed).subscribe(value => {
-    //   const ownerKey = this.wasmService.keyKeeper.getOwnerKey(this.componentSettings.pass);
-    //   this.sub = this.websocketService.on().subscribe((msg: any) => {
-    //     if (msg.result && msg.result.length) {
-    //       passworder.encrypt(this.componentSettings.pass, {
-    //           seed: this.componentSettings.seed,
-    //           id: msg.result
-    //         })
-    //         .then((result) => {
-    //           this.dataService.saveWallet(result);
-    //           this.dataService.settingsInit(this.componentSettings.seedConfirmed);
-    //           this.dataService.loginToWallet(msg.result, this.componentSettings.pass);
-    //         });
-    //     }
-
-    //     this.sub.unsubscribe();
-    //     this.keeperSub.unsubscribe();
-    //   });
-
-    //   this.websocketService.send({
-    //     jsonrpc: '2.0',
-    //     id: 0,
-    //     method: 'create_wallet',
-    //     params: {
-    //       pass: this.componentSettings.pass,
-    //       ownerkey: ownerKey
-    //     }
-    //   });
-    // });
   }
 
   ngOnDestroy() {

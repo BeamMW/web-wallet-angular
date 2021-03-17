@@ -1,5 +1,3 @@
-import { from } from 'rxjs';
-
 export * from './wallet-status-title/wallet-status-title.component';
 export * from './header/header-logo/header-logo.component';
 export * from './header/header-popup/header-popup.component';

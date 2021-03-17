@@ -19,7 +19,6 @@ import {
 })
 export class LoginComponent implements OnInit, OnDestroy {
   public loginForm: FormGroup;
-  public isFullScreen: boolean;
   public bgUrl: string = '';
   public logoUrl: string = `${environment.assetsPath}/images/modules/wallet/containers/login/logo.svg`;
 
@@ -30,15 +29,26 @@ export class LoginComponent implements OnInit, OnDestroy {
   errorState$: Observable<any>;
   isCorrectPass = true;
 
+  public params = {
+    isFullScreen: false,
+    popupOpened: false
+  };
+
   constructor(private store: Store<any>,
               private windowService: WindowService,
               public router: Router,
               private dataService: DataService) {
-    this.isFullScreen = windowService.isFullSize();
+    this.params.isFullScreen = windowService.isFullSize();
     this.bgUrl = `${environment.assetsPath}/images/modules/wallet/containers/login/` +
-      (this.isFullScreen ? 'bg-full.svg' : 'bg.svg');
+      (this.params.isFullScreen ? 'bg-full.svg' : 'bg.svg');
     this.loginForm = new FormGroup({
       password: new FormControl()
+    });
+
+    dataService.changeEmitted$.subscribe(emittedState => {
+      if (emittedState.popupOpened !== undefined) {
+        this.params.popupOpened = emittedState.popupOpened;
+      }
     });
   }
 
@@ -66,6 +76,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.sub.unsubscribe();
       }
     }).unsubscribe();
+  }
+
+  restoreClicked() {
+    this.router.navigate([this.router.url, { outlets: { popup: 'restore-popup' }}]);
   }
 
   passUpdated($event) {

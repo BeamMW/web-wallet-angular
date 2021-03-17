@@ -10,7 +10,8 @@ import {
   FtfConfirmSeedComponent,
   FtfCreatePasswordComponent,
   FtfViewSeedComponent,
-  FtfLoaderComponent
+  FtfLoaderComponent,
+  FtfRestoreComponent
 } from './containers';
 
 import {
@@ -29,7 +30,8 @@ import { FirstTimeFlowRoutingModule } from './first-time-flow-routing.module';
     FtfCreatePasswordComponent,
     SaveSeedPopupComponent,
     ReturnToSeedPopupComponent,
-    FtfLoaderComponent
+    FtfLoaderComponent,
+    FtfRestoreComponent
   ],
   imports: [
     FormsModule,

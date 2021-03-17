@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router} from '@angular/router';
 import { ActivatedRoute} from '@angular/router';
-import { DataService, WindowService, WebsocketService } from './../../../../services';
+import { DataService, WindowService } from '@app/services';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl} from '@angular/forms';
 import { environment } from '@environment';
 import { WasmService } from '../../../../services/wasm.service';
-import { rpcMethodIdsConsts } from '@consts';
+import { rpcMethodIdsConsts, globalConsts } from '@consts';
 
 @Component({
   selector: 'app-payment-proof',
@@ -25,8 +25,7 @@ export class PaymentProofComponent implements OnInit, OnDestroy {
 
   popupCloseIcon: string = `${environment.assetsPath}/images/shared/components/popups/payment-proof/ic-cancel-popup.svg`;
 
-  constructor(private websocketService: WebsocketService,
-              private windowSerivce: WindowService,
+  constructor(private windowSerivce: WindowService,
               private wasmService: WasmService,
               private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -108,7 +107,7 @@ export class PaymentProofComponent implements OnInit, OnDestroy {
   proofDataToCp() {
     return 'Sender: ' + this.proofData.sender +
     '\nReceiver: ' + this.proofData.receiver +
-    '\nAmount: ' + this.proofData.amount / 100000000 + ' BEAM' +
+    '\nAmount: ' + this.proofData.amount / globalConsts.GROTHS_IN_BEAM + ' BEAM' +
     '\nKernel ID: ' + this.proofData.kernel;
   }
 

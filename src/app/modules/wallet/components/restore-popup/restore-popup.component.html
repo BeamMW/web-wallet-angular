@@ -1,0 +1,15 @@
+<div class="restore" appClickOutside (clickOutside)="closePopup()">
+    <div class="restore__title">Restore wallet or create new one</div>
+    <div class="restore__content">
+        <p>If you'll restore a wallet all transaction history and addresses</p>
+        <p>will be lost.</p>
+    </div>
+    <div class="restore__controls">
+        <div class="restore__controls__cancel">
+            <app-button class="copy-button" (click)="cancelClicked($event)">cancel</app-button>
+        </div>
+        <div class="restore__controls__proceed">
+            <app-button class="copy-button" (click)="submit($event)">proceed</app-button>
+        </div>
+    </div>
+</div>

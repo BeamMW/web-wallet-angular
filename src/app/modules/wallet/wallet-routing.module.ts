@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, Router } from '@angular/router';
 
-import { MainComponent, LoginComponent } from './containers';
+import { RestorePopupComponent } from './components';
+import { 
+  MainComponent, 
+  LoginComponent
+} from './containers';
 import { MenuComponent, MenuFullComponent } from '@shared/components';
 import { MainLayoutComponent } from '@shared/layouts';
 import { HeaderComponent, HeaderWithoutLogoComponent } from '@shared/containers';
@@ -51,6 +55,8 @@ const routes: Routes = [{
         path: '', component: HeaderWithoutLogoComponent, outlet: 'header'
       }, {
         path: '', component: LoginComponent
+      }, {
+        path: 'restore-popup', component: RestorePopupComponent, outlet: 'popup',
       }
     ]
   }]

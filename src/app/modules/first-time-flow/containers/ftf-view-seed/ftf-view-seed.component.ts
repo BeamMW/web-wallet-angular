@@ -102,7 +102,8 @@ export class FtfViewSeedComponent implements OnInit, OnDestroy {
     const navigationExtras: NavigationExtras = {
       state: {
         seedConfirmed: false,
-        seed: this.seed
+        seed: this.seed,
+        from: routes.FTF_VIEW_SEED_ROUTE
       }
     };
     this.router.navigate([routes.FTF_PASSWORD_CREATE_ROUTE], navigationExtras);

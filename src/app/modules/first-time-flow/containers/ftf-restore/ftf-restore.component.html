@@ -1,0 +1,65 @@
+<div class="restore" [class.blur-filter]="!componentSettings.isFullScreen && componentSettings.popupOpened">
+    <ng-container *ngIf="!componentSettings.isFullScreen">
+        <div class="restore__header">
+            <div class="menu-control-wrapper">
+                <img class="restore__header__menu" (click)="backClicked($event)" [src]="iconBack"/>
+            </div>
+            <div class="title-wrapper">
+                <div class="restore__header__title">RESTORE WALLET</div>
+            </div>
+            <div class="save-addr-control-wrapper"></div>
+        </div>
+
+        <div class="restore__subtitle">
+            Type in your seed phrase
+        </div>
+    
+        <div class="restore__mid-content">
+            <div class="restore__mid-content__item" *ngFor="let item of seedStateToConfirm">
+                <div class="restore__mid-content__item__circle"
+                    [class.error]="item.inProgress && !item.confirmed"
+                    [class.confirmed]="!item.inProgress && item.confirmed"> {{item.index + 1}} </div>
+                <input class="restore__mid-content__item__input" 
+                    [class.error]="item.inProgress && !item.confirmed"
+                    (input)="wordInputUpdated($event, item)" type="text"/>
+            </div>
+        </div>
+        <div class="restore__bottom-content">
+            <app-button class="restore__bottom-content__next-button"
+                        [class.disabled]="!seedConfirmed"
+                        (click)="restoreClicked()">
+                next
+            </app-button>
+        </div>
+        <div class="restore__top-gradient"></div>
+    </ng-container>
+
+    <ng-container *ngIf="componentSettings.isFullScreen">
+        <div class="restore__top-content">
+            <div class="restore__top-content__header">Restore wallet</div>
+            <div class="restore__top-content__text">
+                Type in your seed phrase
+            </div>
+        </div>
+        <div class="restore__mid-content">
+            <div class="restore__mid-content__item" *ngFor="let item of seedStateToConfirm">
+                <div class="restore__mid-content__item__circle"
+                     [class.error]="item.inProgress && !item.confirmed"
+                     [class.confirmed]="!item.inProgress && item.confirmed"> {{item.index + 1}} </div>
+                <input class="restore__mid-content__item__input" 
+                       [class.error]="item.inProgress && !item.confirmed"
+                       (input)="wordInputUpdated($event, item)" type="text"/>
+            </div>
+        </div>
+        <div class="restore__bottom-content">
+            <app-button class="restore__bottom-content__back-button" (click)="backClicked($event)">back</app-button>
+            <app-button class="restore__bottom-content__restore-button"
+                        [class.disabled]="!seedConfirmed"
+                        (click)="restoreClicked()">
+                restore wallet
+            </app-button>
+        </div>
+    </ng-container>
+</div>
+
+<div *ngIf="componentSettings.isFullScreen && componentSettings.popupOpened" class="full-popup-opened"></div>

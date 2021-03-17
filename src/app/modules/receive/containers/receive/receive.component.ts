@@ -2,14 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { FormGroup, FormControl, Validators} from '@angular/forms';
-import { DataService, WindowService, WebsocketService } from './../../../../services';
+import { FormGroup, FormControl } from '@angular/forms';
+import { DataService, WindowService, WasmService } from '@app/services';
 import { Store, select } from '@ngrx/store';
-import { saveReceiveData } from './../../../../store/actions/wallet.actions';
-
-
-import { selectAddress } from './../../../../store/selectors/address.selectors';
-import { WasmService } from '../../../../services/wasm.service';
+import { saveReceiveData } from '@app/store/actions/wallet.actions';
+import { selectAddress } from '@app/store/selectors/address.selectors';
 import { globalConsts, rpcMethodIdsConsts } from '@consts';
 
 @Component({
@@ -37,8 +34,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
               public router: Router,
               private wasmService: WasmService,
               private dataService: DataService,
-              private windowService: WindowService,
-              private wsService: WebsocketService) {
+              private windowService: WindowService) {
     this.isFullScreen = windowService.isFullSize();
     this.receiveForm = new FormGroup({
       amount: new FormControl(),
@@ -113,7 +109,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   amountUpdated(control: FormControl) {
     const amount = control.value.length > 0 ?
       (parseFloat(control.value) * globalConsts.GROTHS_IN_BEAM).toString() : '';
-    this.generatedToken = this.wasmService.getSendToken(this.generatedAddress, this.identity, amount);
+    this.generatedToken = this.generatedAddress;//this.wasmService.getSendToken(this.generatedAddress, this.identity, amount);
     this.updateQr();
   }
 

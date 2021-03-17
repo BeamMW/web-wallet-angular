@@ -1,15 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router} from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
 import { environment } from '@environment';
-import { WindowService, DataService } from '../../../../services';
-import { routes } from '@consts';
-import { popupRoutes } from '@consts';
+import { WindowService, DataService } from '@app/services';
+import { popupRoutes, routes } from '@consts';
 import { Store, select } from '@ngrx/store';
 import {
   selectError
-} from './../../../../store/selectors/wallet-state.selectors';
-import { saveError } from '../../../../store/actions/wallet.actions';
+} from '@app/store/selectors/wallet-state.selectors';
+import { saveError } from '@app/store/actions/wallet.actions';
 @Component({
   selector: 'app-ftf-create',
   templateUrl: './ftf-create.component.html',
@@ -44,6 +43,15 @@ export class FtfCreateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.popupSub.unsubscribe();
+  }
+
+  restoreClicked() {
+    const navigationExtras: NavigationExtras = {
+      state: {
+        from: routes.FTF_CREATE_WALLET_ROUTE,
+      }
+    };
+    this.router.navigate([routes.FTF_WALLET_RESTORE_ROUTE], navigationExtras);
   }
 
   newWalletClicked() {

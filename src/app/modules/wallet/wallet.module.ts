@@ -9,11 +9,13 @@ import { WalletRoutingModule } from './wallet-routing.module';
 
 import { LoginGuard } from './guards/login.guard';
 import { InitializeGuard } from './guards/initialize.guard';
+import { RestorePopupComponent } from './components/restore-popup/restore-popup.component';
 
 @NgModule({
   declarations: [
     MainComponent,
-    LoginComponent
+    LoginComponent,
+    RestorePopupComponent
   ],
   providers: [
     LoginGuard,

@@ -9,17 +9,16 @@ import { environment } from '@environment';
 import {Router} from '@angular/router';
 
 import { Store, select } from '@ngrx/store';
-import { selectContact } from '../../../store/selectors/wallet-state.selectors';
-import { selectUtxoById } from '../../../store/selectors/utxo.selectors';
-import { selectAddress } from '../../../store/selectors/address.selectors';
+import { selectContact } from '@app/store/selectors/wallet-state.selectors';
+import { selectUtxoById } from '@app/store/selectors/utxo.selectors';
+import { selectAddress } from '@app/store/selectors/address.selectors';
 
-import { WebsocketService } from './../../../services';
+import { WasmService } from '@app/services';
 import { Subscription } from 'rxjs';
-import { WasmService } from '../../../services/wasm.service';
 
 import {
   saveProofData
-} from './../../../store/actions/wallet.actions';
+} from '@app/store/actions/wallet.actions';
 
 @Component({
   selector: 'app-table',
@@ -82,10 +81,9 @@ export class TableComponent implements OnInit, OnChanges {
   constructor(
     private store: Store<any>,
     private router: Router,
-    private websocketService: WebsocketService,
     private changeDetectorRefs: ChangeDetectorRef,
     private wasmService: WasmService
-    ) {}
+  ) {}
 
   getExpandedState(data) {
     let expState = 'collapsed';

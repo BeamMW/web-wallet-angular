@@ -1,0 +1,382 @@
+@import 'ui-mixins';
+@import './styles';
+
+:host {
+    flex: 1 0 auto;
+    background-color: #042548;
+}
+
+.content-text {
+    margin-left: 20px;
+    max-width: 275px;
+    font-family: 'ProximaNova', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff;
+}
+
+.restore {
+    min-height: 530px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &__top-gradient {
+        position: absolute;
+        width: 100%;
+        height: 100px;
+        background-image: linear-gradient(to top, rgba(3, 91, 143, 0), #035b8f);
+        z-index: 1;
+    }
+
+    &__header {
+        margin-top: 30px;
+        display: flex;
+        z-index: 10;
+        width: 100%;
+
+        &__menu {
+            cursor: pointer;
+            margin-left: 20px;
+        }
+
+        &__title {
+            font-family: 'ProximaNovaSemiBold', sans-serif;
+            margin: 0 auto;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: 3px;
+            text-align: center;
+        }
+    }
+
+    &__subtitle {
+        @include normal-text;
+        width: 315px;
+        margin: 35px auto 0 auto;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 14px;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    &__mid-content {
+        display: flex;
+        width: 315px;
+        height: 220px;
+        margin: 40px auto 0 auto;
+        flex-wrap: wrap;
+        align-content: space-between;
+        justify-content: space-between;
+
+        &__item {
+            display: flex;
+            flex-direction: row;
+
+            &__circle {
+                @include normal-text;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 20px;
+                width: 20px;
+                height: 20px;
+                background-color: rgba(255, 255, 255, 0);
+                border: solid 1px #8da1ad;
+                opacity: 0.5;
+                font-family: 'SFProDisplayRegular', sans-serif;
+                font-size: 10px;
+                text-align: center;
+                color: #8da1ad  ;
+            }
+
+            &__circle.error {
+                color: #032e49;
+                box-shadow: 0 0 5px 0 rgba(255, 98, 92, 0.7);
+                background-color: #ff625c;
+                border: none;
+                opacity: 1;
+            }
+
+            &__circle.confirmed {
+                color: #032e49;
+                box-shadow: 0 0 5px 0 rgba(0, 246, 210, 0.7);
+                background-color: #00f6d2;
+                border: none;
+                opacity: 1;
+            }
+
+            &__input {
+                @include normal-text;
+                margin-left: 10px;
+                background: rgba(255, 255, 255, 0);
+                font-family: 'SFProDisplayRegular', sans-serif;
+                border: none;
+                width: 110px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                font-size: 14px;
+                color: #ffffff;
+                resize:none;
+                padding: 5px;
+                max-height: 20px;
+            }
+
+            &__input:focus.error {
+                color: #ff625c;
+            }
+
+            &__input.error {
+                border-bottom: 1px solid #ff625c;
+                color: #ff625c;
+            }
+    
+            &__input:focus {
+                @include normal-text;
+                font-family: 'SFProDisplayRegular', sans-serif;
+                outline-width: 0;
+                font-size: 14px;
+                color: #ffffff;
+            }
+        }
+    }
+
+    &__bottom-content {
+        margin: auto auto 30px auto;
+        display: flex;
+        flex-direction: row;
+
+        &__next-button {
+            @include ui-button($btn-open-wallet, $btn-full-verification) {
+                font-family: 'ProximaNovaBold', sans-serif;
+                font-size: 14px;
+                width: 253px;
+                height: 44px;
+            }
+    
+            @include ui-button-next-icon()
+        }
+
+        &__next-button.disabled {
+        
+            @include ui-button($btn-open-wallet, $btn-full-verification) {
+                font-family: 'ProximaNovaBold', sans-serif;
+                opacity: 0.2;
+                border-radius: 50px;
+                background-color: #00f6d2;
+                font-size: 14px;
+                width: 253px;
+                height: 44px;
+            }
+    
+            @include ui-button-next-icon()
+        }
+    }
+}
+
+@media (min-width: 400px) {
+    .restore {
+        height: 100%;
+            
+        &__top-content {
+            margin-top: 50px;
+
+            &__header {
+                @include normal-text;
+                font-family: 'ProximaNovaSemiBold', sans-serif;
+                font-size: 36px;
+                font-weight: 600;
+                text-align: center;
+                color: #ffffff;
+            }
+
+            &__text {
+                @include normal-text;
+                margin: 30px auto 0 auto;
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 14px;
+                line-height: 1.29;
+                text-align: center;
+                color: #ffffff;
+            }
+        }
+
+        &__mid-content {
+            display: flex;
+            width: 780px;
+            height: 140px;
+            margin: 50px auto 0 auto;
+            flex-wrap: wrap;
+            align-content: space-between;
+            justify-content: space-between;
+
+            &__item {
+                display: flex;
+                flex-direction: row;
+
+                &__circle {
+                    @include normal-text;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 20px;
+                    width: 20px;
+                    height: 20px;
+                    background-color: rgba(255, 255, 255, 0);
+                    border: solid 1px #8da1ad;
+                    opacity: 0.5;
+                    font-family: 'SFProDisplayRegular', sans-serif;
+                    font-size: 10px;
+                    text-align: center;
+                    color: #8da1ad  ;
+                }
+
+                &__circle.error {
+                    color: #032e49;
+                    box-shadow: 0 0 5px 0 rgba(255, 98, 92, 0.7);
+                    background-color: #ff625c;
+                    border: none;
+                    opacity: 1;
+                }
+
+                &__circle.confirmed {
+                    color: #032e49;
+                    box-shadow: 0 0 5px 0 rgba(0, 246, 210, 0.7);
+                    background-color: #00f6d2;
+                    border: none;
+                    opacity: 1;
+                }
+
+                &__input {
+                    @include normal-text;
+                    margin-left: 20px;
+                    background: rgba(255, 255, 255, 0);
+                    font-family: 'SFProDisplayRegular', sans-serif;
+                    border: none;
+                    width: 120px;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                    font-size: 14px;
+                    color: #ffffff;
+                    resize:none;
+                    padding: 5px;
+                    max-height: 20px;
+                }
+
+                &__input:focus.error {
+                    color: #ff625c;
+                }
+
+                &__input.error {
+                    border-bottom: 1px solid #ff625c;
+                    color: #ff625c;
+                }
+        
+                &__input:focus {
+                    @include normal-text;
+                    font-family: 'SFProDisplayRegular', sans-serif;
+                    outline-width: 0;
+                    font-size: 14px;
+                    color: #ffffff;
+                }
+            }
+        }
+
+        &__bottom-content {
+            margin: auto auto 143px auto;
+            display: flex;
+            flex-direction: row;
+
+            &__restore-button {
+                margin-left: 20px;
+                
+                @include ui-button($btn-open-wallet, $btn-full-verification) {
+                    font-size: 14px;
+                    width: 173px;
+                    height: 38px;
+                }
+        
+                @include ui-button-restore-icon()
+            }
+
+            &__restore-button.disabled {
+                margin-left: 20px;
+                
+                @include ui-button($btn-open-wallet, $btn-full-verification) {
+                    opacity: 0.2;
+                    border-radius: 50px;
+                    background-color: #00f6d2;
+                    font-size: 14px;
+                    width: 173px;
+                    height: 38px;
+                }
+        
+                @include ui-button-restore-icon()
+            }
+
+            &__back-button {
+                
+                @include ui-button($btn-full-back, $btn-full-sm) {
+                    font-size: 14px;
+                    width: 117px;
+                    height: 38px;
+                }
+        
+                @include ui-button-back-icon()
+            }
+        }
+    }
+}
+
+.content-header {
+    opacity: 0.5;
+    font-family: 'ProximaNova', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 1px;
+    color: #ffffff;
+}
+
+.menu-control-wrapper {
+    width: 50%;
+    flex-shrink: 1;
+    display: flex;
+}
+
+.title-wrapper {
+    flex-shrink: 0;
+}
+
+.save-addr-control-wrapper {
+    width: 50%;
+    flex-shrink: 1;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.confirm.blur-filter {
+    -webkit-filter: blur(4px);
+    -moz-filter: blur(4px);
+    -o-filter: blur(4px);
+    -ms-filter: blur(4px);
+    filter: blur(4px);
+}
+
+.full-popup-opened {
+    background-color: rgba(4, 37, 72, .5);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+}

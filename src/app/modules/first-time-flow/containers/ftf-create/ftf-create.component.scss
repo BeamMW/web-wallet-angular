@@ -67,18 +67,20 @@
         @include ui-button-create-wallet-icon()
     }
 
-    &__restore-beta {
+    &__restore {
         margin-top: 20px;
         margin-bottom: 94px;
         height: 18px;
         @include normal-text;
-        opacity: 0.5;
-        font-family: 'ProximaNovaIT', sans-serif;
+        font-family: 'ProximaNova', sans-serif;
         font-size: 14px;
         line-height: 1.29;
         text-align: center;
-        color: #ffffff;
+        font-size: 14px;
+        font-weight: bold;
+        color: #00f6d2;
         z-index: 10;
+        cursor: pointer;
     }
 }
 
@@ -122,17 +124,19 @@
             @include ui-button-create-wallet-icon()
         }
 
-        &__restore-beta {
+        &__restore {
             margin-top: 20px;
             margin-bottom: 105px;
             height: 18px;
             @include normal-text;
-            opacity: 0.5;
-            font-family: 'ProximaNovaIT', sans-serif;
+            font-family: 'ProximaNova', sans-serif;
             font-size: 14px;
             line-height: 1.29;
             text-align: center;
-            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            color: #00f6d2;
+            cursor: pointer;
         }
     }
 }

@@ -1,10 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
-import { DataService, WebsocketService } from './../../../../services';
+import { DataService } from '@app/services';
 import { Store, select } from '@ngrx/store';
-import { loadTr } from './../../../../store/actions/wallet.actions';
-import { selectAllTr, selectInProgressTr, selectReceivedTr, selectSentTr } from '../../../../store/selectors/transaction.selectors';
+import { 
+  selectAllTr, 
+  selectInProgressTr, 
+  selectReceivedTr, 
+  selectSentTr } from '@app/store/selectors/transaction.selectors';
 import { Subscription, Observable } from 'rxjs';
 import { routes } from '@consts';
 
@@ -35,8 +38,7 @@ export class TransactionsViewComponent implements OnInit, OnDestroy {
 
   constructor(public router: Router,
               public store: Store<any>,
-              public dataService: DataService,
-              public wsService: WebsocketService) {
+              public dataService: DataService) {
     this.transactions$ = this.store.pipe(select(selectAllTr));
   }
 

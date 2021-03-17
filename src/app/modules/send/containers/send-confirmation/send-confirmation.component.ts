@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import {DataService, WebsocketService} from './../../../../services';
+import {DataService} from '@app/services';
 import { Router, NavigationExtras } from '@angular/router';
-import { FormGroup, FormControl, Validators} from '@angular/forms';
+import { FormGroup} from '@angular/forms';
 import { Subscription, Observable, from } from 'rxjs';
 import { environment } from '@environment';
 import { routes, globalConsts } from '@consts';
 import { Store, select } from '@ngrx/store';
 import {
   selectPasswordCheckSetting,
-} from './../../../../store/selectors/wallet-state.selectors';
+} from '@app/store/selectors/wallet-state.selectors';
 
 @Component({
   selector: 'app-send-confirmation',
@@ -31,8 +31,7 @@ export class SendConfirmationComponent implements OnInit {
 
   constructor(private dataService: DataService,
               private store: Store<any>,
-              public router: Router,
-              private wsService: WebsocketService) {
+              public router: Router) {
     dataService.changeEmitted$.subscribe(emittedState => {
       this.popupOpened = emittedState;
     });

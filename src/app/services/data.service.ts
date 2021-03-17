@@ -31,8 +31,6 @@ import {
   saveContact } from '../store/actions/wallet.actions';
 import { Router } from '@angular/router';
 import { WasmService } from './wasm.service';
-import { LoginService } from './login.service';
-import { WebsocketService } from './websocket.service';
 import { LogService } from './log.service';
 import * as passworder from 'browser-passworder';
 import { routes, globalConsts, rpcMethodIdsConsts } from '@consts';
@@ -87,8 +85,6 @@ export class DataService {
 
   constructor(
     private logService: LogService,
-    private loginService: LoginService,
-    private websocketService: WebsocketService,
     public router: Router,
     private wasmService: WasmService,
     private store: Store<any>) {
@@ -225,10 +221,6 @@ export class DataService {
   }
 
   public disconnectWallet() {
-    this.loginService.complete();
-    this.websocketService.complete();
-    this.websocketService.disconnect();
-    this.loginService.disconnect();
   }
 
   public deactivateWallet() {
@@ -251,6 +243,7 @@ export class DataService {
 
   clearWalletData() {
     clearInterval(this.refreshIntervalId);
+    this.wasmService.deleteWalletDB();
     extensionizer.storage.local.remove(['settings', 'wallet', 'contacts', 'state']);
   }
 

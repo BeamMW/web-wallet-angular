@@ -1,17 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
-import { DataService, WindowService, WebsocketService } from './../../../../services';
+import { DataService, WindowService } from '@app/services';
 import { Store, select } from '@ngrx/store';
-import { loadAddresses } from './../../../../store/actions/wallet.actions';
 import {
-  selectAllAddresses,
   selectExpiredAddresses,
   selectActiveAddresses
-} from '../../../../store/selectors/address.selectors';
+} from '@app/store/selectors/address.selectors';
 import {
   selectContacts
-} from '../../../../store/selectors/wallet-state.selectors';
+} from '@app/store/selectors/wallet-state.selectors';
 import { Subscription, Observable } from 'rxjs';
 
 @Component({
@@ -45,8 +43,7 @@ export class AddressesListComponent implements OnInit, OnDestroy {
   constructor(public router: Router,
               public store: Store<any>,
               public dataService: DataService,
-              private windowService: WindowService,
-              public wsService: WebsocketService) {
+              private windowService: WindowService) {
     this.isFullScreen = windowService.isFullSize();
     this.addresses$ = this.store.pipe(select(selectActiveAddresses));
     dataService.changeEmitted$.subscribe(emittedState => {

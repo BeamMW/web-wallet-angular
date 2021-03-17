@@ -3,15 +3,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router} from '@angular/router';
 import { environment } from '@environment';
 import { ActivatedRoute} from '@angular/router';
-import { DataService, WebsocketService, WindowService } from './../../../../services';
+import { DataService, WindowService } from '@app/services';
 import { Subscription, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as passworder from 'browser-passworder';
-import { FormGroup, FormControl, Validators} from '@angular/forms';
+import { FormGroup, FormControl} from '@angular/forms';
 import {
-  selectWalletData,
-  selectSendData
-} from './../../../../store/selectors/wallet-state.selectors';
+  selectWalletData
+} from '@app/store/selectors/wallet-state.selectors';
 import { globalConsts } from '@consts';
 import Big from 'big.js';
 
@@ -42,7 +41,6 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
   public contactIcon: string = `${environment.assetsPath}/images/shared/components/table/icon-contact.svg`;
 
   constructor(private store: Store<any>,
-              private wsService: WebsocketService,
               public router: Router,
               private activatedRoute: ActivatedRoute,
               private windowService: WindowService,
@@ -105,7 +103,6 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
       this.dataService.transactionSend(this.sendData);
     }
   }
-  //1.0203424
 
   getTotalUtxo() {
     return ((this.sendData.amount.plus(this.sendData.fee)).div(globalConsts.GROTHS_IN_BEAM)).toFixed();

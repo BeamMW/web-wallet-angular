@@ -1,20 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { selectAddress } from '../../../../store/selectors/address.selectors';
 import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
-import { selectTrById } from '../../../../store/selectors/transaction.selectors';
+import { selectTrById } from '@app/store/selectors/transaction.selectors';
 import {
   selectPrivacySetting
-} from '../../../../store/selectors/wallet-state.selectors';
-import { selectUtxoById } from '../../../../store/selectors/utxo.selectors';
-import { WebsocketService, DataService } from './../../../../services';
-import {
-  saveProofData
-} from './../../../../store/actions/wallet.actions';
-import { WasmService } from '../../../../services/wasm.service';
+} from '@app/store/selectors/wallet-state.selectors';
+import { selectUtxoById } from '@app/store/selectors/utxo.selectors';
+import { WasmService, DataService } from '@app/services';
+import { saveProofData } from '@app/store/actions/wallet.actions';
 import { rpcMethodIdsConsts } from '@consts';
 
 @Component({
@@ -40,7 +36,6 @@ export class TransactionDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     public store: Store<any>,
-    private websocketService: WebsocketService,
     private dataService: DataService,
     private wasmService: WasmService,
     public router: Router) {

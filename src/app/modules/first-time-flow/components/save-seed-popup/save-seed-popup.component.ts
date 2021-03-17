@@ -68,7 +68,8 @@ export class SaveSeedPopupComponent implements OnInit, OnDestroy {
       const navigationExtras: NavigationExtras = {
         state: {
           seedConfirmed: this.componentSettings.navExtras.seedConfirmed,
-          seed: this.componentSettings.navExtras.seed
+          seed: this.componentSettings.navExtras.seed,
+          from: routes.FTF_VIEW_SEED_ROUTE
         }
       };
       this.router.navigate([routes.FTF_PASSWORD_CREATE_ROUTE], navigationExtras);

@@ -1,26 +1,30 @@
-<div class="background">
-    <img [src]="bgUrl" class="background__bg">
-</div>
-<div class="login">
-    <img [src]="logoUrl" class="login__logo">
-    <div class="login__subheader-text">Scalable confidential cryptocurrency</div>
-    <div class="login__header-text">Enter your password to access the wallet</div>
-    <div class="login__container">
-        <form class="send-form-cl" [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="submit()">
-            <input autofocus class="login__container__input" #passInput [class.incorrect]="!isCorrectPass"
-                (input)="passUpdated($event)"
-                name="password" type="password" formControlName="password" 
-                placeholder="Password"/>
-                {{ passInput.focus() }}
-            <div class="login__container__validator" *ngIf="!isCorrectPass">Incorrect password</div>
-            <ng-container *ngIf="errorState$ | async as errorState">
-                <div class="login__container__validator" *ngIf="errorState.gotAnError">{{errorState.errorMessage}}</div>
-            </ng-container>
-        </form>
+<div class="container" [class.blur-filter]="!params.isFullScreen && params.popupOpened">
+    <div class="background">
+        <img [src]="bgUrl" class="background__bg">
     </div>
-    <div class="login__controls" [class.incorrect]="!isCorrectPass">
-        <app-button class="open-button" (click)="submit()">open your wallet</app-button>
+    <div class="login">
+        <img [src]="logoUrl" class="login__logo">
+        <div class="login__subheader-text">Scalable confidential cryptocurrency</div>
+        <div class="login__header-text">Enter your password to access the wallet</div>
+        <div class="login__container">
+            <form class="send-form-cl" [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="submit()">
+                <input autofocus class="login__container__input" #passInput [class.incorrect]="!isCorrectPass"
+                    (input)="passUpdated($event)"
+                    name="password" type="password" formControlName="password" 
+                    placeholder="Password"/>
+                    {{ passInput.focus() }}
+                <div class="login__container__validator" *ngIf="!isCorrectPass">Incorrect password</div>
+                <ng-container *ngIf="errorState$ | async as errorState">
+                    <div class="login__container__validator" *ngIf="errorState.gotAnError">{{errorState.errorMessage}}</div>
+                </ng-container>
+            </form>
+        </div>
+        <div class="login__controls" [class.incorrect]="!isCorrectPass">
+            <app-button class="open-button" (click)="submit()">open your wallet</app-button>
+        </div>
+        <div class="login__restore" (click)="restoreClicked()">Restore wallet or create a new one</div>
+        <div class="login__top-gradient" *ngIf="!params.isFullScreen"></div>
     </div>
-    <div class="login__restore-beta">Restore is not supported in this Beta version.</div>
-    <div class="login__top-gradient" *ngIf="!isFullScreen"></div>
 </div>
+
+<div *ngIf="params.isFullScreen && params.popupOpened" class="full-popup-opened"></div>

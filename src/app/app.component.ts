@@ -13,9 +13,5 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.wasmService.init();
-
-    // setTimeout(()=> {
-    //   this.wasmService.hello();
-    // }, 10000)
   }
 }

@@ -1,28 +1,26 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { WasmService } from '../../../../services/wasm.service';
 import { Subscription, Observable, from } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import {
   updatePrivacySetting,
   updateVerificatedSetting
-} from './../../../../store/actions/wallet.actions';
-import { selectAllAddresses } from '../../../../store/selectors/address.selectors';
-import { selectAllUtxo } from '../../../../store/selectors/utxo.selectors';
+} from '@app/store/actions/wallet.actions';
+import { selectAllAddresses } from '@app/store/selectors/address.selectors';
+import { selectAllUtxo } from '@app/store/selectors/utxo.selectors';
 import {
   selectAllTr,
   selectInProgressTr,
   selectReceivedTr,
   selectSentTr
-} from '../../../../store/selectors/transaction.selectors';
+} from '@app/store/selectors/transaction.selectors';
 import {
   selectPrivacySetting,
   selectVerificatedSetting,
   selectWalletStatus
-} from '../../../../store/selectors/wallet-state.selectors';
-import { selectAddress } from '../../../../store/selectors/address.selectors';
-import { DataService, WindowService, WebsocketService, LoginService } from './../../../../services';
-import { routes, transactionsStatuses, globalConsts } from '@consts';
+} from '@app/store/selectors/wallet-state.selectors';
+import { DataService, WindowService } from '@app/services';
+import { routes, globalConsts } from '@consts';
 
 import { environment } from '@environment';
 
@@ -88,11 +86,8 @@ export class MainComponent implements OnInit, OnDestroy {
   };
 
   constructor(private store: Store<any>,
-              private wasm: WasmService,
               public router: Router,
               private windowService: WindowService,
-              private websocketService: WebsocketService,
-              private loginService: LoginService,
               private dataService: DataService) {
     this.isFullScreen = windowService.isFullSize();
     this.addresses$ = this.store.pipe(select(selectAllAddresses));

@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router} from '@angular/router';
 import { ActivatedRoute} from '@angular/router';
-import { DataService, WindowService, WebsocketService } from './../../../../services';
+import { DataService, WindowService } from '@app/services';
 import { Subscription, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { selectProofData } from '../../../../store/selectors/wallet-state.selectors';
+import { selectProofData } from '@app/store/selectors/wallet-state.selectors';
 import { environment } from '@environment';
+import { globalConsts } from '@consts';
 
 @Component({
   selector: 'app-payment-proof-exported',
@@ -22,8 +23,7 @@ export class PaymentProofExportedComponent implements OnInit, OnDestroy {
 
   popupCloseIcon: string = `${environment.assetsPath}/images/shared/components/popups/payment-proof/ic-cancel-popup.svg`;
 
-  constructor(private websocketService: WebsocketService,
-              private windowSerivce: WindowService,
+  constructor(private windowSerivce: WindowService,
               private router: Router,
               private store: Store<any>,
               private activatedRoute: ActivatedRoute,
@@ -65,7 +65,7 @@ export class PaymentProofExportedComponent implements OnInit, OnDestroy {
   proofDataToCp() {
     return 'Sender: ' + this.proofData.sender +
     '\nReceiver: ' + this.proofData.receiver +
-    '\nAmount: ' + this.proofData.amount / 100000000 + ' BEAM' +
+    '\nAmount: ' + this.proofData.amount / globalConsts.GROTHS_IN_BEAM + ' BEAM' +
     '\nKernel ID: ' + this.proofData.kernelId;
   }
 

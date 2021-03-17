@@ -7,7 +7,8 @@ import {
   FtfConfirmSeedComponent,
   FtfCreatePasswordComponent,
   FtfViewSeedComponent,
-  FtfLoaderComponent
+  FtfLoaderComponent,
+  FtfRestoreComponent
 } from './containers';
 
 import {
@@ -77,6 +78,14 @@ const routes: Routes = [{
         path: '', component: FtfViewSeedComponent
       }, {
         path: 'save-seed', component: SaveSeedPopupComponent, outlet: 'popup',
+      }
+    ]
+  }, {
+    path: 'restore',
+    children: [{
+        path: '', component: HeaderWithLinkComponent, outlet: 'header'
+      }, {
+        path: '', component: FtfRestoreComponent
       }
     ]
   }]

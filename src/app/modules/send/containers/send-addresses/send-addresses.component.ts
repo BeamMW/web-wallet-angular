@@ -3,20 +3,18 @@ import { Router, NavigationExtras } from '@angular/router';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 import { environment } from '@environment';
-import { DataService, WindowService, WebsocketService } from './../../../../services';
+import { DataService, WindowService } from '@app/services';
 import { Store, select } from '@ngrx/store';
 import {
   selectPasswordCheckSetting,
   selectWalletStatus,
   selectSendData
-} from '../../../../store/selectors/wallet-state.selectors';
-import { WasmService } from '../../../../services/wasm.service';
+} from '@app/store/selectors/wallet-state.selectors';
+import { WasmService } from '@app/services/wasm.service';
 import { debounceTime } from 'rxjs/operators';
 import { globalConsts, rpcMethodIdsConsts, routes } from '@consts';
 import Big from 'big.js';
-import { selectAvailableUtxo } from '../../../../store/selectors/utxo.selectors';
-import { SUPER_EXPR } from '@angular/compiler/src/output/output_ast';
-import { parse } from 'querystring';
+import { selectAvailableUtxo } from '@app/store/selectors/utxo.selectors';
 
 @Component({
   selector: 'app-send-addresses',
@@ -67,8 +65,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
               public router: Router,
               private wasmService: WasmService,
               private store: Store<any>,
-              private windowService: WindowService,
-              private websocketService: WebsocketService) {
+              private windowService: WindowService) {
     this.utxos$ = this.store.pipe(select(selectAvailableUtxo));
     this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
     this.localParams.isFullScreen = windowService.isFullSize();
