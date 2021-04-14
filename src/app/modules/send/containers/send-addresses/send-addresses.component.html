@@ -1,5 +1,5 @@
-<div class="send" [class.blur-filter]="!localParams.isFullScreen && localParams.popupOpened">
-    <ng-container *ngIf="!localParams.isFullScreen">
+<div class="send" [class.blur-filter]="!componentParams.isFullScreen && componentParams.popupOpened">
+    <ng-container *ngIf="!componentParams.isFullScreen else fullScreenTemplate">
         <div class="send__header">
             <div class="back-control-wrapper">
                 <img class="send__header__back" (click)="backConfirmationClicked()" [src]="iconBack"/>
@@ -22,15 +22,15 @@
                         <textarea class="send__container__content__input" autosize maxlength="500"
                             name="address" formControlName="address"
                             (input)="addressInputUpdated($event.target.value)"
-                            [class.incorrect]="!localParams.addressValidation"
-                            placeholder="Please specify transaction address"></textarea>
-                        <div class="send__container__content__validator" *ngIf="!localParams.addressValidation">
+                            [class.incorrect]="!componentParams.addressValidation"
+                            placeholder="Paste recipient address here"></textarea>
+                        <div class="send__container__content__validator" *ngIf="!componentParams.addressValidation">
                             Invalid address
                         </div>
                     </div>
                     <div class="controls">
                         <app-button class="controls__button"
-                            [class.disabled]="!localParams.isAddressInputValid"
+                            [class.disabled]="!componentParams.isAddressInputValid"
                             (click)="submit()">
                             next
                         </app-button>
@@ -41,97 +41,153 @@
         <div class="send__top-gradient"></div>
     </ng-container>
     
-    <ng-container *ngIf="localParams.isFullScreen">
-        <div class="send__content">
-            <div class="send__content__header">
-                <div class="send__content__header__title">Send</div>
-            </div>
-            <form class="form" novalidate [formGroup]="fullSendForm" autocomplete="off">
-                <div class="container">
-                    <div class="container__address">
-                        <div class="container__address__title">TRANSACTION ADDRESS</div>
-                        <textarea class="container__address__input" autosize maxlength="500"
-                                  name="address" formControlName="address"
-                                  placeholder="Please specify transaction address"
-                                  (input)="addressInputUpdated($event.target.value)"
-                                  [class.incorrect]="!localParams.addressValidation"></textarea>
-                        <div class="container__address__validator" *ngIf="!localParams.addressValidation">
-                            Invalid address
-                        </div>
-                    </div>
-                    <div class="container__values">
-                        <div class="container__values__title-amount">AMOUNT</div>
-                        <div class="form-group">
-                            <input class="container__values__input-amount"
-                                name="amount" formControlName="amount"
-                                appNumbersOnly
-                                [class.incorrect-amount]="localParams.isNotEnoughAmount"
-                                placeholder="Enter amount"/>
-                            <span class="container__values__currency">BEAM</span>
-                        </div>
-                        <div class="container__values__amount-validator" *ngIf="localParams.isNotEnoughAmount">
-                            Insufficient funds: you would need {{localParams.notEnoughtValue.toFixed()}} BEAM to complete the transaction
-                        </div>
-                        <div class="container__values__title-fee">TRANSACTION FEE</div>
-                        <div class="form-group">
-                            <input class="container__values__input-fee"
-                                type="text" name="fee" formControlName="fee"
-                                appFeeOnly
-                                [class.incorrect]="!localParams.feeIsCorrect"
-                                placeholder="Enter fee"/>
-                            <span class="container__values__currency">GROTH</span>
-                        </div>
-                        <div class="container__values__fee-validator" *ngIf="localParams.minFeeIsNotCorrect">
-                            The minimum fee is 100000 GROTH
-                        </div>
-                        <ng-container *ngIf="walletStatus$ | async as walletStatus">
-                            <div class="total">
-                                <div class="total__container">
-                                    <div class="total__container__header">TOTAL AVAILABLE</div>
-                                    <div class="total__container__value">{{walletStatus.available | beam:'1.0-9'}} BEAM</div>
-                                </div>
-                                <div class="total__add-all">
-                                    <app-button class="add-all-button" (click)="addAllClicked($event)">add all</app-button>
+    <ng-template #fullScreenTemplate>
+        <div class="send__container">
+            <app-container-header 
+                [title]="componentParams.titleText"
+                [subtitle]="componentParams.subtitleText"
+                [backLink]="componentParams.backLink"></app-container-header>
+
+            <div class="send__container__content">
+                <div class="left-row">
+                    <form class="form" novalidate [formGroup]="fullSendForm" autocomplete="off">
+                        <div class="left-row__address">
+                            <div class="container-header">
+                                <span>SEND TO</span>
+                            </div>
+                            <div class="left-row__address__content">
+                                <textarea class="left-row__address__content__input" autosize maxlength="1000"
+                                        name="address" formControlName="address"
+                                        placeholder="Please specify transaction address"
+                                        (input)="addressInputUpdated($event.target.value)"
+                                        [class.incorrect]="!componentParams.addressValidation"></textarea>
+                                <div class="left-row__address__content__validator" *ngIf="!componentParams.addressValidation">
+                                    Invalid address
                                 </div>
                             </div>
-                        </ng-container>
-                        <div class="container__values__title-comment">TRANSACTION COMMENT</div>
-                        <div class="form-group">
-                            <input class="container__values__input-comment"
-                                name="comment" formControlName="comment" 
-                                placeholder="Enter comment"/>
                         </div>
-                        <div class="container__values__stats">
-                            <div class="container__values__stats__titles">
-                                <div>Total UTXO value:</div>
-                                <div class="row-item">Amount to send:</div>
-                                <div class="row-item">Change:</div>
-                                <div>
-                                    (will be locked till the transaction will succeed or expire)
+    
+                        <div class="left-row__amount">
+                            <div class="container-header" (click)="amountControlClicked()">
+                                <span>AMOUNT</span>
+                            </div>
+                            <div class="left-row__amount__content">
+                                <input class="left-row__amount__content__input" 
+                                        name="amount" formControlName="amount"
+                                        appNumbersOnly
+                                        [class.incorrect-amount]="!componentParams.isEnoughAmount"
+                                        placeholder="0"/>
+                                <div class="amount-currency">
+                                    <img class="amount-currency__logo" [src]="componentParams.iconBeam" />
+                                    <span class="amount-currency__currency">BEAM</span>
                                 </div>
+                            </div>
+                            <div class="left-row__amount__content__validator" *ngIf="!componentParams.isEnoughAmount">
+                                Insufficient funds: you would need {{componentParams.notEnoughtValue.toFixed()}} 
+                                BEAM to complete the transaction
+                            </div>
+                            <div class="left-row__amount__subcontent" *ngIf="componentParams.isEnoughAmount">
+                                {{stats.amountToSend.toFixed() | rate}} USD
+                            </div>
+                            <div class="left-row__amount__available" *ngIf="walletStatus$ | async as walletStatus">
+                                <ng-container *ngIf="walletStatus.available > 0">
+                                    <span class="left-row__amount__available__title">
+                                        AVAILABLE
+                                    </span>
+                                    <div class="total">
+                                        <div class="total__value">
+                                            {{walletStatus.available | beam:'1.0-9'}} BEAM
+                                        </div>
+                                        <div class="total__add-all">
+                                            <app-button class="add-all-button" (click)="addAllClicked($event)">
+                                                add all
+                                            </app-button>
+                                        </div>
+                                    </div>
+                                    <div class="total-rate">
+                                        {{(walletStatus.available | beam:'1.0-9') | rate}} USD
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+    
+                        <div class="left-row__comment">
+                            <div class="container-header expandable" (click)="commentControlClicked()">
+                                <span>COMMENT</span>
+                                <div class="container-header__control">
+                                    <img [src]="componentParams.commentExpanded ? componentParams.iconArrowUp :
+                                        componentParams.iconArrowDown"/>
+                                </div>
+                            </div>
+                            <div class="left-row__comment__content" *ngIf="componentParams.commentExpanded">
+                                <input class="left-row__comment__content__input" 
+                                    name="comment" formControlName="comment"
+                                    placeholder="Enter comment"/>
+                            </div>
+                        </div>
+
+                        <div class="left-row__fee">
+                            <div class="container-header expandable" (click)="feeControlClicked()">
+                                <span>TRANSACTION FEE</span>
+                                <div class="container-header__control">
+                                    <img [src]="componentParams.feeExpanded ? componentParams.iconArrowUp :
+                                        componentParams.iconArrowDown"/>
+                                </div>
+                            </div>
+                            <div class="left-row__fee__content" *ngIf="componentParams.feeExpanded">
+                                <input class="left-row__fee__content__input" 
+                                    name="fee" formControlName="fee"
+                                    appFeeOnly
+                                    [class.incorrect]="!componentParams.feeIsCorrect"
+                                    placeholder="Enter fee"/>
+                                <span class="container__values__currency">GROTH</span>
+                            </div>
+                            <div class="left-row__fee__content__validator" *ngIf="componentParams.minFeeIsNotCorrect">
+                                The minimum fee is 100000 GROTH
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="right-row">
+                    <div class="right-row__stats">
+                        <div class="right-row__stats__content">
+                            <div class="right-row__stats__content__titles">
+                                <div>Amount to send:</div>
+                                <div class="row-item">Change:</div>
+                                <div class="row-item">Fee:</div>
                                 <div class="row-item">Remaining:</div>
                             </div>
-                            <div class="container__values__stats__values" 
-                                    [class.incorrect-amount]="localParams.isNotEnoughAmount">
-                                <div>{{stats.totalUtxo.toFixed()}} BEAM</div>
-                                <div class="row-item">{{stats.amountToSend.toFixed()}} BEAM</div>
-                                <div class="row-item">{{stats.change.toFixed()}} BEAM</div>
-                                <div class="row-item-last">{{stats.remaining.toFixed()}} BEAM</div>
+                            <div class="right-row__stats__content__values" 
+                                    [class.incorrect-amount]="!componentParams.isEnoughAmount">
+                            
+                                <div>{{stats.amountToSend.toFixed()}} BEAM</div>
+                                <div class="rate-row-item">{{stats.amountToSend.toFixed() | rate}} USD</div>
+                                <div class="value-row-item">{{stats.change.toFixed()}} BEAM</div>
+                                <div class="rate-row-item">{{stats.change.toFixed() | rate}} USD</div>
+                                <div class="value-row-item">{{stats.fee.toFixed()}} BEAM</div>
+                                <div class="rate-row-item">{{stats.fee.toFixed() | rate}} USD</div>
+                                <div class="value-row-item">{{stats.remaining.toFixed()}} BEAM</div>
+                                <div class="rate-row-item">{{stats.remaining.toFixed() | rate}} USD</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="controls">
-                    <app-button class="controls__back-button" (click)="backConfirmationClicked()">back</app-button>
-                    <app-button [class.disabled]="!localParams.isSendDataValid"
+            </div>
+
+            <div class="send__container__bottom">
+                <div class="send__container__bottom__controls">
+                    <div class="">
+                        <app-button [class.disabled]="!componentParams.isSendDataValid"
                                 (click)="fullSubmit($event)" 
-                                class="controls__send-button">next</app-button>
+                                class="send__container__bottom__controls__button">
+                            next
+                        </app-button>
+                    </div>
                 </div>
-            </form>
+            </div>
         </div>
         <div class="send__top-gradient"></div>
-    </ng-container>
+    </ng-template>
 </div>
 
-<div *ngIf="localParams.isFullScreen && localParams.popupOpened" class="full-popup-opened"></div>
+<div *ngIf="componentParams.isFullScreen && componentParams.popupOpened" class="full-popup-opened"></div>

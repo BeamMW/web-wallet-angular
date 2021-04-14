@@ -1,8 +1,10 @@
-<div class="receive" [class.blur-filter]="!isFullScreen && (modalOpened || popupOpened)">
-    <ng-container *ngIf="!isFullScreen">
+
+<div class="receive" [class.blur-filter]="!componentParams.isFullScreen && 
+        (componentParams.modalOpened || componentParams.popupOpened)">
+    <ng-container *ngIf="!componentParams.isFullScreen else fullScreenTemplate">
         <div class="receive__header">
             <div class="menu-control-wrapper">
-                <img class="receive__header__menu" (click)="backClicked($event)" [src]="iconBack"/>
+                <img class="receive__header__menu" (click)="backClicked($event)" [src]="componentParams.iconBack"/>
             </div>
             <div class="title-wrapper">
                 <div class="receive__header__title">RECEIVE</div>
@@ -10,9 +12,9 @@
             <div class="save-addr-control-wrapper"></div>
         </div>
 
-        <div class="receive__content" *ngIf="generatedAddress.length > 0">
+        <div class="receive__content" *ngIf="componentParams.generatedAddress.length > 0">
             <div class="content-header token-header">MY ADDRESS (auto-generated)</div>
-            <div class="address-value">{{generatedToken}}</div>
+            <div class="address-value">{{componentParams.generatedToken}}</div>
             <form class="receive-form-cl" [formGroup]="receiveForm" autocomplete="off" novalidate (ngSubmit)="submit()">
                 <div class="form-group">
                     <div class="receive__content__amount-header content-header">REQUESTED AN AMOUNT (optional)</div>
@@ -33,68 +35,140 @@
             <div class="receive__content__info">For the transaction to complete, you should get online 
                 during the 12 hours after Beams are sent.</div>
             <div class="receive__content__controls">
-                <!-- <div class="receive__content__button-qr">
-                    <app-button class="qr-button" (click)="qrShowClicked($event)">show QR</app-button>
-                </div> -->
                 <div class="receive__content__button-copy">
-                    <app-button class="copy-button" ngxClipboard [cbContent]="generatedToken" (click)="backClicked($event)">
+                    <app-button class="copy-button" ngxClipboard 
+                            [cbContent]="componentParams.generatedToken" (click)="backClicked($event)">
                         copy transaction address
                     </app-button>
                 </div>
             </div>
         </div>
 
+        <!-- <div class="receive__content__button-qr">
+                    <app-button class="qr-button" (click)="qrShowClicked($event)">show QR</app-button>
+                </div> -->
+
         <div class="receive__top-gradient"></div>
     </ng-container>
 
-    <ng-container *ngIf="isFullScreen">
+    <ng-template #fullScreenTemplate>
         <div class="receive__container">
-            <div class="receive__container__header">
-                <div class="receive__container__header__title">Receive</div>
-            </div>
-            <div class="receive__container__content" *ngIf="generatedAddress.length > 0">
-                <div class="receive__container__content__address">
-                    <div class="content-header token-header">MY ADDRESS (auto-generated)</div>
-                    <div class="address-value">{{generatedToken}}</div>
+            <app-container-header 
+                [title]="componentParams.titleText"
+                [subtitle]="componentParams.subtitleText"
+                [backLink]="componentParams.backLink"></app-container-header>
+            <div class="receive__container__content">
+                <div class="left-row">
                     <form class="receive-form-cl" [formGroup]="receiveForm" autocomplete="off" novalidate (ngSubmit)="submit()">
-                        <div class="form-group">
-                            <div class="form-header content-header">REQUESTED AN AMOUNT (optional)</div>
-                            <input class="amount-input" (input)="amountUpdated(receiveForm.get('amount'))"
-                                        appNumbersOnly
-                                        name="amount" formControlName="amount" 
-                                        placeholder="Enter amount"/>
-                            <span class="beam-currency">BEAM</span>
+                    <div class="left-row__tr-type">
+                        <div class="container-header">
+                            <span>TRANSACTION TYPE</span>
                         </div>
-                        <div class="form-group">
-                            <div class="form-header content-header">TRANSACTION COMMENT</div>
-                            <input class="comment-input" name="comment" formControlName="comment"
-                                        (input)="updateComment(receiveForm.get('comment'))" 
-                                        placeholder="Enter comment"/>
+                        <div class="switch">
+                            <div #regular class="switch__regular" 
+                                [class.selected]="componentParams.switcherSelectedValue === transactionTypes.regular"
+                                (click)="switcherClicked($event, transactionTypes.regular)">Regular</div>
+                            <div #maxprivacy class="switch__maxprivacy"
+                                [class.selected]="componentParams.switcherSelectedValue === transactionTypes.maxPrivacy"
+                                (click)="switcherClicked($event, transactionTypes.maxPrivacy)">Max Privacy</div>
+                            <div #selector class="selector"
+                                [ngStyle]="{'left': componentParams.switcherSelectedValue === transactionTypes.regular ? 
+                                    0 + 'px' : regular.clientWidth + 'px',
+                                    'width': componentParams.switcherSelectedValue === transactionTypes.regular ?
+                                    regular.clientWidth + 'px' : maxprivacy.clientWidth + 'px'}">
+                                {{componentParams.switcherSelectedValue}}
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="left-row__amount">
+                        <div class="container-header expandable" (click)="amountControlClicked()">
+                            <span>REQUESTED AMOUNT (optional)</span>
+                            <div class="container-header__control">
+                                <img [src]="componentParams.amountExpanded ? componentParams.iconArrowUp :
+                                componentParams.iconArrowDown"/>
+                            </div>
+                        </div>
+                        <ng-container *ngIf="componentParams.amountExpanded">
+                            <div class="left-row__amount__content">
+                                <input class="left-row__amount__content__input" 
+                                        (input)="amountUpdated(receiveForm.get('amount'))" 
+                                        autocomplete="off" 
+                                        appNumbersOnly name="amount" 
+                                        formControlName="amount" 
+                                        placeholder="0"/>
+                                <div class="amount-currency">
+                                    <img class="amount-currency__logo" [src]="componentParams.iconBeam" />
+                                    <span class="amount-currency__currency">BEAM</span>
+                                </div>
+                            </div>
+                            <div class="left-row__amount__subcontent">
+                                {{componentParams.amount | rate}} USD
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <div class="left-row__comment">
+                        <div class="container-header expandable" (click)="commentControlClicked()">
+                            <span>COMMENT</span>
+                            <div class="container-header__control">
+                                <img [src]="componentParams.commentExpanded ? componentParams.iconArrowUp :
+                                    componentParams.iconArrowDown"/>
+                            </div>
+                        </div>
+                        <div class="left-row__comment__content" *ngIf="componentParams.commentExpanded">
+                            <input class="left-row__comment__content__input" 
+                                name="comment" formControlName="comment"
+                                (input)="updateComment(receiveForm.get('comment'))" 
+                                placeholder="Enter comment"/>
+                        </div>
+                    </div>
                     </form>
                 </div>
-                <!-- <div class="receive__container__content__qr">
-                    <qrcode class="receive__container__content__qr__value" 
-                            [qrdata]="qrCode" 
-                            [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
-                </div> -->
-            </div>
-            <div class="receive__container__bottom">
-                <div class="receive__container__bottom__info">For the transaction to complete, you should get online 
-                    during the 12 hours after Beams are sent.</div>
-                <div class="receive__container__bottom__controls">
-                    <div class="receive__container__bottom__controls__button-back">
-                        <app-button class="qr-button" (click)="backClicked($event)">back</app-button>
+                <div class="right-row">
+                    <div class="right-row__address">
+                        <div class="container-header">
+                            <span>NEW ADDRESS</span>
+                        </div>
+                        <div class="right-row__address__content" *ngIf="componentParams.qrCode.length > 0">
+                            <qrcode class="right-row__address__content__qr" 
+                                [qrdata]="componentParams.qrCode" 
+                                [width]="150" [errorCorrectionLevel]="'M'"></qrcode>
+                            <div class="right-row__address__content__address">
+                                <span class="right-row__address__content__address__value">
+                                    {{truncStringPortion(componentParams.generatedAddress, 12, 12, 3)}}
+                                    <img [src]="componentParams.iconCopy"
+                                        class="right-row__address__content__address__icon" 
+                                        (click)="copyClicked()"/>
+                                </span>
+                                <!-- <div class="right-row__address__content__address__details">Address details</div> -->
+                            </div>
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="receive__container__bottom">
+                <div class="receive__container__bottom__controls">
                     <div class="receive__container__bottom__controls__button-copy">
-                        <app-button class="copy-button" ngxClipboard [cbContent]="generatedToken" (click)="backClicked($event)">
-                            copy transaction address
+                        <app-button class="copy-button" (click)="backClicked($event)">
+                            copy and close
                         </app-button>
                     </div>
-                </div>  
+                </div>
+                <div class="receive__container__bottom__info" 
+                        *ngIf="componentParams.switcherSelectedValue === transactionTypes.regular">
+                    For the transaction to complete, you should get online 
+                    during the 12 hours after Beams are sent.
+                </div>
+                <div class="receive__container__bottom__info"
+                        *ngIf="componentParams.switcherSelectedValue === transactionTypes.maxPrivacy">
+                    <p>Max Privacy transaction can last up to 2 days.</p>
+                    <p>Min transaction fee to send Max privacy coins is 0.01 BEAM.</p>
+                </div>
             </div>
         </div>
         <div class="receive__top-gradient"></div>
-    </ng-container>
+    </ng-template>
 </div>
 

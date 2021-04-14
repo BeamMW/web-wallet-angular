@@ -36,7 +36,6 @@ import * as passworder from 'browser-passworder';
 import { routes, globalConsts, rpcMethodIdsConsts } from '@consts';
 import * as ObservableStore from 'obs-store';
 
-
 import { selectWasmState } from '../store/selectors/wallet-state.selectors';
 
 @Injectable({
@@ -243,7 +242,7 @@ export class DataService {
 
   clearWalletData() {
     clearInterval(this.refreshIntervalId);
-    this.wasmService.deleteWalletDB();
+    this.wasmService.stopWallet();
     extensionizer.storage.local.remove(['settings', 'wallet', 'contacts', 'state']);
   }
 

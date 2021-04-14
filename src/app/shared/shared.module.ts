@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MainLayoutComponent } from './layouts';
 import { RouterModule } from '@angular/router';
 import { HeaderLogoComponent, HeaderPopupComponent, ButtonComponent, MenuComponent } from './components';
-import { BeamPipe } from 'app/pipes/beam.pipe';
+import { BeamPipe, RatePipe } from '@app/pipes';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
@@ -29,7 +29,8 @@ import {
   PaymentProofExportedComponent,
   StatusIconComponent,
   SeedVerificationPopupComponent,
-  LoaderComponent
+  LoaderComponent,
+  ContainerHeaderComponent
  } from './components';
 
 import {
@@ -56,6 +57,7 @@ import {
     MenuComponent,
     ClickOutsideDirective,
     BeamPipe,
+    RatePipe,
     DropdownComponent,
     MenuFullComponent,
     TableComponent,
@@ -74,6 +76,7 @@ import {
     SeedVerificationPopupComponent,
     LoaderComponent,
     FeeOnlyDirective,
+    ContainerHeaderComponent,
   ],
   imports: [
     CommonModule,
@@ -98,6 +101,7 @@ import {
     MenuComponent,
     ClickOutsideDirective,
     BeamPipe,
+    RatePipe,
     DropdownComponent,
     MenuFullComponent,
     TableComponent,
@@ -110,7 +114,8 @@ import {
     StatusIconComponent,
     StatusColorDirective,
     LoaderComponent,
-    FeeOnlyDirective
+    FeeOnlyDirective,
+    ContainerHeaderComponent
   ],
   providers: [
     DecimalPipe

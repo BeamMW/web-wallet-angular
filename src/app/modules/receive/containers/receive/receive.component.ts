@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl } from '@angular/forms';
 import { DataService, WindowService, WasmService } from '@app/services';
 import { Store, select } from '@ngrx/store';
 import { saveReceiveData } from '@app/store/actions/wallet.actions';
 import { selectAddress } from '@app/store/selectors/address.selectors';
-import { globalConsts, rpcMethodIdsConsts } from '@consts';
+import { globalConsts, transactionTypes, rpcMethodIdsConsts, routes } from '@consts';
+import { ClipboardService } from 'ngx-clipboard'
 
 @Component({
   selector: 'app-receive',
@@ -15,34 +16,53 @@ import { globalConsts, rpcMethodIdsConsts } from '@consts';
   styleUrls: ['./receive.component.scss']
 })
 export class ReceiveComponent implements OnInit, OnDestroy {
-  public iconBack = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
-  public generatedAddress = '';
-  public generatedToken = '';
-  public identity = '';
-
   private sub: Subscription;
   private serviceSub: Subscription;
   private popupSub: Subscription;
   private addrSub: Subscription;
 
-  receiveForm: FormGroup;
-  popupOpened = false;
-  isFullScreen = false;
-  qrCode = '';
+  public receiveForm: FormGroup;
+  public transactionTypes = transactionTypes;
+  public ratesData: any;
+
+  public componentParams = {
+    iconBack: `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`,
+    iconBeam: `${environment.assetsPath}/images/modules/receive/containers/receive/icon-beam.svg`,
+    iconArrowDown: `${environment.assetsPath}/images/modules/receive/containers/receive/icon-arrow-down.svg`,
+    iconArrowUp: `${environment.assetsPath}/images/modules/receive/containers/receive/icon-arrow-up.svg`,
+    iconCopy: `${environment.assetsPath}/images/modules/receive/containers/receive/icon-copy-blue-new.svg`,
+    generatedAddress: '',
+    backLink: routes.WALLET_MAIN_ROUTE,
+    titleText: 'Wallet',
+    subtitleText: 'RECEIVE',
+    switcherValues: {
+      regular: transactionTypes.regular,
+      maxPrivacy: transactionTypes.maxPrivacy
+    },
+    switcherSelectedValue: '',
+    isFullScreen: false,
+    popupOpened: false,
+    qrCode: '',
+    amountExpanded: true,
+    commentExpanded: false,
+    amount: 0
+  }
 
   constructor(private store: Store<any>,
               public router: Router,
               private wasmService: WasmService,
               private dataService: DataService,
+              private _clipboardService: ClipboardService,
               private windowService: WindowService) {
-    this.isFullScreen = windowService.isFullSize();
+    this.componentParams.isFullScreen = windowService.isFullSize();
+    this.componentParams.switcherSelectedValue = transactionTypes.regular;
     this.receiveForm = new FormGroup({
       amount: new FormControl(),
       comment: new FormControl()
     });
 
     this.popupSub = dataService.changeEmitted$.subscribe(emittedState => {
-      this.popupOpened = emittedState;
+      this.componentParams.popupOpened = emittedState;
     });
   }
 
@@ -68,48 +88,54 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     }
   }
 
-  backClicked(event) {
+  public backClicked(event) {
     event.stopPropagation();
+    this._clipboardService.copy(this.componentParams.generatedAddress);
     this.router.navigate(['/wallet/main']);
   }
 
-  createAddress() {
+  public copyClicked() {
+    this._clipboardService.copy(this.componentParams.generatedAddress);
+  }
+
+  public createAddress() {
     var i = this.wasmService.wallet.subscribe((r)=> {
       const respone = JSON.parse(r);
+      
       if (respone.id === rpcMethodIdsConsts.CREATE_ADDRESS_ID) {
         //this.serviceSub.unsubscribe();
-        this.dataService.addressesUpdate();
-        this.dataService.startInterval();
-        const address$ = this.store.pipe(select(selectAddress(respone.result)));
-        this.addrSub = address$.subscribe(val => {
-          if (val !== undefined) {
-            this.generatedAddress = val.address;
-            //this.identity = val.identity;
-            this.generatedToken = val.address;//this.wasmService.getSendToken(this.generatedAddress, val.identity, '');
-            //this.updateQr();
-            this.addrSub.unsubscribe();
-          }
-        });
+        //this.dataService.addressesUpdate();
+        //this.dataService.startInterval();
+        this.componentParams.generatedAddress = respone.result;
+        this.updateQr();
+        // const address$ = this.store.pipe(select(selectAddress(respone.result)));
+        // this.addrSub = address$.subscribe(val => {
+        //   if (val !== undefined) {
+            
+        //     this.updateQr();
+        //     this.addrSub.unsubscribe();
+        //   }
+        // });
       }
     });
 
-    this.dataService.stopInterval();
+    //this.dataService.stopInterval();
     this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.CREATE_ADDRESS_ID,
       method: 'create_address',
       params:
       {
-          expiration : '24h',
-          comment : ''
+          type: this.componentParams.switcherSelectedValue,
+          expiration : 'auto',
+          comment : '',
+          new_style_regular : this.componentParams.switcherSelectedValue === transactionTypes.regular
       }
     }));
   }
 
   amountUpdated(control: FormControl) {
-    const amount = control.value.length > 0 ?
-      (parseFloat(control.value) * globalConsts.GROTHS_IN_BEAM).toString() : '';
-    this.generatedToken = this.generatedAddress;//this.wasmService.getSendToken(this.generatedAddress, this.identity, amount);
+    this.componentParams.amount = control.value ? control.value : 0;
     this.updateQr();
   }
 
@@ -118,26 +144,6 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     this.updateQr();
   }
 
-  // editAddress() {
-  //   this.sub = this.wsService.on().subscribe((msg: any) => {
-  //     if (msg.result) {
-  //       console.log(msg.result);
-  //       this.sub.unsubscribe();
-  //     }
-  //   });
-  //   this.wsService.send({
-  //       jsonrpc: '2.0',
-  //       id: 123,
-  //       method: 'edit_address',
-  //       params:
-  //       {
-  //           address : '19ecec1a5793060fd9e49ee67560da4a4cf7ad8a42577019a9fa0f95fe6e550e81e',
-  //           comment : '',
-  //           expiration: 'never'
-  //       }
-  //   });
-  // }
-
   // qrShowClicked(event) {
   //   event.stopPropagation();
   //   this.router.navigate([this.router.url, { outlets: { popup: 'qr-popup' }}]);
@@ -145,17 +151,42 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   // }
 
   updateQr() {
-    this.qrCode = 'beam:' + this.generatedToken + (this.receiveForm.value.amount ?
-      ('?amount=' + this.receiveForm.value.amount) : '') +
+    this.componentParams.qrCode = 'beam:' + this.componentParams.generatedAddress + 
+      (this.receiveForm.value.amount ? ('?amount=' + this.receiveForm.value.amount) : '') +
       (this.receiveForm.value.comment && this.receiveForm.value.comment.length > 0 ?
       ('?comment=' + this.receiveForm.value.comment) : '');
   }
 
   submit() {
     this.store.dispatch(saveReceiveData({receive: {
-      address: this.generatedToken,
+      address: this.componentParams.generatedAddress,
       amount: this.receiveForm.value.amount,
       comment: this.receiveForm.value.comment
     }}));
+  }
+
+  public switcherClicked(event, value:string) {
+    this.componentParams.switcherSelectedValue = value;
+    this.createAddress();
+  }
+
+  public amountControlClicked() {
+    this.componentParams.amountExpanded = !this.componentParams.amountExpanded; 
+  }
+
+  public commentControlClicked() {
+    this.componentParams.commentExpanded = !this.componentParams.commentExpanded;
+  }
+
+  public truncStringPortion(str, firstCharCount = str.length, endCharCount = 0, dotCount = 3) {
+    var convertedStr="";
+    convertedStr+=str.substring(0, firstCharCount);
+    convertedStr += ".".repeat(dotCount);
+    convertedStr+=str.substring(str.length-endCharCount, str.length);
+    return convertedStr;
+  }
+
+  public addressDetailsClicked() {
+
   }
 }

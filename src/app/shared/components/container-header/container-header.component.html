@@ -1,0 +1,17 @@
+<div class="cont-header">
+    <div class="cont-header__title">{{ title }}</div>
+    <div class="cont-header__content">
+        <span class="control-wrapper">
+            <span class="cont-header__content__control" (click)="backClicked()">
+                <img class="cont-header__content__control__arrow" [src]="iconArrow"/>
+                <span class="cont-header__content__control__text">back</span>
+            </span>
+        </span>
+        <span class="sub-wrapper">
+            <span class="cont-header__content__text">
+                <div>{{ subtitle }}</div>
+            </span>
+        </span>
+        <span class="perm-wrapper"></span>
+    </div>
+</div>

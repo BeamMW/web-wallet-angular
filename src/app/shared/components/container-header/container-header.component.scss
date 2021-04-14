@@ -1,0 +1,68 @@
+@import 'ui-mixins';
+
+.cont-header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    &__title {
+        @include normal-text;
+        font-family: 'ProximaNovaSemiBold', sans-serif;
+        font-size: 36px;
+        font-weight: 500;
+        color: #ffffff;
+    }
+
+    &__content {
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        display: flex;
+
+        &__control {
+            display: flex;
+            cursor: pointer;
+
+            &__arrow {
+                width: 16px;
+                height: 16px;
+            }
+
+            &__text {
+                @include normal-text;
+                font-family: 'ProximaNovaBold', sans-serif;
+                font-size: 14px;
+                font-weight: bold;
+                text-align: center;
+                margin-left: 14px;
+                color: #ffffff;
+            }
+        }
+
+        &__text {
+            @include normal-text;
+            font-family: 'ProximaNovaBold', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            text-align: center;
+            color: #ffffff;
+        }
+    }
+}
+
+.control-wrapper {
+    width: 50%;
+    flex-shrink: 1;
+    display: flex;
+}
+
+.sub-wrapper {
+    flex-shrink: 0;
+}
+
+.perm-wrapper {
+    width: 50%;
+    flex-shrink: 1;
+    display: flex;
+}

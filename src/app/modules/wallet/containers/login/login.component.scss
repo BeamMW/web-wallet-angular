@@ -191,7 +191,6 @@
 
         &__controls {
             margin: 30px auto 0 auto;
-
             @include ui-button($btn-open-wallet, $btn-lg) {
                 width: 192px;
                 height: 38px;

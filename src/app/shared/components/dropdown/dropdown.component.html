@@ -1,6 +1,6 @@
 <span class="header" (click)="changeDropdownState($event)">
     <span>{{selectedItem.title}}</span>
-    <img src="" class="header__icon" [src]="iconDrop">
+    <img class="header__icon" [src]="iconDrop">
 </span>
 <div class="dropdown" *ngIf="isDropdownVisible" appClickOutside (clickOutside)="onClickedOutside()">
     <div class="dropdown__content">

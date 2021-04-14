@@ -15,3 +15,4 @@ export * from './popups/payment-proof-exported/payment-proof-exported.component'
 export * from './status-icon/status-icon.component';
 export * from './popups/seed-verification-popup/seed-verification-popup.component';
 export * from './loader/loader.component';
+export * from './container-header/container-header.component';

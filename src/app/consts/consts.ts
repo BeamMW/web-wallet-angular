@@ -61,3 +61,8 @@ export enum rpcMethodIdsConsts {
     EXPORT_PAYMENT_PROOF_ID = 25,
     VERIFY_PAYMENT_PROOF_ID = 26
 }
+
+export enum transactionTypes {
+    regular = 'Regular',
+    maxPrivacy = 'Max Privacy'
+}

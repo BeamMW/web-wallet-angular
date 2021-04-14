@@ -10,13 +10,15 @@ import { EditAddressComponent } from './containers/edit-address/edit-address.com
 import { ChangeAddressComponent } from './containers/change-address/change-address.component';
 import { QrPopupComponent } from './components/qr-popup/qr-popup.component';
 import { ClipboardModule } from 'ngx-clipboard';
+import { DetailsPopupComponent } from './components/details-popup/details-popup.component';
 
 @NgModule({
   declarations: [
     ReceiveComponent,
     EditAddressComponent,
     ChangeAddressComponent,
-    QrPopupComponent
+    QrPopupComponent,
+    DetailsPopupComponent
   ],
   imports: [
     CommonModule,

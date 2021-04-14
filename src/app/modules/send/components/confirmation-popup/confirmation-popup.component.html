@@ -1,5 +1,5 @@
 <div class="confirm" appClickOutside (clickOutside)="closePopup()">
-    <ng-container *ngIf="!isFullScreen">
+    <ng-container *ngIf="!isFullScreen else fullScreenTemplate">
         <form class="send-form-cl" [formGroup]="confirmForm" autocomplete="off" novalidate (ngSubmit)="submit()">
             <div class="confirm__title">Transaction confirmation</div>
             <div class="form-group">
@@ -18,7 +18,7 @@
         </div>
     </ng-container>
     
-    <ng-container *ngIf="isFullScreen">
+    <ng-template #fullScreenTemplate>
         <div class="confirm__container">
             <div class="confirm__container__title">Transaction confirmation</div>
             <div class="confirm__container__send-title title-text">TRANSACTION ADDRESS</div>
@@ -66,7 +66,7 @@
                 </div>
             </div>
         </div>
-    </ng-container>
+    </ng-template>
 </div>
 
 <div *ngIf="isFullScreen && popupOpened" class="full-popup-opened"></div>

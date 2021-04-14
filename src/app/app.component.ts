@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { timeout } from 'rxjs/operators';
-import { WasmService } from './services/wasm.service';
+import { WasmService, RatesService } from './services';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +8,13 @@ import { WasmService } from './services/wasm.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  constructor(private wasmService: WasmService) {
+  constructor(
+    private wasmService: WasmService,
+    private ratesService: RatesService) {
   }
 
   ngOnInit() {
     this.wasmService.init();
+    this.ratesService.start();
   }
 }

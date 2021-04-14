@@ -27,6 +27,7 @@ export class WasmService {
   module: any;
   keyKeeper: any;
   options$: Observable<any>;
+  isMounted = false;
 
   wasmReady = new BehaviorSubject<boolean>(false);
 
@@ -63,22 +64,60 @@ export class WasmService {
   }
 
   public deleteWalletDB() {
-    indexedDB.deleteDatabase('/beam_wallet');
+    let req = indexedDB.deleteDatabase('/beam_wallet');
+    req.onsuccess = function () {
+      console.log("Deleted database successfully");
+    };
+    req.onerror = function () {
+      console.log("Couldn't delete database");
+    };
+    req.onblocked = (e) => {
+      console.log("Couldn't delete database due to the operation being blocked");
+    };  
+  }
+
+  public stopWallet() {
+    this.wallet.stopWallet((data) => {
+      console.log("is running: " + this.wallet.isRunning())
+      console.log('wallet stopped:', data);
+      this.deleteWalletDB();
+    });
   }
 
   public createWallet(phrase, pass) {
-    this.module.MountFS(()=> {
-      console.log("mounted");
+    if (!this.isMounted) {
+      this.module.MountFS(()=> {
+        this.isMounted = true;
+        console.log("mounted");
+        this.module.CreateWallet(phrase, "/beam_wallet/wallet.db", pass);
+        this.wallet = new this.beamModule.WasmWalletClient("/beam_wallet/wallet.db", pass, "eu-node01.masternet.beam.mw:8200");
+        console.log("starting wallet...");
+        this.wallet.startWallet();
+
+        // this.wallet.setSyncHandler((done, total) => {
+        //   console.log("sync [" + done + "/" + total + "]");
+        // })
+        var i = this.wallet.subscribe((r)=> {
+          //console.log("response: " + r)
+          const respone = JSON.parse(r);
+          this.walletActions(respone);
+        });
+      });
+    } else {
       this.module.CreateWallet(phrase, "/beam_wallet/wallet.db", pass);
       this.wallet = new this.beamModule.WasmWalletClient("/beam_wallet/wallet.db", pass, "eu-node01.masternet.beam.mw:8200");
       console.log("starting wallet...");
       this.wallet.startWallet();
+
+      // this.wallet.setSyncHandler((done, total) => {
+      //   console.log("sync [" + done + "/" + total + "]");
+      // })
       var i = this.wallet.subscribe((r)=> {
-        console.log("response: " + r)
+        //console.log("response: " + r)
         const respone = JSON.parse(r);
         this.walletActions(respone);
       });
-    });
+    }
   }
 
   public saveWalletOptions() {
@@ -90,12 +129,14 @@ export class WasmService {
 
   public openWallet(pass) {
     this.module.MountFS(()=> {
+      this.isMounted = true;
       console.log("mounted");
       this.wallet = new this.beamModule.WasmWalletClient("/beam_wallet/wallet.db", pass, "eu-node01.masternet.beam.mw:8200")//"eu-node03.masternet.beam.mw:8100");
       console.log("starting wallet...");
       this.wallet.startWallet();
+      
       var i = this.wallet.subscribe((r)=> {
-        console.log("response: " + r)
+        //console.log("response: " + r)
 
         const respone = JSON.parse(r);
         this.walletActions(respone);
@@ -137,8 +178,8 @@ export class WasmService {
     }
 
     if (respone.id === rpcMethodIdsConsts.ADDR_LIST_ID) {
-      console.log('[data-service] addresses: ');
-      console.dir(respone.result);
+      // console.log('[data-service] addresses: ');
+      // console.dir(respone.result);
       //this.logService.saveDataToLogs('[Service testnet: addresses list]', msg);
       this.store.dispatch(loadAddresses({addresses: respone.result.length > 0 ? respone.result : []}));           
     }
