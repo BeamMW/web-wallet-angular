@@ -98,10 +98,11 @@
                                         <div class="total__value">
                                             {{walletStatus.available | beam:'1.0-9'}} BEAM
                                         </div>
-                                        <div class="total__add-all">
-                                            <app-button class="add-all-button" (click)="addAllClicked($event)">
-                                                add all
-                                            </app-button>
+                                        <div class="total__add-all" (click)="addAllClicked($event)">
+                                            <img [src]="componentParams.iconButtonArrowUp">
+                                            <div class="total__add-all__button" >
+                                                add max
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="total-rate">
@@ -161,13 +162,13 @@
                                     [class.incorrect-amount]="!componentParams.isEnoughAmount">
                             
                                 <div>{{stats.amountToSend.toFixed()}} BEAM</div>
-                                <div class="rate-row-item">{{stats.amountToSend.toFixed() | rate}} USD</div>
+                                <div class="rate-row-item">{{stats.amountToSend.toFixed() | rate}}</div>
                                 <div class="value-row-item">{{stats.change.toFixed()}} BEAM</div>
-                                <div class="rate-row-item">{{stats.change.toFixed() | rate}} USD</div>
+                                <div class="rate-row-item">{{stats.change.toFixed() | rate}}</div>
                                 <div class="value-row-item">{{stats.fee.toFixed()}} BEAM</div>
-                                <div class="rate-row-item">{{stats.fee.toFixed() | rate}} USD</div>
+                                <div class="rate-row-item">{{stats.fee.toFixed() | rate}}</div>
                                 <div class="value-row-item">{{stats.remaining.toFixed()}} BEAM</div>
-                                <div class="rate-row-item">{{stats.remaining.toFixed() | rate}} USD</div>
+                                <div class="rate-row-item">{{stats.remaining.toFixed() | rate}}</div>
                             </div>
                         </div>
                     </div>
@@ -177,7 +178,7 @@
             <div class="send__container__bottom">
                 <div class="send__container__bottom__controls">
                     <div class="">
-                        <app-button [class.disabled]="!componentParams.isSendDataValid"
+                        <app-button [disabled]="!componentParams.isSendDataValid"
                                 (click)="fullSubmit($event)" 
                                 class="send__container__bottom__controls__button">
                             next

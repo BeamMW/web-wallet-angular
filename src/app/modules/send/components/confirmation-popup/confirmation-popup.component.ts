@@ -61,7 +61,8 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
         isPassCheckEnabled: boolean
       };
       this.sendData.address = state.address;
-      this.sendData.fee = new Big(state.fee === undefined || state.fee === 0 ? 100000 : state.fee);
+      this.sendData.fee = new Big(state.fee === undefined || state.fee === 0 
+        ? 100000 : state.fee).div(globalConsts.GROTHS_IN_BEAM);
       this.sendData.amount = new Big(state.amount);
       this.sendData.comment = state.comment;
       //this.isPassCheckEnabled = state.isPassCheckEnabled;

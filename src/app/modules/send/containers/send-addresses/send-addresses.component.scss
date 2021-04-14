@@ -513,17 +513,6 @@
             
                         @include ui-button-next-icon()
                     }
-            
-                    &__button.disabled {
-                        margin-left: 20px;
-                        @include ui-button($btn-send, $btn-full-xsm) {
-                            font-size: 14px;
-                            opacity: 0.2;
-                            cursor: default;
-                        }
-            
-                        @include ui-button-next-icon()
-                    }
                 }
 
                 &__info {
@@ -556,13 +545,21 @@
 
         &__add-all {
             margin-left: auto;
+            cursor: pointer;
+            display: flex;
 
-            @include ui-button($btn-add-all, $btn-sm) {
+            &__button {
+                margin-left: 15px;
+                @include normal-text;
+                font-family: 'ProximaNovaBold', sans-serif;
                 font-size: 14px;
-                border: none;
+                font-weight: bold;
+                color: #da68f5;
             }
+        }
 
-            @include ui-button-add-all-icon()
+        &__add-all button:hover {
+            box-shadow: none !important;
         }
     }
 

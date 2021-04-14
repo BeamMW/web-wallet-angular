@@ -40,6 +40,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     iconBeam: `${environment.assetsPath}/images/modules/receive/containers/receive/icon-beam.svg`,
     iconArrowDown: `${environment.assetsPath}/images/modules/receive/containers/receive/icon-arrow-down.svg`,
     iconArrowUp: `${environment.assetsPath}/images/modules/receive/containers/receive/icon-arrow-up.svg`,
+    iconButtonArrowUp: `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-send-blue.svg`,
     prevFee: 0,
     addressValidation: true,
     isAddressInputValid: false,

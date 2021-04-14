@@ -21,7 +21,7 @@
     <ng-template #fullScreenTemplate>
         <div class="confirm__container">
             <div class="confirm__container__title">Transaction confirmation</div>
-            <div class="confirm__container__send-title title-text">TRANSACTION ADDRESS</div>
+            <div class="confirm__container__send-title title-text">SEND TO</div>
             <div class="confirm__container__send-value value-text">{{sendData.address}}</div>
             <div class="confirm__container__line">
                 <div class="confirm__container__line__amount">
@@ -32,21 +32,21 @@
                         {{sendData.amount.toFixed() | beam:'1.0-9'}} BEAM
                     </div>
                 </div>
+                <div class="rate-value">{{(sendData.amount.toFixed() | beam:'1.0-9') | rate}}</div>
                 <div class="confirm__container__line__fee">
                     <div class="confirm__container__line__fee__title title-text">
                         TRANSACTION FEE
                     </div>
                     <div class="confirm__container__line__fee__value">
-                        {{sendData.fee.toFixed()}} GROTH
+                        {{sendData.fee.toFixed()}} BEAM
                     </div>
                 </div>
+                <div class="rate-value">{{sendData.fee.toFixed() | rate}}</div>
             </div>
-            <div class="confirm__container__utxo-title title-text">TOTAL UTXO VALUE</div>
-            <div class="confirm__container__utxo-value">{{getTotalUtxo()}}</div>
             <div class="confirm__container__prompt">
                 <p>For the transaction to complete, the recipient must get online</p>
-                <p>within the next 12 hours and you should get online within 2 hours</p>
-                <p>afterwards.</p>
+                <p>within the next 12 hours and you should get online</p>
+                <p>within 2 hours afterwards.</p>
             </div>
             <form class="send-form-cl" *ngIf="isPassCheckEnabled"
                 [formGroup]="confirmForm" autocomplete="off" novalidate (ngSubmit)="submit()">

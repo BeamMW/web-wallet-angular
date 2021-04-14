@@ -11,6 +11,6 @@ export class RatePipe implements PipeTransform {
 
     transform(amount: number, args?: any): string {
         return (new Big(amount ? amount : 0)).
-            times(this.ratesService.data.usd).toFixed();
+            times(this.ratesService.data.usd).toFixed() + " USD";
     }
 }
