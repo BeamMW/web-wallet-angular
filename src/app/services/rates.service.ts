@@ -17,7 +17,7 @@ export class RatesService {
         this.coinGeckoClient = new coingeckoAPI();
     }
 
-    private async loadRates() {
+    private loadRates = async () => {
         try {
             const coinGeckoResult = await this.coinGeckoClient.simple.price({
                 ids: ['beam'],

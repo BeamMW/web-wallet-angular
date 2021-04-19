@@ -226,7 +226,7 @@
                 </div>
                 <div class="main__transactions__content">
                     <ng-container *ngIf="transactions.length > 0">
-                        <div class="transcaction-container" *ngFor="let item of transactions">
+                        <div class="transcaction-container" *ngFor="let item of transactions; let i = index">
                             <ng-container *ngIf="i < 5">
                                 <div class="main__transactions__content__common-item"
                                         appStatusColor [appStatusColorTransaction]="item">

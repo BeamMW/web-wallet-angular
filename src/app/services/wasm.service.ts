@@ -150,6 +150,7 @@ export class WasmService {
       //this.subManager.statusSub.unsubscribe();
       this.store.dispatch(saveWalletStatus({status: respone.result}));
 
+      console.log(respone.result);
       if (respone.result.receiving > 0 || respone.result.available > 0) {
         const verificatedSetting$ = this.store.pipe(select(selectVerificatedSetting));
         verificatedSetting$.subscribe((verState) => {

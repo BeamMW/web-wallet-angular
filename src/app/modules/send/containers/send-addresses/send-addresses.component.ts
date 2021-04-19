@@ -122,9 +122,16 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    if (this.componentParams.isAddressInputValid) {
-      const navigationExtras: NavigationExtras = {state: {address: this.sendForm.value.address}};
-      this.router.navigate([routes.SEND_AMOUNT_ROUTE], navigationExtras);
+    if (this.componentParams.feeIsCorrect && this.componentParams.isSendDataValid) {
+      const navigationExtras: NavigationExtras = {
+        state: {
+          address: this.sendForm.value.address,
+          fee: this.sendForm.value.fee,
+          amount: typeof this.sendForm.value.amount === 'string' ? this.sendForm.value.amount : this.sendForm.value.amount.toFixed(),
+          comment: this.sendForm.value.comment
+        }
+      };
+      this.router.navigate([routes.SEND_CONFIRMATION_ROUTE], navigationExtras);
     }
   }
 
@@ -155,16 +162,13 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       this.stats.remaining = available.minus(feeFullValue);
     });
 
-    if (this.componentParams.isFullScreen) {
-      this.fullSendForm.get('amount').valueChanges.pipe(debounceTime(300)).subscribe(newValue => {
-        this.amountChanged(newValue);
-      });
+    this.fullSendForm.get('amount').valueChanges.pipe(debounceTime(300)).subscribe(newValue => {
+      this.amountChanged(newValue);
+    });
 
-      this.fullSendForm.get('fee').valueChanges.pipe(debounceTime(300)).subscribe(newValue => {
-        this.feeChanged(newValue);
-      });
-      //this.getSmallestUtxo();
-    }
+    this.fullSendForm.get('fee').valueChanges.pipe(debounceTime(300)).subscribe(newValue => {
+      this.feeChanged(newValue);
+    });
   }
 
   // getSmallestUtxo() {
@@ -213,9 +217,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
           .div(globalConsts.GROTHS_IN_BEAM);
         this.amountChanged(allAmount.toFixed());
         this.addressInputCheck();
-        this.componentParams.isFullScreen ?
-        this.fullSendForm.get('amount').setValue(allAmount.toFixed()) :
-          this.sendForm.get('amount').setValue(allAmount.toFixed());
+        this.fullSendForm.get('amount').setValue(allAmount.toFixed());
       }
     }).unsubscribe();
   }

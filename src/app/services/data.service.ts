@@ -260,7 +260,7 @@ export class DataService {
     this.refreshIntervalStatus = true;
     this.refreshIntervalId = setInterval(() => {
       this.walletDataUpdate();
-    }, 5000);
+    }, 8000);
   }
 
   stopInterval() {
