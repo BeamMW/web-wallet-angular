@@ -1,7 +1,7 @@
 import { Directive, OnInit, Input, ElementRef, HostBinding } from '@angular/core';
 import { transactionsStatuses, statusesColors } from '@consts';
 import { Store, select } from '@ngrx/store';
-import { selectAddress } from '../../../store/selectors/address.selectors';
+//import { selectAddress } from '../../../store/selectors/address.selectors';
 
 @Directive({
   selector: '[appStatusColor]'
@@ -51,12 +51,12 @@ export class StatusColorDirective implements OnInit {
     if (transaction.status_string === transactionsStatuses.SELF_SENDING) {
       color = statusesColors.SELF_SENDING;
     } else if (transaction.status_string === transactionsStatuses.COMPLETED) {
-      const address$ = this.store.pipe(select(selectAddress(transaction.receiver)));
-      address$.subscribe(val => {
-        if (val !== undefined && val.own) {
-          color = statusesColors.SELF_SENDING;
-        }
-      }).unsubscribe();
+      // const address$ = this.store.pipe(select(selectAddress(transaction.receiver)));
+      // address$.subscribe(val => {
+      //   if (val !== undefined && val.own) {
+      //     color = statusesColors.SELF_SENDING;
+      //   }
+      // }).unsubscribe();
     }
 
     return color;

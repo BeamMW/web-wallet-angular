@@ -12,10 +12,10 @@ import { Subscription, Observable } from 'rxjs';
 import { routes } from '@consts';
 
 export enum selectorTitles {
-  ALL = 'All',
-  IN_PROGRESS = 'In progress',
-  SENT = 'Sent',
-  RECEIVED = 'Received'
+  ALL = 'ALL',
+  IN_PROGRESS = 'IN PROGRESS',
+  SENT = 'SENT',
+  RECEIVED = 'RECEIVED'
 }
 
 @Component({

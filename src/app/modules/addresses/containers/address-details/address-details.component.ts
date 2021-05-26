@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { selectAddress } from '../../../../store/selectors/address.selectors';
+//import { selectAddress } from '../../../../store/selectors/address.selectors';
 import { Observable } from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -26,7 +26,7 @@ export class AddressDetailsComponent implements OnInit {
 
   ngOnInit() {
     const address = this.route.snapshot.params['address'];
-    this.address$ = this.store.pipe(select(selectAddress(address)));
+    //this.address$ = this.store.pipe(select(selectAddress(address)));
     this.transactions$ = this.store.pipe(select(selectTrByAddress(address)));
   }
 

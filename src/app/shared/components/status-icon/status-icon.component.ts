@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { transactionsStatuses } from '@consts';
 import { environment } from '@environment';
 import { Store, select } from '@ngrx/store';
-import { selectAddress } from '../../../store/selectors/address.selectors';
+//import { selectAddress } from '../../../store/selectors/address.selectors';
 
 @Component({
   selector: 'app-status-icon',
@@ -65,12 +65,12 @@ export class StatusIconComponent implements OnInit {
     if (this.transaction.status_string === transactionsStatuses.SELF_SENDING) {
       iconPath = this.iconSendingOwn;
     } else if (this.transaction.status_string === transactionsStatuses.COMPLETED) {
-      const address$ = this.store.pipe(select(selectAddress(this.transaction.receiver)));
-      address$.subscribe(val => {
-        if (val !== undefined && val.own) {
-          iconPath = this.iconSentOwn;
-        }
-      });
+      // const address$ = this.store.pipe(select(selectAddress(this.transaction.receiver)));
+      // address$.subscribe(val => {
+      //   if (val !== undefined && val.own) {
+      //     iconPath = this.iconSentOwn;
+      //   }
+      // });
     }
     return iconPath;
   }

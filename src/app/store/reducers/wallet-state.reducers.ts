@@ -1,14 +1,22 @@
 import { Action, createReducer, on, State } from '@ngrx/store';
 import * as walletActions from '../actions/wallet.actions';
 import { NumberSymbol } from '@angular/common';
-import { Contact } from '@app/models';
+import { Contact, Asset, AssetInfo } from '@app/models';
 
 export interface WalletAppState {
     activated: boolean;
     wasmInitiated: boolean;
     seedPhrase: string;
     walletData: any;
-    walletStatus: any;
+    walletLoading: boolean;
+    walletStatus: {
+        current_height: number,
+        current_state_hash: string,
+        difficulty: number,
+        prev_state_hash: string,
+        totals: Asset[]
+    };
+    assetsData: AssetInfo[];
     receiveData: {
         amount: number,
         comment: string,
@@ -44,7 +52,8 @@ export interface WalletAppState {
     error: {
         gotAnError: boolean,
         errorMessage: string
-    }
+    },
+    addressValidation: any;
 }
 
 export const initialWalletAppState: WalletAppState = {
@@ -52,7 +61,15 @@ export const initialWalletAppState: WalletAppState = {
     wasmInitiated: false,
     seedPhrase: '',
     walletData: '',
-    walletStatus: {},
+    walletLoading: false,
+    walletStatus: {
+        current_height: 0,
+        current_state_hash: '',
+        difficulty: 0,
+        prev_state_hash: '',
+        totals: []
+    },
+    assetsData: [],
     receiveData: {
         amount: 0,
         comment: '',
@@ -88,7 +105,8 @@ export const initialWalletAppState: WalletAppState = {
     error: {
         gotAnError: false,
         errorMessage: ''
-    }
+    },
+    addressValidation: null
 };
 
 const reducerWalletApp = createReducer(
@@ -126,6 +144,9 @@ const reducerWalletApp = createReducer(
     })),
 
     on(walletActions.saveProofData, (state, { proofData }) => ({ ...state, proofDataValue: proofData })),
+    on(walletActions.addressValidationLoaded, (state, { validationData }) => ({ ...state, addressValidation: validationData })),
+    on(walletActions.loadAssetsData, (state, { assets }) => ({ ...state, assetsData: assets })),
+    on(walletActions.isWalletLoadedState, (state, { loadState }) => ({ ...state, walletLoading: loadState })),
 );
 
 export function reducer(state: WalletAppState | undefined, action: Action) {

@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Subject, from, Subscription, Observable, Subscribable } from 'rxjs';
 import * as extensionizer from 'extensionizer';
-import { WalletState } from './../models/wallet-state.model';
+import { 
+  WalletState,
+  AssetMetadata
+} from '@app/models';
 import { Store, select } from '@ngrx/store';
 import {
   selectAppState,
@@ -33,8 +36,12 @@ import { Router } from '@angular/router';
 import { WasmService } from './wasm.service';
 import { LogService } from './log.service';
 import * as passworder from 'browser-passworder';
-import { routes, globalConsts, rpcMethodIdsConsts } from '@consts';
+import {
+  assetPropertiesConsts,
+  rpcMethodIdsConsts 
+} from '@consts';
 import * as ObservableStore from 'obs-store';
+import { Asset, AssetInfo } from '@app/models';
 
 import { selectWasmState } from '../store/selectors/wallet-state.selectors';
 
@@ -71,6 +78,11 @@ export class DataService {
     walletId: ''
   };
 
+  public isAssetsInfoLoading = true;
+  public assetsCount = 0;
+  public assetsReqCount = 0;
+  public assetsInfoTmp: AssetInfo[] = [];
+
   public getCoinsState = new ObservableStore(false);
   public clickedElement: HTMLElement;
   // Observable string sources
@@ -88,18 +100,18 @@ export class DataService {
     private wasmService: WasmService,
     private store: Store<any>) {
 
-    this.needToReconnect$ = this.store.pipe(select(selectIsNeedToReconnect));
-    this.needToReconnect$.subscribe((state) => {
-      if (state) {
-        this.refreshReconnectIntervalId = setInterval(() => {
-          this.disconnectWallet();
-          clearInterval(this.refreshIntervalId);
-          this.loginToService(this.walletParams.seed, true, this.walletParams.walletId, this.walletParams.pass);
-          console.log('[reconnecting...]');
-          this.logService.saveDataToLogs('[Wallet testnet: reconnecting triggered]', '');
-        }, 10000);
-      }
-    });
+    // this.needToReconnect$ = this.store.pipe(select(selectIsNeedToReconnect));
+    // this.needToReconnect$.subscribe((state) => {
+    //   if (state) {
+    //     this.refreshReconnectIntervalId = setInterval(() => {
+    //       //this.disconnectWallet();
+    //       //clearInterval(this.refreshIntervalId);
+    //       //this.loginToService(this.walletParams.seed, true, this.walletParams.walletId, this.walletParams.pass);
+    //       console.log('[reconnecting...]');
+    //       this.logService.saveDataToLogs('[Wallet testnet: reconnecting triggered]', '');
+    //     }, 10000);
+    //   }
+    // });
   }
 
   public settingsInit(seedConfirmed: boolean) {
@@ -212,19 +224,15 @@ export class DataService {
     this.loadWalletData().then(walletData => {
       if (walletData !== undefined && walletData.length > 0) {
           console.log('Wallet: ', walletData);
-          this.logService.saveDataToLogs('[Wallet testnet: Activated]', walletData);
+          this.logService.saveDataToLogs('[Wallet: Activated]', walletData);
           this.store.dispatch(saveWallet({wallet: walletData}));
           this.store.dispatch(ChangeWalletState({walletState: true}));
       }
     });
   }
 
-  public disconnectWallet() {
-  }
-
   public deactivateWallet() {
     clearInterval(this.refreshIntervalId);
-    this.disconnectWallet();
     this.getCoinsState.putState(false);
     this.store.dispatch(saveWallet({wallet: {}}));
     this.store.dispatch(ChangeWalletState({walletState: false}));
@@ -246,16 +254,6 @@ export class DataService {
     extensionizer.storage.local.remove(['settings', 'wallet', 'contacts', 'state']);
   }
 
-  loginToService(seed: string, loginToWallet: boolean = true, walletId?: string, pass?: string) {
-    this.wasmState$ = this.store.pipe(select(selectWasmState));
-    this.wasmState$.subscribe((state) => {
-        if (state) {
-          this.wasmService.openWallet(pass);
-        }
-      });
-      this.loginToWallet(pass);
-  }
-
   startInterval() {
     this.refreshIntervalStatus = true;
     this.refreshIntervalId = setInterval(() => {
@@ -269,13 +267,17 @@ export class DataService {
   }
 
   loginToWallet(password: string) {
+    this.wasmService.openWallet(password);
+    this.startWallet();
+  }
+
+  startWallet() {
     this.store.dispatch(ChangeWalletState({walletState: true}));
     this.startInterval();
     this.loadWalletSettings();
-    this.router.navigate([routes.WALLET_MAIN_ROUTE]);
 
-    this.store.dispatch(saveError({errorValue:
-      {
+    this.store.dispatch(saveError({
+      errorValue: {
         gotAnError: false,
         errorMessage: ''
       }
@@ -286,7 +288,10 @@ export class DataService {
     this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.TX_LIST_ID,
-      method: 'tx_list'
+      method: 'tx_list',
+      params: {
+        assets: true
+      }
     }));
   }
 
@@ -297,6 +302,17 @@ export class DataService {
       method: 'get_utxo',
     }));
     this.transactionsUpdate();
+  }
+
+  public async validateAddress(address: string) {
+    this.wasmService.wallet.sendRequest(JSON.stringify({
+      jsonrpc: '2.0',
+      id: rpcMethodIdsConsts.VALIDATE_ADDRESS,
+      method: rpcMethodIdsConsts.VALIDATE_ADDRESS,
+      params: {
+        address: address
+      }
+    }));
   }
 
   addressesUpdate() {
@@ -316,9 +332,28 @@ export class DataService {
     this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.WALLET_STATUS_ID,
-      method: 'wallet_status'
+      method: rpcMethodIdsConsts.WALLET_STATUS_ID,
+      params: {
+        assets: true
+      }
     }));
     this.addressesUpdate();
+  }
+
+  loadAssetsInfo(assets: Asset[]) {
+    for (let asset of assets) {
+      if (asset.asset_id > 0) {
+        this.wasmService.wallet.sendRequest(JSON.stringify({
+          jsonrpc: '2.0',
+          id: rpcMethodIdsConsts.GET_ASSET_INFO,
+          method: rpcMethodIdsConsts.GET_ASSET_INFO,
+          params: {
+            assets: true,
+            asset_id: asset.asset_id
+          }
+        }));
+      }
+    }
   }
 
   transactionSend(sendData) {
@@ -387,5 +422,82 @@ export class DataService {
         txId,
       }
     }));
+  }
+
+
+
+  public getAssetMetadata(data: string) {
+    let metadata: AssetMetadata = {
+      asset_name: '',
+      short_name: '',
+      unit_name: '',
+      smallest_unit_name: ''
+    };
+    
+    let propIndex = data.indexOf(assetPropertiesConsts.ASSET_NAME);
+    metadata.asset_name = data.slice(propIndex + assetPropertiesConsts.ASSET_NAME.length, 
+      data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+
+    propIndex = data.indexOf(assetPropertiesConsts.SHORT_NAME);
+    metadata.short_name = data.slice(propIndex + assetPropertiesConsts.SHORT_NAME.length,
+      data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+
+    propIndex = data.indexOf(assetPropertiesConsts.UNIT_NAME);
+    metadata.unit_name = data.slice(propIndex + assetPropertiesConsts.UNIT_NAME.length,
+      data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+
+    propIndex = data.indexOf(assetPropertiesConsts.SMALLET_UNIT_NAME);
+    metadata.smallest_unit_name = data.slice(propIndex + assetPropertiesConsts.SMALLET_UNIT_NAME.length,
+      data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+
+    propIndex = data.indexOf(assetPropertiesConsts.RATIO);
+    if (propIndex > 0) {
+      metadata.ratio = parseInt(data.slice(propIndex + assetPropertiesConsts.RATIO.length,
+        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length));
+    }
+
+    propIndex = data.indexOf(assetPropertiesConsts.SHORT_DESC);
+    if (propIndex > 0) {
+      metadata.short_desc = data.slice(propIndex + assetPropertiesConsts.SHORT_DESC.length,
+        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+    }
+
+    propIndex = data.indexOf(assetPropertiesConsts.LONG_DESC);
+    if (propIndex > 0) {
+      metadata.long_desc = data.slice(propIndex + assetPropertiesConsts.LONG_DESC.length,
+        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+    }
+
+    propIndex = data.indexOf(assetPropertiesConsts.SITE_URL);
+    if (propIndex > 0) {
+      metadata.site_url = data.slice(propIndex + assetPropertiesConsts.SITE_URL.length,
+        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+    }
+
+    propIndex = data.indexOf(assetPropertiesConsts.PDF_URL);
+    if (propIndex > 0) {
+      metadata.pdf_url = data.slice(propIndex + assetPropertiesConsts.PDF_URL.length,
+        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+    }
+
+    propIndex = data.indexOf(assetPropertiesConsts.FAVICON_URL);
+    if (propIndex > 0) {
+      metadata.favicon_url = data.slice(propIndex + assetPropertiesConsts.FAVICON_URL.length,
+        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+    }
+
+    propIndex = data.indexOf(assetPropertiesConsts.LOGO_URL);
+    if (propIndex > 0) {
+      metadata.logo_url = data.slice(propIndex + assetPropertiesConsts.LOGO_URL.length,
+        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+    }
+
+    propIndex = data.indexOf(assetPropertiesConsts.COLOR);
+    if (propIndex > 0) {
+      metadata.color = data.slice(propIndex + assetPropertiesConsts.COLOR.length,
+        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+    }
+
+    return metadata;
   }
 }

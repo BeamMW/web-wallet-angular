@@ -22,7 +22,7 @@ export interface State {
 }
 
 export const reducers: ActionReducerMap<State> = {
-  addresses: addressReducers.walletReducer,
+  addresses: addressReducers.addressesReducer,
   utxos: utxoReducers.utxoReducer,
   transactions: trReducers.trReducer,
   walletAppState: walletStateReducers.reducer

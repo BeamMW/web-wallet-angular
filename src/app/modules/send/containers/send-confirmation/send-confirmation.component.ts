@@ -23,11 +23,16 @@ export class SendConfirmationComponent implements OnInit {
     address: '',
     fee: 0,
     comment: '',
-    amount: 0
+    amount: 0,
+    change: 0,
+    remaining: 0
   };
   popupOpened = false;
   isPassCheckEnabled = false;
   passwordCheckSetting$: Observable<any>;
+  public componentParams = {
+    sendClicked: false
+  }
 
   constructor(private dataService: DataService,
               private store: Store<any>,
@@ -47,12 +52,16 @@ export class SendConfirmationComponent implements OnInit {
         address: string,
         fee: number,
         amount: number,
-        comment: string
+        comment: string,
+        change: number,
+        remaining: number
       };
       this.sendData.address = state.address;
       this.sendData.fee = state.fee === undefined || state.fee === 0 ? 100000 : state.fee;
       this.sendData.amount = state.amount;
       this.sendData.comment = state.comment;
+      this.sendData.change = state.change;
+      this.sendData.remaining = state.remaining;
     } catch (e) {
       this.router.navigate([routes.SEND_ADDRESSES_ROUTE]);
     }
@@ -60,25 +69,30 @@ export class SendConfirmationComponent implements OnInit {
 
   submit($event) {
     $event.stopPropagation();
-    if (this.isPassCheckEnabled) {
-      const navigationExtras: NavigationExtras = {
-        state: {
-          address: this.sendData.address,
-          fee: this.sendData.fee,
-          comment: this.sendData.comment,
-          amount: this.sendData.amount * globalConsts.GROTHS_IN_BEAM,
-          isPassCheckEnabled: true
-        }
-      };
-      this.router.navigate([this.router.url, { outlets: { popup: 'confirm-popup' }}], navigationExtras);
-    } else {
-      this.dataService.transactionSend({
-        fee: this.sendData.fee,
-        address: this.sendData.address,
-        comment: this.sendData.comment,
-        amount: this.sendData.amount * globalConsts.GROTHS_IN_BEAM
-      });
+
+    if (!this.componentParams.sendClicked) {
+      this.dataService.transactionSend(this.sendData);
+      this.componentParams.sendClicked = true;
     }
+    // if (this.isPassCheckEnabled) {
+    //   const navigationExtras: NavigationExtras = {
+    //     state: {
+    //       address: this.sendData.address,
+    //       fee: this.sendData.fee,
+    //       comment: this.sendData.comment,
+    //       amount: this.sendData.amount * globalConsts.GROTHS_IN_BEAM,
+    //       isPassCheckEnabled: true
+    //     }
+    //   };
+    //   this.router.navigate([this.router.url, { outlets: { popup: 'confirm-popup' }}], navigationExtras);
+    // } else {
+    //   this.dataService.transactionSend({
+    //     fee: this.sendData.fee,
+    //     address: this.sendData.address,
+    //     comment: this.sendData.comment,
+    //     amount: this.sendData.amount * globalConsts.GROTHS_IN_BEAM
+    //   });
+    // }
   }
 
   ngOnInit() {
@@ -88,6 +102,6 @@ export class SendConfirmationComponent implements OnInit {
     const navigationExtras: NavigationExtras = {
       state: this.sendData
     };
-    this.router.navigate([routes.SEND_AMOUNT_ROUTE], navigationExtras);
+    this.router.navigate([routes.SEND_ADDRESSES_ROUTE], navigationExtras);
   }
 }

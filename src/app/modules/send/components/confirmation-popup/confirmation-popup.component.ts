@@ -38,6 +38,11 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
     comment: '',
     amount: new Big(0)
   };
+
+  public componentData = {
+    isSendClicked: false
+  }
+
   public contactIcon: string = `${environment.assetsPath}/images/shared/components/table/icon-contact.svg`;
 
   constructor(private store: Store<any>,
@@ -91,18 +96,21 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
   }
 
   submit($event) {
-    if (this.isPassCheckEnabled) {
-      this.walletSub = this.wallet$.subscribe(wallet => {
-        passworder.decrypt(this.confirmForm.value.password, wallet).then((result) => {
-          this.dataService.transactionSend(this.sendData);
-          this.walletSub.unsubscribe();
-        }).catch(error => {
-          this.isCorrectPass = false;
+    if (!this.componentData.isSendClicked) {
+      if (this.isPassCheckEnabled) {
+        this.walletSub = this.wallet$.subscribe(wallet => {
+          passworder.decrypt(this.confirmForm.value.password, wallet).then((result) => {
+            this.dataService.transactionSend(this.sendData);
+            this.walletSub.unsubscribe();
+          }).catch(error => {
+            this.isCorrectPass = false;
+          });
         });
-      });
-    } else {
-      this.dataService.transactionSend(this.sendData);
+      } else {
+        this.dataService.transactionSend(this.sendData);
+      }
     }
+    this.componentData.isSendClicked = true;
   }
 
   getTotalUtxo() {

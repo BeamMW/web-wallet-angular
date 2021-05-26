@@ -3,7 +3,7 @@ import { environment } from '@environment';
 import { Router } from '@angular/router';
 import { routes, transactionsStatuses, TableTypes } from '@consts';
 import { Store, select } from '@ngrx/store';
-import { selectAddress } from '../../../../store/selectors/address.selectors';
+//import { selectAddress } from '../../../../store/selectors/address.selectors';
 import { Observable } from 'rxjs';
 import {
   selectPrivacySetting
@@ -38,12 +38,12 @@ export class TransactionElementComponent implements OnInit {
     if (item.status_string === transactionsStatuses.SELF_SENDING) {
       status = transactionsStatuses.SENDING_TO_OWN_ADDRESS;
     } else if (item.status_string === transactionsStatuses.COMPLETED) {
-      const address$ = this.store.pipe(select(selectAddress(item.receiver)));
-      address$.subscribe(val => {
-        if (val !== undefined && val.own) {
-          status = transactionsStatuses.SENT_TO_OWN_ADDRESS;
-        }
-      });
+      //const address$ = this.store.pipe(select(selectAddress(item.receiver)));
+      // address$.subscribe(val => {
+      //   if (val !== undefined && val.own) {
+      //     status = transactionsStatuses.SENT_TO_OWN_ADDRESS;
+      //   }
+      // });
     }
 
     return status;

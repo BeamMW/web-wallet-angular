@@ -1,0 +1,11 @@
+<div #card [className]="'card'+ '--color-' + cardData.asset_id">
+    <img class="card__icon" [src]="iconUrl">
+    <div class="card__data">
+        <div class="card__data__value">
+            <span>{{ cardData.available / 100000000 }}</span>
+            <span class="card__data__value__uname">{{assetData.unit_name}}</span>
+        </div>
+        <div class="card__data__rate" *ngIf="cardData.asset_id === 0">{{ cardData.available / 100000000 | rate }}</div>
+        <div class="card__data__locked" *ngIf="cardData.locked > 0">Locked: {{ cardData.locked }}</div>
+    </div>
+</div>

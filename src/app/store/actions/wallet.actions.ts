@@ -1,7 +1,19 @@
 import { createAction, props } from '@ngrx/store';
-import { WalletState, Address, Utxo, Transaction, Contact } from '@app/models';
+import { WalletState, Address, Utxo, Transaction, Contact, AssetInfo } from '@app/models';
+
+
+export const updateWalletData = createAction('[Wallet state] Update wallet data');
+export const loadAssetsData = createAction('[Wallet state] Load assets data', props<{ assets: AssetInfo[] }>());
+
+
+export const setLoadedWalletState = createAction('[Wallet state] Set wallet loaded', props<{ loadState: boolean }>());
+export const setLoadindWalletState = createAction('[Wallet state] Set wallet loading', props<{ loadState: boolean }>());
+export const isWalletLoadedState = createAction('[Wallet state] Wallet loading update', props<{ loadState: boolean }>());
+//лоадер через два экшена и эффект!!!!!
 
 export const loadAddresses = createAction('[Addresses] Load Addresses', props<{ addresses: Address[] }>());
+export const loadAddressValidation = createAction('[Addresses] Load validation', props<{ address: string }>());
+export const addressValidationLoaded = createAction('[Wallet state] Validation load success', props<{ validationData: any }>());
 export const loadUtxo = createAction('[Utxos] Load Utxos', props<{ utxos: Utxo[] }>());
 export const loadTr = createAction('[Transcations] Load Transcations', props<{ transactions: Transaction[] }>());
 

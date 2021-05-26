@@ -2,15 +2,19 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import * as passworder from 'browser-passworder';
 import { Observable, Subscription } from 'rxjs';
-import { Router } from '@angular/router';
-import { DataService, WindowService } from './../../../../services';
+import { Router, NavigationExtras } from '@angular/router';
+import { DataService, WindowService } from '@app/services';
 import { environment } from '@environment';
 import { Store, select } from '@ngrx/store';
-import { ChangeWalletState } from './../../../../store/actions/wallet.actions';
 import {
   selectError,
   selectWalletData
-} from './../../../../store/selectors/wallet-state.selectors';
+} from '@app/store/selectors/wallet-state.selectors';
+import { routes } from '@app/consts';
+import {
+  isWalletLoadedState
+} from '@app/store/actions/wallet.actions';
+
 
 @Component({
   selector: 'app-login',
@@ -68,7 +72,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.wallet$ = this.store.pipe(select(selectWalletData));
     this.wallet$.subscribe(wallet => {
       passworder.decrypt(pass, wallet).then((result) => {
-        this.dataService.loginToService(result.seed, true, '', pass);
+        this.dataService.loginToWallet(pass);
+        this.store.dispatch(isWalletLoadedState({loadState: true}));
+        const navigationExtras: NavigationExtras = {
+          state: {
+            isCreating: false
+          }
+        };
+        this.router.navigate([routes.FTF_CREATE_LOADER], navigationExtras);
       }).catch(error => {
         this.isCorrectPass = false;
       });

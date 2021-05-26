@@ -7,15 +7,19 @@
                     <app-button class="main__content__header__send-button" [routerLink]="sendRoute">send</app-button>
                     <app-button class="main__content__header__receive-button" [routerLink]="receiveRoute">receive</app-button>
                 </div>
-                <div class="main__content__state"
-                    *ngIf="walletStatus.available !== undefined"
-                    [class.reduced]="walletStatus.receiving === 0 && walletStatus.sending === 0">
+                <div class="main__content__cards" *ngIf="!dataService.isAssetsInfoLoading">
+                    <app-card *ngFor="let item of walletStatus.totals" [cardData]="item"></app-card>
+                </div>
+
+                <!-- <div class="main__content__state"
+                    *ngIf="walletStatus.totals.length > 0"
+                    [class.reduced]="walletStatus.totals[0].receiving === 0 && walletStatus.totals[0].sending === 0">
                     <div class="available">
                         <img class="available__logo" [src]="iconBeamFull">
                         <div class="available__container">
                             <div class="available__container__title" [class.grayed]="privacyMode">Available</div>
                             <span class="available__container__value" *ngIf="!privacyMode">
-                                {{walletStatus.available | beam:'1.0-9'}} BEAM
+                                {{walletStatus.totals[0].available | beam:'1.0-9'}} BEAM
                             </span>
                             <img class="available__container__value" [src]="iconEnabledPrivacyGrayed" 
                                 *ngIf="privacyMode">
@@ -43,7 +47,7 @@
                             </div>
                         </div>
                     </ng-container>
-                </div>
+                </div> -->
                 <div class="flex-row">
                     <ng-container *ngIf="componentSettings.isGetCoinsVisible && !dataService.getCoinsState.getState()">
                         <div class="main__content__get-coins"

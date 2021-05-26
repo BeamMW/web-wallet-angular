@@ -6,7 +6,6 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { DataService, WindowService, WasmService } from '@app/services';
 import { Store, select } from '@ngrx/store';
 import { saveReceiveData } from '@app/store/actions/wallet.actions';
-import { selectAddress } from '@app/store/selectors/address.selectors';
 import { globalConsts, transactionTypes, rpcMethodIdsConsts, routes } from '@consts';
 import { ClipboardService } from 'ngx-clipboard'
 
@@ -126,10 +125,10 @@ export class ReceiveComponent implements OnInit, OnDestroy {
       method: 'create_address',
       params:
       {
-          type: this.componentParams.switcherSelectedValue,
+          assets: true,
+          type: 'regular_new',
           expiration : 'auto',
-          comment : '',
-          new_style_regular : this.componentParams.switcherSelectedValue === transactionTypes.regular
+          comment : ''
       }
     }));
   }

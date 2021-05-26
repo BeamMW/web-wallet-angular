@@ -8,7 +8,8 @@ import * as passworder from 'browser-passworder';
 import { Store, select } from '@ngrx/store';
 import {
   selectWasmState,
-  selectError
+  selectError,
+  selectWalletLoadState
 } from '@app/store/selectors/wallet-state.selectors';
 
 @Component({
@@ -21,16 +22,15 @@ export class FtfLoaderComponent implements OnInit, OnDestroy {
   public logoUrl: string = `${environment.assetsPath}/images/modules/wallet/containers/login/logo.svg`;
   public isFullScreen = false;
   public popupOpened = false;
-  private keeperSub: Subscription;
-  private sub: Subscription;
-  private errorSub: Subscription;
-  errorState$: Observable<any>;
   wasmState$: Observable<any>;
   private componentSettings = {
     pass: '',
     seed: '',
-    seedConfirmed: false
+    seedConfirmed: false,
+    isCreating: false
   };
+  sub: any;
+  isLoading = true;
 
   constructor(public router: Router,
               private store: Store<any>,
@@ -43,33 +43,28 @@ export class FtfLoaderComponent implements OnInit, OnDestroy {
 
     try {
       const navigation = this.router.getCurrentNavigation();
-      const state = navigation.extras.state as {seed: string, pass: string, seedConfirmed: boolean};
+      const state = navigation.extras.state as {
+        isCreating: boolean,
+        seed: string,
+        pass: string,
+        seedConfirmed: boolean
+      };
 
-      this.componentSettings.pass = state.pass;
-      this.componentSettings.seed = state.seed;
-      this.componentSettings.seedConfirmed = state.seedConfirmed;
+      this.componentSettings.isCreating = state.isCreating;
+      if (state.isCreating) {
+        this.componentSettings.pass = state.pass;
+        this.componentSettings.seed = state.seed;
+        this.componentSettings.seedConfirmed = state.seedConfirmed;
+      }
 
     } catch (e) {
     }
-
-    this.errorState$ = this.store.pipe(select(selectError));
-    this.errorSub = this.errorState$.subscribe(value => {
-      if (value.gotAnError) {
-        if (this.sub !== undefined) {
-          this.sub.unsubscribe();
-        }
-
-        if (this.keeperSub !== undefined) {
-          this.keeperSub.unsubscribe();
-        }
-        this.router.navigate([routes.FTF_CREATE_WALLET_ROUTE]);
-      }
-    });
   }
 
   ngOnInit() {
-    this.wasmState$ = this.store.pipe(select(selectWasmState));
-    this.wasmState$.subscribe((state) => {
+    if (this.componentSettings.isCreating) {
+      this.wasmState$ = this.store.pipe(select(selectWasmState));
+      this.wasmState$.subscribe((state) => {
         if (state) {
           passworder.encrypt(this.componentSettings.pass, {
             seed: this.componentSettings.seed
@@ -78,15 +73,20 @@ export class FtfLoaderComponent implements OnInit, OnDestroy {
             this.dataService.saveWallet(result);
             this.dataService.settingsInit(this.componentSettings.seedConfirmed);
             this.wasmService.createWallet(this.componentSettings.seed, this.componentSettings.pass);
-            this.dataService.loginToWallet(this.componentSettings.pass);
+            this.dataService.startWallet();
           });
         }
-      });
+      }).unsubscribe();
+    }
+
+    this.sub = this.store.pipe(select(selectWalletLoadState)).subscribe(state => {
+      if (!state) {
+        this.router.navigate([routes.WALLET_MAIN_ROUTE]);
+      }
+    });
   }
 
   ngOnDestroy() {
-    if (this.errorSub !== undefined) {
-      this.errorSub.unsubscribe();
-    }
+    this.sub.unsubscribe();
   }
 }

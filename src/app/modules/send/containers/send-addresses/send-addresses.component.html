@@ -13,7 +13,7 @@
             <div class="send__container">
                 <div class="send__container__address">
                     <div class="container-header">
-                        <span>SEND TO</span>
+                        <span>TRANSACTION INFO</span>
                     </div>
                     <div class="send__container__address__content">
                         <ng-container *ngTemplateOutlet="addressTemplate"></ng-container>
@@ -168,12 +168,15 @@
     <ng-template #addressTemplate>
         <textarea class="address-input" autosize maxlength="1000"
                 name="address" formControlName="address"
-                placeholder="Please specify transaction address"
+                placeholder="Paste recipient address here"
                 (input)="addressInputUpdated($event.target.value)"
                 [class.incorrect]="!componentParams.addressValidation"></textarea>
-        <div class="address-validator" *ngIf="!componentParams.addressValidation">
-            Invalid address
-        </div>
+        <ng-container *ngIf="addressValidation$ | async as addressValidation">
+            <div class="address-type" *ngIf="addressValidation.is_valid">{{componentParams.validationResult}}</div>
+            <div class="address-validator" *ngIf="!addressValidation.is_valid">
+                Invalid wallet address
+            </div>
+        </ng-container>
     </ng-template>
 
     <ng-template #amountTemplate>

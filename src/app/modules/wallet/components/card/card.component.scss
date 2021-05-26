@@ -1,0 +1,153 @@
+@import 'ui-mixins';
+
+@function setBgImage($color) {
+    @return linear-gradient(107deg, $color 2%, rgba(0, 69, 143, .3) 98%);
+}
+
+.card {
+    width: 221px;
+    height: 75px;
+    margin: 0 10px 10px 0;
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    &__icon {
+        width: 26px;
+        height: 26px;
+    }
+
+    &__data {
+        margin-left: 10px;
+
+        &__value {
+            @include normal-text;
+            font-family: 'ProximaNova', sans-serif;
+            font-size: 16px;
+            color: #fff;
+
+            &__uname {
+                margin-left: 5px;
+            }
+        }
+
+        &__rate {
+            @include normal-text;
+            font-family: 'ProximaNova', sans-serif;
+            opacity: 0.7;
+            color: #fff;
+            font-size: 12px;
+        }
+
+        &__locked {
+            @include normal-text;
+            font-family: 'ProximaNova', sans-serif;
+            opacity: 0.5;
+            color: #fff;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    }
+
+    &--color-0 {
+        @extend .card;
+        background-image: setBgImage(rgba(114, 253, 255, .3));
+    }
+
+    &--color-1 {
+        @extend .card;
+        background-image: setBgImage(rgba(42, 207, 29, .3));
+    }
+
+    &--color-2 {
+        @extend .card;
+        background-image: setBgImage(rgba(255, 187, 84, .3));
+    }
+
+    &--color-3 {
+        @extend .card;
+        background-image: setBgImage(rgba(216, 133, 255, .3));
+    }
+
+    &--color-4 {
+        @extend .card;
+        background-image: setBgImage(rgba(0, 142, 255, .3));
+    }
+
+    &--color-5 {
+        @extend .card;
+        background-image: setBgImage(rgba(255, 116, 107, .3));
+    }
+
+    &--color-6 {
+        @extend .card;
+        background-image: setBgImage(rgba(145, 227, 0, .3));
+    }
+
+    &--color-7 {
+        @extend .card;
+        background-image: setBgImage(rgba(255, 231, 90, .3));
+    }
+
+    &--color-8 {
+        @extend .card;
+        background-image: setBgImage(rgba(150, 67, 255, .3));
+    }
+
+    &--color-9 {
+        @extend .card;
+        background-image: setBgImage(rgba(57, 91, 255, .3));
+    }
+    
+    &--color-10 {
+        @extend .card;
+        background-image: setBgImage(rgba(255, 59, 59, .3));
+    }
+
+    &--color-11 {
+        @extend .card;
+        background-image: setBgImage(rgba(115, 255, 124, .3));
+    }
+
+    &--color-12 {
+        @extend .card;
+        background-image: setBgImage(rgba(255, 168, 108, .3));
+    }
+
+    &--color-13 {
+        @extend .card;
+        background-image: setBgImage(rgba(255, 58, 190, .3));
+    }
+
+    &--color-14 {
+        @extend .card;
+        background-image: setBgImage(rgba(0, 174, 225, .3));
+    }
+
+    &--color-15 {
+        @extend .card;
+        background-image: setBgImage(rgba(255, 82, 0, .3));
+    }
+
+    &--color-16 {
+        @extend .card;
+        background-image: setBgImage(rgba(100, 100, 255, .3));
+    }
+    
+    &--color-17 {
+        @extend .card;
+        background-image: setBgImage(rgba(255, 122, 33, .3));
+    }
+
+    &--color-18 {
+        @extend .card;
+        background-image: setBgImage(rgba(99, 175, 255, .3));
+    }
+
+    &--color-19 {
+        @extend .card;
+        background-image: setBgImage(rgba(200, 31, 104, .3));
+    }
+}

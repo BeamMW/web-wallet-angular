@@ -52,14 +52,31 @@ export enum rpcMethodIdsConsts {
     GET_UTXO_ID = 7,
     ADDR_LIST_ID = 8,
     CREATE_ADDRESS_ID = 9,
-    WALLET_STATUS_ID = 10,
+    WALLET_STATUS_ID = 'wallet_status',
     TX_SEND_ID = 11,
     TX_CANCEL_ID = 15,
     CHANGE_PASSWORD_ID = 16,
     CALC_CHANGE_ID = 17,
     TX_DELETE_ID = 18,
     EXPORT_PAYMENT_PROOF_ID = 25,
-    VERIFY_PAYMENT_PROOF_ID = 26
+    VERIFY_PAYMENT_PROOF_ID = 26,
+    VALIDATE_ADDRESS = 'validate_address',
+    GET_ASSET_INFO = 'get_asset_info'
+}
+
+export enum assetPropertiesConsts {
+    ASSET_NAME = 'N=',
+    SHORT_NAME = 'SN=',
+    UNIT_NAME = 'UN=',
+    SMALLET_UNIT_NAME = 'NTHUN=',
+    RATIO = 'NTHUN=',
+    SHORT_DESC = 'OPT_SHORT_DESC=',
+    LONG_DESC = 'OPT_LONG_DESC=',
+    SITE_URL = 'OPT_SITE_URL=',
+    PDF_URL = 'OPT_PDF_URL=',
+    FAVICON_URL = 'OPT_FAVICON_URL=',
+    LOGO_URL = 'OPT_LOGO_URL=',
+    COLOR = 'OPT_COLOR='
 }
 
 export enum transactionTypes {

@@ -1,8 +1,4 @@
-import {
-    createSelector,
-    createFeatureSelector,
-    ActionReducerMap,
-  } from '@ngrx/store';
+import { createSelector } from '@ngrx/store';
 import * as fromWalletState from './../reducers/wallet-state.reducers';
 
 export interface State {
@@ -123,4 +119,19 @@ export const selectProofData = createSelector(
 export const selectIsNeedToReconnect = createSelector(
   selectAppState,
   state => state.isNeedToReconnect
+);
+
+export const selectAddressValidationData = createSelector(
+  selectAppState,
+  state => state.addressValidation
+);
+
+export const selectAssetsInfo = createSelector(
+  selectAppState,
+  state => state.assetsData
+);
+
+export const selectWalletLoadState = createSelector(
+  selectAppState,
+  state => state.walletLoading
 );

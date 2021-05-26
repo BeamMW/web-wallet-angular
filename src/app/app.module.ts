@@ -14,6 +14,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FirstTimeFlowModule } from './modules/first-time-flow/first-time-flow.module';
 import { WalletModule } from './modules/wallet/wallet.module';
 import { SendModule } from './modules/send/send.module';
+import { ReceiveModule } from './modules/receive/receive.module';
+import { SettingsModule } from './modules/settings/settings.module';
+import { UtxoModule } from './modules/utxo/utxo.module';
 import { StorageModule } from '@ngx-pwa/local-storage';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 
@@ -39,6 +42,9 @@ import { DatePipe } from '@angular/common';
     FirstTimeFlowModule,
     WalletModule,
     SendModule,
+    ReceiveModule,
+    SettingsModule,
+    UtxoModule,
     TransactionsModule,
     StoreModule.forRoot(walletReducer.reducers, {
       runtimeChecks: {

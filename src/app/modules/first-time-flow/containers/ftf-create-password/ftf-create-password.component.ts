@@ -5,6 +5,10 @@ import { Observable, Subscription } from 'rxjs';
 import { FormGroup, FormControl, Validators} from '@angular/forms';
 import { DataService, WindowService } from './../../../../services';
 import { routes } from '@consts';
+import {
+  isWalletLoadedState
+} from '@app/store/actions/wallet.actions';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-ftf-create-password',
@@ -33,6 +37,7 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
   private wasmState$: Observable<any>;
 
   constructor(
+      private store: Store<any>,
       public router: Router,
       private windowService: WindowService,
       private dataService: DataService) {
@@ -71,11 +76,13 @@ export class FtfCreatePasswordComponent implements OnInit, OnDestroy {
     const confirmPass = this.createForm.value.passwordConfirm;
 
     if (confirmPass === pass && (pass !== null && pass.length > 0)) {
+      this.store.dispatch(isWalletLoadedState({loadState: true}));
       const navigationExtras: NavigationExtras = {
         state: {
           seed: this.seed,
           pass,
-          seedConfirmed: this.seedConfirmed
+          seedConfirmed: this.seedConfirmed, 
+          isCreating: true
         }
       };
       this.router.navigate([routes.FTF_CREATE_LOADER], navigationExtras);

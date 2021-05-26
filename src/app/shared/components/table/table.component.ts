@@ -11,7 +11,7 @@ import {Router} from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { selectContact } from '@app/store/selectors/wallet-state.selectors';
 import { selectUtxoById } from '@app/store/selectors/utxo.selectors';
-import { selectAddress } from '@app/store/selectors/address.selectors';
+//import { selectAddress } from '@app/store/selectors/address.selectors';
 
 import { WasmService } from '@app/services';
 import { Subscription } from 'rxjs';
@@ -228,12 +228,12 @@ export class TableComponent implements OnInit, OnChanges {
     if (item.status_string === transactionsStatuses.SELF_SENDING) {
       status = transactionsStatuses.SENDING_TO_OWN_ADDRESS;
     } else if (item.status_string === transactionsStatuses.COMPLETED) {
-      const address$ = this.store.pipe(select(selectAddress(item.receiver)));
-      address$.subscribe(val => {
-        if (val !== undefined && val.own) {
-          status = transactionsStatuses.SENT_TO_OWN_ADDRESS;
-        }
-      });
+      // const address$ = this.store.pipe(select(selectAddress(item.receiver)));
+      // address$.subscribe(val => {
+      //   if (val !== undefined && val.own) {
+      //     status = transactionsStatuses.SENT_TO_OWN_ADDRESS;
+      //   }
+      // });
     }
 
     return status;

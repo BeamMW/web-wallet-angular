@@ -5,15 +5,18 @@ import { Subscription, Observable } from 'rxjs';
 import { environment } from '@environment';
 import { DataService, WindowService } from '@app/services';
 import { Store, select } from '@ngrx/store';
+import { loadAddressValidation } from '@app/store/actions/wallet.actions';
 import {
   selectPasswordCheckSetting,
   selectWalletStatus,
-  selectSendData
+  selectSendData,
+  selectAddressValidationData
 } from '@app/store/selectors/wallet-state.selectors';
 import { WasmService } from '@app/services/wasm.service';
 import { debounceTime } from 'rxjs/operators';
 import { globalConsts, rpcMethodIdsConsts, routes } from '@consts';
 import { selectAvailableUtxo } from '@app/store/selectors/utxo.selectors';
+//import { selectAddressValidationData } from '@app/store/selectors/address.selectors';
 import Big from 'big.js';
 
 @Component({
@@ -25,18 +28,34 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
   public arrowIcon: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/arrow.svg`;
 
+  private addressTypes = {
+    'regular': {
+      name: 'Regular address'
+    },
+    'regular_new': {
+      name: 'Regular address'
+    },
+    'max_privacy': {
+      name: 'Max privacy address'
+    },
+    'offline': {
+      name: 'Offline address'
+    }
+  };
+
   sendForm: FormGroup;
   fullSendForm: FormGroup;
   walletStatus$: Observable<any>;
   sendFrom: string;
   passwordCheckSetting$: Observable<any>;
   utxos$: Observable<any>;
+  addressValidation$: Observable<any>;
   sendData$: Observable<any>;
   private isPassCheckEnabled = false;
 
   private ratesData: any;
 
-  componentParams = {
+  public componentParams = {
     iconBeam: `${environment.assetsPath}/images/modules/receive/containers/receive/icon-beam.svg`,
     iconArrowDown: `${environment.assetsPath}/images/modules/receive/containers/receive/icon-arrow-down.svg`,
     iconArrowUp: `${environment.assetsPath}/images/modules/receive/containers/receive/icon-arrow-up.svg`,
@@ -57,7 +76,8 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     subtitleText: 'SEND',
     amountInUSD: 0,
     commentExpanded: false,
-    feeExpanded: false
+    feeExpanded: false,
+    validationResult: ''
   };
 
   private subManager = {
@@ -83,9 +103,16 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
     this.componentParams.isFullScreen = windowService.isFullSize();
     this.passwordCheckSetting$ = this.store.pipe(select(selectPasswordCheckSetting));
+    this.addressValidation$ = this.store.pipe(select(selectAddressValidationData));
     this.passwordCheckSetting$.subscribe(settingValue => {
       this.isPassCheckEnabled = settingValue;
     }).unsubscribe();
+
+    this.addressValidation$.subscribe(value => {
+      if (value) {
+        this.componentParams.validationResult = this.addressTypes[value.type].name;
+      }
+    });
 
     let address = '';
     try {
@@ -128,7 +155,9 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
           address: this.sendForm.value.address,
           fee: this.sendForm.value.fee,
           amount: typeof this.sendForm.value.amount === 'string' ? this.sendForm.value.amount : this.sendForm.value.amount.toFixed(),
-          comment: this.sendForm.value.comment
+          comment: this.sendForm.value.comment,
+          change: this.stats.change.toFixed(),
+          remaining: this.stats.remaining.toFixed()
         }
       };
       this.router.navigate([routes.SEND_CONFIRMATION_ROUTE], navigationExtras);
@@ -158,7 +187,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
     this.subManager.statusSub = this.walletStatus$.subscribe((status) => {
       const feeFullValue = new Big(this.fullSendForm.value.fee).div(globalConsts.GROTHS_IN_BEAM);
-      const available = new Big(status.available).div(globalConsts.GROTHS_IN_BEAM);
+      const available = new Big(status.totals[0].available).div(globalConsts.GROTHS_IN_BEAM);
       this.stats.remaining = available.minus(feeFullValue);
     });
 
@@ -212,7 +241,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
   addAllClicked($event) {
     this.walletStatus$.subscribe((status) => {
-      if (status.available > 0 && status.available > this.fullSendForm.value.fee) {
+      if (status.totals[0].available > 0 && status.totals[0].available > this.fullSendForm.value.fee) {
         const allAmount = (new Big(status.available).minus(this.fullSendForm.value.fee))
           .div(globalConsts.GROTHS_IN_BEAM);
         this.amountChanged(allAmount.toFixed());
@@ -317,29 +346,15 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     this.stats.fee = new Big(0);
   }
 
-  addressInputUpdated(value) {
-    //const tokenJson = this.wasmService.convertTokenToJson(value);
-    // if (value.length > 0 && tokenJson.length > 0) {
-    //   const tokenData = JSON.parse(tokenJson);
-    //   if (tokenData.params !== undefined &&
-    //       tokenData.params.PeerWalletIdentity !== undefined &&
-    //       tokenData.params.PeerID !== undefined) {
-    //     if (tokenData.params.Amount !== undefined) {
-    //       const amountFromToken = new Big(tokenData.params.Amount).div(globalConsts.GROTHS_IN_BEAM);
-    //       this.fullSendForm.get('amount').setValue(amountFromToken.toFixed());
-    //       this.amountChanged(amountFromToken.toFixed());
-    //     }
-    //     this.localParams.addressValidation = true;
-    //   } else {
-    //     this.localParams.addressValidation = false;
-    //   }
-    // } else 
-    
-    if (value.length > 0) { //&& tokenJson.length === 0
-      this.componentParams.addressValidation = true;
-    } else {
-      this.componentParams.addressValidation = false;
-    }
+  public addressInputUpdated(value: string) {
+    this.store.dispatch(loadAddressValidation({address: value}));
+
+    // if (value.length > 0) {
+    //   //this.dataService.validateAddress(value);
+    //   this.componentParams.addressValidation = true;
+    // } else {
+    //   this.componentParams.addressValidation = false;
+    // }
 
     this.addressInputCheck();
     this.valuesValidationCheck();

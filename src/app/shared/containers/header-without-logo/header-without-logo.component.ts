@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import * as extensionizer from 'extensionizer';
 import { environment } from '@environment';
 
-import { WindowService } from './../../../services';
+import { WindowService } from '@app/services';
 
 @Component({
   selector: 'app-header-without-logo',

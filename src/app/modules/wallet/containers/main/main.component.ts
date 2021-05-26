@@ -6,7 +6,7 @@ import {
   updatePrivacySetting,
   updateVerificatedSetting
 } from '@app/store/actions/wallet.actions';
-import { selectAllAddresses } from '@app/store/selectors/address.selectors';
+//import { selectAllAddresses } from '@app/store/selectors/address.selectors';
 import { selectAllUtxo } from '@app/store/selectors/utxo.selectors';
 import {
   selectAllTr,
@@ -25,10 +25,10 @@ import { routes, globalConsts } from '@consts';
 import { environment } from '@environment';
 
 export enum selectorTitles {
-  ALL = 'All',
-  IN_PROGRESS = 'In progress',
-  SENT = 'Sent',
-  RECEIVED = 'Received'
+  ALL = 'ALL',
+  IN_PROGRESS = 'IN PROGRESS',
+  SENT = 'SENT',
+  RECEIVED = 'RECEIVED'
 }
 @Component({
   selector: 'app-main',
@@ -82,15 +82,16 @@ export class MainComponent implements OnInit, OnDestroy {
     isValidationVisible: true,
     isGetCoinsVisible: true,
     validationState: true,
-    validationStateLoaded: false
+    validationStateLoaded: false,
+    isAssetsInfoLoading: false
   };
 
   constructor(private store: Store<any>,
               public router: Router,
               private windowService: WindowService,
-              private dataService: DataService) {
+              public dataService: DataService) {
     this.isFullScreen = windowService.isFullSize();
-    this.addresses$ = this.store.pipe(select(selectAllAddresses));
+    //this.addresses$ = this.store.pipe(select(selectAllAddresses));
     this.utxos$ = this.store.pipe(select(selectAllUtxo));
     this.transactions$ = this.store.pipe(select(selectAllTr));
     this.privacySetting$ = this.store.pipe(select(selectPrivacySetting));
@@ -102,8 +103,9 @@ export class MainComponent implements OnInit, OnDestroy {
 
       this.walletStatus$.subscribe((walletState) => {
         this.componentSettings.isAvailableEnough = verState.balanceWasPositiveMoreEn ||
-          (!verState.balanceWasPositiveMoreEn && (parseFloat(walletState.receiving) >= 100 * globalConsts.GROTHS_IN_BEAM ||
-          parseFloat(walletState.available) >= 100 * globalConsts.GROTHS_IN_BEAM));
+          (!verState.balanceWasPositiveMoreEn && 
+          (parseFloat(walletState.totals[0].receiving) >= 100 * globalConsts.GROTHS_IN_BEAM ||
+          parseFloat(walletState.totals[0].available) >= 100 * globalConsts.GROTHS_IN_BEAM));
 
         this.componentSettings.validationState = !this.verificatedSetting.state &&
           (!this.verificatedSetting.isMessageClosed ||
@@ -112,7 +114,7 @@ export class MainComponent implements OnInit, OnDestroy {
         this.componentSettings.validationStateLoaded = true;
         this.componentSettings.isValidationVisible = this.componentSettings.validationState;
         this.componentSettings.isGetCoinsVisible = !verState.balanceWasPositive &&
-          walletState.available === 0 && !this.dataService.getCoinsState.getState();
+          walletState.totals[0].available === 0 && !this.dataService.getCoinsState.getState();
       });
     });
 

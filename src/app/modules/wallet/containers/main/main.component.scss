@@ -403,6 +403,14 @@
                 max-width: 447px;
             }
 
+            &__cards {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                margin-top: 30px;
+            }
+
             &__get-coins {
                 width: 100%;
                 height: 125px;

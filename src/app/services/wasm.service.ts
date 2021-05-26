@@ -4,7 +4,9 @@ import { filter, map } from 'rxjs/operators';
 
 declare const BeamModule: any;
 import { Store, select } from '@ngrx/store';
-import { ChangeWasmState } from '../store/actions/wallet.actions';
+import { 
+  ChangeWasmState,
+  updateWalletData } from '../store/actions/wallet.actions';
 import * as extensionizer from 'extensionizer';
 import {
   selectWalletSetting,
@@ -15,21 +17,21 @@ import {
   loadUtxo,
   loadTr,
   saveWalletStatus,
+  isWalletLoadedState,
   updateVerificatedSetting } from '../store/actions/wallet.actions';
 import { Router } from '@angular/router';
 import { routes, globalConsts, rpcMethodIdsConsts } from '@consts';
 
 @Injectable({providedIn: 'root'})
 export class WasmService {
-  isWasmLoaded = false;
-  beamModule: any;
+  private isWasmLoaded = false;
+  private beamModule: any;
   wallet: any;
   module: any;
   keyKeeper: any;
-  options$: Observable<any>;
-  isMounted = false;
-
-  wasmReady = new BehaviorSubject<boolean>(false);
+  private options$: Observable<any>;
+  private isMounted = false;
+  private wasmReady = new BehaviorSubject<boolean>(false);
 
   constructor(
     public router: Router,
@@ -80,20 +82,25 @@ export class WasmService {
     this.wallet.stopWallet((data) => {
       console.log("is running: " + this.wallet.isRunning())
       console.log('wallet stopped:', data);
-      this.deleteWalletDB();
+      //this.deleteWalletDB();
     });
   }
 
-  public createWallet(phrase, pass) {
+  private startWallet(pass: string) {
+    this.wallet = new this.beamModule.WasmWalletClient("/beam_wallet/wallet.db", pass, "eu-node01.masternet.beam.mw:8200");
+    console.log("starting wallet...");
+    this.wallet.startWallet();
+    this.store.dispatch(updateWalletData());
+  }
+
+  public createWallet(phrase: string, pass: string) {
     if (!this.isMounted) {
       this.module.MountFS(()=> {
         this.isMounted = true;
         console.log("mounted");
         this.module.CreateWallet(phrase, "/beam_wallet/wallet.db", pass);
-        this.wallet = new this.beamModule.WasmWalletClient("/beam_wallet/wallet.db", pass, "eu-node01.masternet.beam.mw:8200");
-        console.log("starting wallet...");
-        this.wallet.startWallet();
-
+        this.startWallet(pass);
+        
         // this.wallet.setSyncHandler((done, total) => {
         //   console.log("sync [" + done + "/" + total + "]");
         // })
@@ -105,9 +112,7 @@ export class WasmService {
       });
     } else {
       this.module.CreateWallet(phrase, "/beam_wallet/wallet.db", pass);
-      this.wallet = new this.beamModule.WasmWalletClient("/beam_wallet/wallet.db", pass, "eu-node01.masternet.beam.mw:8200");
-      console.log("starting wallet...");
-      this.wallet.startWallet();
+      this.startWallet(pass);
 
       // this.wallet.setSyncHandler((done, total) => {
       //   console.log("sync [" + done + "/" + total + "]");
@@ -131,92 +136,47 @@ export class WasmService {
     this.module.MountFS(()=> {
       this.isMounted = true;
       console.log("mounted");
-      this.wallet = new this.beamModule.WasmWalletClient("/beam_wallet/wallet.db", pass, "eu-node01.masternet.beam.mw:8200")//"eu-node03.masternet.beam.mw:8100");
-      console.log("starting wallet...");
-      this.wallet.startWallet();
-      
-      var i = this.wallet.subscribe((r)=> {
-        //console.log("response: " + r)
+      this.startWallet(pass);
 
-        const respone = JSON.parse(r);
-        this.walletActions(respone);
+      this.wallet.subscribe((r)=> {
+        const response = JSON.parse(r);
+        this.walletActions(response);
       });
     });
   }
 
 
-  private walletActions(respone) {
-    if (respone.id === rpcMethodIdsConsts.WALLET_STATUS_ID) {
-      //this.subManager.statusSub.unsubscribe();
-      this.store.dispatch(saveWalletStatus({status: respone.result}));
-
-      console.log(respone.result);
-      if (respone.result.receiving > 0 || respone.result.available > 0) {
-        const verificatedSetting$ = this.store.pipe(select(selectVerificatedSetting));
-        verificatedSetting$.subscribe((verState) => {
-          if (!verState.balanceWasPositive && (respone.result.receiving > 0 || respone.result.available > 0)) {
-            this.store.dispatch(updateVerificatedSetting({settingValue: {
-              state: verState.state,
-              isMessageClosed: verState.isMessageClosed,
-              balanceWasPositive: true,
-              balanceWasPositiveMoreEn: verState.balanceWasPositiveMoreEn
-            }}));
-            this.saveWalletOptions();
-          }
-
-          if (!verState.balanceWasPositiveMoreEn && (respone.result.receiving >= 100 * globalConsts.GROTHS_IN_BEAM ||
-            respone.result.available >= 100 * globalConsts.GROTHS_IN_BEAM)) {
-            this.store.dispatch(updateVerificatedSetting({settingValue: {
-              state: verState.state,
-              isMessageClosed: verState.isMessageClosed,
-              balanceWasPositive: verState.balanceWasPositive,
-              balanceWasPositiveMoreEn: true
-            }}));
-            this.saveWalletOptions();
-          }
-        }).unsubscribe();
-      }
-    }
-
-    if (respone.id === rpcMethodIdsConsts.ADDR_LIST_ID) {
+  private walletActions(response) {
+    if (response.id === rpcMethodIdsConsts.ADDR_LIST_ID) {
       // console.log('[data-service] addresses: ');
       // console.dir(respone.result);
       //this.logService.saveDataToLogs('[Service testnet: addresses list]', msg);
-      this.store.dispatch(loadAddresses({addresses: respone.result.length > 0 ? respone.result : []}));           
-    }
-
-    if (respone.id === rpcMethodIdsConsts.GET_UTXO_ID) {
+      this.store.dispatch(loadAddresses({addresses: response.result.length > 0 ? response.result : []}));           
+    } else if (response.id === rpcMethodIdsConsts.GET_UTXO_ID) {
       console.log('[data-service] utxo: ');
-      console.dir(respone.result);
+      console.dir(response.result);
       //this.logService.saveDataToLogs('[Service testnet: UTXO list]', respone);
 
-      this.store.dispatch(loadUtxo({utxos: respone.result.length > 0 ? respone.result : []}));
-    }
-
-    if (respone.id === rpcMethodIdsConsts.TX_LIST_ID) {
+      this.store.dispatch(loadUtxo({utxos: response.result.length > 0 ? response.result : []}));
+    } else if (response.id === rpcMethodIdsConsts.TX_LIST_ID) {
       console.log('[data-service] transactions: ');
-      console.dir(respone.result);
+      console.dir(response.result);
       //this.logService.saveDataToLogs('[Service testnet: transaction list]', msg);
 
-      this.store.dispatch(loadTr({transactions: respone.result.length > 0 ? respone.result : []}));
+      this.store.dispatch(loadTr({transactions: response.result.length > 0 ? response.result : []}));
+      this.store.dispatch(isWalletLoadedState({loadState: false}));
       console.log('----------update finished----------');
-    }
-
-    if (respone.id === rpcMethodIdsConsts.TX_SEND_ID) {
-      console.log('send result: ', respone);
+    } else if (response.id === rpcMethodIdsConsts.TX_SEND_ID) {
+      console.log('send result: ', response);
       //this.logService.saveDataToLogs('[Wallet testnet: send finished]', msg);
       this.router.navigate([routes.WALLET_MAIN_ROUTE]);
-    }
-
-    if (respone.id === rpcMethodIdsConsts.TX_CANCEL_ID) {
+    } else if (response.id === rpcMethodIdsConsts.TX_CANCEL_ID) {
         // this.logService.saveDataToLogs('[Wallet testnet: transaction cancelled]', txId);
-      console.log('[Transaction cancelled]', respone);
-    }
-
-    if (respone.id === rpcMethodIdsConsts.TX_DELETE_ID) {
+      console.log('[Transaction cancelled]', response);
+    } else if (response.id === rpcMethodIdsConsts.TX_DELETE_ID) {
       // this.logService.saveDataToLogs('[Wallet testnet: transaction deleted]', txId);
-      console.log('[Transaction deleted]', respone);
-    }
+      console.log('[Transaction deleted]', response);
+    } 
   }
 
   public keykeeperInit(seed) {
