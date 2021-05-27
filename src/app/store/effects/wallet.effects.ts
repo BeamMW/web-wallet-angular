@@ -6,8 +6,7 @@ import {
   addressValidationLoaded,
   updateVerificatedSetting,
   loadAssetsData,
-  setLoadindWalletState,
-  setLoadedWalletState,
+  calculatedChangeState,
   isWalletLoadedState,
   saveWalletStatus } from '../actions/wallet.actions';
 import { map, tap, mergeMap, catchError } from 'rxjs/operators';
@@ -33,26 +32,6 @@ export class WalletEffects {
       ofType(loadAddressValidation),
       tap((action) => {
         this.dataService.validateAddress(action.address)
-      })
-    ),
-    { dispatch: false }
-  );
-
-  walletLoadingEffect$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(setLoadindWalletState),
-      tap((action) => {
-        this.store.dispatch(isWalletLoadedState({loadState: true}))
-      })
-    ),
-    { dispatch: false }
-  );
-
-  walletLoadedEffect$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(setLoadedWalletState),
-      tap((action) => {
-        this.store.dispatch(isWalletLoadedState({loadState: false}))
       })
     ),
     { dispatch: false }
@@ -108,6 +87,7 @@ export class WalletEffects {
               }).unsubscribe();
             }
           } else if (parsedResponse.id === rpcMethodIdsConsts.GET_ASSET_INFO) {
+            console.log('ASSET INFO:', parsedResponse);
             this.dataService.assetsReqCount++;
             const assetMetadata = this.dataService.getAssetMetadata(parsedResponse.result.metadata);
             if (this.dataService.assetsReqCount === this.dataService.assetsCount) {
@@ -125,8 +105,14 @@ export class WalletEffects {
                 metadata: assetMetadata
               });
             }
-
-            console.log(parsedResponse);
+          } else if (parsedResponse.id === rpcMethodIdsConsts.CALC_CHANGE_ID) {
+            console.log('CHANGE:', parsedResponse)
+            
+            this.store.dispatch(calculatedChangeState({changeValue: {
+              asset_change: parsedResponse.result.asset_change,
+              change: parsedResponse.result.change,
+              fee: parsedResponse.result.explicit_fee
+            }}));
           }
         });
       })

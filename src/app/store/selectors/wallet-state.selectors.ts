@@ -135,3 +135,8 @@ export const selectWalletLoadState = createSelector(
   selectAppState,
   state => state.walletLoading
 );
+
+export const selectCalculatedChange = createSelector(
+  selectAppState,
+  state => state.calculatedChange
+);

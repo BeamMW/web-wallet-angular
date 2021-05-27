@@ -1,13 +1,14 @@
 import { createAction, props } from '@ngrx/store';
-import { WalletState, Address, Utxo, Transaction, Contact, AssetInfo } from '@app/models';
+import { WalletState, Address, Utxo, Transaction, Contact, AssetInfo, CalcChange } from '@app/models';
 
 
 export const updateWalletData = createAction('[Wallet state] Update wallet data');
 export const loadAssetsData = createAction('[Wallet state] Load assets data', props<{ assets: AssetInfo[] }>());
 
 
-export const setLoadedWalletState = createAction('[Wallet state] Set wallet loaded', props<{ loadState: boolean }>());
-export const setLoadindWalletState = createAction('[Wallet state] Set wallet loading', props<{ loadState: boolean }>());
+export const calculatedChangeState = createAction('[Wallet state] Set calculated change state', 
+    props<{ changeValue: CalcChange }>());
+
 export const isWalletLoadedState = createAction('[Wallet state] Wallet loading update', props<{ loadState: boolean }>());
 //лоадер через два экшена и эффект!!!!!
 

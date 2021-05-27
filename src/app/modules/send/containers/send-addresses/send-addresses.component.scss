@@ -211,10 +211,17 @@
 .address-validator {
     @include normal-text;
     margin-top: 5px;
-    font-family: 'ProximaNova', sans-serif;
-    font-size: 13px;
-    line-height: 1.23;
+    font-family: 'ProximaNovaIt', sans-serif;
+    font-size: 14px;
     color: #ff625c;
+}
+
+.address-type {
+    @include normal-text;
+    margin-top: 5px;
+    font-family: 'ProximaNovaIt', sans-serif;
+    font-size: 14px;
+    color: #8196a4;
 }
 
 .amount-form {
@@ -276,19 +283,88 @@
     color: #ff625c;
 }
 
-.amount-currency {
-    width: 45px;
+.asset-selector {
     display: flex;
     justify-content: flex-end;
-    margin-left: auto;
+    margin-left: 10px;
 
-    &__currency {
+    &__selected {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        &__arrow {
+            margin-left: 5px;
+            width: 0; 
+            height: 0; 
+            border-left: 4.5px solid transparent;
+            border-right: 4.5px solid transparent;
+            border-top: 5px solid #8da1ad;
+        }
+
+        &__name {
+            @include normal-text;
+            font-family: 'ProximaNova', sans-serif;
+            font-size: 16px;
+            color: #ffffff;
+            margin-left: 10px;
+            margin-left: 10px;
+        }
+     
+        &__icon {
+            width: 22px;
+            height: 22px;
+            display: flex;
+        }
+    }
+
+    &__dropdown {
         @include normal-text;
         font-family: 'ProximaNova', sans-serif;
-        font-size: 16px;
-        color: #ffffff;
-        margin-left: 10px;
-        cursor: default;
+        position: absolute;
+        width: 100px;
+        color: #92abba;
+        margin-top: 40px;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.14);
+        background-color: #003f6f;
+        z-index: 10;
+    
+        &__content {
+            margin: 10px 0;
+        }
+    
+        &__column {
+            padding: 0;
+            margin: 0;
+        }
+    
+        &__item {
+            padding: 5px 10px;
+            list-style-type: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+
+            &__icon {
+                width: 18px;
+                height: 18px;
+            }
+
+            &__name {
+                margin-left: 5px;
+                font-size: 13px;
+            }
+        }
+    
+        &__item:hover {
+            background-color: rgba(255, 255, 255, .07);
+            color: #e4f5ff;;
+        }
+    
+        &__item.active {
+            color: #00f6d2;
+        }
     }
 }
 
@@ -461,7 +537,8 @@
         &__address,
         &__amount,
         &__fee,
-        &__comment {
+        &__comment,
+        &__type {
             padding: 20px;
             border-radius: 10px;
             background-color: rgba(255, 255, 255, 0.05);
@@ -470,6 +547,7 @@
         }
 
         &__amount,
+        &__type,
         &__fee,
         &__comment {
             margin-top: 10px;
@@ -499,6 +577,12 @@
                 flex-direction: column;
                 line-height: .8;
                 width: 100%;
+            }
+        }
+
+        &__type {
+            &__content {
+                display: flex;
             }
         }
     }
@@ -537,6 +621,65 @@
                 }
             }
         }
+    }
+
+    .switch {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        height: 30px;
+        line-height: normal;
+        border-radius: 16px;
+        background-color: rgba(255, 255, 255, 0.1);
+        position: relative;
+        margin-top: 20px;
+    }
+      
+    .switch__regular,
+    .switch__offline {
+        @include normal-text;
+        font-family: 'ProximaNova', sans-serif;
+        cursor: pointer;
+        position: relative;
+        display: block;
+        float: left;
+        -webkit-transition: 300ms ease-in;
+        -moz-transition: 300ms ease-in;
+        transition: 300ms ease-in;
+        padding: 0 3em;
+        opacity: 0.5;
+        font-size: 14px;
+        letter-spacing: normal;
+        color: #ffffff;
+    }
+    
+    .switch__regular.selected,
+    .switch__offline.selected {
+        color: rgba(255, 255, 255, 0);
+    }
+    
+    .selector {
+        @include normal-text;
+        font-family: 'ProximaNova', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        min-width: 80px;
+        box-sizing: border-box;
+        -webkit-transition: 300ms ease-out;
+        -moz-transition: 300ms ease-out;
+        transition: 300ms ease-out;
+        border-radius: 16px;
+        font-size: 14px;
+        font-weight: 600;
+        height: 30px;
+        text-align: center;
+        cursor: default;
+        border: solid 1px #00f6d2;
+        background-color: rgba(0, 252, 207, 0.1);
+        color: #00f6d2;
+        opacity: 1;
     }
 
     .send {

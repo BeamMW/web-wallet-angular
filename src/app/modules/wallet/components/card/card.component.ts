@@ -17,7 +17,6 @@ export class CardComponent implements OnInit {
   @Input() cardData: Asset;
   @ViewChild('card', {static: true}) card: ElementRef;
 
-
   assets$: Observable<any>;
   iconUrl: string;
   assetData: AssetMetadata;
@@ -38,7 +37,10 @@ export class CardComponent implements OnInit {
       .substring(1).match(/.{2}/g).map(x => parseInt(x, 16))
 
   ngOnInit(): void {
-    this.iconUrl = `${environment.assetsPath}/images/modules/wallet/components/card/asset-${this.cardData.asset_id}.svg`;
+    this.iconUrl = 
+      `${environment.assetsPath}/images/modules/wallet/components/card/${
+        this.cardData.asset_id === 0 ? 'icon-beam' : ('asset-' + this.cardData.asset_id)
+      }.svg`;
     this.assets$.subscribe(assets => {
       const asset = assets.find(elem => elem.asset_id === this.cardData.asset_id);
       if (asset) {

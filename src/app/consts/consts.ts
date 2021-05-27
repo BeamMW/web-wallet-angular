@@ -9,6 +9,7 @@ export enum TableTypes {
 export enum globalConsts {
     GROTHS_IN_BEAM = 100000000,
     MIN_FEE_VALUE = 100000,
+    MIN_OFFLINE_FEE_VALUE = 110000,
     MAX_FEE_VALUE = 1000000000,
 }
 
@@ -56,7 +57,7 @@ export enum rpcMethodIdsConsts {
     TX_SEND_ID = 11,
     TX_CANCEL_ID = 15,
     CHANGE_PASSWORD_ID = 16,
-    CALC_CHANGE_ID = 17,
+    CALC_CHANGE_ID = 'calc_change',
     TX_DELETE_ID = 18,
     EXPORT_PAYMENT_PROOF_ID = 25,
     VERIFY_PAYMENT_PROOF_ID = 26,
@@ -81,5 +82,6 @@ export enum assetPropertiesConsts {
 
 export enum transactionTypes {
     regular = 'Regular',
-    maxPrivacy = 'Max Privacy'
+    maxPrivacy = 'Max Privacy',
+    offline = 'Offline'
 }

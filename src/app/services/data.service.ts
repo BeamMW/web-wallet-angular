@@ -368,7 +368,22 @@ export class DataService {
         address : sendData.address,
         comment : sendData.comment &&
           sendData.comment.length > 0 ?
-          sendData.comment : ''
+          sendData.comment : '',
+        asset_id: sendData.asset_id,
+        offline: sendData.offline
+      }
+    }));
+  }
+
+  public calcChange(amount: number, is_push_transaction: boolean, asset_id: number) {
+    this.wasmService.wallet.sendRequest(JSON.stringify({
+      jsonrpc: '2.0',
+      id: rpcMethodIdsConsts.CALC_CHANGE_ID,
+      method: rpcMethodIdsConsts.CALC_CHANGE_ID,
+      params: {
+        amount,
+        is_push_transaction,
+        asset_id
       }
     }));
   }

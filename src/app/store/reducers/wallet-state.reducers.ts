@@ -1,7 +1,7 @@
 import { Action, createReducer, on, State } from '@ngrx/store';
 import * as walletActions from '../actions/wallet.actions';
 import { NumberSymbol } from '@angular/common';
-import { Contact, Asset, AssetInfo } from '@app/models';
+import { Contact, Asset, AssetInfo, CalcChange } from '@app/models';
 
 export interface WalletAppState {
     activated: boolean;
@@ -54,6 +54,7 @@ export interface WalletAppState {
         errorMessage: string
     },
     addressValidation: any;
+    calculatedChange: CalcChange
 }
 
 export const initialWalletAppState: WalletAppState = {
@@ -106,7 +107,12 @@ export const initialWalletAppState: WalletAppState = {
         gotAnError: false,
         errorMessage: ''
     },
-    addressValidation: null
+    addressValidation: null,
+    calculatedChange: {
+        asset_change: 0,
+        change: 0,
+        fee: 100000
+    }
 };
 
 const reducerWalletApp = createReducer(
@@ -147,6 +153,7 @@ const reducerWalletApp = createReducer(
     on(walletActions.addressValidationLoaded, (state, { validationData }) => ({ ...state, addressValidation: validationData })),
     on(walletActions.loadAssetsData, (state, { assets }) => ({ ...state, assetsData: assets })),
     on(walletActions.isWalletLoadedState, (state, { loadState }) => ({ ...state, walletLoading: loadState })),
+    on(walletActions.calculatedChangeState, (state, { changeValue }) => ({ ...state, calculatedChange: changeValue })),
 );
 
 export function reducer(state: WalletAppState | undefined, action: Action) {

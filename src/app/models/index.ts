@@ -6,3 +6,4 @@ export * from './contact.model';
 export * from './asset.model';
 export * from './assetInfo.model';
 export * from './assetMetadata.model';
+export * from './calcChange.model';

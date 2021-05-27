@@ -3,7 +3,8 @@
         <ng-container *ngIf="!componentParams.isFullScreen else fullScreenTemplate">
             <div class="send__header">
                 <div class="back-control-wrapper">
-                    <img class="send__header__back" (click)="backConfirmationClicked()" [src]="iconBack"/>
+                    <img class="send__header__back" (click)="backConfirmationClicked()" 
+                        [src]="componentParams.iconBack"/>
                 </div>
                 <div class="title-wrapper">
                     <div class="send__header__title">SEND</div>
@@ -42,19 +43,6 @@
                     </div>
                 </div>
 
-                <div class="send__container__fee">
-                    <div class="container-header" (click)="feeControlClicked()">
-                        <span>TRANSACTION FEE</span>
-                        <div class="container-header__control">
-                            <img [src]="componentParams.feeExpanded ? componentParams.iconArrowUp :
-                                componentParams.iconArrowDown"/>
-                        </div>
-                    </div>
-                    <div class="send__container__fee__content" *ngIf="componentParams.feeExpanded">
-                        <ng-container *ngTemplateOutlet="feeTemplate"></ng-container>
-                    </div>
-                </div>
-
                 <div class="send__container__bottom">
                     <div class="send__container__bottom__controls">
                         <div class="">
@@ -89,11 +77,20 @@
                         </div>
 
                         <div class="left-row__amount">
-                            <div class="container-header" (click)="amountControlClicked()">
+                            <div class="container-header">
                                 <span>AMOUNT</span>
                             </div>
                             <div class="left-row__amount__content">
                                 <ng-container *ngTemplateOutlet="amountTemplate"></ng-container>
+                            </div>
+                        </div>
+
+                        <div class="left-row__type" *ngIf="componentParams.isTypeVisible">
+                            <div class="container-header">
+                                <span>TRANSACTION TYPE</span>
+                            </div>
+                            <div class="left-row__type__content">
+                                <ng-container *ngTemplateOutlet="typeTemplate"></ng-container>
                             </div>
                         </div>
 
@@ -109,19 +106,6 @@
                                 <ng-container *ngTemplateOutlet="commentTemplate"></ng-container>
                             </div>
                         </div>
-
-                        <div class="left-row__fee">
-                            <div class="container-header expandable" (click)="feeControlClicked()">
-                                <span>TRANSACTION FEE</span>
-                                <div class="container-header__control">
-                                    <img [src]="componentParams.feeExpanded ? componentParams.iconArrowUp :
-                                        componentParams.iconArrowDown"/>
-                                </div>
-                            </div>
-                            <div class="left-row__fee__content" *ngIf="componentParams.feeExpanded">
-                                <ng-container *ngTemplateOutlet="feeTemplate"></ng-container>
-                            </div>
-                        </div>
                     </div>
                     <div class="right-row">
                         <div class="right-row__stats">
@@ -131,18 +115,34 @@
                                     <div class="row-item">Change:</div>
                                     <div class="row-item">Fee:</div>
                                     <div class="row-item">Remaining:</div>
+                                    <div class="row-item" 
+                                        *ngIf="selectedAssetValue.asset_id !== 0">
+                                        BEAM Remaining:
+                                    </div>
                                 </div>
                                 <div class="right-row__stats__content__values" 
                                         [class.incorrect-amount]="!componentParams.isEnoughAmount">
                                 
-                                    <div>{{stats.amountToSend.toFixed()}} BEAM</div>
+                                    <div>
+                                        {{stats.amountToSend.toFixed()}}
+                                        {{selectedAssetValue.metadata.unit_name}}</div>
                                     <div class="rate-row-item">{{stats.amountToSend.toFixed() | rate}}</div>
-                                    <div class="value-row-item">{{stats.change.toFixed()}} BEAM</div>
+                                    <div class="value-row-item">
+                                        {{stats.change.toFixed()}}
+                                        {{selectedAssetValue.metadata.unit_name}}
+                                    </div>
                                     <div class="rate-row-item">{{stats.change.toFixed() | rate}}</div>
                                     <div class="value-row-item">{{stats.fee.toFixed()}} BEAM</div>
                                     <div class="rate-row-item">{{stats.fee.toFixed() | rate}}</div>
-                                    <div class="value-row-item">{{stats.remaining.toFixed()}} BEAM</div>
+                                    <div class="value-row-item">
+                                        {{stats.remaining.toFixed()}}
+                                        {{selectedAssetValue.metadata.unit_name}}
+                                    </div>
                                     <div class="rate-row-item">{{stats.remaining.toFixed() | rate}}</div>
+                                    <ng-container *ngIf="selectedAssetValue.asset_id !== 0">
+                                        <div class="value-row-item">{{stats.beam_remaining.toFixed()}} BEAM</div>
+                                        <div class="rate-row-item">{{stats.beam_remaining.toFixed() | rate}}</div>
+                                    </ng-container>
                                 </div>
                             </div>
                         </div>
@@ -153,7 +153,7 @@
                     <div class="send__container__bottom__controls">
                         <div class="">
                             <app-button [disabled]="!componentParams.isSendDataValid"
-                                    (click)="fullSubmit($event)" 
+                                    (click)="nextClicked($event)" 
                                     class="send__container__bottom__controls__button">
                                 next
                             </app-button>
@@ -166,11 +166,11 @@
     </div>
 
     <ng-template #addressTemplate>
-        <textarea class="address-input" autosize maxlength="1000"
+        <input class="address-input" maxlength="1000"
                 name="address" formControlName="address"
                 placeholder="Paste recipient address here"
                 (input)="addressInputUpdated($event.target.value)"
-                [class.incorrect]="!componentParams.addressValidation"></textarea>
+                [class.incorrect]="!componentParams.addressValidation"/>
         <ng-container *ngIf="addressValidation$ | async as addressValidation">
             <div class="address-type" *ngIf="addressValidation.is_valid">{{componentParams.validationResult}}</div>
             <div class="address-validator" *ngIf="!addressValidation.is_valid">
@@ -179,16 +179,63 @@
         </ng-container>
     </ng-template>
 
+    <ng-template #typeTemplate>
+        <div class="switch">
+            <div #regular class="switch__regular" 
+                [class.selected]="componentParams.switcherSelectedValue === transactionTypes.regular"
+                (click)="switcherClicked($event, transactionTypes.regular)">Regular</div>
+            <div #offline class="switch__offline"
+                [class.selected]="componentParams.switcherSelectedValue === transactionTypes.offline"
+                (click)="switcherClicked($event, transactionTypes.offline)">Offline</div>
+            <div #selector class="selector"
+                [ngStyle]="{'left': componentParams.switcherSelectedValue === transactionTypes.regular ? 
+                    0 + 'px' : regular.clientWidth + 'px',
+                    'width': componentParams.switcherSelectedValue === transactionTypes.regular ?
+                    regular.clientWidth + 'px' : offline.clientWidth + 'px'}">
+                {{componentParams.switcherSelectedValue}}
+            </div>
+        </div>
+    </ng-template>
+
     <ng-template #amountTemplate>
         <div class="amount-form">
             <input class="amount-form__input" 
-                name="amount" formControlName="amount"
-                appNumbersOnly [class.incorrect-amount]="!componentParams.isEnoughAmount"
+                name="amount" formControlName="amount" appNumbersOnly 
+                [class.incorrect-amount]="!componentParams.isEnoughAmount"
                 placeholder="0"/>
-            <div class="amount-currency">
-                <img class="amount-currency__logo" 
+            <div class="asset-selector">
+                <!-- <img class="amount-currency__logo" 
                     *ngIf="componentParams.isFullScreen" [src]="componentParams.iconBeam" />
-                <span class="amount-currency__currency">BEAM</span>
+                <span class="amount-currency__currency">BEAM</span> -->
+                <span class="asset-selector__selected" #selected (click)="currencySelectorClicked($event)">
+                    <img class="asset-selector__selected__icon" 
+                        src="{{ 'assets/images/modules/wallet/components/card/'
+                        +(selectedAssetValue.asset_id === 0 ? 'icon-beam' 
+                        : ('asset-' + selectedAssetValue.asset_id))+'.svg' }}">
+                    <span class="asset-selector__selected__name">
+                        {{selectedAssetValue.metadata.unit_name}}
+                    </span>
+                    <span class="asset-selector__selected__arrow"></span>
+                </span>
+                <div class="asset-selector__dropdown" *ngIf="componentParams.isAssetDropdownVisible" 
+                        appClickOutside (clickOutside)="onClickedOutside($event)">
+                    <div class="asset-selector__dropdown__content">
+                        <ul class="asset-selector__dropdown__column">
+                            <li *ngFor="let item of assets" 
+                                    class="asset-selector__dropdown__item"
+                                    [class.active]="item === selectedAssetValue" 
+                                    (click)="selectAssetItemClicked(item)">
+                                <img class="asset-selector__dropdown__item__icon" 
+                                    src="{{ 'assets/images/modules/wallet/components/card/'
+                                        +(item.asset_id === 0 ? 'icon-beam' 
+                                        : ('asset-' + item.asset_id))+'.svg' }}">
+                                <span class="asset-selector__dropdown__item__name">
+                                    {{item.metadata.unit_name}}
+                                </span> 
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="amount-validator" *ngIf="!componentParams.isEnoughAmount">
@@ -225,20 +272,6 @@
         <input class="comment-input" 
             name="comment" formControlName="comment"
             placeholder="Enter comment"/>
-    </ng-template>
-
-    <ng-template #feeTemplate>
-        <div class="fee">
-            <input class="fee__input" 
-                name="fee" formControlName="fee"
-                appFeeOnly
-                [class.incorrect]="!componentParams.feeIsCorrect"
-                placeholder="Enter fee"/>
-            <span class="container__values__currency">GROTH</span>
-        </div>
-        <div class="fee-input-validator" *ngIf="componentParams.minFeeIsNotCorrect">
-            The minimum fee is 100000 GROTH
-        </div>
     </ng-template>
 </form>
 

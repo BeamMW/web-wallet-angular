@@ -36,7 +36,9 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
     address: '',
     fee: new Big(0),
     comment: '',
-    amount: new Big(0)
+    amount: new Big(0),
+    asset_id: 0,
+    offline: false
   };
 
   public componentData = {
@@ -63,13 +65,16 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
         fee: number,
         amount: number,
         comment: string,
-        isPassCheckEnabled: boolean
+        isPassCheckEnabled: boolean,
+        offline: boolean,
+        asset_id: number
       };
       this.sendData.address = state.address;
-      this.sendData.fee = new Big(state.fee === undefined || state.fee === 0 
-        ? 100000 : state.fee).div(globalConsts.GROTHS_IN_BEAM);
+      this.sendData.fee = state.fee;
       this.sendData.amount = new Big(state.amount);
       this.sendData.comment = state.comment;
+      this.sendData.asset_id = state.asset_id;
+      this.sendData.offline = state.offline;
       //this.isPassCheckEnabled = state.isPassCheckEnabled;
     } catch (e) {}
   }
@@ -97,6 +102,7 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
 
   submit($event) {
     if (!this.componentData.isSendClicked) {
+      this.sendData.amount = parseInt(this.sendData.amount.toFixed(), 10);
       if (this.isPassCheckEnabled) {
         this.walletSub = this.wallet$.subscribe(wallet => {
           passworder.decrypt(this.confirmForm.value.password, wallet).then((result) => {
