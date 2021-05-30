@@ -10,7 +10,12 @@ export class RatePipe implements PipeTransform {
     }
 
     transform(amount: number, args?: any): string {
-        return (new Big(amount ? amount : 0)).
-            times(this.ratesService.data.usd).toFixed() + " USD";
+        if (amount == 0) {
+            return '0 USD';
+        } else if (amount > 0.01) {
+            return new Big(amount).times(this.ratesService.data.usd).toFixed(2) + ' USD';
+        } else {
+            return '< 1 cent';
+        }
     }
 }

@@ -124,24 +124,26 @@
                                         [class.incorrect-amount]="!componentParams.isEnoughAmount">
                                 
                                     <div>
-                                        {{stats.amountToSend.toFixed()}}
+                                        {{values.amountToSend}}
                                         {{selectedAssetValue.metadata.unit_name}}</div>
-                                    <div class="rate-row-item">{{stats.amountToSend.toFixed() | rate}}</div>
+                                    <div class="rate-row-item">{{values.amountToSend | rate}}</div>
                                     <div class="value-row-item">
-                                        {{stats.change.toFixed()}}
+                                        {{selectedAssetValue.asset_id == 0 ? values.change : values.asset_change}}
                                         {{selectedAssetValue.metadata.unit_name}}
                                     </div>
-                                    <div class="rate-row-item">{{stats.change.toFixed() | rate}}</div>
-                                    <div class="value-row-item">{{stats.fee.toFixed()}} BEAM</div>
-                                    <div class="rate-row-item">{{stats.fee.toFixed() | rate}}</div>
+                                    <div class="rate-row-item">
+                                        {{(selectedAssetValue.asset_id == 0 ? values.change : values.asset_change) | rate}}
+                                    </div>
+                                    <div class="value-row-item">{{values.fee}} BEAM</div>
+                                    <div class="rate-row-item">{{values.fee | rate}}</div>
                                     <div class="value-row-item">
-                                        {{stats.remaining.toFixed()}}
+                                        {{values.remaining}}
                                         {{selectedAssetValue.metadata.unit_name}}
                                     </div>
-                                    <div class="rate-row-item">{{stats.remaining.toFixed() | rate}}</div>
+                                    <div class="rate-row-item">{{values.remaining | rate}}</div>
                                     <ng-container *ngIf="selectedAssetValue.asset_id !== 0">
-                                        <div class="value-row-item">{{stats.beam_remaining.toFixed()}} BEAM</div>
-                                        <div class="rate-row-item">{{stats.beam_remaining.toFixed() | rate}}</div>
+                                        <div class="value-row-item">{{values.beam_remaining}} BEAM</div>
+                                        <div class="rate-row-item">{{values.beam_remaining | rate}}</div>
                                     </ng-container>
                                 </div>
                             </div>
@@ -204,9 +206,6 @@
                 [class.incorrect-amount]="!componentParams.isEnoughAmount"
                 placeholder="0"/>
             <div class="asset-selector">
-                <!-- <img class="amount-currency__logo" 
-                    *ngIf="componentParams.isFullScreen" [src]="componentParams.iconBeam" />
-                <span class="amount-currency__currency">BEAM</span> -->
                 <span class="asset-selector__selected" #selected (click)="currencySelectorClicked($event)">
                     <img class="asset-selector__selected__icon" 
                         src="{{ 'assets/images/modules/wallet/components/card/'
@@ -239,20 +238,20 @@
             </div>
         </div>
         <div class="amount-validator" *ngIf="!componentParams.isEnoughAmount">
-            Insufficient funds: you would need {{componentParams.notEnoughtValue.toFixed()}} 
-            BEAM to complete the transaction
+            Insufficient funds: you would need {{componentParams.notEnoughtValue}} 
+            {{selectedAssetValue.metadata.unit_name}} to complete the transaction
         </div>
         <div class="amount-rate" *ngIf="componentParams.isEnoughAmount">
-            {{stats.amountToSend.toFixed() | rate}}
+            {{values.amountToSend | rate}}
         </div>
-        <div class="amount-available" *ngIf="walletStatus$ | async as walletStatus">
-            <ng-container *ngIf="walletStatus.available > 0">
+        <div class="amount-available" *ngIf="selectedAssetStatus.available > 0">
+            <ng-container >
                 <span class="amount-available__title">
                     AVAILABLE
                 </span>
                 <div class="total">
                     <div class="total__value">
-                        {{walletStatus.available | beam:'1.0-9'}} BEAM
+                        {{selectedAssetStatus.available | beam:'1.0-9'}} BEAM
                     </div>
                     <div class="total__add-all" (click)="addAllClicked($event)">
                         <img [src]="componentParams.iconButtonArrowUp">
@@ -262,7 +261,7 @@
                     </div>
                 </div>
                 <div class="total-rate">
-                    {{(walletStatus.available | beam:'1.0-9') | rate}}
+                    {{(selectedAssetStatus.available | beam:'1.0-9') | rate}}
                 </div>
             </ng-container>
         </div>

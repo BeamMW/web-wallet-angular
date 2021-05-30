@@ -38,10 +38,10 @@
                         TRANSACTION FEE
                     </div>
                     <div class="confirm__container__line__fee__value">
-                        {{sendData.fee.toFixed()}} BEAM
+                        {{feeString}} BEAM
                     </div>
                 </div>
-                <div class="rate-value">{{sendData.fee.toFixed() | rate}}</div>
+                <div class="rate-value">{{feeString | rate}}</div>
             </div>
             <div class="confirm__container__prompt">
                 <p>For the transaction to complete, the recipient must get online</p>
