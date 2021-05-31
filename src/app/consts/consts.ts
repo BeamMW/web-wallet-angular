@@ -52,7 +52,7 @@ export enum rpcMethodIdsConsts {
     TX_LIST_ID = 6,
     GET_UTXO_ID = 7,
     ADDR_LIST_ID = 8,
-    CREATE_ADDRESS_ID = 9,
+    CREATE_ADDRESS_ID = 'create_address',
     WALLET_STATUS_ID = 'wallet_status',
     TX_SEND_ID = 11,
     TX_CANCEL_ID = 15,

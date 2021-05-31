@@ -113,6 +113,8 @@ export class WalletEffects {
               change: parsedResponse.result.change,
               fee: parsedResponse.result.explicit_fee
             }}));
+          } else if (parsedResponse.id === rpcMethodIdsConsts.CREATE_ADDRESS_ID) {
+          
           }
         });
       })

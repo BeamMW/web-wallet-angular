@@ -8,6 +8,9 @@ import { Store, select } from '@ngrx/store';
 import { saveReceiveData } from '@app/store/actions/wallet.actions';
 import { globalConsts, transactionTypes, rpcMethodIdsConsts, routes } from '@consts';
 import { ClipboardService } from 'ngx-clipboard'
+import {
+  selectAssetsInfo
+} from '@app/store/selectors/wallet-state.selectors';
 
 @Component({
   selector: 'app-receive',
@@ -24,6 +27,9 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   public transactionTypes = transactionTypes;
   public ratesData: any;
 
+  private subscriptions: Subscription[] = [];
+  private assetsData$: Observable<any>;
+  
   public componentParams = {
     iconBack: `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`,
     iconBeam: `${environment.assetsPath}/images/modules/receive/containers/receive/icon-beam.svg`,
@@ -44,7 +50,20 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     qrCode: '',
     amountExpanded: true,
     commentExpanded: false,
-    amount: 0
+    amount: 0,
+    isAssetDropdownVisible: false,
+  }
+
+  public assets = [];
+  public selectedAssetValue = {
+    asset_id: 0
+  };
+
+  private DEFAULT_ASSET = {
+    asset_id: 0,
+    metadata: {
+      unit_name: 'BEAM'
+    }
   }
 
   constructor(private store: Store<any>,
@@ -60,9 +79,19 @@ export class ReceiveComponent implements OnInit, OnDestroy {
       comment: new FormControl()
     });
 
-    this.popupSub = dataService.changeEmitted$.subscribe(emittedState => {
+    this.subscriptions.push(dataService.changeEmitted$.subscribe(emittedState => {
       this.componentParams.popupOpened = emittedState;
-    });
+    }));
+
+    this.assets.push(this.DEFAULT_ASSET);
+    this.selectedAssetValue = this.DEFAULT_ASSET;
+
+    this.assetsData$ = this.store.pipe(select(selectAssetsInfo));
+    this.subscriptions.push(this.assetsData$.subscribe(value => {
+      this.assets = [];
+      this.assets.push(this.DEFAULT_ASSET)
+      this.assets.push(...value);
+    }));
   }
 
   ngOnInit() {
@@ -70,21 +99,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.sub !== undefined) {
-      this.sub.unsubscribe();
-    }
-
-    if (this.popupSub !== undefined) {
-      this.popupSub.unsubscribe();
-    }
-
-    if (this.serviceSub !== undefined) {
-      this.serviceSub.unsubscribe();
-    }
-
-    if (this.addrSub !== undefined) {
-      this.addrSub.unsubscribe();
-    }
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   public backClicked(event) {
@@ -102,9 +117,6 @@ export class ReceiveComponent implements OnInit, OnDestroy {
       const respone = JSON.parse(r);
       
       if (respone.id === rpcMethodIdsConsts.CREATE_ADDRESS_ID) {
-        //this.serviceSub.unsubscribe();
-        //this.dataService.addressesUpdate();
-        //this.dataService.startInterval();
         this.componentParams.generatedAddress = respone.result;
         this.updateQr();
         // const address$ = this.store.pipe(select(selectAddress(respone.result)));
@@ -118,19 +130,8 @@ export class ReceiveComponent implements OnInit, OnDestroy {
       }
     });
 
-    //this.dataService.stopInterval();
-    this.wasmService.wallet.sendRequest(JSON.stringify({
-      jsonrpc: '2.0',
-      id: rpcMethodIdsConsts.CREATE_ADDRESS_ID,
-      method: 'create_address',
-      params:
-      {
-          assets: true,
-          type: 'regular_new',
-          expiration : 'auto',
-          comment : ''
-      }
-    }));
+    this.dataService.createAddress('regular_new', 'auto', 
+      this.receiveForm.value.comment ? this.receiveForm.value.comment : '');
   }
 
   amountUpdated(control: FormControl) {
@@ -185,7 +186,17 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     return convertedStr;
   }
 
-  public addressDetailsClicked() {
+  public currencySelectorClicked($event: Event) {
+    $event.stopPropagation();
+    this.componentParams.isAssetDropdownVisible = !this.componentParams.isAssetDropdownVisible;
+  }
 
+  public onClickedOutside(element) {
+    this.componentParams.isAssetDropdownVisible = false;
+  }
+
+  public selectAssetItemClicked(value) {
+    this.selectedAssetValue = value;
+    this.componentParams.isAssetDropdownVisible = false;
   }
 }

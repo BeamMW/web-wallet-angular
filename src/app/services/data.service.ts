@@ -439,7 +439,20 @@ export class DataService {
     }));
   }
 
-
+  public createAddress(type: string, expiration: string, comment: string) {
+    this.wasmService.wallet.sendRequest(JSON.stringify({
+      jsonrpc: '2.0',
+      id: rpcMethodIdsConsts.CREATE_ADDRESS_ID,
+      method: rpcMethodIdsConsts.CREATE_ADDRESS_ID,
+      params:
+      {
+          assets: true,
+          type, //'regular_new',
+          expiration, //: 'auto',
+          comment
+      }
+    }));
+  }
 
   public getAssetMetadata(data: string) {
     let metadata: AssetMetadata = {

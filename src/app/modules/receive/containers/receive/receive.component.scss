@@ -431,15 +431,16 @@
             &__content {
                 margin-top: 20px ;
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
                 align-items: center;
+                align-content: center;
               
                 &__qr {
                     display: flex;
                 }
 
                 &__address {
-                    margin-left: 20px;
+                    margin-top: 20px;
 
                     &__value {
                         @include normal-text;
@@ -516,6 +517,91 @@
                     text-align: center;
                     color: #ffffff;
                 }
+            }
+        }
+    }
+
+    .asset-selector {
+        display: flex;
+        justify-content: flex-end;
+        margin-left: 10px;
+    
+        &__selected {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+    
+            &__arrow {
+                margin-left: 5px;
+                width: 0; 
+                height: 0; 
+                border-left: 4.5px solid transparent;
+                border-right: 4.5px solid transparent;
+                border-top: 5px solid #8da1ad;
+            }
+    
+            &__name {
+                @include normal-text;
+                font-family: 'ProximaNova', sans-serif;
+                font-size: 16px;
+                color: #ffffff;
+                margin-left: 10px;
+                margin-left: 10px;
+            }
+         
+            &__icon {
+                width: 22px;
+                height: 22px;
+                display: flex;
+            }
+        }
+    
+        &__dropdown {
+            @include normal-text;
+            font-family: 'ProximaNova', sans-serif;
+            position: absolute;
+            width: 100px;
+            color: #92abba;
+            margin-top: 40px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.14);
+            background-color: #003f6f;
+            z-index: 10;
+        
+            &__content {
+                margin: 10px 0;
+            }
+        
+            &__column {
+                padding: 0;
+                margin: 0;
+            }
+        
+            &__item {
+                padding: 5px 10px;
+                list-style-type: none;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+    
+                &__icon {
+                    width: 18px;
+                    height: 18px;
+                }
+    
+                &__name {
+                    margin-left: 5px;
+                    font-size: 13px;
+                }
+            }
+        
+            &__item:hover {
+                background-color: rgba(255, 255, 255, .07);
+                color: #e4f5ff;;
+            }
+        
+            &__item.active {
+                color: #00f6d2;
             }
         }
     }

@@ -32,7 +32,6 @@ import Big from 'big.js';
   styleUrls: ['./send-addresses.component.scss']
 })
 export class SendAddressesComponent implements OnInit, OnDestroy {
-  
   @ViewChild('selected', {static: true}) selected: ElementRef;
   private addressTypes = {
     'regular': {
@@ -135,6 +134,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
     this.componentParams.isFullScreen = windowService.isFullSize();
     this.componentParams.switcherSelectedValue = transactionTypes.regular;
+    
     this.passwordCheckSetting$ = this.store.pipe(select(selectPasswordCheckSetting));
     this.passwordCheckSetting$.subscribe(settingValue => {
       this.isPassCheckEnabled = settingValue;
@@ -294,6 +294,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach(s => s.unsubscribe());
+    
     this.store.dispatch(addressValidationLoaded({validationData: null}));
     this.store.dispatch(calculatedChangeState({changeValue: {
       asset_change: 0,

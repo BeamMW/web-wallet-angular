@@ -97,10 +97,38 @@
                                         appNumbersOnly name="amount" 
                                         formControlName="amount" 
                                         placeholder="0"/>
-                                <div class="amount-currency">
-                                    <img class="amount-currency__logo" [src]="componentParams.iconBeam" />
-                                    <span class="amount-currency__currency">BEAM</span>
-                                </div>
+                                        <div class="asset-selector">
+                                            <span class="asset-selector__selected" 
+                                                #selected (click)="currencySelectorClicked($event)">
+                                                <img class="asset-selector__selected__icon" 
+                                                    src="{{ 'assets/images/modules/wallet/components/card/'
+                                                    +(selectedAssetValue.asset_id === 0 ? 'icon-beam' 
+                                                    : ('asset-' + selectedAssetValue.asset_id))+'.svg' }}">
+                                                <span class="asset-selector__selected__name">
+                                                    {{selectedAssetValue.metadata.unit_name}}
+                                                </span>
+                                                <span class="asset-selector__selected__arrow"></span>
+                                            </span>
+                                            <div class="asset-selector__dropdown" *ngIf="componentParams.isAssetDropdownVisible" 
+                                                    appClickOutside (clickOutside)="onClickedOutside($event)">
+                                                <div class="asset-selector__dropdown__content">
+                                                    <ul class="asset-selector__dropdown__column">
+                                                        <li *ngFor="let item of assets" 
+                                                                class="asset-selector__dropdown__item"
+                                                                [class.active]="item === selectedAssetValue" 
+                                                                (click)="selectAssetItemClicked(item)">
+                                                            <img class="asset-selector__dropdown__item__icon" 
+                                                                src="{{ 'assets/images/modules/wallet/components/card/'
+                                                                    +(item.asset_id === 0 ? 'icon-beam' 
+                                                                    : ('asset-' + item.asset_id))+'.svg' }}">
+                                                            <span class="asset-selector__dropdown__item__name">
+                                                                {{item.metadata.unit_name}}
+                                                            </span> 
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
                             </div>
                             <div class="left-row__amount__subcontent">
                                 {{componentParams.amount | rate}}
@@ -128,12 +156,12 @@
                 <div class="right-row">
                     <div class="right-row__address">
                         <div class="container-header">
-                            <span>NEW ADDRESS</span>
+                            <span>ADDRESS</span>
                         </div>
                         <div class="right-row__address__content" *ngIf="componentParams.qrCode.length > 0">
                             <qrcode class="right-row__address__content__qr" 
                                 [qrdata]="componentParams.qrCode" 
-                                [width]="150" [errorCorrectionLevel]="'M'"></qrcode>
+                                [width]="210" [errorCorrectionLevel]="'M'"></qrcode>
                             <div class="right-row__address__content__address">
                                 <span class="right-row__address__content__address__value">
                                     {{truncStringPortion(componentParams.generatedAddress, 12, 12, 3)}}
