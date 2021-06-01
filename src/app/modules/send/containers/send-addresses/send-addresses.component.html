@@ -134,8 +134,8 @@
                                     <div class="rate-row-item">
                                         {{(selectedAssetValue.asset_id == 0 ? values.change : values.asset_change) | rate}}
                                     </div>
-                                    <div class="value-row-item">{{values.fee}} BEAM</div>
-                                    <div class="rate-row-item">{{values.fee | rate}}</div>
+                                    <div class="value-row-item">{{values.fee_formatted}} BEAM</div>
+                                    <div class="rate-row-item">{{values.fee_formatted | rate}}</div>
                                     <div class="value-row-item">
                                         {{values.remaining}}
                                         {{selectedAssetValue.metadata.unit_name}}

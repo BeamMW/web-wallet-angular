@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { PreloadAllModules } from '@angular/router';
 
 const routes: Routes = [
   { path: '', redirectTo: 'wallet/login', pathMatch: 'full'},
@@ -33,7 +34,8 @@ const routes: Routes = [
     initialNavigation: 'enabled',
     paramsInheritanceStrategy: 'always',
     useHash: true,
-    relativeLinkResolution: 'legacy'
+    relativeLinkResolution: 'legacy',
+    preloadingStrategy: PreloadAllModules
 })],
   exports: [RouterModule]
 })

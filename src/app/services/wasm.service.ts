@@ -79,11 +79,13 @@ export class WasmService {
   }
 
   public stopWallet() {
-    this.wallet.stopWallet((data) => {
-      console.log("is running: " + this.wallet.isRunning())
-      console.log('wallet stopped:', data);
-      //this.deleteWalletDB();
-    });
+    if (this.wallet !== undefined) {
+      this.wallet.stopWallet((data) => {
+        console.log("is running: " + this.wallet.isRunning())
+        console.log('wallet stopped:', data);
+        this.deleteWalletDB();
+      });
+    }
   }
 
   private startWallet(pass: string) {

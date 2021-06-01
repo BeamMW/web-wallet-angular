@@ -121,7 +121,8 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     asset_change: 0,
     remaining: 0,
     fee: 0,
-    beam_remaining: 0
+    beam_remaining: 0,
+    fee_formatted: ''
   };
 
   constructor(private dataService: DataService,
@@ -196,7 +197,8 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
             (this.selectedAssetStatus.available - changeValue.fee) : this.selectedAssetStatus.available)
             .minus(this.values.amountToSend)).toFixed(),
           beam_remaining: this.calcFromAssetValue(this.globalStatus.totals[0].available - changeValue.fee).toFixed(),
-          fee: changeValue.fee
+          fee: changeValue.fee,
+          fee_formatted: this.calcFromAssetValue(changeValue.fee).toFixed()
         });
         
         const amountInBig = new Big(this.values.amountToSend);
@@ -294,7 +296,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach(s => s.unsubscribe());
-    
+
     this.store.dispatch(addressValidationLoaded({validationData: null}));
     this.store.dispatch(calculatedChangeState({changeValue: {
       asset_change: 0,
