@@ -241,7 +241,7 @@
             Insufficient funds: you would need {{componentParams.notEnoughtValue}} 
             {{selectedAssetValue.metadata.unit_name}} to complete the transaction
         </div>
-        <div class="amount-rate" *ngIf="componentParams.isEnoughAmount">
+        <div class="amount-rate" *ngIf="selectedAssetStatus.asset_id === 0 && componentParams.isEnoughAmount">
             {{values.amountToSend | rate}}
         </div>
         <div class="amount-available" *ngIf="selectedAssetStatus.available > 0">
@@ -251,7 +251,7 @@
                 </span>
                 <div class="total">
                     <div class="total__value">
-                        {{selectedAssetStatus.available | beam:'1.0-9'}} BEAM
+                        {{selectedAssetStatus.available | beam:'1.0-9'}} {{selectedAssetValue.metadata.unit_name}}
                     </div>
                     <div class="total__add-all" (click)="addAllClicked($event)">
                         <img [src]="componentParams.iconButtonArrowUp">
@@ -260,7 +260,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="total-rate">
+                <div class="total-rate" *ngIf="selectedAssetStatus.asset_id === 0">
                     {{(selectedAssetStatus.available | beam:'1.0-9') | rate}}
                 </div>
             </ng-container>

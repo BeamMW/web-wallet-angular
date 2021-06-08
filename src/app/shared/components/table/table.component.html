@@ -1,38 +1,45 @@
 <div class="example-container">
     <mat-table #table [dataSource]="dataSource">
       <!-- transactions table -->
+      
+      <ng-container matColumnDef="coin">
+        <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.amount"
+            (click)="sortClicked(sortParams.amount)"> 
+          <span>Coin</span>
+          <img class="sort-icon" [src]="activeSortItem === sortParams.amount ? icons.iconSortActive : icons.iconSort">
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="coin-cell">
+            <ng-container *ngIf="!privacy">
+              <img class="asset-icon" [src]="element.metadata.icon_path">
+              <div class="asset-value">
+                <div class="asset-value__in-asset">
+                  {{getValueSign(element)+(element.value | beam:'1.0-9') + ' ' + element.metadata.unit_name}}
+                </div>
+                <div class="asset-value__in-curr" *ngIf="element.asset_id === 0">
+                  {{(element.value / 100000000) | rate}}
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="privacy">
+              <img [src]="icons.iconEnabledPrivacy">
+            </ng-container>
+        </mat-cell>
+      </ng-container>
+      
       <ng-container matColumnDef="created">
         <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.created"
             (click)="sortClicked(sortParams.created)">
           <span>Created on</span>
-          <img class="sort-icon" [src]="activeSortItem === sortParams.created ? iconSortActive : iconSort">
+          <img class="sort-icon" [src]="activeSortItem === sortParams.created ? icons.iconSortActive : icons.iconSort">
         </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{ element.create_time * 1000 | date:'d MMM y | HH:mm'}} </mat-cell>
-      </ng-container>
-  
-      <ng-container matColumnDef="from">
-        <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.from"
-            (click)="sortClicked(sortParams.from)">
-          <span>From</span> 
-          <img class="sort-icon" [src]="activeSortItem === sortParams.from ? iconSortActive : iconSort">
-        </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{(element.sender | slice:0:6)+'...'+(element.sender | slice:-6)}} </mat-cell>
-      </ng-container>
-  
-      <ng-container matColumnDef="to">
-        <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.to"
-            (click)="sortClicked(sortParams.to)"> 
-          <span>To</span>
-          <img class="sort-icon" [src]="activeSortItem === sortParams.to ? iconSortActive : iconSort">
-        </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{(element.receiver | slice:0:6)+'...'+(element.receiver | slice:-6)}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="amount">
         <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.amount"
             (click)="sortClicked(sortParams.amount)"> 
           <span>Amount</span>
-          <img class="sort-icon" [src]="activeSortItem === sortParams.amount ? iconSortActive : iconSort">
+          <img class="sort-icon" [src]="activeSortItem === sortParams.amount ? icons.SortActive : icons.iconSort">
         </mat-header-cell>
         <mat-cell *matCellDef="let element" class="amount-cell" appStatusColor [appStatusColorTransaction]="element">
             <ng-container *ngIf="!privacy">
@@ -40,7 +47,7 @@
               {{ element.value | beam:'1.0-9'}} BEAM
             </ng-container>
             <ng-container *ngIf="privacy">
-              <img [src]="iconEnabledPrivacy">
+              <img [src]="icons.iconEnabledPrivacy">
             </ng-container>
         </mat-cell>
       </ng-container>
@@ -50,7 +57,7 @@
         <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.name"
         (click)="sortClicked(sortParams.name)"> 
           Name
-          <img class="sort-icon" [src]="activeSortItem === sortParams.name ? iconSortActive : iconSort">
+          <img class="sort-icon" [src]="activeSortItem === sortParams.name ? icons.iconSortActive : icons.iconSort">
         </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{element.comment.length > 0 ? element.comment : 'No name'}} </mat-cell>
       </ng-container>
@@ -59,7 +66,7 @@
         <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.address"
           (click)="sortClicked(sortParams.address)"> 
           Address
-          <img class="sort-icon" [src]="activeSortItem === sortParams.address ? iconSortActive : iconSort">
+          <img class="sort-icon" [src]="activeSortItem === sortParams.address ? icons.iconSortActive : icons.iconSort">
         </mat-header-cell>
         <mat-cell *matCellDef="let element" class="address-cell"> 
           <div tooltip="Copy address to clipboard" tooltip-class="copy-tooltip" 
@@ -75,7 +82,7 @@
         <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.exp_date"
           (click)="sortClicked(sortParams.exp_date)">
           Expiration date
-          <img class="sort-icon" [src]="activeSortItem === sortParams.exp_date ? iconSortActive : iconSort">
+          <img class="sort-icon" [src]="activeSortItem === sortParams.exp_date ? icons.iconSortActive : icons.iconSort">
         </mat-header-cell>
         <mat-cell *matCellDef="let element">  {{ element.create_time * 1000 | date:'d MMM y | HH:mm'}}  </mat-cell>
       </ng-container>
@@ -84,11 +91,11 @@
         <mat-header-cell *matHeaderCellDef [class.active]="activeSortItem === sortParams.status"
             (click)="sortClicked(sortParams.status)"> 
           <span>Status</span>
-          <img class="sort-icon" [src]="activeSortItem === sortParams.status ? iconSortActive : iconSort">
+          <img class="sort-icon" [src]="activeSortItem === sortParams.status ? icons.iconSortActive : icons.iconSort">
         </mat-header-cell>
         <mat-cell class="status-cell" appStatusColor [appStatusColorTransaction]="element" *matCellDef="let element">
           <app-status-icon [transaction]="element"></app-status-icon>
-          <span class="status-cell__value">{{ getStatus(element) }}</span>
+          <span class="status-cell__value">{{ element.status_string }}</span>
         </mat-cell>
       </ng-container>
 
@@ -98,7 +105,7 @@
                         [class.active]="activeSortItem === sortParams.contactName"
                         (click)="sortClicked(sortParams.contactName)"> 
           Name 
-          <img class="sort-icon" [src]="activeSortItem === sortParams.contactName ? iconSortActive : iconSort">
+          <img class="sort-icon" [src]="activeSortItem === sortParams.contactName ? icons.iconSortActive : icons.iconSort">
         </mat-header-cell>
         <mat-cell class="status-cell" *matCellDef="let element"> {{element.name}} </mat-cell>
       </ng-container>
@@ -109,7 +116,7 @@
                         [class.active]="activeSortItem === sortParams.status"
                         (click)="sortClicked(sortParams.status)"> 
           Status 
-          <img class="sort-icon" [src]="activeSortItem === sortParams.status ? iconSortActive : iconSort">
+          <img class="sort-icon" [src]="activeSortItem === sortParams.status ? icons.iconSortActive : icons.iconSort">
         </mat-header-cell>
         <mat-cell class="status-cell" *matCellDef="let element"> {{element.status_string}} </mat-cell>
       </ng-container>
@@ -119,7 +126,7 @@
                         [class.active]="activeSortItem === sortParams.maturity"
                         (click)="sortClicked(sortParams.maturity)">
           Maturity 
-          <img class="sort-icon" [src]="activeSortItem === sortParams.maturity ? iconSortActive : iconSort">
+          <img class="sort-icon" [src]="activeSortItem === sortParams.maturity ? icons.iconSortActive : icons.iconSort">
         </mat-header-cell>
         <mat-cell class="utxo-cell" *matCellDef="let element">
           {{element.status_string === utxoStatusesConsts.INCOMING || 
@@ -132,7 +139,7 @@
                         [class.active]="activeSortItem === sortParams.utxo_amount"
                         (click)="sortClicked(sortParams.utxo_amount)">
           Amount 
-          <img class="sort-icon" [src]="activeSortItem === sortParams.utxo_amount ? iconSortActive : iconSort">
+          <img class="sort-icon" [src]="activeSortItem === sortParams.utxo_amount ? icons.iconSortActive : icons.iconSort">
         </mat-header-cell>
         <mat-cell class="utxo-cell" *matCellDef="let element"> {{ element.amount | beam:'1.0-9'}} BEAM </mat-cell>
       </ng-container>
@@ -142,7 +149,7 @@
                         [class.active]="activeSortItem === sortParams.utxo_type"
                         (click)="sortClicked(sortParams.utxo_type)">
           Type
-          <img class="sort-icon" [src]="activeSortItem === sortParams.utxo_type ? iconSortActive : iconSort">
+          <img class="sort-icon" [src]="activeSortItem === sortParams.utxo_type ? icons.iconSortActive : icons.iconSort">
         </mat-header-cell>
         <mat-cell class="utxo-cell" *matCellDef="let element">
           {{element.type === 'norm' ? 'regular' : 'change'}}
@@ -173,26 +180,26 @@
                   <div class="tr-details__info__header">DETAILS</div>
                   <div class="details-title">DATE</div>
                   <div class="details-value">{{detail.element.create_time * 1000 | date:'d MMM y | HH:mm'}}</div>
-                  <ng-container *ngIf="detail.element.token !== undefined && detail.element.token.length > 0">
-                    <div class="details-title">ADDRESS</div>
-                    <div class="details-value">{{detail.element.token}}</div>
+                  <ng-container *ngIf="detail.element.sender">
+                    <div class="details-title">SENDING ADDRESS</div>
+                    <div class="details-value">{{detail.element.sender}}</div>
                   </ng-container>
-                  <div class="details-title">SENDING ADDRESS</div>
+                  <div class="details-title">SENDER IDENTITY</div>
+                  <div class="details-value">{{detail.element.sender_identity}}</div>
+                  <div class="details-title">RECEIVING ADDRESS</div>
                   <!-- <ng-container *ngIf="contact$ | async as contact">
-                    <div class="details-contact" *ngIf="detail.element.income">
-                      <img [src]="contactIcon" class="details-contact__icon">
+                    <div class="details-contact" *ngIf="!detail.element.income">
+                      <img [src]="icons.contactIcon" class="details-contact__icon">
                       <div class="details-contact__name">{{contact.name}}</div>
                     </div>
                   </ng-container> -->
-                  <div class="details-value">{{detail.element.sender}}</div>
-                  <div class="details-title">RECEIVING ADDRESS</div>
-                  <ng-container *ngIf="contact$ | async as contact">
-                    <div class="details-contact" *ngIf="!detail.element.income">
-                      <img [src]="contactIcon" class="details-contact__icon">
-                      <div class="details-contact__name">{{contact.name}}</div>
-                    </div>
-                  </ng-container>
                   <div class="details-value">{{detail.element.receiver}}</div>
+                  <div class="details-title">RECEIVER IDENTITY</div>
+                  <div class="details-value">{{detail.element.receiver_identity}}</div>
+                  <ng-container *ngIf="detail.element.confirmations">
+                    <div class="details-title">CONFIRMATIONS</div>
+                    <div class="details-value">{{detail.element.confirmations}}</div>
+                  </ng-container>
                   <div class="details-title">TRANSACTION FEE</div>
                   <div class="details-value">{{detail.element.fee}} GROTH</div>
                   <ng-container *ngIf="detail.element.comment !== undefined && detail.element.comment.length > 0">
@@ -201,21 +208,23 @@
                   </ng-container>
                   <div class="details-title">TRANSACTION ID</div>
                   <div class="details-value">{{detail.element.txId}}</div>
-                  <div class="details-title">KERNEL ID</div>
-                  <div class="details-value">{{detail.element.kernel}}</div>
+                  <ng-container *ngIf="detail.element.kernel">
+                    <div class="details-title">KERNEL ID</div>
+                    <div class="details-value">{{detail.element.kernel}}</div>
+                  </ng-container>
                 </div>
                 <div class="tr-details__specs" *ngIf="detail.element.status_string === 'sent'">
                   <div class="tr-details__specs__utxo" *ngIf="!privacy">
                     <div class="tr-details__specs__utxo__header" (click)='utxoListHeaderClicked($event)'>
                       <span>TRANSACTION UTXO LIST</span>
                       <img class="tr-details__specs__utxo__header__icon" 
-                        [class.list-visible]="!isUtxoListVisible" [src]="arrowIcon">
+                        [class.list-visible]="!isUtxoListVisible" [src]="icons.arrowIcon">
                     </div>
                     <ng-container *ngIf="isUtxoListVisible">
                       <div class="tr-details__specs__utxo__list" *ngIf="utxoList$ | async as utxoList">
                         <div *ngFor="let item of utxoList">
                           <div class="tr-details__specs__utxo__list__item">
-                            <img [src]="item.status_string === 'spent' ? sentIcon : receivedIcon">
+                            <img [src]="item.status_string === 'spent' ? icons.sentIcon : icons.receivedIcon">
                             <span class="tr-details__specs__utxo__list__item__value"> 
                               {{ item.amount | beam:'1.0-9'}} BEAM
                             </span>

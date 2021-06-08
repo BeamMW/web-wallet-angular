@@ -35,16 +35,16 @@ export class TransactionElementComponent implements OnInit {
 
   getStatus(item) {
     let status = item.status_string;
-    if (item.status_string === transactionsStatuses.SELF_SENDING) {
-      status = transactionsStatuses.SENDING_TO_OWN_ADDRESS;
-    } else if (item.status_string === transactionsStatuses.COMPLETED) {
+    // if (item.status_string === transactionsStatuses.SELF_SENDING) {
+    //   status = transactionsStatuses.SENDING_TO_OWN_ADDRESS;
+    // } else if (item.status_string === transactionsStatuses.COMPLETED) {
       //const address$ = this.store.pipe(select(selectAddress(item.receiver)));
       // address$.subscribe(val => {
       //   if (val !== undefined && val.own) {
       //     status = transactionsStatuses.SENT_TO_OWN_ADDRESS;
       //   }
       // });
-    }
+   // }
 
     return status;
   }

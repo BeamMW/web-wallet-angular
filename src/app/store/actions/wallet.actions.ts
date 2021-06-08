@@ -10,7 +10,6 @@ export const calculatedChangeState = createAction('[Wallet state] Set calculated
     props<{ changeValue: CalcChange }>());
 
 export const isWalletLoadedState = createAction('[Wallet state] Wallet loading update', props<{ loadState: boolean }>());
-//лоадер через два экшена и эффект!!!!!
 
 export const loadAddresses = createAction('[Addresses] Load Addresses', props<{ addresses: Address[] }>());
 export const loadAddressValidation = createAction('[Addresses] Load validation', props<{ address: string }>());

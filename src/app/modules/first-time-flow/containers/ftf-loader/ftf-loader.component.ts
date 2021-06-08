@@ -1,14 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '@environment';
-import { WindowService, DataService, WasmService } from '@app/services';
+import { WindowService, DataService } from '@app/services';
 import { routes } from '@consts';
 import * as passworder from 'browser-passworder';
 import { Store, select } from '@ngrx/store';
 import {
   selectWasmState,
-  selectError,
   selectWalletLoadState
 } from '@app/store/selectors/wallet-state.selectors';
 
@@ -34,7 +33,6 @@ export class FtfLoaderComponent implements OnInit, OnDestroy {
 
   constructor(public router: Router,
               private store: Store<any>,
-              private wasmService: WasmService,
               private dataService: DataService,
               private windowService: WindowService) {
     this.isFullScreen = windowService.isFullSize();
@@ -69,11 +67,8 @@ export class FtfLoaderComponent implements OnInit, OnDestroy {
           passworder.encrypt(this.componentSettings.pass, {
             seed: this.componentSettings.seed
           })
-          .then((result) => {
-            this.dataService.saveWallet(result);
-            this.dataService.settingsInit(this.componentSettings.seedConfirmed);
-            this.wasmService.createWallet(this.componentSettings.seed, this.componentSettings.pass);
-            this.dataService.startWallet();
+          .then((walletData) => {
+            this.dataService.createWallet(walletData, this.componentSettings);
           });
         }
       }).unsubscribe();

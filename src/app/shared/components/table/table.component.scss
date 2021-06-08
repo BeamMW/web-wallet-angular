@@ -54,6 +54,33 @@
     border-bottom-width: 0px;
 }
 
+.asset-icon {
+    width: 26px;
+    height: 26px;
+}
+
+.asset-value {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+
+    &__in-asset {
+        @include normal-text;
+        font-family: 'ProximaNovaBold', sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        color: #ffffff;
+    }
+
+    &__in-curr {
+        @include normal-text;
+        margin-top: 2px;
+        opacity: 0.5;
+        font-family: 'ProximaNova', sans-serif;
+        font-size: 12px;
+        color: #ffffff;
+    }
+}
 
 .mat-header-cell {
     @include normal-text;
@@ -87,6 +114,7 @@
     }
 }
 
+.coin-cell,
 .amount-cell {
     @include normal-text;
     font-family: 'SFProDisplayBold', sans-serif;

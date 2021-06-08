@@ -33,13 +33,13 @@ export const selectAllTr = createSelector(
 
 export const selectInProgressTr = createSelector(
     selectAllTr,
-    transactions => transactions.filter(transaction => transaction.status_string === transactionsStatuses.RECEIVING ||
+    transactions => transactions.filter(transaction => //transaction.status_string === transactionsStatuses.RECEIVING ||
         transaction.status_string === transactionsStatuses.IN_PROGRESS ||
         transaction.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
         transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
-        transaction.status_string === transactionsStatuses.SENDING ||
+        //transaction.status_string === transactionsStatuses.SENDING ||
         transaction.status_string === transactionsStatuses.PENDING ||
-        transaction.status_string === transactionsStatuses.SELF_SENDING ||
+        //transaction.status_string === transactionsStatuses.SELF_SENDING ||
         transaction.status_string === transactionsStatuses.SENT_TO_OWN_ADDRESS)
 );
 

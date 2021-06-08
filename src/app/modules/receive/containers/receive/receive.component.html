@@ -69,8 +69,9 @@
                                 [class.selected]="componentParams.switcherSelectedValue === transactionTypes.regular"
                                 (click)="switcherClicked($event, transactionTypes.regular)">Regular</div>
                             <div #maxprivacy class="switch__maxprivacy"
-                                [class.selected]="componentParams.switcherSelectedValue === transactionTypes.maxPrivacy"
-                                (click)="switcherClicked($event, transactionTypes.maxPrivacy)">Max Privacy</div>
+                                [class.selected]="componentParams.switcherSelectedValue === transactionTypes.maxPrivacy">
+                                Max Privacy
+                            </div>
                             <div #selector class="selector"
                                 [ngStyle]="{'left': componentParams.switcherSelectedValue === transactionTypes.regular ? 
                                     0 + 'px' : regular.clientWidth + 'px',

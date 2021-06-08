@@ -7,18 +7,10 @@ import {
 } from '@app/models';
 import { Store, select } from '@ngrx/store';
 import {
-  selectAppState,
   selectWalletSetting,
   selectContacts,
-  selectIsNeedToReconnect,
-  selectVerificatedSetting
 } from '../store/selectors/wallet-state.selectors';
 import {
-  loadWalletState,
-  loadAddresses,
-  loadUtxo,
-  loadTr,
-  saveWalletStatus,
   saveWallet,
   ChangeWalletState,
   updatePrivacySetting,
@@ -28,8 +20,6 @@ import {
   updateSaveLogsSetting,
   updateVerificatedSetting,
   updatePasswordCheckSetting,
-  needToReconnect,
-  saveSendData,
   saveError,
   saveContact } from '../store/actions/wallet.actions';
 import { Router } from '@angular/router';
@@ -42,8 +32,6 @@ import {
 } from '@consts';
 import * as ObservableStore from 'obs-store';
 import { Asset, AssetInfo } from '@app/models';
-
-import { selectWasmState } from '../store/selectors/wallet-state.selectors';
 
 @Injectable({
   providedIn: 'root'
@@ -257,8 +245,9 @@ export class DataService {
   startInterval() {
     this.refreshIntervalStatus = true;
     this.refreshIntervalId = setInterval(() => {
+      console.log('--------------------update started--------------------');
       this.walletDataUpdate();
-    }, 8000);
+    }, 5000);
   }
 
   stopInterval() {
@@ -288,7 +277,7 @@ export class DataService {
     this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.TX_LIST_ID,
-      method: 'tx_list',
+      method: rpcMethodIdsConsts.TX_LIST_ID,
       params: {
         assets: true
       }
@@ -299,7 +288,7 @@ export class DataService {
     this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.GET_UTXO_ID,
-      method: 'get_utxo',
+      method: rpcMethodIdsConsts.GET_UTXO_ID,
     }));
     this.transactionsUpdate();
   }
@@ -315,20 +304,21 @@ export class DataService {
     }));
   }
 
-  addressesUpdate() {
+  public addressesUpdate() {
     this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.ADDR_LIST_ID,
-      method: 'addr_list',
+      method: rpcMethodIdsConsts.ADDR_LIST_ID,
       params:
       {
-        own: true
+        own: true,
+        assets: true
       }
     }));
     this.utxoUpdate();
   }
 
-  walletDataUpdate() {
+  public walletDataUpdate() {
     this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.WALLET_STATUS_ID,
@@ -340,7 +330,7 @@ export class DataService {
     this.addressesUpdate();
   }
 
-  loadAssetsInfo(assets: Asset[]) {
+  public loadAssetsInfo(assets: Asset[]) {
     for (let asset of assets) {
       if (asset.asset_id > 0) {
         this.wasmService.wallet.sendRequest(JSON.stringify({
@@ -356,11 +346,11 @@ export class DataService {
     }
   }
 
-  transactionSend(sendData) {
+  public transactionSend(sendData) {
     this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.TX_SEND_ID,
-      method: 'tx_send',
+      method: rpcMethodIdsConsts.TX_SEND_ID,
       params:
       {
         value : parseInt(sendData.amount.toFixed(), 10),
@@ -388,12 +378,12 @@ export class DataService {
     }));
   }
 
-  changePassword(newPass, seedValue, idValue) {
+  public changePassword(newPass, seedValue, idValue) {
     this.subManager.changePassSub = this.wasmService.wallet.subscribe((r)=> {
       const respone = JSON.parse(r);
 
       if (respone.id === rpcMethodIdsConsts.CHANGE_PASSWORD_ID) {
-        this.logService.saveDataToLogs('[Wallet testnet: password changed]', respone);
+        this.logService.saveDataToLogs('[Wallet: password changed]', respone);
         passworder.encrypt(newPass, {seed: seedValue, id: idValue}).then((result) => {
           this.saveWallet(result);
         });
@@ -407,7 +397,7 @@ export class DataService {
     this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.CHANGE_PASSWORD_ID,
-      method: 'change_password',
+      method: rpcMethodIdsConsts.CHANGE_PASSWORD_ID,
       params:
       {
         new_pass: newPass,
@@ -415,11 +405,11 @@ export class DataService {
     }));
   }
 
-  cancelTransaction(txId) {
+  public cancelTransaction(txId) {
     this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.TX_CANCEL_ID,
-      method: 'tx_cancel',
+      method: rpcMethodIdsConsts.TX_CANCEL_ID,
       params:
       {
         txId,
@@ -427,11 +417,11 @@ export class DataService {
     }));
   }
 
-  deleteTransaction(txId) {
+  public deleteTransaction(txId) {
     this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.TX_DELETE_ID,
-      method: 'tx_delete',
+      method: rpcMethodIdsConsts.TX_DELETE_ID,
       params:
       {
         txId,
@@ -454,6 +444,25 @@ export class DataService {
     }));
   }
 
+  public exportPaymentProof(txId: string) {
+    this.wasmService.wallet.sendRequest(JSON.stringify({
+      jsonrpc: '2.0',
+      id: rpcMethodIdsConsts.EXPORT_PAYMENT_PROOF_ID,
+      method: rpcMethodIdsConsts.EXPORT_PAYMENT_PROOF_ID,
+      params: {
+        txId: txId
+      }
+    }));
+  }
+
+  public createWallet(wallet: any, settings: any) {
+    this.wasmService.deleteWalletDB();
+    this.saveWallet(wallet);
+    this.settingsInit(settings.seedConfirmed);
+    this.wasmService.createWallet(settings.seed, settings.pass);
+    this.startWallet();
+  }
+
   public getAssetMetadata(data: string) {
     let metadata: AssetMetadata = {
       asset_name: '',
@@ -461,69 +470,71 @@ export class DataService {
       unit_name: '',
       smallest_unit_name: ''
     };
+
+    const separator = ';';
     
     let propIndex = data.indexOf(assetPropertiesConsts.ASSET_NAME);
     metadata.asset_name = data.slice(propIndex + assetPropertiesConsts.ASSET_NAME.length, 
-      data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+      data.indexOf(separator, propIndex) > 0 ? data.indexOf(separator, propIndex) : data.length);
 
     propIndex = data.indexOf(assetPropertiesConsts.SHORT_NAME);
     metadata.short_name = data.slice(propIndex + assetPropertiesConsts.SHORT_NAME.length,
-      data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+      data.indexOf(separator, propIndex) > 0 ? data.indexOf(separator, propIndex) : data.length);
 
     propIndex = data.indexOf(assetPropertiesConsts.UNIT_NAME);
     metadata.unit_name = data.slice(propIndex + assetPropertiesConsts.UNIT_NAME.length,
-      data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+      data.indexOf(separator, propIndex) > 0 ? data.indexOf(separator, propIndex) : data.length);
 
     propIndex = data.indexOf(assetPropertiesConsts.SMALLET_UNIT_NAME);
     metadata.smallest_unit_name = data.slice(propIndex + assetPropertiesConsts.SMALLET_UNIT_NAME.length,
-      data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+      data.indexOf(separator, propIndex) > 0 ? data.indexOf(separator, propIndex) : data.length);
 
     propIndex = data.indexOf(assetPropertiesConsts.RATIO);
     if (propIndex > 0) {
       metadata.ratio = parseInt(data.slice(propIndex + assetPropertiesConsts.RATIO.length,
-        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length));
+        data.indexOf(separator, propIndex) > 0 ? data.indexOf(separator, propIndex) : data.length));
     }
 
     propIndex = data.indexOf(assetPropertiesConsts.SHORT_DESC);
     if (propIndex > 0) {
       metadata.short_desc = data.slice(propIndex + assetPropertiesConsts.SHORT_DESC.length,
-        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+        data.indexOf(separator, propIndex) > 0 ? data.indexOf(separator, propIndex) : data.length);
     }
 
     propIndex = data.indexOf(assetPropertiesConsts.LONG_DESC);
     if (propIndex > 0) {
       metadata.long_desc = data.slice(propIndex + assetPropertiesConsts.LONG_DESC.length,
-        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+        data.indexOf(separator, propIndex) > 0 ? data.indexOf(separator, propIndex) : data.length);
     }
 
     propIndex = data.indexOf(assetPropertiesConsts.SITE_URL);
     if (propIndex > 0) {
       metadata.site_url = data.slice(propIndex + assetPropertiesConsts.SITE_URL.length,
-        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+        data.indexOf(separator, propIndex) > 0 ? data.indexOf(separator, propIndex) : data.length);
     }
 
     propIndex = data.indexOf(assetPropertiesConsts.PDF_URL);
     if (propIndex > 0) {
       metadata.pdf_url = data.slice(propIndex + assetPropertiesConsts.PDF_URL.length,
-        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+        data.indexOf(separator, propIndex) > 0 ? data.indexOf(separator, propIndex) : data.length);
     }
 
     propIndex = data.indexOf(assetPropertiesConsts.FAVICON_URL);
     if (propIndex > 0) {
       metadata.favicon_url = data.slice(propIndex + assetPropertiesConsts.FAVICON_URL.length,
-        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+        data.indexOf(separator, propIndex) > 0 ? data.indexOf(separator, propIndex) : data.length);
     }
 
     propIndex = data.indexOf(assetPropertiesConsts.LOGO_URL);
     if (propIndex > 0) {
       metadata.logo_url = data.slice(propIndex + assetPropertiesConsts.LOGO_URL.length,
-        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+        data.indexOf(separator, propIndex) > 0 ? data.indexOf(separator, propIndex) : data.length);
     }
 
     propIndex = data.indexOf(assetPropertiesConsts.COLOR);
     if (propIndex > 0) {
       metadata.color = data.slice(propIndex + assetPropertiesConsts.COLOR.length,
-        data.indexOf(';', propIndex) > 0 ? data.indexOf(';', propIndex) : data.length);
+        data.indexOf(separator, propIndex) > 0 ? data.indexOf(separator, propIndex) : data.length);
     }
 
     return metadata;

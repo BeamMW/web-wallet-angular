@@ -97,7 +97,7 @@ export class PaymentProofComponent implements OnInit, OnDestroy {
     this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.VERIFY_PAYMENT_PROOF_ID,
-      method: 'verify_payment_proof',
+      method: rpcMethodIdsConsts.VERIFY_PAYMENT_PROOF_ID,
       params: {
         payment_proof: proofValue
       }

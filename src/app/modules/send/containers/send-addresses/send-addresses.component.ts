@@ -20,7 +20,6 @@ import {
 import { debounceTime } from 'rxjs/operators';
 import { 
   globalConsts,
-  rpcMethodIdsConsts,
   transactionTypes,
   routes 
 } from '@consts';
@@ -342,7 +341,8 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
       this.values.amountToSend = amount;
       this.dataService.calcChange(parseFloat(new Big(this.values.amountToSend).times(globalConsts.GROTHS_IN_BEAM)),
-        this.componentParams.switcherSelectedValue === transactionTypes.offline, this.selectedAssetValue.asset_id);
+        this.componentParams.switcherSelectedValue === transactionTypes.offline ||
+        this.componentParams.validationResult === this.addressTypes['max_privacy'].name, this.selectedAssetValue.asset_id);
     } else {
       this.componentParams.isEnoughAmount = true;
     }

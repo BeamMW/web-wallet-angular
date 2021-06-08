@@ -16,19 +16,28 @@ export enum globalConsts {
 export enum transactionsStatuses {
     IN_PROGRESS = 'in progress',
     PENDING = 'pending',
-    SENDING = 'sending',
     WAITING_FOR_RECEIVER = 'waiting for receiver',
     WAITING_FOR_SENDER = 'waiting for sender',
     SENT = 'sent',
     RECEIVED = 'received',
-    RECEIVING = 'receiving',
     CANCELED = 'cancelled',
     EXPIRED = 'expired',
     FAILED = 'failed',
-    SELF_SENDING = 'self sending',
     COMPLETED = 'completed',
-    SENDING_TO_OWN_ADDRESS = 'sending to own address',
+    SENDING_TO_OWN_ADDRESS = 'self sending',
     SENT_TO_OWN_ADDRESS = 'sent to own address',
+
+    SENT_OFFLINE = 'sent offline',
+    RECEIVED_OFFLINE = 'received offline',
+    CANCELED_OFFLINE = 'canceled offline',
+    IN_PROGRESS_OFFLINE = 'in progress offline',
+    FAILED_OFFLINE = 'failed offline',
+
+    SENT_MAX_PRIVACY = 'sent max privacy',
+    RECEIVED_MAX_PRIVACY = 'received max privacy',
+    CANCELED_MAX_PRIVACY = 'canceled max privacy',
+    IN_PROGRESS_MAX_PRIVACY = 'in progress max privacy',
+    FAILED_MAX_PRIVACY = 'failed max privacy'
 }
 
 export enum utxoStatuses {
@@ -49,18 +58,18 @@ export enum statusesColors {
 }
 
 export enum rpcMethodIdsConsts {
-    TX_LIST_ID = 6,
-    GET_UTXO_ID = 7,
-    ADDR_LIST_ID = 8,
+    TX_LIST_ID = 'tx_list',
+    GET_UTXO_ID = 'get_utxo',
+    ADDR_LIST_ID = 'addr_list',
     CREATE_ADDRESS_ID = 'create_address',
     WALLET_STATUS_ID = 'wallet_status',
-    TX_SEND_ID = 11,
-    TX_CANCEL_ID = 15,
-    CHANGE_PASSWORD_ID = 16,
+    TX_SEND_ID = 'tx_send',
+    TX_CANCEL_ID = 'tx_cancel',
+    CHANGE_PASSWORD_ID = 'change_password',
     CALC_CHANGE_ID = 'calc_change',
-    TX_DELETE_ID = 18,
-    EXPORT_PAYMENT_PROOF_ID = 25,
-    VERIFY_PAYMENT_PROOF_ID = 26,
+    TX_DELETE_ID = 'tx_delete',
+    EXPORT_PAYMENT_PROOF_ID = 'export_payment_proof',
+    VERIFY_PAYMENT_PROOF_ID = 'verify_payment_proof',
     VALIDATE_ADDRESS = 'validate_address',
     GET_ASSET_INFO = 'get_asset_info'
 }

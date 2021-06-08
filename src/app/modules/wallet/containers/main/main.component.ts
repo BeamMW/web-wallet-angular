@@ -55,7 +55,7 @@ export class MainComponent implements OnInit, OnDestroy {
   public sendRoute = '/send/addresses';
   public receiveRoute = '/receive/page';
   public tableType = 'wallet';
-  public tableColumns = ['created', 'from', 'to', 'amount', 'status', 'actions'];
+  public tableColumns = ['coin', 'created', 'status', 'actions'];
 
   public selectorTitlesData = selectorTitles;
   public trSelectorActiveTitle = selectorTitles.ALL;

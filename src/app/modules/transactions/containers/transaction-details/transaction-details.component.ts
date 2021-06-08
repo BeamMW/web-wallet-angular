@@ -101,7 +101,7 @@ export class TransactionDetailsComponent implements OnInit {
     this.wasmService.wallet.sendRequest(JSON.stringify({
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.EXPORT_PAYMENT_PROOF_ID,
-      method: 'export_payment_proof',
+      method: rpcMethodIdsConsts.EXPORT_PAYMENT_PROOF_ID,
       params: {
         txId: transaction.txId
       }

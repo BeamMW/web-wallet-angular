@@ -9,16 +9,19 @@ import { environment } from '@environment';
 import {Router} from '@angular/router';
 
 import { Store, select } from '@ngrx/store';
-import { selectContact } from '@app/store/selectors/wallet-state.selectors';
+import { 
+  selectContact 
+} from '@app/store/selectors/wallet-state.selectors';
 import { selectUtxoById } from '@app/store/selectors/utxo.selectors';
 //import { selectAddress } from '@app/store/selectors/address.selectors';
 
-import { WasmService } from '@app/services';
+import { WasmService, DataService } from '@app/services';
 import { Subscription } from 'rxjs';
 
 import {
   saveProofData
 } from '@app/store/actions/wallet.actions';
+
 
 @Component({
   selector: 'app-table',
@@ -41,6 +44,7 @@ export class TableComponent implements OnInit, OnChanges {
   isReversedSort = false;
   contact$: Observable<any>;
   utxoList$: Observable<any>;
+  assets$: Observable<any>;
   tableTypesConsts = TableTypes;
   public utxoStatusesConsts = utxoStatuses;
   public iconEnabledPrivacy: string = `${environment.assetsPath}/images/modules/wallet/containers/main/icn-eye-crossed-gray.svg`;
@@ -66,12 +70,14 @@ export class TableComponent implements OnInit, OnChanges {
   };
   activeSortItem = null;
 
-  public iconSort: string = `${environment.assetsPath}/images/shared/components/table/icon-sort.svg`;
-  public iconSortActive: string = `${environment.assetsPath}/images/shared/components/table/icon-sort-active.svg`;
-  public contactIcon: string = `${environment.assetsPath}/images/shared/components/table/icon-contact.svg`;
-  public arrowIcon: string = `${environment.assetsPath}/images/shared/components/table/icon-arrow.svg`;
-  public sentIcon: string = `${environment.assetsPath}/images/shared/components/table/icon-sent.svg`;
-  public receivedIcon: string = `${environment.assetsPath}/images/shared/components/table/icon-received.svg`;
+  public icons = {
+    iconSort: `${environment.assetsPath}/images/shared/components/table/icon-sort.svg`,
+    iconSortActive: `${environment.assetsPath}/images/shared/components/table/icon-sort-active.svg`,
+    contactIcon: `${environment.assetsPath}/images/shared/components/table/icon-contact.svg`,
+    arrowIcon: `${environment.assetsPath}/images/shared/components/table/icon-arrow.svg`,
+    sentIcon: `${environment.assetsPath}/images/shared/components/table/icon-sent.svg`,
+    receivedIcon: `${environment.assetsPath}/images/shared/components/table/icon-received.svg`
+  }
 
   dataSource: any;
 
@@ -82,7 +88,8 @@ export class TableComponent implements OnInit, OnChanges {
     private store: Store<any>,
     private router: Router,
     private changeDetectorRefs: ChangeDetectorRef,
-    private wasmService: WasmService
+    private wasmService: WasmService,
+    private dataService: DataService
   ) {}
 
   getExpandedState(data) {
@@ -205,14 +212,7 @@ export class TableComponent implements OnInit, OnChanges {
       }
     });
 
-    this.wasmService.wallet.sendRequest(JSON.stringify({
-      jsonrpc: '2.0',
-      id: rpcMethodIdsConsts.EXPORT_PAYMENT_PROOF_ID,
-      method: 'export_payment_proof',
-      params: {
-        txId: transaction.txId
-      }
-    }));
+    this.dataService.exportPaymentProof(transaction.txId);
   }
 
   proofDataToCp() {
@@ -223,29 +223,9 @@ export class TableComponent implements OnInit, OnChanges {
     return item.status_string === transactionsStatuses.SENT;
   }
 
-  getStatus(item) {
-    let status = item.status_string;
-    if (item.status_string === transactionsStatuses.SELF_SENDING) {
-      status = transactionsStatuses.SENDING_TO_OWN_ADDRESS;
-    } else if (item.status_string === transactionsStatuses.COMPLETED) {
-      // const address$ = this.store.pipe(select(selectAddress(item.receiver)));
-      // address$.subscribe(val => {
-      //   if (val !== undefined && val.own) {
-      //     status = transactionsStatuses.SENT_TO_OWN_ADDRESS;
-      //   }
-      // });
-    }
-
-    return status;
-  }
-
   getValueSign(element) {
     return element.income ? '+' : '-';
   }
-
-  // getToken(data) {
-  //   return this.wasmService.getSendToken(data.sender, val.identity, 0);
-  // }
 }
 
 export class ExampleDataSource extends DataSource<any> {
