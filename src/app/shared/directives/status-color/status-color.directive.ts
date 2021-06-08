@@ -25,37 +25,36 @@ export class StatusColorDirective implements OnInit {
 
   getColor(transaction) {
     let color = '';
-    if (transaction.status_string === transactionsStatuses.CANCELED ||
-      transaction.status_string === transactionsStatuses.EXPIRED) {
-        color = statusesColors.CANCELED;
-    } else if (transaction.status_string === transactionsStatuses.FAILED) {
+    const status = transaction.status_string;
+    if (status === transactionsStatuses.PENDING ||
+      status === transactionsStatuses.IN_PROGRESS ||
+      status === transactionsStatuses.IN_PROGRESS_MAX_PRIVACY ||
+      status === transactionsStatuses.IN_PROGRESS_OFFLINE ) {
+        color = this.transaction.income ? statusesColors.RECEIVE : statusesColors.SEND;
+    } else if (status === transactionsStatuses.WAITING_FOR_RECEIVER ||
+      status === transactionsStatuses.SENT ||
+      status === transactionsStatuses.SENDING ||
+      status === transactionsStatuses.SENT_MAX_PRIVACY ||
+      status === transactionsStatuses.SENT_OFFLINE) {
+        color = statusesColors.SEND;
+    } else if (status === transactionsStatuses.WAITING_FOR_SENDER ||
+      status === transactionsStatuses.RECEIVED ||
+      status === transactionsStatuses.RECEIVING ||
+      status === transactionsStatuses.RECEIVED_MAX_PRIVACY ||
+      status === transactionsStatuses.RECEIVED_OFFLINE) {
+        color = statusesColors.RECEIVE;
+    } else if (status === transactionsStatuses.SENT_TO_OWN_ADDRESS ||
+      status === transactionsStatuses.SENDING_TO_OWN_ADDRESS) {
+        color = statusesColors.SELF_SENDING;
+    } else if (status === transactionsStatuses.FAILED ||
+      status === transactionsStatuses.FAILED_MAX_PRIVACY ||
+      status === transactionsStatuses.FAILED_OFFLINE) {
         color = statusesColors.FAILED;
-    } else if ((transaction.status_string === transactionsStatuses.PENDING ||
-        transaction.status_string === transactionsStatuses.IN_PROGRESS ||
-        transaction.status_string === transactionsStatuses.COMPLETED ||
-        transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
-        transaction.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
-        transaction.status_string === transactionsStatuses.SENT) && !transaction.income) {
-          color = statusesColors.SEND;
-    } else if ((transaction.status_string === transactionsStatuses.PENDING ||
-        transaction.status_string === transactionsStatuses.IN_PROGRESS ||
-        transaction.status_string === transactionsStatuses.COMPLETED ||
-        transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
-        transaction.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
-        transaction.status_string === transactionsStatuses.RECEIVED) && transaction.income) {
-          color = statusesColors.RECEIVE;
+    } else if (status === transactionsStatuses.CANCELED ||
+      status === transactionsStatuses.CANCELED_MAX_PRIVACY ||
+      status === transactionsStatuses.CANCELED_OFFLINE) {
+        color = statusesColors.CANCELED;
     }
-
-    // if (transaction.status_string === transactionsStatuses.SELF_SENDING) {
-    //   color = statusesColors.SELF_SENDING;
-    // } else if (transaction.status_string === transactionsStatuses.COMPLETED) {
-      // const address$ = this.store.pipe(select(selectAddress(transaction.receiver)));
-      // address$.subscribe(val => {
-      //   if (val !== undefined && val.own) {
-      //     color = statusesColors.SELF_SENDING;
-      //   }
-      // }).unsubscribe();
-    //}
 
     return color;
   }

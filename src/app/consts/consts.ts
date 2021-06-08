@@ -15,6 +15,8 @@ export enum globalConsts {
 
 export enum transactionsStatuses {
     IN_PROGRESS = 'in progress',
+    RECEIVING = 'receiving',
+    SENDING = 'sending',
     PENDING = 'pending',
     WAITING_FOR_RECEIVER = 'waiting for receiver',
     WAITING_FOR_SENDER = 'waiting for sender',
