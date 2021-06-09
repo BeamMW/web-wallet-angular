@@ -57,7 +57,6 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     }
   }
 
-  public sendForm: FormGroup;
   public fullSendForm: FormGroup;
 
   public walletStatus$: Observable<any>;
@@ -143,8 +142,11 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     this.addressValidation$ = this.store.pipe(select(selectAddressValidationData));
     this.subscriptions.push(this.addressValidation$.subscribe(value => {
       if (value) {
+        this.componentParams.addressValidation = value.is_valid;
         this.componentParams.validationResult = this.addressTypes[value.type].name;
-        this.componentParams.isTypeVisible = this.componentParams.validationResult === this.addressTypes['offline'].name; 
+        this.componentParams.isTypeVisible = this.componentParams.validationResult === this.addressTypes['offline'].name;
+        this.addressInputCheck();
+        this.valuesValidationCheck(); 
       }
     }));
 
@@ -156,12 +158,6 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       };
       address = state.address;
     } catch (e) {}
-
-    this.sendForm = new FormGroup({
-      address: new FormControl(address,  [
-        Validators.required
-      ])
-    });
 
     this.fullSendForm = new FormGroup({
       address: new FormControl('',  [
@@ -203,7 +199,10 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
         const amountInBig = new Big(this.values.amountToSend);
         if (this.values.amountToSend > 0) {
           if (this.selectedAssetStatus.available > 0) {
-            if (parseFloat(amountInBig.plus(this.calcFromAssetValue(this.values.fee))) > 
+            const total = this.selectedAssetValue.asset_id === 0 
+              ? amountInBig.plus(this.calcFromAssetValue(this.values.fee))
+              : amountInBig;
+            if (parseFloat(total) > 
                 parseFloat(this.calcFromAssetValue(this.selectedAssetStatus.available))) {
               this.componentParams.isEnoughAmount = false;
               this.updateValues({
@@ -228,9 +227,23 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
         } else {
           this.componentParams.isEnoughAmount = true;
         }
-      
-        this.valuesValidationCheck();
+      } else {
+        const remaining = new Big(this.values.amountToSend).times(globalConsts.GROTHS_IN_BEAM) > 
+          this.selectedAssetStatus.available - changeValue.fee ? 0 : 
+            ((this.calcFromAssetValue(this.selectedAssetValue.asset_id == 0 ?
+            (this.selectedAssetStatus.available - changeValue.fee) : this.selectedAssetStatus.available)
+            .minus(this.values.amountToSend)).toFixed())
+
+        this.updateValues({
+          change: this.calcFromAssetValue(changeValue.change).toFixed(),
+          asset_change: this.calcFromAssetValue(changeValue.asset_change).toFixed(),
+          remaining: remaining,
+          beam_remaining: this.calcFromAssetValue(this.globalStatus.totals[0].available - changeValue.fee).toFixed(),
+          fee: changeValue.fee,
+          fee_formatted: this.calcFromAssetValue(changeValue.fee).toFixed()
+        });
       }
+      this.valuesValidationCheck();
     }));
 
     this.assetsData$ = this.store.pipe(select(selectAssetsInfo));
@@ -239,22 +252,6 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       this.assets.push(this.DEFAULT_ASSET)
       this.assets.push(...value);
     }));
-  }
-
-  submit() {
-    if (this.componentParams.isSendDataValid) {
-      const navigationExtras: NavigationExtras = {
-        state: {
-          address: this.sendForm.value.address,
-          fee: this.sendForm.value.fee,
-          amount: typeof this.sendForm.value.amount === 'string' ? this.sendForm.value.amount : this.sendForm.value.amount.toFixed(),
-          comment: this.sendForm.value.comment,
-          change: this.values.change.toFixed(),
-          remaining: this.values.remaining.toFixed()
-        }
-      };
-      this.router.navigate([routes.SEND_CONFIRMATION_ROUTE], navigationExtras);
-    }
   }
 
   private calcFromAssetValue(value) {
@@ -284,10 +281,6 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.sendForm.value.address.length > 0) {
-      this.addressInputUpdated(this.sendForm.value.address);
-    }
-
     this.fullSendForm.get('amount').valueChanges.pipe(debounceTime(300)).subscribe(newValue => {
       this.amountChanged(newValue);
     });
@@ -309,13 +302,24 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   addAllClicked($event) {
-    if (this.selectedAssetStatus.available > 0 && 
-        this.selectedAssetStatus.available > this.calcFromAssetValue(this.values.fee).toFixed()) {
-      const allAmount = (new Big(this.selectedAssetStatus.available - this.values.fee))
+    let addAllAmount: Big;
+    const fee = this.values.fee > 0 ? this.values.fee :
+      (this.componentParams.switcherSelectedValue === this.componentParams.switcherValues.regular ? 
+        globalConsts.MIN_FEE_VALUE : globalConsts.MIN_OFFLINE_FEE_VALUE);
+    if (this.selectedAssetValue.asset_id === 0) {
+      if (this.selectedAssetStatus.available > 0 && 
+        this.selectedAssetStatus.available > fee) {
+        addAllAmount = (new Big(this.selectedAssetStatus.available - fee))
+          .div(globalConsts.GROTHS_IN_BEAM);
+      }
+    } else {
+      addAllAmount = (new Big(this.selectedAssetStatus.available))
         .div(globalConsts.GROTHS_IN_BEAM);
-      this.addressInputCheck();
-      this.fullSendForm.get('amount').setValue(allAmount.toFixed());
     }
+
+    this.addressInputCheck();
+    this.fullSendForm.get('amount').setValue(addAllAmount.toFixed());
+    //this.amountChanged(addAllAmount.toFixed());
   }
 
   private amountChanged(amountInputValue) {
@@ -357,24 +361,23 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       .div(globalConsts.GROTHS_IN_BEAM);
     this.values.beam_remaining = new Big(!this.walletStatusLoading ? this.globalStatus.totals[0].available : 0)
       .div(globalConsts.GROTHS_IN_BEAM);
+    this.componentParams.isEnoughAmount = true;
+    this.componentParams.notEnoughtValue = 0;
   }
 
   public addressInputUpdated(value: string) {
     this.store.dispatch(loadAddressValidation({address: value}));
-
-    this.addressInputCheck();
-    this.valuesValidationCheck();
   }
 
   addressInputCheck() {
-    this.componentParams.isAddressInputValid = (this.sendForm.value.address.length > 0 ||
+    this.componentParams.isAddressInputValid = (this.fullSendForm.value.address.length > 0 ||
       this.fullSendForm.value.address.length > 0) &&
       this.componentParams.addressValidation;
   }
 
   valuesValidationCheck() {
     this.componentParams.isSendDataValid = this.componentParams.isAddressInputValid &&
-      this.componentParams.addressValidation &&
+      this.componentParams.addressValidation && this.fullSendForm.value.amount > 0 &&
       this.componentParams.isEnoughAmount;
   }
 
@@ -384,8 +387,9 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
 
   public switcherClicked(event, value:string) {
     this.componentParams.switcherSelectedValue = value;
-    this.dataService.calcChange(parseFloat(new Big(this.values.amountToSend).times(globalConsts.GROTHS_IN_BEAM)),
-      value === transactionTypes.offline, this.selectedAssetValue.asset_id);
+    this.resetStats();
+    this.fullSendForm.get('amount').setValue(this.fullSendForm.value.amount);
+    //this.amountChanged(this.fullSendForm.value.amount);
   }
 
 

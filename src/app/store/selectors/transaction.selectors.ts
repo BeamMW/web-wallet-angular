@@ -33,24 +33,34 @@ export const selectAllTr = createSelector(
 
 export const selectInProgressTr = createSelector(
     selectAllTr,
-    transactions => transactions.filter(transaction => //transaction.status_string === transactionsStatuses.RECEIVING ||
+    transactions => transactions.filter(transaction =>
         transaction.status_string === transactionsStatuses.IN_PROGRESS ||
         transaction.status_string === transactionsStatuses.WAITING_FOR_RECEIVER ||
         transaction.status_string === transactionsStatuses.WAITING_FOR_SENDER ||
-        //transaction.status_string === transactionsStatuses.SENDING ||
+        transaction.status_string === transactionsStatuses.SENDING ||
         transaction.status_string === transactionsStatuses.PENDING ||
-        //transaction.status_string === transactionsStatuses.SELF_SENDING ||
-        transaction.status_string === transactionsStatuses.SENT_TO_OWN_ADDRESS)
+        transaction.status_string === transactionsStatuses.SENDING_TO_OWN_ADDRESS ||
+        transaction.status_string === transactionsStatuses.IN_PROGRESS_MAX_PRIVACY ||
+        transaction.status_string === transactionsStatuses.IN_PROGRESS_OFFLINE ||
+        transaction.status_string === transactionsStatuses.RECEIVING)
 );
 
 export const selectSentTr = createSelector(
     selectAllTr,
-    transactions => transactions.filter(transaction => transaction.status_string === transactionsStatuses.SENT)
+    transactions => transactions.filter(transaction => 
+        transaction.status_string === transactionsStatuses.SENT ||
+        transaction.status_string === transactionsStatuses.SENT_MAX_PRIVACY ||
+        transaction.status_string === transactionsStatuses.SENT_OFFLINE ||
+        transaction.status_string === transactionsStatuses.COMPLETED ||
+        transaction.status_string === transactionsStatuses.SENT_TO_OWN_ADDRESS)
 );
 
 export const selectReceivedTr = createSelector(
     selectAllTr,
-    transactions => transactions.filter(transaction => transaction.status_string === transactionsStatuses.RECEIVED)
+    transactions => transactions.filter(transaction => 
+        transaction.status_string === transactionsStatuses.RECEIVED ||
+        transaction.status_string === transactionsStatuses.RECEIVED_OFFLINE ||
+        transaction.status_string === transactionsStatuses.RECEIVED_MAX_PRIVACY)
 );
 
 export const selectTrTotal = createSelector(
