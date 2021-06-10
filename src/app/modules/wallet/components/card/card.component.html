@@ -1,11 +1,73 @@
-<div #card [className]="'card'+ '--color-' + cardData.asset_id">
-    <img class="card__icon" [src]="iconUrl">
-    <div class="card__data">
-        <div class="card__data__value">
-            <span>{{ cardData.available / 100000000 }}</span>
-            <span class="card__data__value__uname">{{assetData.unit_name}}</span>
-        </div>
-        <div class="card__data__rate" *ngIf="cardData.asset_id === 0">{{ cardData.available / 100000000 | rate }}</div>
-        <div class="card__data__locked" *ngIf="cardData.locked > 0">Locked: {{ cardData.locked }}</div>
+<ng-container *ngIf="values.length > 0" >
+    <div class="cards">
+        <ng-container *ngFor="let asset of values">
+            <div>
+                <div #card [className]="'card'+ '--color-' + asset.asset_id" [style.background-image]="asset.bgStyle">
+                    <img class="card__icon" [src]="asset.iconUrl">
+                    <div class="card__data">
+                        <div class="card__data__value">
+                            <span>{{ asset.available / grothsValue }}</span>
+                            <span class="card__data__value__uname">{{asset.assetData.unit_name}}</span>
+                            <span class="card__data__value__arrow" (click)="showDetails(asset)"></span>
+                        </div>
+                        <div class="card__data__rate" *ngIf="asset.asset_id === 0">{{ (asset.available / grothsValue) | rate }}</div>
+                        <div class="card__data__locked" *ngIf="asset.locked > 0">Locked: {{ asset.locked }}</div>
+                    </div>
+                
+                    
+                </div>
+                <div class="details" *ngIf="asset.isDetailsVisible" appClickOutside (clickOutside)="hideDetails(asset)">
+                    <div class="details__header">
+                        <div class="details__header__selector">
+                            <div class="selector" >
+                                <div class="selector__title">
+                                    BALANCE</div>
+                                <div class="selector__bottom-line"></div>
+                            </div>
+                            <div class="details__stats">
+                                <div class="details__stats__item">
+                                    <div class="details__stats__item__title">Available</div>
+                                    <div class="details__stats__item__value">
+                                        {{asset.available / grothsValue}} {{asset.assetData.unit_name}}
+                                    </div>
+                                </div>
+
+                                <div class="details__stats__item column">
+                                    <div class="details__stats__item__title">Maturing</div>
+                                    <div class="details__stats__item__value">
+                                        {{asset.maturing / grothsValue}} {{asset.assetData.unit_name}}
+                                    </div>
+                                </div>
+
+                                <div class="details__stats__item column">
+                                    <div class="details__stats__item__title">Receiving</div>
+                                    <div class="details__stats__item__value">
+                                        {{asset.receiving / grothsValue}} {{asset.assetData.unit_name}}
+                                    </div>
+                                </div>
+
+                                <div class="details__stats__item column">
+                                    <div class="details__stats__item__title">Sending</div>
+                                    <div class="details__stats__item__value">
+                                        {{asset.sending / grothsValue}} {{asset.assetData.unit_name}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <div class="selector" (click)="selectorItemInProgressClicked()">
+                                <div class="selector__title" 
+                                    [class.active]="trSelectorActiveTitle === selectorTitlesData.IN_PROGRESS">
+                                    {{selectorTitlesData.IN_PROGRESS}}</div>
+                                <div class="selector__bottom-line"
+                                    *ngIf="trSelectorActiveTitle === selectorTitlesData.IN_PROGRESS"></div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </ng-container>
+        
+        
     </div>
-</div>
+</ng-container>

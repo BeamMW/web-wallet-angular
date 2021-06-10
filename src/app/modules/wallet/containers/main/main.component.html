@@ -1,14 +1,14 @@
 <ng-container *ngIf="isFullScreen">
     <div class="main">
         <div class="main__content">
-            <ng-container *ngIf="walletStatus$ | async as walletStatus">
+            <!-- <ng-container *ngIf="walletStatus$ | async as walletStatus"> -->
                 <div class="main__content__header">
                     <div class="main__content__header__title">Wallet</div>
                     <app-button class="main__content__header__send-button" [routerLink]="sendRoute">send</app-button>
                     <app-button class="main__content__header__receive-button" [routerLink]="receiveRoute">receive</app-button>
                 </div>
                 <div class="main__content__cards" *ngIf="!dataService.isAssetsInfoLoading">
-                    <app-card *ngFor="let item of walletStatus.totals" [cardData]="item"></app-card>
+                    <app-card [status]="walletStatus$ | async"></app-card>
                 </div>
 
                 <!-- <div class="main__content__state"
@@ -88,7 +88,7 @@
                         </div>
                     </ng-container>
                 </div>
-            </ng-container>
+            <!-- </ng-container> -->
             <ng-container *ngIf="transactions$ | async as transactions">
                 <ng-container>
                     <div class="main__content__subtitle">TRANSACTIONS</div>
