@@ -25,8 +25,8 @@ export interface Contact {
 }
 
 export enum selectorTitles {
-  ALL = 'BALANCE',
-  IN_PROGRESS = 'ASSET INFO'
+  BALANCE = 'BALANCE',
+  ASSET_INFO = 'ASSET INFO'
 }
 
 @Component({
@@ -36,16 +36,18 @@ export enum selectorTitles {
 })
 export class CardComponent implements OnInit {
   @ObservableInput() @Input("status") public status$: Observable<any>;
-  // @Input() cardData: Asset;
+
   @ViewChild('card', {static: true}) card: ElementRef;
   assets$: Observable<any>;
   iconUrl: string;
   grothsValue: number;
   values: Contact[];
 
+  public selectorTitlesData = selectorTitles;
+  public selectorActiveTitle = selectorTitles.BALANCE;
+  public isDetailsVisible: boolean;
 
 
-  isDetailsVisible: boolean;
   // public compomentParams = {
   //   isDetailsVisible:,
   // }
@@ -126,5 +128,14 @@ export class CardComponent implements OnInit {
 
   public hideDetails(asset) {
     asset.isDetailsVisible = false;
+    this.selectorActiveTitle = this.selectorTitlesData.BALANCE;
+  }
+
+  public assetInfoClicked(asset) {
+      this.selectorActiveTitle = this.selectorTitlesData.ASSET_INFO;
+  }
+
+  public balanceClicked(asset) {
+    this.selectorActiveTitle = this.selectorTitlesData.BALANCE;
   }
 }

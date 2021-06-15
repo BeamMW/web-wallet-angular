@@ -1,9 +1,8 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { routes, transactionsStatuses, TableTypes, utxoStatuses, rpcMethodIdsConsts } from '@consts';
-
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { transactionsStatuses, TableTypes, utxoStatuses, rpcMethodIdsConsts } from '@consts';
+import { Observable, of } from 'rxjs';
 
 import { environment } from '@environment';
 import {Router} from '@angular/router';
@@ -13,15 +12,10 @@ import {
   selectContact 
 } from '@app/store/selectors/wallet-state.selectors';
 import { selectUtxoById } from '@app/store/selectors/utxo.selectors';
-//import { selectAddress } from '@app/store/selectors/address.selectors';
-
 import { WasmService, DataService } from '@app/services';
 import { Subscription } from 'rxjs';
-
-import {
-  saveProofData
-} from '@app/store/actions/wallet.actions';
-
+import { ObservableInput } from "ngx-observable-input";
+import { saveProofData } from '@app/store/actions/wallet.actions';
 
 @Component({
   selector: 'app-table',
@@ -36,7 +30,8 @@ import {
   ],
 })
 export class TableComponent implements OnInit, OnChanges {
-  @Input() tableData: any;
+  @ObservableInput() @Input("tableData") public tableData$: Observable<any>;
+  //@Input() tableData: any;
   @Input() tableColumns: any;
   @Input() tableType: any;
   @Input() privacy = false;
@@ -87,7 +82,6 @@ export class TableComponent implements OnInit, OnChanges {
   constructor(
     private store: Store<any>,
     private router: Router,
-    private changeDetectorRefs: ChangeDetectorRef,
     private wasmService: WasmService,
     private dataService: DataService
   ) {}
@@ -110,7 +104,8 @@ export class TableComponent implements OnInit, OnChanges {
       this.activeSortItem = this.tableType === TableTypes.TRANSACTIONS ? this.sortParams.created : null;
     }
 
-    if (changes.tableData) {
+    let updatedData = changes.tableData$.currentValue;
+    if (updatedData) {
       if (this.expandedElement === null && this.tableType === TableTypes.TRANSACTIONS) {
         this.expandedElement = {txId: null};
       } else if (this.expandedElement === null && this.tableType === TableTypes.UTXO) {
@@ -119,7 +114,6 @@ export class TableComponent implements OnInit, OnChanges {
         this.expandedElement = {address: null};
       }
 
-      let updatedData = changes.tableData.currentValue;
       if (this.activeSortItem !== null) {
         this.isReversedSort = !this.isReversedSort;
         updatedData = this.getSortedDataSource(this.activeSortItem, updatedData);

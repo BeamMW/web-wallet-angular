@@ -278,9 +278,6 @@ export class DataService {
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.TX_LIST_ID,
       method: rpcMethodIdsConsts.TX_LIST_ID,
-      params: {
-        assets: true
-      }
     }));
   }
 
@@ -311,8 +308,7 @@ export class DataService {
       method: rpcMethodIdsConsts.ADDR_LIST_ID,
       params:
       {
-        own: true,
-        assets: true
+        own: true
       }
     }));
     this.utxoUpdate();
@@ -323,9 +319,6 @@ export class DataService {
       jsonrpc: '2.0',
       id: rpcMethodIdsConsts.WALLET_STATUS_ID,
       method: rpcMethodIdsConsts.WALLET_STATUS_ID,
-      params: {
-        assets: true
-      }
     }));
     this.addressesUpdate();
   }
@@ -436,7 +429,6 @@ export class DataService {
       method: rpcMethodIdsConsts.CREATE_ADDRESS_ID,
       params:
       {
-          assets: true,
           type, //'regular_new',
           expiration, //: 'auto',
           comment

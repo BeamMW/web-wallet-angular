@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
-import { Store, select } from '@ngrx/store';
 import {Observable, from, Subscription} from 'rxjs';
 import { ClipboardService } from 'ngx-clipboard';
 import { TableTypes } from '@consts';
@@ -44,7 +43,6 @@ export class TableActionsComponent implements OnInit {
 
   constructor(
     private clipboardService: ClipboardService,
-    private store: Store<any>,
     private dataService: DataService,
     private windowService: WindowService,
     public router: Router) {
@@ -78,6 +76,10 @@ export class TableActionsComponent implements OnInit {
       status === transactionsStatuses.FAILED ||
       status === transactionsStatuses.RECEIVED ||
       status === transactionsStatuses.SENT ||
+      status === transactionsStatuses.SENT_MAX_PRIVACY ||
+      status === transactionsStatuses.SENT_OFFLINE ||
+      status === transactionsStatuses.RECEIVED_MAX_PRIVACY ||
+      status === transactionsStatuses.RECEIVED_OFFLINE ||
       status === transactionsStatuses.SENT_TO_OWN_ADDRESS) {
         result = !result;
     }
