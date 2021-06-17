@@ -12,7 +12,7 @@
             <ng-container *ngIf="!privacy">
               <img class="asset-icon" [src]="element.metadata.icon_path">
               <div class="asset-value">
-                <div class="asset-value__in-asset" appStatusColor [appStatusColorTransaction]="element">
+                <div class="asset-value__in-asset" appCoinColor [appCoinColorTransaction]="element">
                   {{getValueSign(element)+' '+(element.value | beam:'1.0-9') + ' ' + element.metadata.unit_name}}
                 </div>
                 <div class="asset-value__in-curr" *ngIf="element.asset_id === 0">

@@ -43,7 +43,8 @@ import {
   DetectCapsDirective,
   NumbersOnlyDirective,
   StatusColorDirective,
-  FeeOnlyDirective
+  FeeOnlyDirective,
+  CoinColorDirective
 } from './directives';
 
 @NgModule({
@@ -73,6 +74,7 @@ import {
     NumbersOnlyDirective,
     StatusIconComponent,
     StatusColorDirective,
+    CoinColorDirective,
     SeedVerificationPopupComponent,
     LoaderComponent,
     FeeOnlyDirective,
@@ -113,6 +115,7 @@ import {
     NumbersOnlyDirective,
     StatusIconComponent,
     StatusColorDirective,
+    CoinColorDirective,
     LoaderComponent,
     FeeOnlyDirective,
     ContainerHeaderComponent

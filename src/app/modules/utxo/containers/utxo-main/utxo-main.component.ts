@@ -18,10 +18,10 @@ import {
 import { environment } from '@environment';
 
 export enum selectorTitles {
-  AVAILABLE = 'Available',
-  IN_PROGRESS = 'In progress',
-  SPENT = 'Spent',
-  UNAVAILABLE = 'Unavailable'
+  AVAILABLE = 'AVAILABLE',
+  IN_PROGRESS = 'IN PROGRESS',
+  SPENT = 'SPENT',
+  UNAVAILABLE = 'UNAVAILABLE'
 }
 
 @Component({
