@@ -180,6 +180,7 @@
     display: flex;
     margin-top: -30px;
     margin-left: 20px;
+    z-index: 1000;
 
     &__header {
         &__selector {
@@ -256,6 +257,12 @@
             }
         }
 
+        &__links {
+            display: flex;
+            flex-direction: row;
+            margin-top: 15px;
+        }
+
         &__optional {
             margin-top: 20px;
             display: flex;
@@ -267,6 +274,15 @@
             }
         }
     }
+}
+
+.item-link {
+    @include normal-text;
+    font-family: 'ProximaNova', sans-serif;
+    font-size: 12px;
+    color: #05e2c2;
+    cursor: pointer;
+    margin-left: 40px
 }
 
 .item-title {
@@ -284,6 +300,7 @@
     font-family: 'ProximaNova', sans-serif;
     font-size: 12px;
     color: #fff;
+    max-width: 235px;
 }
 
 .column {

@@ -90,7 +90,12 @@
                                 <span class="details__info__mand__unit">{{ asset.assetData.unit_name }}</span>
                             </div>
                             <div class="details__info__links">
-
+                                <div class="item-link" 
+                                    *ngIf="asset.assetData.site_url !== undefined"
+                                    (click)="websiteClicked(asset.assetData.site_url)">Website</div>
+                                <div class="item-link" 
+                                    *ngIf="asset.assetData.pdf_url !== undefined"
+                                    (click)="websiteClicked(asset.assetData.pdf_url)">Description paper</div>
                             </div>
                             <div class="details__info__optional">
                                 <div class="details__info__optional__item">
@@ -101,6 +106,18 @@
                                 <div class="details__info__optional__item column">
                                     <div class="item-title">Smallest unit name</div>
                                     <div class="item-value">{{ asset.assetData.smallest_unit_name }}</div>
+                                </div>
+
+                                <div class="details__info__optional__item column"
+                                        *ngIf="asset.assetData.short_desc !== undefined">
+                                    <div class="item-title">Short description</div>
+                                    <div class="item-value">{{ asset.assetData.short_desc }}</div>
+                                </div>
+
+                                <div class="details__info__optional__item column" 
+                                        *ngIf="asset.assetData.long_desc !== undefined">
+                                    <div class="item-title">Long description</div>
+                                    <div class="item-value">{{ asset.assetData.long_desc }}</div>
                                 </div>
                             </div>
                         </div>

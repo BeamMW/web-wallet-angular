@@ -116,6 +116,10 @@ export class CardComponent implements OnInit {
     // changes.prop contains the old and the new value...
   }
 
+  public websiteClicked(link: string) {
+    window.open(link, "_blank");
+  }
+
   public showDetails(asset) {
     for(let item of this.values) {
       if (asset.asset_id === item.asset_id) {
