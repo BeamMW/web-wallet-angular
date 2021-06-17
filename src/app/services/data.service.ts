@@ -222,6 +222,7 @@ export class DataService {
   public deactivateWallet() {
     clearInterval(this.refreshIntervalId);
     this.getCoinsState.putState(false);
+    this.wasmService.stopWallet();
     this.store.dispatch(saveWallet({wallet: {}}));
     this.store.dispatch(ChangeWalletState({walletState: false}));
   }

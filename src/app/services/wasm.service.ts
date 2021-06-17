@@ -74,7 +74,7 @@ export class WasmService {
       this.wallet.stopWallet((data) => {
         console.log("is running: " + this.wallet.isRunning())
         console.log('wallet stopped:', data);
-        this.deleteWalletDB();
+        //this.deleteWalletDB();
       });
     }
   }
@@ -115,11 +115,15 @@ export class WasmService {
   }
 
   public openWallet(pass) {
-    this.module.MountFS(()=> {
-      this.isMounted = true;
-      console.log("mounted");
+    if (this.isMounted) {
       this.startWallet(pass);
-    });
+    } else {
+      this.module.MountFS(()=> {
+        this.isMounted = true;
+        console.log("mounted");
+        this.startWallet(pass);
+      });
+    }
   }
 
   public keykeeperInit(seed) {

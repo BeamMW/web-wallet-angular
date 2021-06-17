@@ -1,4 +1,4 @@
-<form class="form" novalidate [formGroup]="fullSendForm" autocomplete="off">
+<form class="form" novalidate [formGroup]="sendForm" autocomplete="off">
     <div class="send" [class.blur-filter]="!componentParams.isFullScreen && componentParams.popupOpened">
         <ng-container *ngIf="!componentParams.isFullScreen else fullScreenTemplate">
             <div class="send__header">
@@ -18,6 +18,15 @@
                     </div>
                     <div class="send__container__address__content">
                         <ng-container *ngTemplateOutlet="addressTemplate"></ng-container>
+                    </div>
+                </div>
+
+                <div class="send__container__tr-type" *ngIf="componentParams.isTypeVisible">
+                    <div class="container-header">
+                        <span>TRANSACTION TYPE</span>
+                    </div>
+                    <div class="send__container__tr-type__content">
+                        <ng-container *ngTemplateOutlet="typeTemplate"></ng-container>
                     </div>
                 </div>
 
@@ -47,7 +56,7 @@
                     <div class="send__container__bottom__controls">
                         <div class="">
                             <app-button [disabled]="!componentParams.isSendDataValid"
-                                    (click)="submit($event)" 
+                                    (click)="nextClicked($event)" 
                                     class="send__container__bottom__controls__button">
                                 next
                             </app-button>

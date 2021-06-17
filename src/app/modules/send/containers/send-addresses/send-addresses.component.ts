@@ -34,19 +34,29 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   @ViewChild('selected', {static: true}) selected: ElementRef;
   private addressTypes = {
     'regular': {
-      name: 'Regular address'
+      id: 'regular',
+      name: 'Regular address',
+      type: 'Regular'
     },
     'regular_new': {
-      name: 'Regular address'
+      id: 'regular_new',
+      name: 'Regular address',
+      type: 'Regular'
     },
     'max_privacy': {
-      name: 'Max privacy address'
+      id: 'max_privacy',
+      name: 'Max privacy address',
+      type: 'Max privacy'
     },
     'offline': {
-      name: 'Regular address'
+      id: 'offline',
+      name: 'Regular address',
+      type: 'Offline'
     },
     'unknown': {
-      name: ''
+      id: '',
+      name: '',
+      type: ''
     }
   };
 
@@ -57,8 +67,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     }
   }
 
-  public fullSendForm: FormGroup;
-
+  public sendForm: FormGroup;
   public walletStatus$: Observable<any>;
   public addressValidation$: Observable<any>;
   private calculatedChange$: Observable<any>;
@@ -95,13 +104,20 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     },
     switcherSelectedValue: '',
     validationResult: '',
+    validationFullResult: {
+      type: '',
+      id: ''
+    },
     isTypeVisible: false,
     isAssetDropdownVisible: false
   };
 
   public assets = [];
   public selectedAssetValue = {
-    asset_id: 0
+    asset_id: 0,
+    metadata: {
+      unit_name: 'BEAM'
+    }
   };
 
   public selectedAssetStatus = {
@@ -144,22 +160,14 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       if (value) {
         this.componentParams.addressValidation = value.is_valid;
         this.componentParams.validationResult = this.addressTypes[value.type].name;
+        this.componentParams.validationFullResult = this.addressTypes[value.type];
         this.componentParams.isTypeVisible = this.componentParams.validationResult === this.addressTypes['offline'].name;
         this.addressInputCheck();
         this.valuesValidationCheck(); 
       }
     }));
 
-    let address = '';
-    try {
-      const navigation = this.router.getCurrentNavigation();
-      const state = navigation.extras.state as {
-        address: string,
-      };
-      address = state.address;
-    } catch (e) {}
-
-    this.fullSendForm = new FormGroup({
+    this.sendForm = new FormGroup({
       address: new FormControl('',  [
         Validators.required
       ]),
@@ -168,6 +176,22 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
         Validators.required
       ])
     });
+
+    // try {
+    //   const navigation = this.router.getCurrentNavigation();
+    //   const state = navigation.extras.state as {
+    //     address: string,
+    //     amount: number
+    //   };
+      
+    //   if (state.address.length > 0) {
+    //     this.sendForm.get('address').setValue(state.address);
+    //   }
+
+    //   if (state.amount > 0) {
+    //     this.sendForm.get('amount').setValue(state.amount);
+    //   }
+    // } catch (e) {}
 
     this.subscriptions.push(dataService.changeEmitted$.subscribe(emittedState => {
       this.componentParams.popupOpened = emittedState;
@@ -267,21 +291,32 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     if (this.componentParams.isSendDataValid) {
       const navigationExtras: NavigationExtras = {
         state: {
-          address: this.fullSendForm.value.address,
+          address: this.sendForm.value.address,
           fee: this.values.fee,
-          comment: this.fullSendForm.value.comment,
-          amount: parseInt((new Big(this.fullSendForm.value.amount).times(globalConsts.GROTHS_IN_BEAM)).toFixed(), 10),
+          comment: this.sendForm.value.comment,
+          amount: parseInt((new Big(this.sendForm.value.amount).times(globalConsts.GROTHS_IN_BEAM)).toFixed(), 10),
           isPassCheckEnabled: this.isPassCheckEnabled,
           asset_id: this.selectedAssetValue.asset_id,
-          offline: this.componentParams.switcherSelectedValue === transactionTypes.offline
+          offline: this.componentParams.switcherSelectedValue === transactionTypes.offline,
+          type: this.componentParams.validationFullResult.id === this.addressTypes.offline.id ? 
+            (this.componentParams.switcherSelectedValue === transactionTypes.offline ? 'Offline' : 'Regular') :
+            this.componentParams.validationFullResult.type,
+          unit_name: this.selectedAssetValue.metadata.unit_name,
+          remaining: this.values.remaining,
+          change: this.values.change
         }
       };
-      this.router.navigate([this.router.url, { outlets: { popup: 'confirm-popup' }}], navigationExtras);
+
+      if (this.componentParams.isFullScreen) {
+        this.router.navigate([this.router.url, { outlets: { popup: 'confirm-popup' }}], navigationExtras);
+      } else {
+        this.router.navigate([routes.SEND_CONFIRMATION_ROUTE], navigationExtras);
+      }
     }
   }
 
   ngOnInit() {
-    this.fullSendForm.get('amount').valueChanges.pipe(debounceTime(300)).subscribe(newValue => {
+    this.sendForm.get('amount').valueChanges.pipe(debounceTime(300)).subscribe(newValue => {
       this.amountChanged(newValue);
     });
   }
@@ -318,7 +353,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     }
 
     this.addressInputCheck();
-    this.fullSendForm.get('amount').setValue(addAllAmount.toFixed());
+    this.sendForm.get('amount').setValue(addAllAmount.toFixed());
     //this.amountChanged(addAllAmount.toFixed());
   }
 
@@ -346,7 +381,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       this.values.amountToSend = amount;
       this.dataService.calcChange(parseFloat(new Big(this.values.amountToSend).times(globalConsts.GROTHS_IN_BEAM)),
         this.componentParams.switcherSelectedValue === transactionTypes.offline ||
-        this.componentParams.validationResult === this.addressTypes['max_privacy'].name, this.selectedAssetValue.asset_id);
+        (this.componentParams.validationResult === this.addressTypes['max_privacy'].name), this.selectedAssetValue.asset_id);
     } else {
       this.componentParams.isEnoughAmount = true;
     }
@@ -370,14 +405,14 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   }
 
   addressInputCheck() {
-    this.componentParams.isAddressInputValid = (this.fullSendForm.value.address.length > 0 ||
-      this.fullSendForm.value.address.length > 0) &&
+    this.componentParams.isAddressInputValid = (this.sendForm.value.address.length > 0 ||
+      this.sendForm.value.address.length > 0) &&
       this.componentParams.addressValidation;
   }
 
   valuesValidationCheck() {
     this.componentParams.isSendDataValid = this.componentParams.isAddressInputValid &&
-      this.componentParams.addressValidation && this.fullSendForm.value.amount > 0 &&
+      this.componentParams.addressValidation && this.sendForm.value.amount > 0 &&
       this.componentParams.isEnoughAmount;
   }
 
@@ -388,7 +423,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
   public switcherClicked(event, value:string) {
     this.componentParams.switcherSelectedValue = value;
     this.resetStats();
-    this.fullSendForm.get('amount').setValue(this.fullSendForm.value.amount);
+    this.sendForm.get('amount').setValue(this.sendForm.value.amount);
     //this.amountChanged(this.fullSendForm.value.amount);
   }
 
@@ -408,7 +443,7 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
     if (selectedAssetData) {
       this.selectedAssetStatus = selectedAssetData;
     }
-    this.fullSendForm.controls['amount'].setValue(0);
+    this.sendForm.controls['amount'].setValue(0);
     this.componentParams.isAssetDropdownVisible = false;
   }
 }

@@ -9,6 +9,7 @@ import { Store, select } from '@ngrx/store';
 import {
   selectPasswordCheckSetting,
 } from '@app/store/selectors/wallet-state.selectors';
+import Big from 'big.js';
 
 @Component({
   selector: 'app-send-confirmation',
@@ -17,15 +18,14 @@ import {
 })
 export class SendConfirmationComponent implements OnInit {
   public iconBack: string = `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`;
-  sendForm: FormGroup;
-  sub: Subscription;
+  public sendForm: FormGroup;
   public sendData = {
     address: '',
     fee: 0,
     comment: '',
-    amount: 0,
-    change: 0,
-    remaining: 0
+    amount: new Big(0),
+    asset_id: 0,
+    offline: false
   };
   popupOpened = false;
   isPassCheckEnabled = false;
@@ -33,6 +33,12 @@ export class SendConfirmationComponent implements OnInit {
   public componentParams = {
     sendClicked: false
   }
+  public feeString = '';
+  public typeString = '';
+  public unitName = '';
+  public amountValue = 0;
+  public remaining = 0;
+  public change = 0;
 
   constructor(private dataService: DataService,
               private store: Store<any>,
@@ -54,19 +60,29 @@ export class SendConfirmationComponent implements OnInit {
         amount: number,
         comment: string,
         change: number,
-        remaining: number
+        remaining: number,
+        asset_id: number,
+        offline: boolean,
+        type: string,
+        unit_name: string
       };
       this.sendData.address = state.address;
-      this.sendData.fee = state.fee === undefined || state.fee === 0 ? 100000 : state.fee;
-      this.sendData.amount = state.amount;
+      this.sendData.fee = state.fee;
+      this.feeString = (new Big(state.fee).div(globalConsts.GROTHS_IN_BEAM)).toFixed();
+      this.amountValue = (new Big(state.amount).div(globalConsts.GROTHS_IN_BEAM)).toFixed();
+      this.typeString = state.type;
+      this.unitName = state.unit_name;
+      this.sendData.amount = new Big(state.amount);
       this.sendData.comment = state.comment;
-      this.sendData.change = state.change;
-      this.sendData.remaining = state.remaining;
+      this.change = state.change;
+      this.sendData.asset_id = state.asset_id;
+      this.sendData.offline = state.offline;
+      this.remaining = state.remaining;
     } catch (e) {
       this.router.navigate([routes.SEND_ADDRESSES_ROUTE]);
     }
   }
-
+  
   submit($event) {
     $event.stopPropagation();
 
@@ -74,34 +90,18 @@ export class SendConfirmationComponent implements OnInit {
       this.dataService.transactionSend(this.sendData);
       this.componentParams.sendClicked = true;
     }
-    // if (this.isPassCheckEnabled) {
-    //   const navigationExtras: NavigationExtras = {
-    //     state: {
-    //       address: this.sendData.address,
-    //       fee: this.sendData.fee,
-    //       comment: this.sendData.comment,
-    //       amount: this.sendData.amount * globalConsts.GROTHS_IN_BEAM,
-    //       isPassCheckEnabled: true
-    //     }
-    //   };
-    //   this.router.navigate([this.router.url, { outlets: { popup: 'confirm-popup' }}], navigationExtras);
-    // } else {
-    //   this.dataService.transactionSend({
-    //     fee: this.sendData.fee,
-    //     address: this.sendData.address,
-    //     comment: this.sendData.comment,
-    //     amount: this.sendData.amount * globalConsts.GROTHS_IN_BEAM
-    //   });
-    // }
   }
 
   ngOnInit() {
   }
 
   backAmountClicked() {
-    const navigationExtras: NavigationExtras = {
-      state: this.sendData
-    };
-    this.router.navigate([routes.SEND_ADDRESSES_ROUTE], navigationExtras);
+    // const navigationExtras: NavigationExtras = {
+    //   state: {
+    //     address: this.sendData.address,
+    //     amount: (this.sendData.amount.div(globalConsts.GROTHS_IN_BEAM)).toFixed()
+    //   }
+    // };
+    this.router.navigate([routes.SEND_ADDRESSES_ROUTE]);//, navigationExtras);
   }
 }

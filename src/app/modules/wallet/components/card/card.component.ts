@@ -85,7 +85,7 @@ export class CardComponent implements OnInit {
 
           if (this.values !== undefined) {
             let prev = this.values.find(val => { return val.asset_id === value.asset_id });
-            value['isDetailsVisible'] = prev.isDetailsVisible ;
+            value['isDetailsVisible'] = prev.isDetailsVisible !== undefined ? prev.isDetailsVisible : false;
           }
 
           return value;
