@@ -201,7 +201,7 @@
                     <div class="details-value">{{detail.element.confirmations}}</div>
                   </ng-container>
                   <div class="details-title">TRANSACTION FEE</div>
-                  <div class="details-value">{{detail.element.fee}} GROTH</div>
+                  <div class="details-value">{{detail.element.fee | beam:'1.0-9'}} BEAM</div>
                   <ng-container *ngIf="detail.element.comment !== undefined && detail.element.comment.length > 0">
                     <div class="details-title">TRANSACTION COMMENT</div>
                     <div class="details-value">{{detail.element.comment}}</div>

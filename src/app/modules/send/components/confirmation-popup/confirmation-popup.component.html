@@ -24,15 +24,23 @@
             <div class="confirm__container__send-title title-text">SEND TO</div>
             <div class="confirm__container__send-value value-text">{{sendData.address}}</div>
             <div class="confirm__container__line">
+                <div class="confirm__container__line__type">
+                    <div class="confirm__container__line__type__title title-text">
+                        TRANSACTION TYPE
+                    </div>
+                    <div class="confirm__container__line__type__value">
+                        {{typeString}}
+                    </div>
+                </div>
                 <div class="confirm__container__line__amount">
                     <div class="confirm__container__line__amount__title title-text">
                         AMOUNT
                     </div>
                     <div class="confirm__container__line__amount__value">
-                        {{sendData.amount.toFixed() | beam:'1.0-9'}} BEAM
+                        {{amountValue}} {{unitName}}
                     </div>
                 </div>
-                <div class="rate-value">{{(sendData.amount.toFixed() | beam:'1.0-9') | rate}}</div>
+                <div class="rate-value" *ngIf="sendData.asset_id === 0">{{(amountValue) | rate}}</div>
                 <div class="confirm__container__line__fee">
                     <div class="confirm__container__line__fee__title title-text">
                         TRANSACTION FEE

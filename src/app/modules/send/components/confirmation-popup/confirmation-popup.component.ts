@@ -31,7 +31,10 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
   isFullScreen = false;
   isCorrectPass = true;
   isPassCheckEnabled = false;
-  feeString = '';
+  public feeString = '';
+  public typeString = '';
+  public unitName = '';
+  public amountValue = 0;
 
   public sendData = {
     address: '',
@@ -68,15 +71,20 @@ export class ConfirmationPopupComponent implements OnInit, OnDestroy {
         comment: string,
         isPassCheckEnabled: boolean,
         offline: boolean,
-        asset_id: number
+        asset_id: number,
+        type: string,
+        unit_name: string
       };
       this.sendData.address = state.address;
       this.sendData.fee = state.fee;
       this.feeString = (new Big(state.fee).div(globalConsts.GROTHS_IN_BEAM)).toFixed();
+      this.amountValue = (new Big(state.amount).div(globalConsts.GROTHS_IN_BEAM)).toFixed();
       this.sendData.amount = new Big(state.amount);
       this.sendData.comment = state.comment;
       this.sendData.asset_id = state.asset_id;
       this.sendData.offline = state.offline;
+      this.unitName = state.unit_name;
+      this.typeString = state.type;
       //this.isPassCheckEnabled = state.isPassCheckEnabled;
     } catch (e) {}
   }
