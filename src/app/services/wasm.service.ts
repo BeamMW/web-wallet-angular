@@ -23,6 +23,7 @@ export class WasmService {
   private options$: Observable<any>;
   private isMounted = false;
   private wasmReady = new BehaviorSubject<boolean>(false);
+  private isWalletWasOpened = false;
 
   constructor(
     public router: Router,
@@ -57,33 +58,37 @@ export class WasmService {
   }
 
   public deleteWalletDB() {
-    let req = indexedDB.deleteDatabase('/beam_wallet');
-    req.onsuccess = function () {
-      console.log("Deleted database successfully");
-    };
-    req.onerror = function () {
-      console.log("Couldn't delete database");
-    };
-    req.onblocked = (e) => {
-      console.log("Couldn't delete database due to the operation being blocked");
-    };  
+    this.module.DeleteWallet('/beam_wallet/wallet.db') 
   }
 
   public stopWallet() {
     if (this.wallet !== undefined) {
+      setTimeout((wc)=>{
+        this.wallet.stopWallet((data) => {
+          console.log("is running: " + this.wallet.isRunning())
+          console.log('wallet stopped:', data);
+        });     
+      }, 1000);
+    }
+  }
+
+  public stopAndDelete() {
+    if (this.wallet !== undefined) {
       this.wallet.stopWallet((data) => {
-        console.log("is running: " + this.wallet.isRunning())
-        console.log('wallet stopped:', data);
-        //this.deleteWalletDB();
+        console.log("is running: " + this.wallet.isRunning());
+        this.deleteWalletDB();
       });
     }
   }
 
   private startWallet(pass: string) {
-    this.wallet = new this.beamModule.WasmWalletClient("/beam_wallet/wallet.db", pass, "eu-node01.masternet.beam.mw:8200");
+    if (this.wallet === undefined) {
+      this.wallet = new this.beamModule.WasmWalletClient("/beam_wallet/wallet.db", pass, "eu-node01.masternet.beam.mw:8200");
+      this.store.dispatch(updateWalletData());
+    }
     console.log("starting wallet...");
     this.wallet.startWallet();
-    this.store.dispatch(updateWalletData());
+    
   }
 
   public createWallet(phrase: string, pass: string) {

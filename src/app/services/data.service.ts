@@ -239,7 +239,7 @@ export class DataService {
 
   clearWalletData() {
     clearInterval(this.refreshIntervalId);
-    this.wasmService.stopWallet();
+    this.wasmService.stopAndDelete();
     extensionizer.storage.local.remove(['settings', 'wallet', 'contacts', 'state']);
   }
 
@@ -449,7 +449,6 @@ export class DataService {
   }
 
   public createWallet(wallet: any, settings: any) {
-    this.wasmService.deleteWalletDB();
     this.saveWallet(wallet);
     this.settingsInit(settings.seedConfirmed);
     this.wasmService.createWallet(settings.seed, settings.pass);

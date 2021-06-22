@@ -2,19 +2,22 @@
 @import './styles';
 
 .example-container {
-    display: flex;
-    flex-direction: column;
+    width: 100%;
     margin-top: 15px;
 }
 
-.mat-table {
+.table {
     overflow: auto;
+    display: table;
+    border-collapse: separate;
+    box-sizing: border-box;
+    width: 100%;
     border-radius: 10px;
     background-color: rgba(255,255,255, 0);
 }
 
 .element-row {
-    min-height: 56px;
+    height: 56px;
     border: none;
     position: relative;
 }
@@ -24,7 +27,7 @@
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-.element-row:not(.expanded):nth-child(4n) {
+.element-row:not(.expanded):nth-child(2n) {
     background-color: rgba(255, 255, 255, 0.03);
 }
 
@@ -54,6 +57,18 @@
     border-bottom-width: 0px;
 }
 
+.table-header-item {
+    font-size: 14px;
+    color: #8da1ad;
+    font-family: 'ProximaNova', sans-serif;
+    cursor: pointer;
+    border: none;
+}
+
+.mat-cell {
+    border: none;
+}
+
 .asset-icon {
     width: 26px;
     height: 26px;
@@ -65,7 +80,6 @@
     margin-left: 20px;
 
     &__in-asset {
-        @include normal-text;
         font-family: 'ProximaNovaBold', sans-serif;
         font-size: 14px;
         font-weight: bold;
@@ -73,7 +87,6 @@
     }
 
     &__in-curr {
-        @include normal-text;
         margin-top: 2px;
         opacity: 0.5;
         font-family: 'ProximaNova', sans-serif;
@@ -82,30 +95,28 @@
     }
 }
 
-.mat-header-cell {
-    @include normal-text;
-    font-size: 14px;
-    color: #8da1ad;
-    font-family: 'SFProDisplayRegular', sans-serif;
-    cursor: pointer;
-}
-
-.mat-header-cell.active {
+.table-header-item.active {
     color: #ffffff;
     font-family: 'ProximaNovaBold', sans-serif;
 }
 
-.mat-cell {
-    @include normal-text;
+.table-content-item {
+    overflow: hidden;
+    word-wrap: break-word;
+    min-height: inherit;
     font-family: 'ProximaNova', sans-serif;
     font-size: 14px;
     line-height: 1.29;
     color: #ffffff;
 }
 
+.cell-content {
+    display: flex;
+    align-items: center;
+}
+
 .status-cell {
-    @include normal-text;
-    font-family: 'SFProDisplayItalic', sans-serif;
+    font-family: 'ProximaNovaItalic', sans-serif;
     font-size: 14px;
     font-style: italic;
 
@@ -116,22 +127,19 @@
 
 .coin-cell,
 .amount-cell {
-    @include normal-text;
-    font-family: 'SFProDisplayBold', sans-serif;
+    font-family: 'ProximaNovaBold', sans-serif;
     font-size: 14px;
     font-weight: bold;
 }
 
 .utxo-cell {
-    @include normal-text;
     opacity: .5;
-    font-family: 'SFProDisplayItalic', sans-serif;
+    font-family: 'ProximaNovaItalic', sans-serif;
     font-size: 14px;
     font-style: italic;
 }
 
 .address-cell {
-    @include normal-text;
     opacity: 0.5;
     font-family: 'ProximaNova', sans-serif;
     font-size: 14px;
@@ -141,7 +149,6 @@
 }
 
 .details-title {
-    @include normal-text;
     margin-top: 30px;
     font-family: 'ProximaNovaBold', sans-serif;
     opacity: .5;
@@ -152,7 +159,6 @@
 }
 
 .details-value {
-    @include normal-text;
     margin-top: 10px;
     font-family: 'ProximaNova', sans-serif;
     font-size: 14px;
@@ -167,7 +173,6 @@
     width: 100%;
 
     &__header {
-        @include normal-text;
         font-family: 'ProximaNovaBold', sans-serif;
         font-size: 14px;
         font-weight: bold;
@@ -176,7 +181,6 @@
     }
 
     &__subheader {
-        @include normal-text;
         margin-top: 20px;
         opacity: 0.5;
         font-family: 'ProximaNovaBold', sans-serif;
@@ -187,7 +191,6 @@
     }
 
     &__value {
-        @include normal-text;
         margin-top: 5px;
         font-family: 'ProximaNova', sans-serif;
         font-size: 14px;
@@ -207,7 +210,6 @@
         max-width: 600px;
 
         &__header {
-            @include normal-text;
             font-family: 'ProximaNovaBold', sans-serif;
             font-size: 14px;
             font-weight: bold;
@@ -227,7 +229,6 @@
             flex-direction: column;
             
             &__header {
-                @include normal-text;
                 display: flex;
                 flex-direction: row;
                 cursor: pointer;
@@ -256,7 +257,6 @@
                     margin-top: 20px;
 
                     &__value {
-                        @include normal-text;
                         margin-left: 10px;
                         font-size: 14px;
                         font-family: 'ProximaNova', sans-serif;
@@ -270,7 +270,6 @@
             margin-top: 60px;
 
             &__header {
-                @include normal-text;
                 font-family: 'ProximaNovaBold', sans-serif;
                 font-size: 14px;
                 font-weight: bold;
@@ -324,7 +323,6 @@
     }
 
     &__name {
-        @include normal-text;
         margin-left: 15px;
         font-family: 'ProximaNovaBold', sans-serif;
         font-size: 14px;
@@ -342,7 +340,6 @@
 }
 
 ::ng-deep .copy-tooltip {
-    @include normal-text;
     width: 155px;
     height: 30px;
     -webkit-backdrop-filter: blur(15px);
@@ -358,4 +355,21 @@
 
 ::ng-deep .copy-tooltip::after {
     border-color: transparent transparent rgba(42, 95, 135, 0.72) transparent !important;
+}
+
+tr.example-detail-row {
+    height: 0;
+}
+
+.example-element-row td {
+    border-bottom-width: 0;
+  }
+  
+.example-element-detail {
+    overflow: hidden;
+    display: flex;
+}
+
+table {
+    width: 100%;
 }

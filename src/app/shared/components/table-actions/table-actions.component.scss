@@ -1,7 +1,9 @@
-@import 'ui-mixins';
-
 .actions-control {
+    display: flex;
+    justify-content: flex-end;
+    
     &__button {
+        margin-top: 6px;
         background: rgba(0,0,0,0);
         border: none;
         padding: 0;
@@ -54,7 +56,6 @@
 }
 
 .actions-text {
-    @include normal-text;
     margin-left: 15px;
     font-family: 'ProximaNova', sans-serif;
     font-size: 16px;
