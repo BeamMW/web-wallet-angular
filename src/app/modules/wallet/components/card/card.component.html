@@ -1,7 +1,9 @@
 <ng-container *ngIf="values.length > 0" >
     <div class="cards">
         <ng-container *ngFor="let asset of values">
-            <div *ngIf="asset.available > 0 || asset.receiving > 0 || asset.maturing > 0 || asset.sending > 0">
+            <div *ngIf="asset.asset_id === 0 || 
+                    (asset.asset_id > 0 && (asset.available > 0 || asset.receiving > 0 || 
+                    asset.maturing > 0 || asset.sending > 0))">
                 <div #card [className]="'card'+ '--color-' + asset.asset_id" [style.background-image]="asset.bgStyle">
                     <img class="card__icon" [src]="asset.iconUrl">
                     <div class="card__data">
