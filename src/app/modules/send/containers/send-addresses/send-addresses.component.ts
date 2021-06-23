@@ -399,7 +399,8 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       this.values.amountToSend = amount;
       this.dataService.calcChange(parseFloat(new Big(this.values.amountToSend).times(globalConsts.GROTHS_IN_BEAM)),
         this.componentParams.switcherSelectedValue === transactionTypes.offline ||
-        (this.componentParams.validationResult === this.addressTypes['max_privacy'].name), this.selectedAssetValue.asset_id);
+        (this.componentParams.validationResult === this.addressTypes['max_privacy'].name ||
+        this.componentParams.validationResult === this.addressTypes['public_offline'].name), this.selectedAssetValue.asset_id);
     } else {
       this.componentParams.isEnoughAmount = true;
     }

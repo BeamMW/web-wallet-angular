@@ -77,18 +77,20 @@ export class StatusIconComponent implements OnInit {
       iconPath = this.icons.iconSentOwn;
     } else if (status === transactionsStatuses.CANCELED) {
       iconPath = this.transaction.income ? this.icons.iconCanceledIncome : this.icons.iconCanceledOutcome;
-    } else if (status === transactionsStatuses.CANCELED_MAX_PRIVACY) {
+    } else if (status === transactionsStatuses.CANCELED_MAX_PRIVACY || 
+        status === transactionsStatuses.CANCELED_PUBLIC_OFFLINE) {
       iconPath = this.transaction.income ? this.icons.iconCanceledMaxOnlineIncome 
         : this.icons.iconCanceledMaxOnlineOutcome;
-    } else if (status === transactionsStatuses.FAILED_MAX_PRIVACY) {
+    } else if (status === transactionsStatuses.FAILED_MAX_PRIVACY ||
+        status === transactionsStatuses.FAILED_PUBLIC_OFFLINE) {
       iconPath = this.transaction.income ? this.icons.iconFailedMaxOnlineIncome 
         : this.icons.iconFailedMaxOnlineOutcome;
-    } else if (status === transactionsStatuses.SENT_MAX_PRIVACY) {
-      iconPath = this.icons.iconSentMaxOnline;
-    } else if (status === transactionsStatuses.IN_PROGRESS_MAX_PRIVACY) {
+    } else if (status === transactionsStatuses.IN_PROGRESS_MAX_PRIVACY ||
+        status === transactionsStatuses.IN_PROGRESS_PUBLIC_OFFLINE) {
       iconPath = this.transaction.income ? this.icons.iconInProgressMaxOnlineIncome 
         : this.icons.iconInProgressMaxOnlineOutcome;
-    } else if (status === transactionsStatuses.SENT_MAX_PRIVACY) {
+    } else if (status === transactionsStatuses.SENT_MAX_PRIVACY ||
+        status === transactionsStatuses.SENT_PUBLIC_OFFLINE) {
       iconPath = this.icons.iconSentMaxOnline;
     } else if (status === transactionsStatuses.CANCELED_OFFLINE) {
       iconPath = this.transaction.income ? this.icons.iconCanceledMaxOfflineIncome 
@@ -103,7 +105,7 @@ export class StatusIconComponent implements OnInit {
         : this.icons.iconInProgressMaxOfflineOutcome;
     } else if (status === transactionsStatuses.SENT_OFFLINE) {
       iconPath = this.icons.iconSentMaxOffline;
-    }
+    } 
      
     return iconPath;
   }

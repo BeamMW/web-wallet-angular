@@ -29,18 +29,21 @@ export class StatusColorDirective implements OnInit {
     if (status === transactionsStatuses.PENDING ||
       status === transactionsStatuses.IN_PROGRESS ||
       status === transactionsStatuses.IN_PROGRESS_MAX_PRIVACY ||
+      status === transactionsStatuses.IN_PROGRESS_PUBLIC_OFFLINE ||
       status === transactionsStatuses.IN_PROGRESS_OFFLINE ) {
         color = this.transaction.income ? statusesColors.RECEIVE : statusesColors.SEND;
     } else if (status === transactionsStatuses.WAITING_FOR_RECEIVER ||
       status === transactionsStatuses.SENT ||
       status === transactionsStatuses.SENDING ||
       status === transactionsStatuses.SENT_MAX_PRIVACY ||
+      status === transactionsStatuses.SENT_PUBLIC_OFFLINE ||
       status === transactionsStatuses.SENT_OFFLINE) {
         color = statusesColors.SEND;
     } else if (status === transactionsStatuses.WAITING_FOR_SENDER ||
       status === transactionsStatuses.RECEIVED ||
       status === transactionsStatuses.RECEIVING ||
       status === transactionsStatuses.RECEIVED_MAX_PRIVACY ||
+      status === transactionsStatuses.RECEIVED_PUBLIC_OFFLINE ||
       status === transactionsStatuses.RECEIVED_OFFLINE) {
         color = statusesColors.RECEIVE;
     } else if (status === transactionsStatuses.SENT_TO_OWN_ADDRESS ||
@@ -48,10 +51,12 @@ export class StatusColorDirective implements OnInit {
         color = statusesColors.SELF_SENDING;
     } else if (status === transactionsStatuses.FAILED ||
       status === transactionsStatuses.FAILED_MAX_PRIVACY ||
+      status === transactionsStatuses.FAILED_PUBLIC_OFFLINE ||
       status === transactionsStatuses.FAILED_OFFLINE) {
         color = statusesColors.FAILED;
     } else if (status === transactionsStatuses.CANCELED ||
       status === transactionsStatuses.CANCELED_MAX_PRIVACY ||
+      status === transactionsStatuses.CANCELED_PUBLIC_OFFLINE ||
       status === transactionsStatuses.CANCELED_OFFLINE ||
       status === transactionsStatuses.EXPIRED) {
         color = statusesColors.CANCELED;

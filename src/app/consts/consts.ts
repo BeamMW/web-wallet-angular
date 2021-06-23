@@ -39,7 +39,13 @@ export enum transactionsStatuses {
     RECEIVED_MAX_PRIVACY = 'received max privacy',
     CANCELED_MAX_PRIVACY = 'canceled max privacy',
     IN_PROGRESS_MAX_PRIVACY = 'in progress max privacy',
-    FAILED_MAX_PRIVACY = 'failed max privacy'
+    FAILED_MAX_PRIVACY = 'failed max privacy',
+
+    IN_PROGRESS_PUBLIC_OFFLINE = 'in progress public offline',
+    FAILED_PUBLIC_OFFLINE = 'failed public offline',
+    SENT_PUBLIC_OFFLINE = 'sent public offline',
+    CANCELED_PUBLIC_OFFLINE = 'canceled public offline',
+    RECEIVED_PUBLIC_OFFLINE = 'received public offline'
 }
 
 export enum utxoStatuses {
