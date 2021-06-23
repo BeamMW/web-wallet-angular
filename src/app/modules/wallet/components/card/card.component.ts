@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Asset } from '@app/models';
 import { environment } from '@environment';
 import {
@@ -47,15 +47,11 @@ export class CardComponent implements OnInit {
   public selectorActiveTitle = selectorTitles.BALANCE;
   public isDetailsVisible: boolean;
 
-
-  // public compomentParams = {
-  //   isDetailsVisible:,
-  // }
-
   constructor(private store: Store<any>) {
     this.assets$ = this.store.pipe(select(selectAssetsInfo));
     this.grothsValue = globalConsts.GROTHS_IN_BEAM;
     this.isDetailsVisible = false;
+    this.values = [];
   }
 
   private hexToRgb = hex =>
@@ -83,37 +79,18 @@ export class CardComponent implements OnInit {
             }
           }).unsubscribe();
 
-          if (this.values !== undefined) {
+          
+          if (this.values.length > 0) {
             let prev = this.values.find(val => { return val.asset_id === value.asset_id });
-            value['isDetailsVisible'] = prev.isDetailsVisible !== undefined ? prev.isDetailsVisible : false;
-          }
+            value['isDetailsVisible'] = prev && prev.isDetailsVisible !== undefined ? prev.isDetailsVisible : false;
+          }  
 
           return value;
         });
 
         this.values = data;
-        
       }
     });
-    // this.iconUrl = 
-    //   `${environment.assetsPath}/images/modules/wallet/components/card/${
-    //     this.cardData.asset_id === 0 ? 'icon-beam' : ('asset-' + this.cardData.asset_id)
-    //   }.svg`;
-    // this.assets$.subscribe(assets => {
-    //   const asset = assets.find(elem => elem.asset_id === this.cardData.asset_id);
-    //   if (asset) {
-    //     this.assetData = asset.metadata;
-    //     if (asset.metadata.color) {
-    //       const rgbaValues = this.hexToRgb(asset.metadata.color);
-    //       this.card.nativeElement.setAttribute('style', 'background-image: linear-gradient(107deg, rgba(' + 
-    //         rgbaValues.join(',') + ', .3) 2%, rgba(0, 69, 143, .3) 98%)');
-    //     }
-    //   }
-    // });
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    // changes.prop contains the old and the new value...
   }
 
   public websiteClicked(link: string) {
@@ -121,13 +98,7 @@ export class CardComponent implements OnInit {
   }
 
   public showDetails(asset) {
-    for(let item of this.values) {
-      if (asset.asset_id === item.asset_id) {
-        item.isDetailsVisible = !item.isDetailsVisible;
-      } else {
-        item.isDetailsVisible = false;
-      }
-    }
+    asset.isDetailsVisible = !asset.isDetailsVisible;
   }
 
   public hideDetails(asset) {
