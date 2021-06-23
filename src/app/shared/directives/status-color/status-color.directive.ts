@@ -52,7 +52,8 @@ export class StatusColorDirective implements OnInit {
         color = statusesColors.FAILED;
     } else if (status === transactionsStatuses.CANCELED ||
       status === transactionsStatuses.CANCELED_MAX_PRIVACY ||
-      status === transactionsStatuses.CANCELED_OFFLINE) {
+      status === transactionsStatuses.CANCELED_OFFLINE ||
+      status === transactionsStatuses.EXPIRED) {
         color = statusesColors.CANCELED;
     }
 
