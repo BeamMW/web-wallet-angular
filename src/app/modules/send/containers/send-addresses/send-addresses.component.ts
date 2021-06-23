@@ -53,6 +53,11 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       name: 'Regular address',
       type: 'Offline'
     },
+    'public_offline': {
+      id: 'public_offline',
+      name: 'Public offline address',
+      type: 'Public offline'
+    },
     'unknown': {
       id: '',
       name: '',
@@ -197,9 +202,29 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
       this.componentParams.popupOpened = emittedState;
     }));
 
+    this.assetsData$ = this.store.pipe(select(selectAssetsInfo));
+
     this.subscriptions.push(this.walletStatus$.subscribe((status) => {
       this.walletStatusLoading = false;
       this.globalStatus = status;
+
+      this.assetsData$.subscribe(value => {
+        const assets = value.map(asset=> {
+          if(asset.asset_id > 0) {
+            const assetFromStatus = status.totals.find(assetData => assetData.asset_id === asset.asset_id);
+            if (assetFromStatus) {
+              asset['status'] = assetFromStatus;
+            }
+          }
+
+          return asset;
+        });
+
+        this.assets = [];
+        this.assets.push(this.DEFAULT_ASSET)
+        this.assets.push(...assets);
+      }).unsubscribe();
+
       const selectedAssetData = status.totals.find(value => value.asset_id == this.selectedAssetValue.asset_id);
       if (selectedAssetData) {
         this.selectedAssetStatus = selectedAssetData;
@@ -268,13 +293,6 @@ export class SendAddressesComponent implements OnInit, OnDestroy {
         });
       }
       this.valuesValidationCheck();
-    }));
-
-    this.assetsData$ = this.store.pipe(select(selectAssetsInfo));
-    this.subscriptions.push(this.assetsData$.subscribe(value => {
-      this.assets = [];
-      this.assets.push(this.DEFAULT_ASSET)
-      this.assets.push(...value);
     }));
   }
 

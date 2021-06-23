@@ -9,7 +9,8 @@ import { saveReceiveData } from '@app/store/actions/wallet.actions';
 import { globalConsts, transactionTypes, rpcMethodIdsConsts, routes } from '@consts';
 import { ClipboardService } from 'ngx-clipboard'
 import {
-  selectAssetsInfo
+  selectAssetsInfo,
+  selectWalletStatus
 } from '@app/store/selectors/wallet-state.selectors';
 
 @Component({
@@ -29,6 +30,7 @@ export class ReceiveComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
   private assetsData$: Observable<any>;
+  private walletStatus$: Observable<any>;
   
   public componentParams = {
     iconBack: `${environment.assetsPath}/images/modules/send/containers/send-addresses/icon-back.svg`,
@@ -87,10 +89,24 @@ export class ReceiveComponent implements OnInit, OnDestroy {
     this.selectedAssetValue = this.DEFAULT_ASSET;
 
     this.assetsData$ = this.store.pipe(select(selectAssetsInfo));
-    this.subscriptions.push(this.assetsData$.subscribe(value => {
-      this.assets = [];
-      this.assets.push(this.DEFAULT_ASSET)
-      this.assets.push(...value);
+    this.walletStatus$ = this.store.pipe(select(selectWalletStatus));
+    this.subscriptions.push(this.walletStatus$.subscribe((status) => {
+      this.assetsData$.subscribe(value => {
+        const assets = value.map(asset=> {
+          if(asset.asset_id > 0) {
+            const assetFromStatus = status.totals.find(assetData => assetData.asset_id === asset.asset_id);
+            if (assetFromStatus) {
+              asset['status'] = assetFromStatus;
+            }
+          }
+
+          return asset;
+        });
+
+        this.assets = [];
+        this.assets.push(this.DEFAULT_ASSET)
+        this.assets.push(...assets);
+      }).unsubscribe();
     }));
   }
 

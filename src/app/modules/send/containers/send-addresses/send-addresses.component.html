@@ -230,7 +230,10 @@
                     <div class="asset-selector__dropdown__content">
                         <ul class="asset-selector__dropdown__column">
                             <ng-container *ngFor="let item of assets">
-                                <li *ngIf="item.asset_id === 0 || (item.asset_id > 0 && (item.available > 0 || item.receiving > 0 || item.maturing > 0 || item.sending > 0))"
+                                <li *ngIf="item.asset_id === 0 || 
+                                            (item.asset_id > 0 && (item.status.available > 0 
+                                            || item.status.receiving > 0 || item.status.maturing > 0 
+                                            || item.status.sending > 0))"
                                         class="asset-selector__dropdown__item"
                                         [class.active]="item === selectedAssetValue" 
                                         (click)="selectAssetItemClicked(item)">

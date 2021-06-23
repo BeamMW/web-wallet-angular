@@ -114,18 +114,24 @@
                                                     appClickOutside (clickOutside)="onClickedOutside($event)">
                                                 <div class="asset-selector__dropdown__content">
                                                     <ul class="asset-selector__dropdown__column">
-                                                        <li *ngFor="let item of assets" 
-                                                                class="asset-selector__dropdown__item"
-                                                                [class.active]="item === selectedAssetValue" 
-                                                                (click)="selectAssetItemClicked(item)">
-                                                            <img class="asset-selector__dropdown__item__icon" 
-                                                                src="{{ 'assets/images/modules/wallet/components/card/'
-                                                                    +(item.asset_id === 0 ? 'icon-beam' 
-                                                                    : ('asset-' + item.asset_id))+'.svg' }}">
-                                                            <span class="asset-selector__dropdown__item__name">
-                                                                {{item.metadata.unit_name}}
-                                                            </span> 
-                                                        </li>
+                                                        <ng-container *ngFor="let item of assets">
+                                                            <li *ngIf="item.asset_id === 0 || 
+                                                                        (item.asset_id > 0 && (item.status.available > 0 
+                                                                        || item.status.receiving > 0 
+                                                                        || item.status.maturing > 0 
+                                                                        || item.status.sending > 0))"
+                                                                    class="asset-selector__dropdown__item"
+                                                                    [class.active]="item === selectedAssetValue" 
+                                                                    (click)="selectAssetItemClicked(item)">
+                                                                <img class="asset-selector__dropdown__item__icon" 
+                                                                    src="{{ 'assets/images/modules/wallet/components/card/'
+                                                                        +(item.asset_id === 0 ? 'icon-beam' 
+                                                                        : ('asset-' + item.asset_id))+'.svg' }}">
+                                                                <span class="asset-selector__dropdown__item__name">
+                                                                    {{item.metadata.unit_name}}
+                                                                </span> 
+                                                            </li>
+                                                        </ng-container>
                                                     </ul>
                                                 </div>
                                             </div>
