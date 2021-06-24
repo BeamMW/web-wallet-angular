@@ -131,14 +131,14 @@
                                 </div>
                                 <div class="right-row__stats__content__values" 
                                         [class.incorrect-amount]="!componentParams.isEnoughAmount">
-                                
-                                    <div>
+                                    <div class="value-row-item">
                                         {{values.amountToSend}}
-                                        {{selectedAssetValue.metadata.unit_name}}</div>
+                                        <span class="value-unit">{{selectedAssetValue.metadata.unit_name}}</span>
+                                    </div>
                                     <div class="rate-row-item">{{values.amountToSend | rate}}</div>
                                     <div class="value-row-item">
                                         {{selectedAssetValue.asset_id == 0 ? values.change : values.asset_change}}
-                                        {{selectedAssetValue.metadata.unit_name}}
+                                        <span class="value-unit">{{selectedAssetValue.metadata.unit_name}}</span>
                                     </div>
                                     <div class="rate-row-item">
                                         {{(selectedAssetValue.asset_id == 0 ? values.change : values.asset_change) | rate}}
@@ -147,7 +147,7 @@
                                     <div class="rate-row-item">{{values.fee_formatted | rate}}</div>
                                     <div class="value-row-item">
                                         {{values.remaining}}
-                                        {{selectedAssetValue.metadata.unit_name}}
+                                        <span class="value-unit">{{selectedAssetValue.metadata.unit_name}}</span>
                                     </div>
                                     <div class="rate-row-item">{{values.remaining | rate}}</div>
                                     <ng-container *ngIf="selectedAssetValue.asset_id !== 0">
@@ -253,7 +253,7 @@
         </div>
         <div class="amount-validator" *ngIf="!componentParams.isEnoughAmount">
             Insufficient funds: you would need {{componentParams.notEnoughtValue}} 
-            {{selectedAssetValue.metadata.unit_name}} to complete the transaction
+            <span class="amount-validator__unit">{{selectedAssetValue.metadata.unit_name}}</span> to complete the transaction
         </div>
         <div class="amount-rate" *ngIf="selectedAssetStatus.asset_id === 0 && componentParams.isEnoughAmount">
             {{values.amountToSend | rate}}

@@ -30,7 +30,6 @@
         margin-left: 10px;
 
         &__value {
-            @include normal-text;
             font-family: 'ProximaNova', sans-serif;
             font-size: 16px;
             color: #fff;
@@ -38,6 +37,10 @@
             align-items: center;
 
             &__uname {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                max-width: 105px;
+                white-space: nowrap;
                 margin-left: 5px;
             }
 
@@ -53,7 +56,6 @@
         }
 
         &__rate {
-            @include normal-text;
             font-family: 'ProximaNova', sans-serif;
             opacity: 0.7;
             color: #fff;
@@ -61,7 +63,6 @@
         }
 
         &__locked {
-            @include normal-text;
             font-family: 'ProximaNova', sans-serif;
             opacity: 0.5;
             color: #fff;
@@ -201,7 +202,6 @@
 
             &__title {
                 width: 70px;
-                @include normal-text;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 12px;
                 color: #fff;
@@ -209,7 +209,10 @@
 
             &__value {
                 margin-left: 20px;
-                @include normal-text;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                max-width: 215px;
+                white-space: nowrap;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 12px;
                 color: #fff;
@@ -234,15 +237,17 @@
     
             &__name {
                 margin-left: 15px;
-                @include normal-text;
                 font-family: 'ProximaNovaBold', sans-serif;
                 font-size: 14px;
                 font-weight: bold;
                 color: #fff;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                max-width: 100px;
+                white-space: nowrap;
             }
     
             &__unit {
-                @include normal-text;
                 display: flex;
                 text-align: center;
                 margin-left: 15px;
@@ -254,6 +259,10 @@
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 12px;
                 color: #fff;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                max-width: 100px;
+                white-space: nowrap;
             }
         }
 
@@ -277,7 +286,6 @@
 }
 
 .item-link {
-    @include normal-text;
     font-family: 'ProximaNova', sans-serif;
     font-size: 12px;
     color: #05e2c2;
@@ -286,7 +294,6 @@
 }
 
 .item-title {
-    @include normal-text;
     opacity: 0.5;
     font-family: 'ProximaNova', sans-serif;
     font-size: 12px;
@@ -295,12 +302,29 @@
 }
 
 .item-value {
-    @include normal-text;
     margin-left: 25px;
     font-family: 'ProximaNova', sans-serif;
     font-size: 12px;
     color: #fff;
     max-width: 235px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.uname {
+    white-space: nowrap;
+}
+
+.short {
+    display: -webkit-box;
+   -webkit-line-clamp: 3;
+   -webkit-box-orient: vertical;
+}
+
+.long {
+    display: -webkit-box;
+   -webkit-line-clamp: 15; /* number of lines to show */
+   -webkit-box-orient: vertical;
 }
 
 .column {
@@ -310,7 +334,6 @@
 .selector {
     cursor: pointer;
     &__title {
-        @include normal-text;
         margin: 3px 15px;
         font-family: 'ProximaNova', sans-serif;
         font-size: 12px;

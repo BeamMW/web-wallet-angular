@@ -107,19 +107,19 @@
 
                                 <div class="details__info__optional__item column">
                                     <div class="item-title">Smallest unit name</div>
-                                    <div class="item-value">{{ asset.assetData.smallest_unit_name }}</div>
+                                    <div class="item-value uname">{{ asset.assetData.smallest_unit_name }}</div>
                                 </div>
 
                                 <div class="details__info__optional__item column"
                                         *ngIf="asset.assetData.short_desc !== undefined">
                                     <div class="item-title">Short description</div>
-                                    <div class="item-value">{{ asset.assetData.short_desc }}</div>
+                                    <div class="item-value short">{{ asset.assetData.short_desc }}</div>
                                 </div>
 
                                 <div class="details__info__optional__item column" 
                                         *ngIf="asset.assetData.long_desc !== undefined">
                                     <div class="item-title">Long description</div>
-                                    <div class="item-value">{{ asset.assetData.long_desc }}</div>
+                                    <div class="item-value long">{{ asset.assetData.long_desc }}</div>
                                 </div>
                             </div>
                         </div>

@@ -32,7 +32,6 @@
         }
 
         &__title {
-            @include normal-text;
             font-family: 'ProximaNovaSemiBold', sans-serif;
             margin: 0 auto;
             color: #ffffff;
@@ -122,7 +121,6 @@
             }
 
             &__info {
-                @include normal-text;
                 margin-top: 30px;
                 max-width: 370px;
                 opacity: 0.5;
@@ -149,7 +147,6 @@
   
 .switch__regular,
 .switch__offline {
-    @include normal-text;
     font-family: 'ProximaNova', sans-serif;
     cursor: pointer;
     position: relative;
@@ -171,7 +168,6 @@
 }
 
 .selector {
-    @include normal-text;
     font-family: 'ProximaNova', sans-serif;
     display: flex;
     align-items: center;
@@ -228,7 +224,6 @@
 }
 
 .container-header span {
-    @include normal-text;
     font-family: 'ProximaNovaBold', sans-serif;
     font-size: 14px;
     font-weight: bold;
@@ -237,7 +232,6 @@
 }
 
 .address-input {
-    @include normal-text;
     background: rgba(255, 255, 255, 0);
     font-family: 'ProximaNova', sans-serif;
     border: none;
@@ -251,7 +245,6 @@
 }
 
 .address-input:focus {
-    @include normal-text;
     font-family: 'ProximaNova', sans-serif;
     outline-width: 0;
     font-size: 14px;
@@ -259,7 +252,6 @@
 }
 
 .address-input::placeholder {
-    @include normal-text;
     font-family: 'ProximaNova', sans-serif;
     font-size: 14px;
     letter-spacing: 0.26px;
@@ -276,7 +268,6 @@
 }
 
 .address-validator {
-    @include normal-text;
     margin-top: 5px;
     font-family: 'ProximaNovaIt', sans-serif;
     font-size: 14px;
@@ -284,7 +275,6 @@
 }
 
 .address-type {
-    @include normal-text;
     margin-top: 5px;
     font-family: 'ProximaNovaIt', sans-serif;
     font-size: 14px;
@@ -297,7 +287,6 @@
     width: 100%;
 
     &__input {
-        @include normal-text;
         background: rgba(255, 255, 255, 0);
         font-family: 'ProximaNova', sans-serif;
         border: none;
@@ -312,7 +301,6 @@
     }
 
     &__input:focus {
-        @include normal-text;
         font-family: 'ProximaNova', sans-serif;
         outline-width: 0;
         font-size: 18px;
@@ -322,7 +310,6 @@
     }
 
     &__input::placeholder {
-        @include normal-text;
         font-family: 'ProximaNova', sans-serif;
         font-size: 18px;
         font-weight: 300;
@@ -342,12 +329,18 @@
 }
 
 .amount-validator {
-    @include normal-text;
     margin-top: 10px;
     font-family: 'ProximaNova', sans-serif;
     font-size: 13px;
     line-height: 1.23;
     color: #ff625c;
+
+    &__unit {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: 45px;
+        white-space: nowrap;
+    }
 }
 
 .asset-selector {
@@ -370,7 +363,10 @@
         }
 
         &__name {
-            @include normal-text;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 45px;
+            white-space: nowrap;
             font-family: 'ProximaNova', sans-serif;
             font-size: 16px;
             color: #ffffff;
@@ -386,7 +382,6 @@
     }
 
     &__dropdown {
-        @include normal-text;
         font-family: 'ProximaNova', sans-serif;
         position: absolute;
         width: 100px;
@@ -419,6 +414,10 @@
             }
 
             &__name {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                max-width: 55px;
+                white-space: nowrap;
                 margin-left: 5px;
                 font-size: 13px;
             }
@@ -438,7 +437,6 @@
 .amount-rate {
     margin-top: 5px;
     font-family: 'ProximaNova', sans-serif;
-    @include normal-text;
     opacity: 0.7;
     font-size: 14px;
     font-weight: 300;
@@ -468,7 +466,10 @@
     margin-top: 10px;
 
     &__value {
-        @include normal-text;
+        max-width: 250px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
         font-family: 'ProximaNova', sans-serif;
         font-size: 14px;
         color: #ffffff;
@@ -481,7 +482,6 @@
 
         &__button {
             margin-left: 15px;
-            @include normal-text;
             font-family: 'ProximaNovaBold', sans-serif;
             font-size: 14px;
             font-weight: bold;
@@ -496,7 +496,6 @@
 
 .total-rate {
     opacity: 0.5;
-    @include normal-text;
     font-family: 'ProximaNova', sans-serif;
     font-size: 12px;      
     color: #ffffff;
@@ -510,7 +509,6 @@
 
 .comment-input,
 .fee__input {
-    @include normal-text;
     background: rgba(255, 255, 255, 0);
     font-family: 'ProximaNova', sans-serif;
     border: none;
@@ -525,7 +523,6 @@
 
 .comment-input:focus,
 .fee__input:focus {
-    @include normal-text;
     font-family: 'ProximaNova', sans-serif;
     outline-width: 0;
     font-size: 14px;
@@ -536,7 +533,6 @@
 
 .comment-input::placeholder,
 .fee__input::placeholder {
-    @include normal-text;
     font-family: 'ProximaNova', sans-serif;
     font-size: 14px;
     color: rgba(255, 255, 255, .3);
@@ -556,7 +552,6 @@
 }
 
 .fee-input-validator {
-    @include normal-text;
     margin-top: 10px;
     font-family: 'ProximaNova', sans-serif;
     font-size: 13px;
@@ -668,7 +663,6 @@
                 flex-direction: row;
               
                 &__titles {
-                    @include normal-text;
                     font-family: 'ProximaNova', sans-serif;
                     font-size: 14px;
                     letter-spacing: 0.35px;
@@ -676,7 +670,6 @@
                 }
 
                 &__values {
-                    @include normal-text;
                     font-family: 'ProximaNova', sans-serif;
                     font-size: 14px;
                     color: #ffffff;
@@ -733,7 +726,6 @@
                 }
 
                 &__info {
-                    @include normal-text;
                     margin-top: 30px;
                     max-width: 370px;
                     opacity: 0.5;
@@ -751,12 +743,24 @@
     }
 
     .value-row-item {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .value-row-item:not(:first-child) {
         margin-top: 16px;
+    }
+
+    .value-unit {
+        margin-left: 5px;
+        max-width: 90px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 
     .rate-row-item {
         opacity: 0.5;
-        @include normal-text;
         font-family: 'ProximaNova', sans-serif;
         font-size: 12px;
         color: #ffffff;

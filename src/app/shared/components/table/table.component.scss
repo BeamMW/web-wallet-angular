@@ -81,6 +81,10 @@
 
     &__in-asset {
         font-family: 'ProximaNovaBold', sans-serif;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: 250px;
+        white-space: nowrap;
         font-size: 14px;
         font-weight: bold;
         color: #ffffff;

@@ -204,7 +204,6 @@
       
     .switch__regular,
     .switch__maxprivacy {
-        @include normal-text;
         font-family: 'ProximaNova', sans-serif;
         cursor: pointer;
         position: relative;
@@ -226,7 +225,6 @@
     }
     
     .selector {
-        @include normal-text;
         font-family: 'ProximaNova', sans-serif;
         display: flex;
         align-items: center;
@@ -266,7 +264,6 @@
     }
 
     .container-header span {
-        @include normal-text;
         font-family: 'ProximaNovaBold', sans-serif;
         font-size: 14px;
         font-weight: bold;
@@ -286,7 +283,6 @@
         }
 
         &__currency {
-            @include normal-text;
             font-family: 'ProximaNova', sans-serif;
             font-size: 24px;
             font-weight: 300;
@@ -329,7 +325,6 @@
                 width: 100%;
 
                 &__input {
-                    @include normal-text;
                     background: rgba(255, 255, 255, 0);
                     font-family: 'ProximaNova', sans-serif;
                     border: none;
@@ -344,7 +339,6 @@
                 }
 
                 &__input:focus {
-                    @include normal-text;
                     font-family: 'ProximaNova', sans-serif;
                     outline-width: 0;
                     font-size: 36px;
@@ -354,7 +348,6 @@
                 }
 
                 &__input::placeholder {
-                    @include normal-text;
                     font-family: 'ProximaNova', sans-serif;
                     font-size: 36px;
                     font-weight: 300;
@@ -366,7 +359,6 @@
             &__subcontent {
                 margin-top: 5px;
                 font-family: 'ProximaNova', sans-serif;
-                @include normal-text;
                 opacity: 0.7;
                 font-size: 14px;
                 font-weight: 300;
@@ -386,7 +378,6 @@
                 width: 100%;
 
                 &__input {
-                    @include normal-text;
                     background: rgba(255, 255, 255, 0);
                     font-family: 'ProximaNova', sans-serif;
                     border: none;
@@ -400,7 +391,6 @@
                 }
 
                 &__input:focus {
-                    @include normal-text;
                     font-family: 'ProximaNova', sans-serif;
                     outline-width: 0;
                     font-size: 14px;
@@ -410,7 +400,6 @@
                 }
 
                 &__input::placeholder {
-                    @include normal-text;
                     font-family: 'ProximaNova', sans-serif;
                     font-size: 14px;
                     color: rgba(255, 255, 255, .3);
@@ -443,7 +432,6 @@
                     margin-top: 20px;
 
                     &__value {
-                        @include normal-text;
                         display: flex;
                         font-family: 'ProximaNova', sans-serif;
                         font-size: 14px;
@@ -457,7 +445,6 @@
 
                     &__details {
                         width: 98px;
-                        @include normal-text;
                         margin-top: 10px;
                         cursor: pointer;
                         font-family: 'ProximaNova', sans-serif;
@@ -508,7 +495,6 @@
                 }
 
                 &__info {
-                    @include normal-text;
                     margin-top: 30px;
                     max-width: 370px;
                     opacity: 0.5;
@@ -541,7 +527,10 @@
             }
     
             &__name {
-                @include normal-text;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                max-width: 45px;
+                white-space: nowrap;
                 font-family: 'ProximaNova', sans-serif;
                 font-size: 16px;
                 color: #ffffff;
@@ -557,7 +546,6 @@
         }
     
         &__dropdown {
-            @include normal-text;
             font-family: 'ProximaNova', sans-serif;
             position: absolute;
             width: 100px;
@@ -590,6 +578,10 @@
                 }
     
                 &__name {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    max-width: 55px;
+                    white-space: nowrap;
                     margin-left: 5px;
                     font-size: 13px;
                 }
