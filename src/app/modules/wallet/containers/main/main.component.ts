@@ -102,19 +102,21 @@ export class MainComponent implements OnInit, OnDestroy {
       this.verificatedSetting = verState;
 
       this.walletStatus$.subscribe((walletState) => {
-        this.componentSettings.isAvailableEnough = verState.balanceWasPositiveMoreEn ||
-          (!verState.balanceWasPositiveMoreEn && 
-          (parseFloat(walletState.totals[0].receiving) >= 100 * globalConsts.GROTHS_IN_BEAM ||
-          parseFloat(walletState.totals[0].available) >= 100 * globalConsts.GROTHS_IN_BEAM));
+        if (walletState.totals !== undefined) {
+          this.componentSettings.isAvailableEnough = verState.balanceWasPositiveMoreEn ||
+            (!verState.balanceWasPositiveMoreEn && 
+            (parseFloat(walletState.totals[0].receiving) >= 100 * globalConsts.GROTHS_IN_BEAM ||
+            parseFloat(walletState.totals[0].available) >= 100 * globalConsts.GROTHS_IN_BEAM));
 
-        this.componentSettings.validationState = !this.verificatedSetting.state &&
-          (!this.verificatedSetting.isMessageClosed ||
-          (this.verificatedSetting.isMessageClosed && this.componentSettings.isAvailableEnough));
+          this.componentSettings.validationState = !this.verificatedSetting.state &&
+            (!this.verificatedSetting.isMessageClosed ||
+            (this.verificatedSetting.isMessageClosed && this.componentSettings.isAvailableEnough));
 
-        this.componentSettings.validationStateLoaded = true;
-        this.componentSettings.isValidationVisible = this.componentSettings.validationState;
-        this.componentSettings.isGetCoinsVisible = !verState.balanceWasPositive &&
-          walletState.totals[0].available === 0 && !this.dataService.getCoinsState.getState();
+          this.componentSettings.validationStateLoaded = true;
+          this.componentSettings.isValidationVisible = this.componentSettings.validationState;
+          this.componentSettings.isGetCoinsVisible = !verState.balanceWasPositive &&
+            walletState.totals[0].available === 0 && !this.dataService.getCoinsState.getState();
+        }
       });
     });
 

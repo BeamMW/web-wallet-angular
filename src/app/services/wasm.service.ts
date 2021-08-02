@@ -76,9 +76,9 @@ export class WasmService {
     if (this.wallet !== undefined) {
       this.wallet.stopWallet((data) => {
         console.log("is running: " + this.wallet.isRunning());
-        this.deleteWalletDB();
       });
     }
+    this.deleteWalletDB();
   }
 
   private startWallet(pass: string) {
