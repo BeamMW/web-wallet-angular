@@ -20,6 +20,7 @@
             "customWebpackConfig": {
               "path": "src/custom-webpack-dev.config.js"
             },
+            "deleteOutputPath": false,
             "outputPath": "dist/web-wallet",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -31,6 +32,8 @@
               "src/assets",
               "src/manifest.json",
               "src/background.js",
+              "src/inpage.js",
+              "src/contentscript.js",
               "src/wasm/wasm-client.wasm",
               "src/wasm/wasm-client.js",
               "src/wasm/wasm-client.worker.js"
@@ -94,6 +97,14 @@
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
           }
         },

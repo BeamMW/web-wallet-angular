@@ -19,9 +19,9 @@ import {
   selectVerificatedSetting,
   selectWalletStatus
 } from '@app/store/selectors/wallet-state.selectors';
-import { DataService, WindowService } from '@app/services';
+import { DataService, WindowService, WasmService } from '@app/services';
 import { routes, globalConsts } from '@consts';
-
+import * as extensionizer from 'extensionizer';
 import { environment } from '@environment';
 
 export enum selectorTitles {
@@ -49,7 +49,6 @@ export class MainComponent implements OnInit, OnDestroy {
   public iconEmptyTransactions: string = this.basePath + `/images/modules/wallet/containers/main/icon-wallet.svg`;
   public iconGetCoinsButton: string = this.basePath + `/images/modules/wallet/containers/main/icon-receive-blue.svg`;
 
-  private iconComment = this.basePath + `/images/modules/addresses/components/address-element/icon-comment.svg`;
   public iconClose = this.basePath + `/images/modules/receive/components/qr-popup/ic-cancel.svg`;
 
   public sendRoute = '/send/addresses';
@@ -89,6 +88,7 @@ export class MainComponent implements OnInit, OnDestroy {
   constructor(private store: Store<any>,
               public router: Router,
               private windowService: WindowService,
+              private wasmService: WasmService,
               public dataService: DataService) {
     this.isFullScreen = windowService.isFullSize();
     //this.addresses$ = this.store.pipe(select(selectAllAddresses));
@@ -133,7 +133,32 @@ export class MainComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    let apiObj: any;
+    extensionizer.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      if (message.text === 'load-faucet') {
+        apiObj = this.wasmService.createAppAPI(message.params.id, message.params.name);
+        apiObj.setHandler((r)=> {
+          extensionizer.tabs.query({
+            active: true,
+            currentWindow: true
+          }, tabs => {
+            extensionizer.tabs.sendMessage(
+                tabs[0].id,
+                {text: 'api-result', response: r}, ()=>{});
+          });
+        });
+      } else if (message.text === 'call-app-api') {
+        let request = {
+            "jsonrpc": "2.0",
+            "id":      message.params.callid,
+            "method":  message.params.method,
+            "params":  message.params.params
+        }
+        let result = apiObj.callWalletApi(JSON.stringify(request));
+      }
+    });
+  }
 
   ngOnDestroy() {}
 

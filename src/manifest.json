@@ -11,11 +11,26 @@
         "scripts": ["background.js"],
         "persistent": false
     },
+    "content_scripts": [
+        {
+          "matches": ["file://*/*", "http://*/*", "https://*/*"],
+          "js": [
+            "contentscript.js"
+          ],
+          "run_at": "document_start",
+          "all_frames": true
+        }
+    ],
+    "web_accessible_resources": [
+        "inpage.js"
+     ],
     "icons": { "16": "assets/chrome-extention-icon-16x16.png",
         "48": "assets/chrome-extention-icon-48x48.png",
        "128": "assets/chrome-extention-icon-128x128.png" },
     "permissions": [
-        "storage"
+        "storage",
+        "activeTab",
+        "clipboardWrite"
     ],
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }
