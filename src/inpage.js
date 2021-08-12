@@ -54,7 +54,7 @@ class BeamProvider {
         }));   
     }
 
-    setupInitApiCall(callid, method, params) {
+    callApi(callid, method, params) {
         window.dispatchEvent(new CustomEvent("callWalletApi", {
             detail: {
                 callid, method, params
