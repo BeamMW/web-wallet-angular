@@ -45,6 +45,12 @@ export class WasmService {
     }
   }
 
+  public createAppAPI(id, name) {
+    if (this.isWasmLoaded) {
+      return this.wallet.createAppAPI(id, name);
+    }
+  }
+
   public isAllowedWord(word) {
     if (this.isWasmLoaded) {
       return this.module.IsAllowedWord(word);
