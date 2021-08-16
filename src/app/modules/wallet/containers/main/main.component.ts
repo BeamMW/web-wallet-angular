@@ -59,6 +59,8 @@ export class MainComponent implements OnInit, OnDestroy {
   public selectorTitlesData = selectorTitles;
   public trSelectorActiveTitle = selectorTitles.ALL;
 
+  private wApi: any;
+
   addresses$: Observable<any>;
   utxos$: Observable<any>;
   transactions$: Observable<any>;
@@ -134,18 +136,19 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    let apiObj: any;
     extensionizer.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message.text === 'load-faucet') {
-        apiObj = this.wasmService.createAppAPI(message.params.id, message.params.name);
-        apiObj.setHandler((r)=> {
-          extensionizer.tabs.query({
-            active: true,
-            currentWindow: true
-          }, tabs => {
-            extensionizer.tabs.sendMessage(
-                tabs[0].id,
-                {text: 'api-result', response: r}, ()=>{});
+        this.wasmService.createAppAPI(message.params.id, message.params.name, (api) => {
+          this.wApi = api;
+          api.setHandler((r)=> {
+            extensionizer.tabs.query({
+              active: true,
+              currentWindow: true
+            }, tabs => {
+              extensionizer.tabs.sendMessage(
+                  tabs[0].id,
+                  {text: 'api-result', response: r}, ()=>{});
+            });
           });
         });
       } else if (message.text === 'call-app-api') {
@@ -155,7 +158,7 @@ export class MainComponent implements OnInit, OnDestroy {
             "method":  message.params.method,
             "params":  message.params.params
         }
-        let result = apiObj.callWalletApi(JSON.stringify(request));
+        this.wApi.callWalletApi(JSON.stringify(request));
       }
     });
   }

@@ -45,9 +45,21 @@ export class WasmService {
     }
   }
 
-  public createAppAPI(id, name) {
+  public createAppAPI(id, name, callback) {
     if (this.isWasmLoaded) {
-      return this.wallet.createAppAPI(id, name);
+
+      this.wallet.setApproveSendHandler((req, info, cb) => {
+        console.log('APPROVE REQUEST: ', req);
+        console.log('APPROVE INFO: ', info);
+        cb.setApproved(req);
+      });
+
+      this.wallet.setApproveContractInfoHandler((req, info, cb) => {
+        console.log('APPROVE CONTRACT REQUEST: ', req);
+        console.log('APPROVE CONTRACT INFO: ', info);
+        cb.contractInfoApproved(req);
+      });
+      return this.wallet.createAppAPI(id, name, callback);
     }
   }
 
