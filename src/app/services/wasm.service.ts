@@ -51,13 +51,21 @@ export class WasmService {
       this.wallet.setApproveSendHandler((req, info, cb) => {
         console.log('APPROVE REQUEST: ', req);
         console.log('APPROVE INFO: ', info);
-        cb.setApproved(req);
+        if (window.confirm("Approve send?")) {
+          cb.setApproved(req);
+        } else {
+          cb.setRejected(req);
+        }
       });
 
-      this.wallet.setApproveContractInfoHandler((req, info, cb) => {
+      this.wallet.setApproveContractInfoHandler((req, info, amounts, cb) => {
         console.log('APPROVE CONTRACT REQUEST: ', req);
         console.log('APPROVE CONTRACT INFO: ', info);
-        cb.contractInfoApproved(req);
+        if (window.confirm("Approve contract?")) {
+          cb.contractInfoApproved(req);
+        } else {
+          cb.contractInfoRejected(req);
+        }
       });
       return this.wallet.createAppAPI(id, name, callback);
     }
